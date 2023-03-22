@@ -1,13 +1,15 @@
 #! /Users/toddingalls/Developer/Python/synthesis-env/env/bin/python
-import numpy as np
-import numpy.typing as npt
-from sndlib import *
+
+
 from typing import Optional
-import tempfile
 from contextlib import contextmanager
 import subprocess
 import functools
 from functools import partial
+from sndlib import *
+
+import numpy as np
+import numpy.typing as npt
 
 import os
 
