@@ -38,4 +38,7 @@
 *.mxo
 *.mxe64
 
+*.aif
+*.aiff
+
 venv/
