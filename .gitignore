@@ -40,5 +40,9 @@
 
 *.aif
 *.aiff
-
+*.rev
 venv/
+__pycache/
+.ipynb_checkpoints/Untitled-checkpoint.ipynb
+__pycache__/pysndlib.cpython-310.pyc
+__pycache__/sndlib.cpython-310.pyc

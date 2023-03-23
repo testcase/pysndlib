@@ -1,4 +1,4 @@
-#! /Users/toddingalls/Developer/Python/synthesis-env/env/bin/python
+#! /Users/toddingalls/Developer/Python/pysndlib/venv/bin/python
 
 
 from typing import Optional
@@ -179,6 +179,76 @@ class Sample(IntEnum):
 	BDOUBLE_UNSCALED = MUS_BDOUBLE_UNSCALED
 	LDOUBLE_UNSCALED = MUS_LDOUBLE_UNSCALED
 	NUM_SAMPLES = MUS_NUM_SAMPLES
+	
+class Error(IntEnum):
+	NO_ERROR = MUS_NO_ERROR
+	NO_FREQUENCY = MUS_NO_FREQUENCY
+	NO_PHASE = MUS_NO_PHASE
+	NO_GEN = MUS_NO_GEN
+	NO_LENGTH = MUS_NO_LENGTH
+	NO_DESCRIBE = MUS_NO_DESCRIBE
+	NO_DATA = MUS_NO_DATA
+	NO_SCALER = MUS_NO_SCALER
+	MEMORY_ALLOCATION_FAILED = MUS_MEMORY_ALLOCATION_FAILED
+	CANT_OPEN_FILE = MUS_CANT_OPEN_FILE
+	NO_SAMPLE_INPUT = MUS_NO_SAMPLE_INPUT
+	NO_SAMPLE_OUTPUT = MUS_NO_SAMPLE_OUTPUT
+	NO_SUCH_CHANNEL = MUS_NO_SUCH_CHANNEL
+	NO_FILE_NAME_PROVIDED = MUS_NO_FILE_NAME_PROVIDED
+	NO_LOCATION = MUS_NO_LOCATION
+	NO_CHANNEL = MUS_NO_CHANNEL
+	NO_SUCH_FFT_WINDOW = MUS_NO_SUCH_FFT_WINDOW
+	UNSUPPORTED_SAMPLE_TYPE = MUS_UNSUPPORTED_SAMPLE_TYPE
+	HEADER_READ_FAILED = MUS_HEADER_READ_FAILED
+	UNSUPPORTED_HEADER_TYPE = MUS_UNSUPPORTED_HEADER_TYPE
+	FILE_DESCRIPTORS_NOT_INITIALIZED = MUS_FILE_DESCRIPTORS_NOT_INITIALIZED
+	NOT_A_SOUND_FILE = MUS_NOT_A_SOUND_FILE
+	FILE_CLOSED = MUS_FILE_CLOSED
+	WRITE_ERROR = MUS_WRITE_ERROR
+	HEADER_WRITE_FAILED = MUS_HEADER_WRITE_FAILED
+	CANT_OPEN_TEMP_FILE = MUS_CANT_OPEN_TEMP_FILE
+	INTERRUPTED = MUS_INTERRUPTED
+	BAD_ENVELOPE = MUS_BAD_ENVELOPE
+	AUDIO_CHANNELS_NOT_AVAILABLE = MUS_AUDIO_CHANNELS_NOT_AVAILABLE
+	AUDIO_SRATE_NOT_AVAILABLE = MUS_AUDIO_SRATE_NOT_AVAILABLE
+	AUDIO_SAMPLE_TYPE_NOT_AVAILABLE = MUS_AUDIO_SAMPLE_TYPE_NOT_AVAILABLE
+	AUDIO_NO_INPUT_AVAILABLE = MUS_AUDIO_NO_INPUT_AVAILABLE
+	AUDIO_CONFIGURATION_NOT_AVAILABLE = MUS_AUDIO_CONFIGURATION_NOT_AVAILABLE
+	AUDIO_WRITE_ERROR = MUS_AUDIO_WRITE_ERROR
+	AUDIO_SIZE_NOT_AVAILABLE = MUS_AUDIO_SIZE_NOT_AVAILABLE
+	AUDIO_DEVICE_NOT_AVAILABLE = MUS_AUDIO_DEVICE_NOT_AVAILABLE
+	AUDIO_CANT_CLOSE = MUS_AUDIO_CANT_CLOSE
+	AUDIO_CANT_OPEN = MUS_AUDIO_CANT_OPEN
+	AUDIO_READ_ERROR = MUS_AUDIO_READ_ERROR
+	AUDIO_CANT_WRITE = MUS_AUDIO_CANT_WRITE
+	AUDIO_CANT_READ = MUS_AUDIO_CANT_READ
+	AUDIO_NO_READ_PERMISSION = MUS_AUDIO_NO_READ_PERMISSION
+	CANT_CLOSE_FILE = MUS_CANT_CLOSE_FILE
+	ARG_OUT_OF_RANGE = MUS_ARG_OUT_OF_RANGE
+	NO_CHANNELS = MUS_NO_CHANNELS
+	NO_HOP = MUS_NO_HOP
+	NO_WIDTH = MUS_NO_WIDTH
+	NO_FILE_NAME = MUS_NO_FILE_NAME
+	NO_RAMP = MUS_NO_RAMP
+	NO_RUN = MUS_NO_RUN
+	NO_INCREMENT = MUS_NO_INCREMENT
+	NO_OFFSET = MUS_NO_OFFSET
+	NO_XCOEFF = MUS_NO_XCOEFF
+	NO_YCOEFF = MUS_NO_YCOEFF
+	NO_XCOEFFS = MUS_NO_XCOEFFS
+	NO_YCOEFFS = MUS_NO_YCOEFFS
+	NO_RESET = MUS_NO_RESET
+	BAD_SIZE = MUS_BAD_SIZE
+	CANT_CONVERT = MUS_CANT_CONVERT
+	READ_ERROR = MUS_READ_ERROR
+	NO_FEEDFORWARD = MUS_NO_FEEDFORWARD
+	NO_FEEDBACK = MUS_NO_FEEDBACK
+	NO_INTERP_TYPE = MUS_NO_INTERP_TYPE
+	NO_POSITION = MUS_NO_POSITION
+	NO_ORDER = MUS_NO_ORDER
+	NO_COPY = MUS_NO_COPY
+	CANT_TRANSLATE = MUS_CANT_TRANSLATE
+	NUM_ERRORS = MUS_NUM_ERRORS
 
 
 INPUTCALLBACK = CFUNCTYPE(c_double, c_void_p, c_int)
@@ -270,14 +340,9 @@ MUS_ANY_POINTER.mus_feedforward = property(get_mus_feedforward, set_mus_feedforw
 MUS_ANY_POINTER.mus_hop = property(get_mus_hop, set_mus_hop, None)
 MUS_ANY_POINTER.mus_ramp = property(get_mus_ramp, set_mus_ramp, None)
 MUS_ANY_POINTER.mus_filename = property(get_mus_filename, None, None) # not setable
+MUS_ANY_POINTER.__del__ = lambda s : mus_free(s)
+MUS_ANY_POINTER.__str__ = lambda s : f'{MUS_ANY_POINTER} {str(mus_describe(s).data, "utf-8")}'
 
-def ff(s):
-	print(f'free {mus_describe(s)}')
-	mus_free(s)
-
-
-MUS_ANY_POINTER.__del__ = lambda s : ff(s)
-#MUS_ANY_POINTER.__str__ = lambda s : str(mus_describe(s).data)
 # 
 # def mus_any_free(s):
 # 	print("free")
@@ -288,33 +353,43 @@ MUS_ANY_POINTER.__del__ = lambda s : ff(s)
 # MUS_EXPORT const char *mus_interp_type_to_string(int type);
 
 def radians2hz(radians: float):
+	"""Convert radians per sample to frequency in "Hz: rads * srate / (2 * pi)"""
 	return mus_radians_to_hz(radians)
 
 def hz2radians(hz: float):
+	"""Convert frequency in Hz to radians per sample: hz * 2 * pi / srate"""
 	return mus_hz_to_radians(hz)
 
 def degrees2radians(degrees: float):
+	"""Convert degrees to radians: deg * 2 * pi / 360"""
 	return mus_degrees_to_radians(degrees)
 	
 def radians2degrees(radians: float):
+	"""Convert radians to degrees: rads * 360 / (2 * pi)"""
 	return mus_radians_to_degrees(radians)
 	
 def db2linear(x: float):
+	"""Convert decibel value db to linear value: pow(10, db / 20)"""
 	return mus_db_to_linear(x)
 	
 def linear2db(x: float):
+	"""Convert linear value to decibels: 20 * log10(lin)"""
 	return mus_linear_to_db(x)
 	
 def odd_multiple(x: float, y: float):
+	"""Return the odd multiple of x and y"""
 	return mus_odd_multiple(x,y)
 	
 def even_multiple(x: float, y: float):
+	"""Return the even multiple of x and y"""
 	return mus_even_multiple(x,y)
 	
 def odd_weight(x: float):
+	"""Return the odd weight of x"""
 	return mus_odd_weight(x)
 	
 def even_weight(x: float):
+	"""Return the even weight of x"""
 	mus_even_weight(x)
 	
 def get_srate():
@@ -324,9 +399,11 @@ def set_srate(r: float):
 	return mus_set_srate(r)
 	
 def seconds2samples(secs: float):
+	"""Use mus_srate to convert seconds to samples."""
 	return mus_seconds_to_samples(secs)
 
 def samples2seconds(samples: int):
+	"""Use mus_srate to convert samples to seconds."""
 	return mus_samples_to_seconds(samples)
 
 def get_mus_float_equal_fudge_factor():
@@ -339,15 +416,19 @@ def set_mus_array_print_length(x: int):
 	return mus_set_array_print_length(x)
 	
 def ring_modulate(s1: float, s2: float):
+	"""Return s1 * s2 (sample by sample multiply)"""
 	return mus_ring_modulate(s1, s2)
 	
 def amplitude_modulate(s1: float, s2: float, s3: float):
+	"""Carrier in1 in2): in1 * (carrier + in2)"""
 	return mus_amplitude_modulate(s1, s2, s3)
 	
 def contrast_enhancement(sig: float, index: float):
+	"""Returns sig (index 1.0)): sin(sig * pi / 2 + index * sin(sig * 2 * pi))"""
 	return mus_contrast_enhancement(sig, index)
 	
 def dot_product(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+	"""Returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product)"""
 	if isinstance(data1, list):
 		data1 = np.array(data1, dtype=np.double)	
 		
@@ -377,6 +458,7 @@ def mus_interpolate(type, x: float, v: npt.NDArray[np.float64], size: int, y1: f
 	
 	
 def mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fftsize: int, sign: int):
+	"""Return the fft of rl and im which contain the real and imaginary parts of the data; len should be a power of 2, dir = 1 for fft, -1 for inverse-fft"""	
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -384,11 +466,14 @@ def mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fftsiz
 	return mus_fft(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), fftsize, sign)
 
 def make_fft_window(type: int, size: int, beta: Optional[float]=0.0, alpha: Optional[float]=0.0):
+	"""fft data window (a ndarray). type is one of the sndlib fft window identifiers such as Window.KAISER, beta is the window family parameter, if any."""
 	win = np.zeros(size, dtype=np.double)
 	mus_make_fft_window_with_window(type, size, beta, alpha, win.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 	return win
 
 def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+	"""Convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a spectrum)"""
+
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -400,6 +485,7 @@ def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float6
 	return rl, img
 	
 def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+	"""Convert real/imaginary  data in rl and im from rectangular form (fft output) to polar form, but ignore the phases"""
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -411,6 +497,7 @@ def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.f
 	return rl, img
 	
 def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+	"""Convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)"""
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -422,6 +509,11 @@ def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float6
 	return rl, img
 
 def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.float64], norm_type: int):
+	"""Real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the fft data window (a ndarray as returned by 
+		make_fft_window  and type determines how the spectral data is scaled:
+  			0 = data in dB,
+  			1 (default) = linear and normalized
+  			2 = linear and un-normalized."""
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -541,7 +633,7 @@ class Sound(object):
 		self.reverb_to_file = self.reverb and isinstance(self.filename, str)
 		self.old_srate = get_srate()
 	def __enter__(self):
-		print("enter")
+		#print("enter")
 		# in original why use reverb-1?
 		if self.output_to_file :
 			# writing to File
@@ -566,7 +658,7 @@ class Sound(object):
 		return self
 		
 	def __exit__(self, *args):
-		print("exit")
+		#print("exit")
 		
 		
 		if self.reverb: 
@@ -584,32 +676,17 @@ class Sound(object):
 		# Statistics and scaling go here	
 						
 		if self.play :
-			print("play")
+			#print("play")
 			subprocess.run(["afplay",self.filename])
-
-
-
 		# need some safety if errors
-		
 		
 		set_srate(self.old_srate)
 
 
-
-
-
-
-
-
-
-
-
 ##########################################	
 
-# oscil
-# MUS_EXPORT mus_float_t mus_oscil_unmodulated(mus_any *ptr);
-# MUS_EXPORT mus_float_t mus_oscil_fm(mus_any *ptr, mus_float_t fm);
-# MUS_EXPORT mus_float_t mus_oscil_pm(mus_any *ptr, mus_float_t pm);
+
+
 def make_oscil(	frequency: Optional[float]=0., initial_phase: Optional[float] = 0.0):
 	return mus_make_oscil(frequency, initial_phase)
 	
@@ -786,14 +863,11 @@ def make_polywave(frequency: float,
 		yc = ycoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 			
 			
-
-	
-	
 					
 	if(xcoeffs and ycoeffs): # should check they are same length
 		return mus_make_polywave_tu(frequency,xc,yc, len(xcoeffs))
 	else:
-		print(*partials)
+#		print(*partials)
 		return mus_make_polywave(frequency, prtls, len(partials), type)
 		
 def polywave(w: MUS_ANY_POINTER, fm: Optional[float]=None):
@@ -1276,11 +1350,6 @@ def make_delay(size: int,
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 		
-# 	if not initial_contents:
-# 		contents = (c_double * max_size)()
-# 		for i in range(max_size):
-# 			contents[i] = initial_element
-		
 	return mus_make_delay(size, contents, max_size, type)
 	
 def delay(d: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
@@ -1327,14 +1396,6 @@ def make_comb(scaler: float,
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 		
-# 	if not initial_contents:
-# 		contents = (c_double * max_size)()
-# 		for i in range(max_size):
-# 			contents[i] = initial_element
-	#x.append(contents)	
-# 	for i in range(max_size):
-# 			print(contents[i])# = initial_element
-	# print(scaler, size, contents, max_size, type)	
 	return mus_make_comb(scaler, size, contents, max_size, type)	
 
 	
@@ -1382,11 +1443,7 @@ def make_filtered_comb(scaler: float,
 	
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-# 	if not initial_contents:
-# 		contents = (c_double * max_size)()
-# 		for i in range(max_size):
-# 			contents[i] = initial_element
+	
 		
 	return mus_make_filtered_comb(scaler, size, contents, max_size, type, filter)
 	
@@ -1433,11 +1490,6 @@ def make_notch(scaler: float,
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 		
-# 	if not initial_contents:
-# 		contents = (c_double * max_size)()
-# 		for i in range(max_size):
-# 			contents[i] = initial_element
-		
 	return mus_make_notch(scaler, size, contents, max_size, type)
 	
 
@@ -1472,10 +1524,6 @@ def make_all_pass(feedback: float,
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 		
-# 	if not initial_contents:
-# 		contents = (c_double * max_size)()
-# 		for i in range(max_size):
-# 			contents[i] = initial_element
 		
 	return mus_make_all_pass(feedback, feedforward, size, contents, max_size, type)
 	
@@ -1520,11 +1568,6 @@ def make_moving_average(size: int, initial_contents: Optional[npt.NDArray[np.flo
 	
 	if isinstance(initial_contents, np.ndarray):
 		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-# 		
-# 	if not initial_contents:
-# 		contents = (c_double * size)()
-# 		for i in range(size):
-# 			contents[i] = initial_element
 		
 	return mus_make_moving_average(size, contents)
 	
