@@ -179,32 +179,6 @@ import random
 # 		outa(i, granulate(grn))
 
 
-# def rev1(beg, dur, input, output):
-# 	pass
-# 
-# def oboe(beg, dur, r, amp, output):
-# 	rate = r
-# 	start = seconds2samples(beg)
-# 	end = seconds2samples(dur) + start
-# 	rd = make_readin("oboe.wav")
-# 	sr = make_src(rd, rate);
-# 	length = mus_sound_framples("oboe.wav")
-# 	grn = make_granulate(lambda x: src(sr), rate)
-# 	for i in range(start, end):
-# 		outa(i, granulate(grn)*amp, output.output)
-# 		
-# with Sound("test1.aif", 1) as output:	
-# 	oboe(0, 2, .5, .8, output)
-# 	oboe(1, 2, .75, .8, output)
-# 	oboe(2, 2, 1., .8, output)
-
-# def make_comb(scaler: float,
-# 				size: int, 
-# 				initial_contents: Optional[npt.NDArray[np.float64]]=None, 
-# 				initial_element: Optional[float]=0.0, 
-# 				max_size:Optional[int]=None,
-# 				type=MUS_INTERP_NONE):
-
 
 
 def jc_reverb(lowpass=False, volume=1., amp_env = None, tail=0):
@@ -262,6 +236,8 @@ def blip(beg, dur, freq):
 
 	
 with Sound("out1.aif", 2, reverb=jc_reverb, reverb_channels=2, play=True):	
-	seq = cycle([60, 66, 62, 67])
-	for i in range(10):
-		blip(i*1, 2, hertz(next(seq)))
+	blip(0, 2, 100)
+	blip(1, 2, 400)
+	blip(2, 2, 200)
+	blip(3, 2, 300)
+	blip(4, 2, 500)

@@ -438,11 +438,14 @@ def dot_product(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
 	return mus_dot_product(data1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), data2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(data1))
 	
 def polynomial(coeffs: npt.NDArray[np.float64], x: float):
+	"""Evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term."""
 	if isinstance(coeffs, list):
 		coeffs = np.array(coeffs, dtype=np.double)
 	return mus_polynomial(coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), x, len(coeffs))
 
 def array_interp(fn: npt.NDArray[np.float64], x: float, size: int):
+	"""Taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer."""
+
 	if isinstance(fn, list):
 		fn = np.array(fn, dtype=np.double)
 
@@ -452,6 +455,7 @@ def bessi0(x: float):
 	mus_bessi0(x)
 	
 def mus_interpolate(type, x: float, v: npt.NDArray[np.float64], size: int, y1: float):
+	"""Interpolate in data ('v' is a ndarray) using interpolation 'type', such as Interp.LINEAR."""
 	if isinstance(v, list):
 		v = np.array(v, dtype=np.double)
 	return mus_interpolate(x, v.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size, y1)
@@ -705,10 +709,7 @@ def is_oscil(os: MUS_ANY_POINTER):
 	
 	
 # oscil bank
-def make_oscil_bank(freqs: npt.NDArray[np.float64], 
-					phases: npt.NDArray[np.float64], 
-					amps: npt.NDArray[np.float64], 
-					stable: Optional[bool]=False):
+def make_oscil_bank(freqs, phases, amps, stable: Optional[bool]=False):
 	if isinstance(freqs, list):
 		freqs = np.array(freqs, dtype=np.double)
 		
@@ -730,19 +731,9 @@ def is_oscil_bank(os: MUS_ANY_POINTER):
 	return mus_is_oscil_bank(os)
 	
 # env
-#    mus_make_env.argtypes = [POINTER(mus_float_t), c_int, mus_float_t, mus_float_t, mus_float_t, mus_float_t, mus_long_t, POINTER(mus_float_t)]
-#MUS_EXPORT mus_any *mus_make_env(mus_float_t *brkpts, int npts, mus_float_t scaler, mus_float_t offset, mus_float_t base, mus_float_t duration, mus_long_t end, mus_float_t *odata);
-def make_env(envelope: npt.NDArray[np.float64], 
-				scaler: Optional[float]=1.0, 
-				duration: Optional[float]=1.0, 
-				offset: Optional[float]=0.0, 
-				base: Optional[float]=1.0, 
-				length: Optional[int]=0):
-
+def make_env(envelope, scaler: Optional[float]=1.0, duration: Optional[float]=1.0, offset: Optional[float]=0.0, base: Optional[float]=1.0, length: Optional[int]=0):
 	if length > 0:
 		duration = samples2seconds(length)
-	
-
 	if isinstance(envelope, list):
 		contents = (c_double * len(envelope))(*envelope)
 	
@@ -809,8 +800,7 @@ def is_table_lookup(tl: MUS_ANY_POINTER):
 
 # TODO make-table-lookup-with-env
 
-def partials2wave(partials: npt.NDArray[np.float64], 
-					wave: Optional[npt.NDArray[np.float64]]=None, 
+def partials2wave(partials, wave: Optional[npt.NDArray[np.float64]]=None, 
 					norm: Optional[bool]=True ):
 					
 	if isinstance(partials, list):
@@ -824,8 +814,7 @@ def partials2wave(partials: npt.NDArray[np.float64],
 	mus_partials_to_wave(partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(partials) // 2, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
 	return wave
 	
-def phase_partials2wave(partials: npt.NDArray[np.float64], 
-						wave: Optional[npt.NDArray[np.float64]]=None, 
+def phase_partials2wave(partials, wave: Optional[npt.NDArray[np.float64]]=None, 
 						norm: Optional[bool]=True ):
 	if isinstance(partials, list):
 		partials = np.array(partials, dtype=np.double)					
