@@ -1024,16 +1024,24 @@ def is_nrxycos(s: MUS_ANY_POINTER):
 	return mus_is_nrxycos(s)
 	
 	
-# ---------------- rxykcos ---------------- #	
-def make_nrxycos(frequency: float, phase: float, r: Optional[float]=.5, ratio: Optional[float]=1.):
-	return mus_make_nrxycos(frequency, phase, r, ratio)
+# ---------------- rxykcos and rxyksin ---------------- #	
+def make_rxykcos(frequency: float, phase: float, r: Optional[float]=.5, ratio: Optional[float]=1.):
+	return mus_make_rxykcos(frequency, phase, r, ratio)
 	
-def nrxycos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+def rxykcos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+	return mus_rxykcos(s, fm)
+	
+def is_rxykcos(s: MUS_ANY_POINTER):
+	return mus_is_rxykcos(s)
+
+def make_rxyksin(frequency: float, phase: float, r: Optional[float]=.5, ratio: Optional[float]=1.):
+	return mus_make_rxyksin(frequency, phase, r, ratio)
+
+def rxyksin(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
 	return mus_rxyksin(s, fm)
 	
-def is_nrxycos(s: MUS_ANY_POINTER):
+def is_rxyksin(s: MUS_ANY_POINTER):
 	return mus_is_rxyksin(s)
-	
 		
 # ---------------- ssb-am ---------------- #	
 
@@ -1528,9 +1536,9 @@ def make_all_pass(feedback: float,
 		initial_contents_ptr = get_array_ptr(intial_contents)
 			
 
-	gen = mus_make_notch(scaler, size, initial_contents_ptr, max_size, type)	
+	gen = mus_make_all_pass(feedback,feedforward,  size, initial_contents_ptr, max_size, type)	
 	gen._cache = [initial_contents_ptr]
-	
+	return gen
 	
 def all_pass(f: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
 	if pm:
@@ -1568,8 +1576,6 @@ def is_all_pass_bank(o: MUS_ANY_POINTER):
 def make_moving_average(size: int, initial_contents=None, initial_element: Optional[float]=0.0):
 	initial_contents_ptr = None
 	
-	if not max_size:
-		max_size = size
 	
 	if initial_contents:
 		initial_contents_ptr = get_array_ptr(intial_contents)
