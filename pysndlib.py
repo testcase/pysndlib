@@ -7,12 +7,9 @@ import subprocess
 import functools
 from functools import partial
 from sndlib import *
-
 import numpy as np
 import numpy.typing as npt
-
 import os
-
 import types
 from enum import Enum, IntEnum
 
@@ -261,7 +258,6 @@ MUS_CLM_DEFAULT_TABLE_SIZE = 512
 
 # is this a hack? i don't know. this seems to add the properties i want
 MUS_ANY_POINTER = POINTER(mus_any)
-
 	
 get_mus_frequency = lambda s: mus_frequency(s)
 set_mus_frequency = lambda s,v : mus_set_frequency(s,v)
@@ -273,7 +269,6 @@ get_mus_increment = lambda s: mus_increment(s)
 set_mus_increment =  lambda s,v : mus_set_increment(s,v)
 get_mus_location = lambda s: mus_location(s)
 set_mus_location = lambda s,v : mus_set_location(s,v)
-
 get_mus_offset = lambda s: mus_offset(s)
 set_mus_offset = lambda s,v : mus_set_offset(s,v)
 get_mus_channels = lambda s: mus_channels(s)
@@ -340,17 +335,40 @@ MUS_ANY_POINTER.mus_feedforward = property(get_mus_feedforward, set_mus_feedforw
 MUS_ANY_POINTER.mus_hop = property(get_mus_hop, set_mus_hop, None)
 MUS_ANY_POINTER.mus_ramp = property(get_mus_ramp, set_mus_ramp, None)
 MUS_ANY_POINTER.mus_filename = property(get_mus_filename, None, None) # not setable
+
+
+#
+# cache for things that need to stick around for lifetime of object to avoid getting 
+# collected
+MUS_ANY_POINTER._cache = [None]
+
+# call free 
 MUS_ANY_POINTER.__del__ = lambda s : mus_free(s)
+
+# this could use some work but good enough for the moment.
 MUS_ANY_POINTER.__str__ = lambda s : f'{MUS_ANY_POINTER} {str(mus_describe(s).data, "utf-8")}'
-
-# 
-# def mus_any_free(s):
-# 	print("free")
-# 	mus_free(s)
-
 
 
 # MUS_EXPORT const char *mus_interp_type_to_string(int type);
+
+# NOTE from what I understand about numpy.ndarray.ctypes 
+# it says that when data_as is used that it keeps a reference to 
+# the original array. that should mean as long as I cache the
+# result of data_as I should not need to cache the original 
+# numpy array. right?
+def get_array_ptr(arr):
+	if isinstance(arr, list):
+		res = (c_double * len(arr))(*arr)
+	
+	elif isinstance(arr, np.ndarray):
+		res = arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+		
+	else:
+		print(f'{arr} is not a list or ndarry but is a {type(arr)}')
+	 	#could add errors for wrong shape 
+	return res	
+
+
 
 def radians2hz(radians: float):
 	"""Convert radians per sample to frequency in "Hz: rads * srate / (2 * pi)"""
@@ -393,9 +411,11 @@ def even_weight(x: float):
 	mus_even_weight(x)
 	
 def get_srate():
+	"""Return current sample rate"""
 	return mus_srate()
 	
 def set_srate(r: float):
+	"""Set current sample rate"""
 	return mus_set_srate(r)
 	
 def seconds2samples(secs: float):
@@ -405,15 +425,16 @@ def seconds2samples(secs: float):
 def samples2seconds(samples: int):
 	"""Use mus_srate to convert samples to seconds."""
 	return mus_samples_to_seconds(samples)
-
-def get_mus_float_equal_fudge_factor():
-	return mus_float_equal_fudge_factor()
-	
-def get_mus_array_print_length():
-	return mus_array_print_length()
-	
-def set_mus_array_print_length(x: int):
-	return mus_set_array_print_length(x)
+#
+# TODO : do we need these
+# def get_mus_float_equal_fudge_factor():
+# 	return mus_float_equal_fudge_factor()
+# 	
+# def get_mus_array_print_length():
+# 	return mus_array_print_length()
+# 	
+# def set_mus_array_print_length(x: int):
+# 	return mus_set_array_print_length(x)
 	
 def ring_modulate(s1: float, s2: float):
 	"""Return s1 * s2 (sample by sample multiply)"""
@@ -427,47 +448,36 @@ def contrast_enhancement(sig: float, index: float):
 	"""Returns sig (index 1.0)): sin(sig * pi / 2 + index * sin(sig * 2 * pi))"""
 	return mus_contrast_enhancement(sig, index)
 	
-def dot_product(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+def dot_product(data1, data2):
 	"""Returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product)"""
-	if isinstance(data1, list):
-		data1 = np.array(data1, dtype=np.double)	
-		
-	if isinstance(data2, list):
-		data2 = np.array(data2, dtype=np.double)	
-		
-	return mus_dot_product(data1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), data2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(data1))
+	data1_ptr = get_array_ptr(data1)	
+	data2_ptr = get_array_ptr(data2)	
+	return mus_dot_product(data1_ptr, data2_ptr, len(data1))
 	
-def polynomial(coeffs: npt.NDArray[np.float64], x: float):
+def polynomial(coeffs, x: float):
 	"""Evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term."""
-	if isinstance(coeffs, list):
-		coeffs = np.array(coeffs, dtype=np.double)
-	return mus_polynomial(coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), x, len(coeffs))
+	coeffs_ptr = get_array_ptr(coeffs)
+	return mus_polynomial(coeffs_ptr, x, len(coeffs))
 
-def array_interp(fn: npt.NDArray[np.float64], x: float, size: int):
-	"""Taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer."""
-
-	if isinstance(fn, list):
-		fn = np.array(fn, dtype=np.double)
-
-	return mus_array_interp(fn.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), x, size)
+def array_interp(fn, x: float, size: int):
+	"""Taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer."""	
+	fn_ptr = get_array_ptr(fn)
+	return mus_array_interp(fn_ptr, x, size)
 
 def bessi0(x: float):
+	"""Bessel function of zeroth order"""
 	mus_bessi0(x)
 	
-def mus_interpolate(type, x: float, v: npt.NDArray[np.float64], size: int, y1: float):
+def mus_interpolate(type, x: float, v, size: int, y1: float):
 	"""Interpolate in data ('v' is a ndarray) using interpolation 'type', such as Interp.LINEAR."""
-	if isinstance(v, list):
-		v = np.array(v, dtype=np.double)
-	return mus_interpolate(x, v.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size, y1)
+	v_ptr = get_array_ptr(v)
+	return mus_interpolate(x, v_ptr, size, y1)
 	
-	
-def mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fftsize: int, sign: int):
+def mus_fft(rdat, idat, fftsize: int, sign: int):
 	"""Return the fft of rl and im which contain the real and imaginary parts of the data; len should be a power of 2, dir = 1 for fft, -1 for inverse-fft"""	
-	if isinstance(rdat, list):
-		rdat = np.array(rdat, dtype=np.double)
-	if isinstance(idat, list):
-		idat = np.array(idat, dtype=np.double)
-	return mus_fft(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), fftsize, sign)
+	rdat_ptr = get_array_ptr(rdat)
+	idat_ptr = get_array_ptr(idat)	
+	return mus_fft(rdat_ptr, idat_ptr, fftsize, sign)
 
 def make_fft_window(type: int, size: int, beta: Optional[float]=0.0, alpha: Optional[float]=0.0):
 	"""fft data window (a ndarray). type is one of the sndlib fft window identifiers such as Window.KAISER, beta is the window family parameter, if any."""
@@ -475,49 +485,52 @@ def make_fft_window(type: int, size: int, beta: Optional[float]=0.0, alpha: Opti
 	mus_make_fft_window_with_window(type, size, beta, alpha, win.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 	return win
 
-def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+def rectangular2polar(rdat, idat):
 	"""Convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a spectrum)"""
-
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
 		idat = np.array(idat, dtype=np.double)
 	size = len(rdat)
+	# want to return new ndarrays instead of changing in-place
 	rl = np.copy(rdat)
 	im = np.copy(idat)
 	mus_rectangular_to_polar(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return rl, img
 	
-def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+def rectangular2magnitudes(rdat, idat):
 	"""Convert real/imaginary  data in rl and im from rectangular form (fft output) to polar form, but ignore the phases"""
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
 		idat = np.array(idat, dtype=np.double)
 	size = len(rdat)
+	# want to return new ndarrays instead of changing in-place
 	rl = np.copy(rdat)
 	im = np.copy(idat)
 	mus_rectangular_to_magnitudes(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return rl, img
 	
-def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+def polar2rectangular(rdat, idat):
 	"""Convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)"""
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
 		idat = np.array(idat, dtype=np.double)
 	size = len(rdat)
+	# want to return new ndarrays instead of changing in-place
 	rl = np.copy(rdat)
 	im = np.copy(idat)
 	mus_polar_to_rectangular(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return rl, img
 
-def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.float64], norm_type: int):
+def spectrum(rdat, idat, window, norm_type: int):
 	"""Real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the fft data window (a ndarray as returned by 
 		make_fft_window  and type determines how the spectral data is scaled:
   			0 = data in dB,
   			1 (default) = linear and normalized
   			2 = linear and un-normalized."""
+  					
 	if isinstance(rdat, list):
 		rdat = np.array(rdat, dtype=np.double)
 	if isinstance(idat, list):
@@ -525,22 +538,25 @@ def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], windo
 	if isinstance(window, list):
 		window = np.array(window, dtype=np.double)
 	size = len(rdat)
+	# want to return new ndarray instead of changing in-place
 	rl = np.copy(rdat)
 	mus_spectrum(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), window.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size, norm_type)
 	return rl
 
-def convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64]):
+def convolution(rl1, rl2):
+	"""Convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1"""
 	if isinstance(rl1, list):
 		rl1 = np.array(rl1, dtype=np.double)
 	if isinstance(rl2, list):
 		rl2 = np.array(rl2, dtype=np.double)
 	size = len(rl1)
+	# want to return new ndarrays instead of changing in-place
 	rl1_1 = np.copy(rl1)
-	rl2_1 = np.copy(rl2)
-	mus_convolution(rl1_1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), rl2_1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+	mus_convolution(rl1_1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), rl2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return rl1_1
 
-def autocorrelate(data: npt.NDArray[np.float64]):
+def autocorrelate(data):
+	"""In place autocorrelation of data (a ndarray)"""
 	if isinstance(data, list):
 		data = np.array(data, dtype=np.double)
 	size = len(data)
@@ -548,28 +564,99 @@ def autocorrelate(data: npt.NDArray[np.float64]):
 	mus_autocorrelate(dt.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return dt
 	
-def correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+def correlate(data1, data2):
+	"""In place cross-correlation of data1 and data2 (both ndarrays)"""
 	if isinstance(data1, list):
 		data1 = np.array(data1, dtype=np.double)
 	if isinstance(data2, list):
 		data2 = np.array(data2, dtype=np.double)
 	size = len(data1)
+	# want to return new ndarrays instead of changing in-place
 	dt1 = data1.copy()
 	dt2 = data2.copy()
 	mus_correlate(dt1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), dt2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return dt
 
-def cepstrum(data: npt.NDArray[np.float64]):
+def cepstrum(data):
+	"""Return cepstrum of signal"""
 	if isinstance(data, list):
 		data = np.array(data, dtype=np.double)
 	size = len(data)
+	# want to return new ndarray instead of changing in-place
 	dt1 = data.copy()
 	mus_cepstrum(dt1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 	return dt1
 	
+def partials2wave(partials, wave=None, norm: Optional[bool]=True ):
+	"""Take a list of partials (harmonic number and associated amplitude) and produce a waveform for use in table_lookup"""
+	partials_ptr = get_array_ptr(partials)				
+					
+	if isinstance(wave, list):
+		wave = np.array(wave, dtype=np.double)
+						
+	if (not wave):
+		wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
 	
+	mus_partials_to_wave(partials_ptr, len(partials) // 2, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
+	# return a ndarray
+	return wave
+	
+def phase_partials2wave(partials, wave=None, norm: Optional[bool]=True ):
+	"""Take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use in table_lookup"""
+	if isinstance(partials, list):
+		partials = np.array(partials, dtype=np.double)		
+		
+	partials_ptr = get_array_ptr(partials)		
+					
+	if (not wave):
+		wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
+		
+	mus_partials_to_wave(partials_ptr, len(partials) // 3, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
+	
+	return wave
+	
+def partials2polynomial(partials, kind: Optional[int]=MUS_CHEBYSHEV_FIRST_KIND):
+	"""Returns a Chebyshev polynomial suitable for use with the polynomial generator to create (via waveshaping) the harmonic spectrum described by the partials argument."""
+	if isinstance(partials, list):
+		prtls = np.array(partials, dtype=np.double)
+	if isinstance(partials, np.ndarray):
+		prtls = partials.copy()
+	
+	mus_partials_to_polynomial(len(partials), prtls.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
+	return prtls
+
+def normalize_partials(partials):
+	if isinstance(partials, list):
+		prtls = np.array(partials, dtype=np.double)
+	if isinstance(partials, np.ndarray):
+		prtls = partials.copy()
+	
+	mus_normalize_partials(len(partials), prtls.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+	return prtls
+	
+def chebyshev_tu_sum(x: float, tcoeffs, ucoeffs):
+	"""Returns the sum of the weighted Chebyshev polynomials Tn and Un (vectors or " S_vct "s), with phase x"""
+	
+	tcoeffs_ptr = get_array_ptr(tcoeffs)
+	ucoeffs_ptr = get_array_ptr(ucoeffs)
+
+	return mus_chebyshev_tu_sum(x, tcoeffs_ptr, ucoeffs_ptr)
+	
+def chebyshev_t_sum(x: float, tcoeffs):
+	"""returns the sum of the weighted Chebyshev polynomials Tn"""
+	tcoeffs_ptr = get_array_ptr(tcoeffs)
+	return mus_chebyshev_t_sum(x,tcoeffs_ptr)
+
+def chebyshev_u_sum(x: float, ucoeffs):
+	"""returns the sum of the weighted Chebyshev polynomials Un"""
+	ucoeffs_ptr = get_array_ptr(ucoeffs)
+	return mus_chebyshev_tu_sum(x, ucoeffs_ptr)
+		
 #########################################
+#MUS_EXPORT const char *mus_array_to_file_with_error(const char *filename, mus_float_t *ddata, mus_long_t len, int srate, int channels);
+	
 def file2array(filename):
+	"""Return an ndarray with samples from file"""
 	length = mus_sound_framples(filename)
 	chans = mus_sound_chans(filename)
 	out = np.zeros((chans, length), dtype=np.double)
@@ -577,10 +664,8 @@ def file2array(filename):
 		mus_file_to_array(filename,i, 0, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
 	return out
 	
-#MUS_EXPORT const char *mus_array_to_file_with_error(const char *filename, mus_float_t *ddata, mus_long_t len, int srate, int channels);
-	
-#  mus_array_to_file.argtypes = [String, POINTER(mus_float_t), mus_long_t, c_int, c_int]
 def array2file(arr, filename, sr=None):
+	"""Write an ndarray of samples to file"""
 	if not sr:
 		sr = mus_srate()
 	chans = np.shape(arr)[0]
@@ -588,13 +673,11 @@ def array2file(arr, filename, sr=None):
 	flatarray = arr.flatten(order='F')
 	return mus_array_to_file(filename, flatarray.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),length, sr, chans)
 
-	
+########context with sound#######	
 class Sound(object):
 	output = None
 	reverb = None
-	
-	
-	
+
 	def __init__(self, filename, 
 						channels=1, 
 						srate=44100., 
@@ -663,8 +746,7 @@ class Sound(object):
 		
 	def __exit__(self, *args):
 		#print("exit")
-		
-		
+
 		if self.reverb: 
 			if self.reverb_to_file:
 				mus_close(Sound.reverb)
@@ -687,14 +769,14 @@ class Sound(object):
 		set_srate(self.old_srate)
 
 
-##########################################	
 
-
-
+# ---------------- oscil ---------------- #
 def make_oscil(	frequency: Optional[float]=0., initial_phase: Optional[float] = 0.0):
+	"""Return a new oscil (sinewave) generator"""
 	return mus_make_oscil(frequency, initial_phase)
 	
 def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=None):
+	"""Return next sample from oscil  gen: val = sin(phase + pm); phase += (freq + fm)"""
 	if not fm:
 		if not pm:
 			return mus_oscil_unmodulated(os)
@@ -702,45 +784,38 @@ def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=Non
 			return mus_oscil_pm(os, pm)
 	else:
 		return mus_oscil_fm(os, fm)
-
 	
 def is_oscil(os: MUS_ANY_POINTER):
 	return mus_is_oscil(os)
-	
-	
-# oscil bank
-def make_oscil_bank(freqs, phases, amps, stable: Optional[bool]=False):
-	if isinstance(freqs, list):
-		freqs = np.array(freqs, dtype=np.double)
-		
-	if isinstance(phases, list):
-		phases = np.array(phases, dtype=np.double)
-		
-	if isinstance(amps, list):
-		amps = np.array(amps, dtype=np.double)	
-			
-	return mus_make_oscil_bank(freqs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), phases.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), amps.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), stable)
 
-def oscil_bank(os: MUS_ANY_POINTER, fms: npt.NDArray[np.float64]):
-	if isinstance(fms, list):
-		fms = np.array(fms, dtype=np.double)
-		
-	return mus_oscil_bank(os, fms.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+	
+# ---------------- oscil-bank ---------------- #
+
+def make_oscil_bank(freqs, phases, amps, stable: Optional[bool]=False):
+	freqs_ptr = get_array_ptr(freqs)
+	phases_ptr = get_array_ptr(phases)
+	amps_ptr = get_array_ptr(amps)
+
+	gen =  mus_make_oscil_bank(freqs_ptr, phases_ptr, amps_ptr, stable)
+	gen._cache = [freqs_ptr, phases_ptr, amps_ptr]
+	return gen
+
+def oscil_bank(os: MUS_ANY_POINTER, fms):
+	fms_prt = get_array_ptr(fms)
+	return mus_oscil_bank(os, fms_prt)
 	
 def is_oscil_bank(os: MUS_ANY_POINTER):
 	return mus_is_oscil_bank(os)
 	
-# env
+# ---------------- env ---------------- #
 def make_env(envelope, scaler: Optional[float]=1.0, duration: Optional[float]=1.0, offset: Optional[float]=0.0, base: Optional[float]=1.0, length: Optional[int]=0):
 	if length > 0:
 		duration = samples2seconds(length)
-	if isinstance(envelope, list):
-		contents = (c_double * len(envelope))(*envelope)
-	
-	if isinstance(envelope, np.ndarray):
-		contents = envelope.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+	envelope_ptr = get_array_ptr(envelope)
 
-	return mus_make_env(contents, len(envelope) // 2, scaler, offset, base, duration, 0, None)
+	gen =  mus_make_env(envelope_ptr, len(envelope) // 2, scaler, offset, base, duration, 0, None)
+	gen._cache = [envelope_ptr]
+	return gen
 	
 def env(e: MUS_ANY_POINTER):
 	return mus_env(e)
@@ -750,22 +825,20 @@ def is_env(e: MUS_ANY_POINTER):
 	
 def env_interp(x: float, env: MUS_ANY_POINTER):
 	return mus_env_interp(x, env)
-	
-def env_any(e: MUS_ANY_POINTER, connection_function):
-	return mus_env_any(e, FF(connection_function))
-	
-def make_pulsed_env(envelope: npt.NDArray[np.float64], duration, frequency):
-	if isinstance(envelope, list):
-		contents = (c_double * len(envelope))(*envelope)
-	
-	if isinstance(envelope, np.ndarray):
-		contents = envelope.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
+# TODO needs testing	
+# def env_any(e: MUS_ANY_POINTER, connection_function):
+# 	return mus_env_any(e, FF(connection_function))
+
+# ---------------- pulsed-env ---------------- #	
+def make_pulsed_env(envelope, duration, frequency):	
 	pl = mus_make_pulse_train(frequency, 1.0, 0.0)
-	ge = make_env(contents, scaler=1.0, duration=duration)
-	return mus_make_pulsed_env(ge, pl)
+	ge = make_env(envelope, scaler=1.0, duration=duration)
+	gen = mus_make_pulsed_env(ge, pl)
+	gen._cache = [pl, ge]
+	return 
 	
-def pulse_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
+def pulsed_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
 	if(fm):
 		return mus_pulsed_env(gen, fm)
 	else:
@@ -773,21 +846,19 @@ def pulse_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
 		
 # TODO envelope-interp different than env-interp
 
-# table lookup
+def is_pulsedenv(e: MUS_ANY_POINTER):
+	return mus_is_pulsed_env(e)
 
+# ---------------- table lookup ---------------- #
 def make_table_lookup(frequency: Optional[float]=0.0, 
 						initial_phase: Optional[float]=0.0, 
-						wave: npt.NDArray[np.float64]=None, 
+						wave=None, 
 						size: Optional[int]=512, 
-						type: Optional[int]=Interp.LINEAR):
-	if isinstance(wave, list):
-		contents = (c_double * len(wave))(*wave)
-	
-	if isinstance(wave, np.ndarray):
-		contents = wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-					
-		
-	return mus_make_table_lookup(frequency, initial_phase, contents, size, type)
+						type: Optional[int]=Interp.LINEAR):		
+	wave_ptr = get_array_ptr(wave)			
+	gen =  mus_make_table_lookup(frequency, initial_phase, wave_ptr, size, type)
+	gen._cache = [wave_ptr]
+	return gen
 	
 def table_lookup(tl: MUS_ANY_POINTER, fm_input: Optional[float]=None):
 	if fm_input:
@@ -800,91 +871,52 @@ def is_table_lookup(tl: MUS_ANY_POINTER):
 
 # TODO make-table-lookup-with-env
 
-def partials2wave(partials, wave: Optional[npt.NDArray[np.float64]]=None, 
-					norm: Optional[bool]=True ):
-					
-	if isinstance(partials, list):
-		partials = np.array(partials, dtype=np.double)
-		
-	if isinstance(wave, list):
-		wave = np.array(wave, dtype=np.double)
-						
-	if (not wave):
-		wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
-	mus_partials_to_wave(partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(partials) // 2, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
-	return wave
-	
-def phase_partials2wave(partials, wave: Optional[npt.NDArray[np.float64]]=None, 
-						norm: Optional[bool]=True ):
-	if isinstance(partials, list):
-		partials = np.array(partials, dtype=np.double)					
-	if (not wave):
-		wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
-	mus_partials_to_wave(partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(partials) // 3, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
-	return wave
-	
-	
-	
-#polywave polyshape
-
+# ---------------- polywave ---------------- #
 def make_polywave(frequency: float, 
-					partials: Optional[npt.NDArray[np.float64]]=np.array([1.,1.]), 
+					partials = [0.,1.], 
 					type: Optional[int]=Polynomial.FIRST_KIND, 
-					xcoeffs: npt.NDArray[np.float64]=None, 
-					ycoeffs: npt.NDArray[np.float64]=None):
+					xcoeffs = None, 
+					ycoeffs =None):
 	
-	if isinstance(partials, list):
-		prtls = (c_double * len(partials))(*partials)
-			
-	if isinstance(xcoeffs, list):
-		xc = (c_double * len(xcoeffs))(*xcoeffs)
-		
-	if isinstance(ycoeffs, list):
-		yc = (c_double * len(ycoeffs))(*ycoeffs)
-		
-	if isinstance(partials, np.ndarray):
-		prtls = partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-			
-	if isinstance(xcoeffs, np.ndarray):
-		xc = xcoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-	if isinstance(ycoeffs, np.ndarray):
-		yc = ycoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-			
-			
-					
+
 	if(xcoeffs and ycoeffs): # should check they are same length
-		return mus_make_polywave_tu(frequency,xc,yc, len(xcoeffs))
+		xcoeffs_ptr = get_array_ptr(xcoeffs)
+		ycoeffs_ptr = get_array_ptr(ycoeffs)
+		gen = mus_make_polywave_tu(frequency,xcoeffs_ptr,ycoeffs_ptr, len(xcoeffs))
+		gen._cache = [xcoeffs_ptr,ycoeffs_ptr]
+		return gen
 	else:
-#		print(*partials)
-		return mus_make_polywave(frequency, prtls, len(partials), type)
-		
+		prtls = normalize_partials(partials)
+		prtls_ptr = get_array_ptr(prtls)
+		gen = mus_make_polywave(frequency, prtls_ptr, len(partials), type)
+		gen._cache = [prtls_ptr]
+		return gen
+	
+	
 def polywave(w: MUS_ANY_POINTER, fm: Optional[float]=None):
 	if fm:
 		return mus_polywave(w, fm)
 	else:
 		return mus_polywave_unmodulated(w)
 		
-def is_polywave(w: POINTER(mus_any)):
+def is_polywave(w: MUS_ANY_POINTER):
 	return mus_is_polywave(w)
 
 
-# seems like in docs should be a coeffs argument but don't see how
-def make_polyshape(frequency: float, initial_phase: float, 
-					partials: Optional[npt.NDArray[np.float64]]=np.array([1.,1.]), 
+# ---------------- polyshape ---------------- #
+# TODO like in docs should be a coeffs argument but don't see how
+def make_polyshape(frequency: float, 
+					initial_phase: float, 
+					partials: [1.,1.], 
 					kind: Optional[int]=Polynomial.FIRST_KIND):
+
+	poly = partials2polynomial(partials)	
+	poly_ptr = get_array_ptr(poly)
+
+	gen = mus_make_polyshape(frequency, initial_phase, poly_ptr, len(partials))
+	gen._cache = [poly_ptr]
+	return gen
 	
-		
-	if isinstance(partials, list):
-		prtls = (c_double * len(partials))(*partials)
-	
-	if isinstance(partials, np.ndarray):
-		prtls = partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-
-	p = mus_partials_to_polynomial(len(partials), prtls, kind)
-	return mus_make_polyshape(frequency, initial_phase, p, len(partials))
-
-
 def polyshape(w: MUS_ANY_POINTER, index: Optional[float]=1.0, fm: Optional[float]=None):
 	if fm:
 		return mus_polyshape(w, index, fm)
@@ -895,46 +927,7 @@ def is_polyshape(w: MUS_ANY_POINTER):
 	return mus_is_polyshape(w)
 	
 
-def partials2polynomial(partials: npt.NDArray[np.float64], kind: Optional[int]=MUS_CHEBYSHEV_FIRST_KIND):
-	if isinstance(partials, list):
-		partials = np.array(partials, dtype=np.double)	
-	mus_partials_to_polynomial(len(partials), partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
-	return partials
-
-def normalize_partials(partials: npt.NDArray[np.float64]):
-	if isinstance(partials, list):
-		partials = np.array(partials, dtype=np.double)	
-	mus_normalize_partials(len(partials), partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-	return partials
-	
-	
-def chebyshev_tu_sum(x: float, t_coeffs: npt.NDArray[np.float64], u_coeffs: npt.NDArray[np.float64]):
-	if isinstance(t_coeffs, list):
-		t_coeffs = np.array(t_coeffs, dtype=np.double)	
-	if isinstance(u_coeffs, list):
-		u_coeffs = np.array(u_coeffs, dtype=np.double)	
-	return mus_chebyshev_tu_sum(x, 
-	t_coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), 
-	u_coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-
-	
-def chebyshev_t_sum(x: float, t_coeffs: npt.NDArray[np.float64]):
-	if isinstance(t_coeffs, list):
-		t_coeffs = np.array(t_coeffs, dtype=np.double)	
-	return mus_chebyshev_tu_sum(x, 
-	t_coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-
-	
-	
-def mus_chebyshev_u_sum(x: float, u_coeffs: npt.NDArray[np.float64]):
-	if isinstance(u_coeffs, list):
-		u_coeffs = np.array(u_coeffs, dtype=np.double)
-	return mus_chebyshev_tu_sum(x, 
-	u_coeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-	
-	
-#sawtooth-wave, triangle-wave, pulse-train, square-wave
-	
+# ---------------- triangle-wave ---------------- #	
 def make_triangle_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
 	return mus_make_triangle_wave(frequency, amplitude, phase)
 	
@@ -947,7 +940,7 @@ def triangle_wave(s: MUS_ANY_POINTER, fm: float=None):
 def is_triangle_wave(s: MUS_ANY_POINTER):
 	return mus_is_triangle_wave(s)
 
-
+# ---------------- square-wave ---------------- #	
 def make_square_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
 	return mus_make_square_wave(frequency, amplitude, phase)
 	
@@ -960,7 +953,7 @@ def square_wave(s: MUS_ANY_POINTER, fm: float=None):
 def is_square_wave(s: MUS_ANY_POINTER):
 	return mus_is_square_wave(s)
 	
-
+# ---------------- sawtooth-wave ---------------- #	
 def make_sawtooth_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
 	return mus_mus_make_sawtooth_wave(frequency, amplitude, phase)
 	
@@ -972,7 +965,8 @@ def sawtooth_wave(s: MUS_ANY_POINTER):
 	
 def is_sawtooth_wave(s: MUS_ANY_POINTER):
 	return mus_is_sawtooth_wave(s)
-	
+
+# ---------------- pulse-train ---------------- #		
 def make_pulse_train(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
 	return mus_make_pulse_train(frequency, amplitude, phase)
 	
@@ -986,7 +980,7 @@ def is_pulse_train(s: MUS_ANY_POINTER):
 	return mus_is_pulse_train()
 	
 	
-# ncos nsin
+# ---------------- ncos ---------------- #
 
 def make_ncos(frequency: float, n: Optional[int]=1):
 	return mus_make_ncos(frequency, n)
@@ -997,6 +991,8 @@ def ncos(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
 def is_ncos(nc: MUS_ANY_POINTER):
 	return mus_is_ncos(nc)
 	
+	
+# ---------------- nsin ---------------- #
 def make_nsin(frequency: float, n: Optional[int]=1):
 	return mus_make_nsin(frequency, n)
 	
@@ -1006,8 +1002,7 @@ def nsin(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
 def is_nsin(nc: MUS_ANY_POINTER):
 	return mus_is_nsin(nc)
 	
-	
-# nrxysin and nrxycos
+# ---------------- nrxysin (sine-summation) and nrxycos ---------------- #
 
 def make_nrxysin(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1, r: Optional[float]=.5):
 	return mus_make_nrxysin(frequency, ratio, n, r)
@@ -1029,7 +1024,18 @@ def is_nrxycos(s: MUS_ANY_POINTER):
 	return mus_is_nrxycos(s)
 	
 	
-# ssb_am
+# ---------------- rxykcos ---------------- #	
+def make_nrxycos(frequency: float, phase: float, r: Optional[float]=.5, ratio: Optional[float]=1.):
+	return mus_make_nrxycos(frequency, phase, r, ratio)
+	
+def nrxycos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+	return mus_rxyksin(s, fm)
+	
+def is_nrxycos(s: MUS_ANY_POINTER):
+	return mus_is_rxyksin(s)
+	
+		
+# ---------------- ssb-am ---------------- #	
 
 def make_ssb_am(frequency: float, n: Optional[int]=40):
 	return mus_make_ssb_am(frequency, n)
@@ -1044,17 +1050,13 @@ def is_ssb_am(gen: MUS_ANY_POINTER):
 	return mus_is_ssb_am(gen)
 
 
-#wave_train
-#MUS_EXPORT mus_any *mus_make_wave_train(mus_float_t freq, mus_float_t phase, mus_float_t *wave, mus_long_t wsize, mus_interp_t type);
-def make_wave_train(frequency: float, wave: npt.NDArray[np.float64], phase: Optional[float]=0., type=MUS_INTERP_LINEAR):
-	
-	if isinstance(wave, list):
-		wv = (c_double * len(wave))(*wave)
-							
-	if isinstance(wave, np.ndarray):
-		wv = wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
-	return mus_make_wave_train(frequency, phase, wv, len(wave), type)
+# ---------------- wave-train ----------------#
+def make_wave_train(frequency: float, wave, phase: Optional[float]=0., type=MUS_INTERP_LINEAR):
+	wave_ptr = get_array_ptr(wave)
+	gen = mus_make_wave_train(frequency, phase, wave_ptr, len(wave), type)
+	gen._cache = [wave_ptr]
+	return gen
 	
 def wave_train(w: MUS_ANY_POINTER, fm: Optional[float]=None):
 	if fm:
@@ -1064,32 +1066,29 @@ def wave_train(w: MUS_ANY_POINTER, fm: Optional[float]=None):
 	
 def is_wave_train(w: MUS_ANY_POINTER):
 	return mus_is_wave_train(w)
+
+
+
 	
 # TODO make-wave-train-with-env
-def make_wave_train_with_env():
-	pass
 
+def make_wave_train_with_env(frequency: float, pulse_env, size=MUS_CLM_DEFAULT_TABLE_SIZE):
+	ve = np.zero(size)
+	e = make_env(pulse_env, length=size)
+	for i in range(size):
+		ve[i] = env(e)
+	return make_wave_train(frequency, ve)	
 
-
-
-#rand rand_interp
-
-# TODO what is distribution envelope
-def make_rand(frequency: float, amplitude: float,distribution: Optional[npt.NDArray[np.float64]]=None):
-
-	if isinstance(distribution, list):
-		dst = (c_double * len(distribution))(*distribution)
-		
-								
-	if isinstance(distribution, np.ndarray):
-		dst = distribution.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-
+# ---------------- rand, rand_interp ---------------- #
+def make_rand(frequency: float, amplitude: float, distribution=None):
 	if (distribution):
-		return mus_make_rand_with_distribution(frequency, amplitude, dst, len(distribution))
+		distribution_ptr = get_array_ptr(distribution)
+		gen =  mus_make_rand_with_distribution(frequency, amplitude, distribution_ptr, len(distribution))
+		gen._cache= [distribution_ptr]
+		return gen
 	else:
 		return mus_make_rand(frequency, amplitude)
 
-	
 def rand(r: MUS_ANY_POINTER, sweep: Optional[float]=None):
 	if(sweep):
 		return mus_rand(r, sweep)
@@ -1099,17 +1098,13 @@ def rand(r: MUS_ANY_POINTER, sweep: Optional[float]=None):
 def is_rand(r: MUS_ANY_POINTER):
 	return mus_is_rand(r)
 
-def make_rand_interp(frequency: float, amplitude: float,distribution: Optional[npt.NDArray[np.float64]]=None):
+def make_rand_interp(frequency: float, amplitude: float,distribution=None):
 	
-	if isinstance(distribution, list):
-		dst = (c_double * len(distribution))(*distribution)
-		
-								
-	if isinstance(distribution, np.ndarray):
-		dst = distribution.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
 	if (distribution):
-		return mus_make_rand_interp_with_distribution(frequency, amplitude, dst, len(distribution))
+		distribution_ptr = get_array_ptr(distribution)
+		gen = mus_make_rand_interp_with_distribution(frequency, amplitude, distribution_ptr, len(distribution))
+		gen._cache = [distribution_ptr]
+		return gen
 	else:
 		return mus_make_rand_interp(frequency, amplitude)
 	
@@ -1132,7 +1127,7 @@ def mus_random(amplitude: float):
 # 	
 # def set_mus_rand_seed()
 	
-# one-pole, one-zero, two-pole, two-zero
+# ---------------- simple filters ---------------- #
 
 def make_one_pole(a0: float, b1: float):
 	return mus_make_one_pole(a0, b1)
@@ -1151,7 +1146,7 @@ def one_zero(f: MUS_ANY_POINTER, input: float):
 	
 def is_one_zero(f: MUS_ANY_POINTER):
 	return mus_is_one_zero(f)	
-	
+
 def make_two_pole(*args):
 	if(len(args) == 2):
 		return mus_make_two_pole_from_frequency_and_radius(args[0], args[1])
@@ -1180,7 +1175,7 @@ def two_zero(f: MUS_ANY_POINTER, input: float):
 def is_two_zero(f: MUS_ANY_POINTER):
 	return mus_is_two_zero(f)
 
-# formant
+# ---------------- formant ---------------- #
 
 def make_formant(frequency: float, radius: float):
 	return mus_make_formant(frequency, radius)
@@ -1194,45 +1189,35 @@ def formant(f: MUS_ANY_POINTER, input: float, radians: Optional[float]=None):
 def is_formant(f: MUS_ANY_POINTER):
 	return mus_is_formant(f)
 	
-def make_formant_bank(filters, amps: npt.NDArray[np.float64]):
-
-	if isinstance(amps, list):
-		a = (c_double * len(amps))(*amps)
-		
-								
-	if isinstance(amps, np.ndarray):
-		a = amps.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-
-
-	filt_array = (POINTER(mus_any) * len(filters))()
-	filt_array[:] = [filters[i] for i in range(len(filters))]
-	return mus_make_formant_bank(len(filters),filt_array, a)
 	
-
+# ---------------- formant-bank ---------------- #
+	
+def make_formant_bank(filters, amps):
+	filt_array = (POINTER(mus_any) * len(filters))()
+	filt_array[:] = [filters[i] for i in range(len(filters))]	
+	amps_ptr = get_array_ptr(amps)
+	
+	gen = mus_make_formant_bank(len(filters),filt_array, amps_ptr)
+	gen._cache = [filt_array, amps_ptr]
+	return gen
+	
 def formant_bank(f: MUS_ANY_POINTER, inputs):
-	if type(inputs) is np.ndarray:
-		return mus_formant_bank_with_inputs(f, inputs.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+	if inputs:
+		inputs_ptr = get_array_ptr(inputs)
+		gen =  mus_formant_bank_with_inputs(f, inputs_ptr)
+		gen._cache.append(inputs_ptr)
+		return gen
 	else:
 		return mus_formant_bank(f, inputs)
-	
-	
+		
 def is_formant_bank(f: MUS_ANY_POINTER):
 	return mus_is_formant_bank(f)
 	
-# filts = [1,2,3,4]		
-# for i in range(0, 4) :
-# 	filts[i] = make_formant(100*i, .2)	
-# a = make_formant_bank(filts, np.array([.4,.3,.5,.5]))
-# print(formant_bank(a, .2))
-# print(mus_describe(a))
-# print(is_formant_bank(a))
 
-
+# ---------------- firmant ---------------- #
 
 def make_firmant(frequency: float, radius: float):
 	return mus_make_firmant(frequency, radius)
-
-#radians is freq in radians
 
 def firmant(f: MUS_ANY_POINTER, input: float,radians: Optional[float]=None ):
 	if radians:
@@ -1248,38 +1233,30 @@ def is_firmant(f: MUS_ANY_POINTER):
 #mus-set-formant-frequency f frequency
 #mus-set-formant-radius-and-frequency f radius frequency
 
-#filter, iir-filter, fir-filter
+# ---------------- filter ---------------- #
 
-def make_filter(order: int, xcoeffs: npt.NDArray[np.float64], ycoeffs: npt.NDArray[np.float64]):
-	if isinstance(xcoeffs, list):
-		xc = (c_double * len(xcoeffs))(*xcoeffs)
+def make_filter(order: int, xcoeffs, ycoeffs):		
+	xcoeffs_ptr = get_array_ptr(xcoeffs)	
+	ycoeffs_ptr = get_array_ptr(ycoeffs)	
 		
-	if isinstance(ycoeffs, list):
-		yc = (c_double * len(ycoeffs))(*ycoeffs)
-
-	if isinstance(xcoeffs, np.ndarray):
-		xc = xcoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-	if isinstance(ycoeffs, np.ndarray):
-		yc = ycoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-	return mus_make_filter(order, xc, yc)
-
+	gen =  mus_make_filter(order, xcoeffs_ptr, ycoeffs_ptr)
+	gen._cache = [xcoeffs, ycoeffs]
+	return gen
 	
 def filter(fl: MUS_ANY_POINTER, input: float):
 	return mus_filter(fl, input)
 	
 def is_filter(fl: MUS_ANY_POINTER):
 	return mus_is_filter(fl)
-	
-def make_fir_filter(order: int, xcoeffs: npt.NDArray[np.float64]):
-	if isinstance(xcoeffs, list):
-		xc = (c_double * len(xcoeffs))(*xcoeffs)
-		
-	if isinstance(xcoeffs, np.ndarray):
-		xc = xcoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
-	return mus_make_fir_filter(order, xc)
+# ---------------- fir-filter ---------------- #
+	
+def make_fir_filter(order: int, xcoeffs):
+	xcoeffs_ptr = get_array_ptr(xcoeffs)	
+
+	gen =  mus_make_fir_filter(order, xcoeffs_ptr)
+	gen._cache = [xcoeffs_ptr]
+	return gen
 	
 def fir_filter(fl: MUS_ANY_POINTER, input: float):
 	return mus_fir_filter(fl, input)
@@ -1287,59 +1264,70 @@ def fir_filter(fl: MUS_ANY_POINTER, input: float):
 def is_fir_filter(fl: MUS_ANY_POINTER):
 	return mus_is_fir_filter(fl)
 
-def make_iir_filter(order: int, ycoeffs: npt.NDArray[np.float64]):
-	if isinstance(ycoeffs, list):
-		yc = (c_double * len(ycoeffs))(*ycoeffs)
+
+# ---------------- iir-filter ---------------- #
+
+def make_iir_filter(order: int, ycoeffs):
+	ycoeffs_ptr = get_array_ptr(ycoeffs)	
 		
-	if isinstance(ycoeffs, np.ndarray):
-		yc = ycoeffs.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-	return mus_make_iir_filter(order, yc, None)
+	gen = mus_make_iir_filter(order, ycoeffs_ptr, None)
+	gen._cache = [ycoeffs_ptr]
+	return gen
 	
 def iir_filter(fl: MUS_ANY_POINTER, input: float ):
 	return mus_iir_filter(fl, input)
 	
 def is_iir_filter(fl: MUS_ANY_POINTER):
 	return mus_is_iir_filter(fl)
-	
-def make_fir_coeffs(order: int, v: npt.NDArray[np.float64]):
-	if isinstance(v, list):
-		v = np.array(v, dtype=np.double)
-	
-	if isinstance(v, list):
-		fre = (c_double * len(ycoeffs))(*xcoeffs)
-		
-	if isinstance(v, np.ndarray):
-		fre = v.ctypes.data_as(ctypes.POINTER(ctypes.c_double))	
-	
-	coeffs = (c_double * (order + 1))()
-
-	
-	mus_make_fir_coeffs(order, fre, coeffs)
-	return coeffs
 
 
 
-#delay, tap
-#if max!=size should be linear?
+# TODO : This is all wrong!!	
+# def make_fir_coeffs(order: int, v: npt.NDArray[np.float64]):
+# 	if isinstance(v, list):
+# 		v = np.array(v, dtype=np.double)
+# 	
+# 	if isinstance(v, list):
+# 		fre = (c_double * len(ycoeffs))(*xcoeffs)
+# 		
+# 	if isinstance(v, np.ndarray):
+# 		fre = v.ctypes.data_as(ctypes.POINTER(ctypes.c_double))	
+# 	
+# 	coeffs = (c_double * (order + 1))()
+# 
+# 	
+# 	mus_make_fir_coeffs(order, fre, coeffs)
+# 	return coeffs
+
+
+
+# ---------------- delay ---------------- #
+# TODO: if max!=size type should default to linear
+
 def make_delay(size: int, 
 				initial_contents: Optional[npt.NDArray[np.float64]]=None, 
-				initial_element: Optional[float]=0.0, 
+				initial_element: Optional[float]=None, 
 				max_size:Optional[int]=None,
 				type=Interp.NONE):
 	
-	contents = None
-		
+	
+	initial_contents_ptr = None
+	
 	if not max_size:
 		max_size = size
 	
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
-	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
+
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
 		
-	return mus_make_delay(size, contents, max_size, type)
+
+	gen = mus_make_delay(size, None, max_size, type)
+	gen._cache = [initial_contents_ptr]
+	return gen
 	
 def delay(d: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
 	if pm:
@@ -1364,28 +1352,33 @@ def is_tap(d: MUS_ANY_POINTER):
 def delay_tick(d: MUS_ANY_POINTER, input: float):
 	return mus_delay_tick(d, input)
 
-# comb notch
 
 
-
+# ---------------- comb ---------------- #
 def make_comb(scaler: float,
 				size: int, 
 				initial_contents: Optional[npt.NDArray[np.float64]]=None, 
-				initial_element: Optional[float]=0.0, 
+				initial_element: Optional[float]=None, 
 				max_size:Optional[int]=None,
 				type=MUS_INTERP_NONE):
-	contents = None
-				
+	initial_contents_ptr = None
+	
 	if not max_size:
 		max_size = size
 	
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
-	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
+
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+				
+
+	gen = mus_make_comb(scaler, size, initial_contents_ptr, max_size, type)
+	gen._cache = [initial_contents_ptr]
+	return gen	
 		
-	return mus_make_comb(scaler, size, contents, max_size, type)	
 
 	
 
@@ -1399,11 +1392,14 @@ def comb(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
 def is_comb(cflt: MUS_ANY_POINTER):
 	return mus_is_comb(cflt)	
 
-
+# ---------------- comb-bank ---------------- #
 def make_comb_bank(combs: list):
 	comb_array = (MUS_ANY_POINTER * len(combs))()
 	comb_array[:] = [combs[i] for i in range(len(combs))]
-	return mus_make_comb_bank(len(combs), comb_array)
+	
+	gen = mus_make_comb_bank(len(combs), comb_array)
+	gen._cache = comb_array
+	return gen
 
 def comb_bank(combs: MUS_ANY_POINTER, input: float):
 	return mus_comb_bank(combs, input)
@@ -1412,6 +1408,14 @@ def is_comb_bank(combs: MUS_ANY_POINTER):
 	return mus_is_comb_bank(combs)
 
 
+
+# ---------------- filtered-comb ---------------- #
+
+# TODO: cache if initial contents
+
+
+# ---------------- filtered-comb ---------------- #
+
 def make_filtered_comb(scaler: float,
 				size: int, 
 				filter: Optional[mus_any]=None, #not really optional
@@ -1419,40 +1423,41 @@ def make_filtered_comb(scaler: float,
 				initial_element: Optional[float]=0.0, 
 				max_size:Optional[int]=None,
 				type=Interp.NONE):
-	contents = None
+	initial_contents_ptr = None
 	
-	if not filter:
-		print("error") # need error			
-				
 	if not max_size:
 		max_size = size
-		
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
 	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-	
-		
-	return mus_make_filtered_comb(scaler, size, contents, max_size, type, filter)
-	
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
 
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+				
+	gen = mus_make_filtered_comb(scaler, size, initial_contents_ptr, max_size, type, filter)
+	gen._cache = [initial_contents_ptr]
+	return gen	
+		
+	
 def filtered_comb(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
 	if pm:
 		return mus_filtered_comb(cflt, input, pm)
 	else:
 		return mus_filtered_comb_unmodulated(cflt, input)
-	
-	
+		
 def is_filtered_comb(cflt: MUS_ANY_POINTER):
 	return mus_is_filtered_comb(cflt)
 	
-	
-	
+# ---------------- filtered-comb-bank ---------------- #	
+# TODO: cache if initial contents	
 def make_filtered_comb_bank(fcombs: list):
 	fcomb_array = (POINTER(mus_any) * len(fcombs))()
 	fcomb_array[:] = [fcombs[i] for i in range(len(fcombs))]
-	return mus_make_filtered_comb_bank(len(fcombs), fcomb_array)
+	gen =  mus_make_filtered_comb_bank(len(fcombs), fcomb_array)
+	gen._cache = [fcomb_array]
+	return gen
 
 def filtered_comb_bank(fcomb: MUS_ANY_POINTER):
 	return mus_filtered_comb_bank(fcombs, input)
@@ -1460,26 +1465,33 @@ def filtered_comb_bank(fcomb: MUS_ANY_POINTER):
 def is_filtered_comb_bank(fcombs: MUS_ANY_POINTER):
 	return mus_is_filtered_comb_bank(fcombs)
 
+# ---------------- notch ---------------- #
+# TODO: cache if initial contents
 def make_notch(scaler: float,
 				size: int, 
 				initial_contents: Optional[npt.NDArray[np.float64]]=None, 
 				initial_element: Optional[float]=0.0, 
 				max_size:Optional[int]=None,
 				type=Interp.NONE):
-				
-	contents = None
-	
+
+	initial_contents_ptr = None
 	
 	if not max_size:
 		max_size = size
-
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
 	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-	return mus_make_notch(scaler, size, contents, max_size, type)
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
+
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+	
+
+	gen = mus_make_notch(scaler, size, initial_contents_ptr, max_size, type)
+	gen._cache = [initial_contents_ptr]
+	return gen	
+	
 	
 
 def notch(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
@@ -1492,8 +1504,8 @@ def is_notch(cflt: MUS_ANY_POINTER):
 	return mus_is_notch(cflt)
 	
 	
-# all pass
-
+# ---------------- all-pass ---------------- #
+# TODO: cache if initial contents
 def make_all_pass(feedback: float, 
 				feedforward: float,
 				size: int, 
@@ -1501,20 +1513,23 @@ def make_all_pass(feedback: float,
 				initial_element: Optional[float]=0.0, 
 				max_size:Optional[int]=None,
 				type=Interp.NONE):
-	
-	contents = None
+
+	initial_contents_ptr = None
 	
 	if not max_size:
 		max_size = size
-
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
 	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-		
-	return mus_make_all_pass(feedback, feedforward, size, contents, max_size, type)
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
+
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+			
+
+	gen = mus_make_notch(scaler, size, initial_contents_ptr, max_size, type)	
+	gen._cache = [initial_contents_ptr]
 	
 	
 def all_pass(f: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
@@ -1526,11 +1541,14 @@ def all_pass(f: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
 def is_all_pass(f: MUS_ANY_POINTER):
 	return mus_is_all_pass(f)
 	
+# ---------------- all-pass ---------------- #
 
 def make_all_pass_bank(all_passes: list):
 	all_passes_array = (POINTER(mus_any) * len(all_passes))()
 	all_passes_array[:] = [all_passes[i] for i in range(len(all_passes))]
-	return mus_make_all_pass_bank(len(all_passes), all_passes_array)
+	gen =  mus_make_all_pass_bank(len(all_passes), all_passes_array)
+	gen._cache = [all_passes_array]
+	return gen
 
 def all_pass_bank(all_passes: MUS_ANY_POINTER, input: float):
 	return mus_all_pass_bank(all_passes, input)
@@ -1545,47 +1563,59 @@ def is_all_pass_bank(o: MUS_ANY_POINTER):
 
 
 
-#moving-average, moving-max, moving-norm
+#---------------- moving-average ----------------#
+# TODO: cache if initial contents
+def make_moving_average(size: int, initial_contents=None, initial_element: Optional[float]=0.0):
+	initial_contents_ptr = None
+	
+	if not max_size:
+		max_size = size
+	
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
 
-def make_moving_average(size: int, initial_contents: Optional[npt.NDArray[np.float64]]=None, initial_element: Optional[float]=0.0):
-					
-					
-	contents = None
-	
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
-	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+						
+	gen = mus_make_moving_average(size, initial_contents_ptr)
+	gen._cache = [initial_contents_ptr]
+	return gen
 		
-	return mus_make_moving_average(size, contents)
+
 	
 def moving_average(f: MUS_ANY_POINTER, input: float):
 	return mus_moving_average(f, input)
 	
 def is_moving_average(f: MUS_ANY_POINTER):
 	return mus_is_moving_average(f)
-	
 
+#---------------- moving-max ----------------#
+# TODO: cache if initial contents
 def make_moving_max(size: int, 
 				initial_contents: Optional[npt.NDArray[np.float64]]=None, 
 				initial_element: Optional[float]=0.0):
-
-	contents = None
-
-	if isinstance(initial_contents, list):
-		contents = (c_double * len(initial_contents))(*initial_contents)
 	
-	if isinstance(initial_contents, np.ndarray):
-		contents = initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-		
-# 	if not initial_contents:
-# 		contents = (c_double * size)()
-# 		for i in range(size):
-# 			contents[i] = initial_element
-		
-	return mus_make_moving_max(size, initial_contents.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+	initial_contents_ptr = None
+	
+	if not max_size:
+		max_size = size
+	
+	if initial_contents:
+		initial_contents_ptr = get_array_ptr(intial_contents)
 
+	elif initial_element:
+		initial_contents = np.zeros(max_size)
+		initial_contents.fill(initial_element)
+		initial_contents_ptr = get_array_ptr(intial_contents)
+						
+
+	gen = mus_make_moving_max(size, initial_contents_ptr)
+	gen._cache = [initial_contents_ptr]
+	return gen
+	
+	
 	
 def moving_max(f: MUS_ANY_POINTER, input: float):
 	return mus_moving_max(f, input)
@@ -1593,10 +1623,11 @@ def moving_max(f: MUS_ANY_POINTER, input: float):
 def is_moving_max(f: MUS_ANY_POINTER):
 	return mus_is_moving_max(f)
 	
-	
+#---------------- moving-norm ----------------#
 def make_moving_norm(size: int,scaler: Optional[float]=1.):
-	initial_contents = (c_double * size)()
-	return mus_make_moving_norm(size, initial_contents, scaler)
+	initial_contents_ptr = (c_double * size)()
+	gen = mus_make_moving_norm(size, initial_contents_ptr, scaler)
+	gen._cache = [initial_contents_ptr]
 	
 def moving_norm(f: MUS_ANY_POINTER, input: float):
 	return mus_moving_norm(f, input)
@@ -1606,7 +1637,7 @@ def is_moving_norm(f: MUS_ANY_POINTER):
 	
 
 	
-#asymmetric-fm
+# ---------------- asymmetric-fm ---------------- #
 
 
 def make_asymmetric_fm(frequency: float, initial_phase: Optional[float]=0.0, r: Optional[float]=1.0, ratio: Optional[float]=1.):
@@ -1624,8 +1655,7 @@ def is_asymmetric_fm(af: MUS_ANY_POINTER):
 	
 
 	
-#@ sound io
-
+#---------------- file-to-sample ----------------#
 def make_file2sample(name, buffer_size: Optional[int]=8192):
 	return mus_make_file_to_sample_with_buffer_size(name, buffer_size)
 	
@@ -1636,7 +1666,7 @@ def is_file2sample(gen: MUS_ANY_POINTER):
 	return mus_is_file_to_sample(gen)
 	
 	
-
+#---------------- sample-to-file ----------------#
 def make_sample2file(name, chans: Optional[int]=1, format: Optional[Sample]=Sample.L24INT, type: Optional[Header]=Header.AIFF, comment: Optional[str]=None):
 	if comment:
 		return mus_make_sample_to_file(name, chans, format, type)
@@ -1655,7 +1685,7 @@ def continue_sample2file(name):
 	
 	
 
-	
+#---------------- file-to-frample ----------------#
 def make_file2frample(name, buffer_size: Optional[int]=8192):
 	return mus_make_file_to_frample_with_buffer_size(name, buffer_size)
 	
@@ -1668,7 +1698,7 @@ def is_file2frample(gen: MUS_ANY_POINTER):
 	return mus_is_file_to_frample(gen)
 	
 	
-
+#---------------- frample-to-file ----------------#
 def make_frample2file(name, chans: Optional[int]=1, format: Optional[Sample]=Sample.LFLOAT, type: Optional[Header]=Header.NEXT, comment: Optional[str]=None):
 	if comment:
 		return mus_make_frample_to_file(name, chans, format, type)
@@ -1690,6 +1720,7 @@ def continue_frample2file(name):
 #def file2array(file, channel: Optional[int]=1, beg: int, dur: int):
 #def array2file(file, data, len, srate, channels)	
 
+# TODO : move these
 def mus_close(obj):
 	return mus_close_file(obj)
 	
@@ -1700,9 +1731,9 @@ def mus_is_input(obj):
 	return mus_is_input(obj)
 
 
-#readin
+#---------------- readin ----------------#
 
-def make_readin(filename: str, chan: int=0, start: int=0, direction: Optional[int]=1, buffersize: Optional[int]=512):
+def make_readin(filename: str, chan: int=0, start: int=0, direction: Optional[int]=1, buffersize: Optional[int]=8192):
 	return mus_make_readin_with_buffer_size(filename, chan, start, direction, buffersize)
 	
 def readin(rd: MUS_ANY_POINTER):
@@ -1714,15 +1745,13 @@ def is_readin(rd: MUS_ANY_POINTER):
 	
 	
 	
-# src
+#---------------- src ----------------#
 
 def make_src(input, srate: Optional[float]=1.0, width: Optional[int]=5):
 	if(isinstance(input, MUS_ANY_POINTER)):
 		@INPUTCALLBACK
 		def ifunc(gen, inc):
-			#obj = cast(gen, POINTER(mus_any))
-			#mus_set_increment(input,inc) # doing this to avoid releasing pointer that is just copy
-			return mus_apply(input,inc, 0.)
+			return mus_apply(input,inc, 0.) # doing this to avoid releasing pointer that is just copy
 		
 		res = mus_make_src(ifunc, srate, width, input)
 	
@@ -1747,8 +1776,8 @@ def is_src(s: MUS_ANY_POINTER):
 	return mus_is_src(s)
 	
 	
-#convolve
-
+#---------------- convolve ----------------#
+# TODO: fix input callback
 def make_convolve(input, filter: npt.NDArray[np.float64], fft_size: int, filter_size: Optional[int]=None ):
 
 	if isinstance(filter, list):
@@ -1760,9 +1789,7 @@ def make_convolve(input, filter: npt.NDArray[np.float64], fft_size: int, filter_
 	if(isinstance(input, MUS_ANY_POINTER)):
 		@INPUTCALLBACK
 		def ifunc(gen, inc):
-			obj = cast(gen, MUS_ANY_POINTER)
-			mus_set_increment(obj,inc)
-			return mus_apply(obj, inc, 0.)
+			return mus_apply(input, inc, 0.)
 		
 		res = mus_make_convolve(ifunc, filter.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), fft_size, filter_size)
 	
@@ -1789,7 +1816,7 @@ def is_convolve(gen: MUS_ANY_POINTER):
 def convolve_files(file1, file2, maxamp: float, outputfile):
 	mus_convolve_files(file1, file2, maxamp,outputfile )
 
-
+# TODO - is this not already defined?
 def cepstrum(data: npt.NDArray[np.float64], n):
 	if isinstance(data, list):
 		data = np.array(data, dtype=np.double)
@@ -1800,7 +1827,7 @@ def cepstrum(data: npt.NDArray[np.float64], n):
 
 # TODO convolve-files file1 file2 (maxamp 1.0) (output-file "tmp.snd")
 	
-#granulate
+#--------------- granulate ----------------#
 
 def make_granulate(input, 
 					expansion: Optional[float]=1.0, 
@@ -1820,9 +1847,7 @@ def make_granulate(input,
 	if(isinstance(input, MUS_ANY_POINTER)):
 		@INPUTCALLBACK
 		def ifunc(gen, inc):
-			#obj = cast(gen, MUS_ANY_POINTER)
-			#mus_set_increment(input,inc)
-			return mus_apply(input, 0., 0.)
+			return mus_apply(input,inc, 0.)
 	
 		res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), input)
 	
@@ -1855,7 +1880,7 @@ def is_granulate(e: MUS_ANY_POINTER):
 	
 	
 	
-# phase vocoder 
+#--------------- phase-vocoder ----------------#
 
 def make_phase_vocoder(input, 
 						fft_size: Optional[int]=512, 
@@ -1884,9 +1909,6 @@ def make_phase_vocoder(input,
 	if(isinstance(input, MUS_ANY_POINTER)):
 		@INPUTCALLBACK
 		def ifunc(gen, inc):
-# 			obj = cast(gen, MUS_ANY_POINTER)
-# 			mus_set_increment(obj,inc)
-# 			return mus_apply(obj, inc, 0.)
  			mus_set_increment(input,inc)
  			return mus_apply(input, inc, 0.)
 	
@@ -1959,78 +1981,56 @@ def phase_vocoder_phase_increments(gen: MUS_ANY_POINTER):
 	phases_increments = np.copy(p)
 	return phases_increments
 	
-#print(isinstance(np.array([1,2,3]), np.ndarray))
-#in-any, out-any
-
-# out-any loc data channel (output *output*)
-# def out_any(loc: int, data: float, channel, output):
-# 	if isinstance(output, np.ndarray):
-# 		output[channel][loc] = data
-# 	else:
-# 		mus_out_any(loc, data, channel, output)
-# 	
-# def outa(loc: int, data: float, output):
-# 	out_any(loc, data, 0, output)
-# 	
-# def outb(loc: int, data: float, output):
-# 	out_any(loc, data, 1, output)
-# 	
-# def outc(loc: int, data: float, output):
-# 	out_any(loc, data, 2, output)
-# 	
-# def outd(loc: int, data: float, output):
-# 	out_any(loc, data, 3, output)
-	
+#--------------- out-any ----------------#
 #  TODO : output to array out-any loc data channel (output *output*)	
 def out_any(loc: int, data: float, channel,  output=None):
 	if output:
 		mus_out_any(loc, data, channel, output)		
 	else:
 		mus_out_any(loc, data, channel, Sound.output)	
-
+#--------------- outa ----------------#
 def outa(loc: int, data: float, output=None):
 	if output:
 		out_any(loc, data, 0, output)		
 	else:
 		out_any(loc, data, 0, Sound.output)	
-	
+#--------------- outb ----------------#	
 def outb(loc: int, data: float, output=None):
 	if output:
 		out_any(loc, data, 1, output)		
 	else:
 		out_any(loc, data, 1, Sound.output)
-	
+#--------------- outc ----------------#	
 def outc(loc: int, data: float, output=None):
 	if output:
 		out_any(loc, data, 2, output)		
 	else:
 		out_any(loc, data, 2, Sound.output)		
-	
+#--------------- outd ----------------#	
 def outd(loc: int, data: float, output=None):
 	if output:
 		out_any(loc, data, 3, output)		
 	else:
 		out_any(loc, data, 3, Sound.output)	
-	
+#--------------- out-bank ----------------#	
 def out_bank(gens, loc, input):
 	for i in range(len(gens)):
 		out_any(loc, mus_apply(gens[i], input, 0.), i)	
 	
 
-#out_bank ? TODO - what is this
-
+#--------------- in-any ----------------#
 def in_any(loc: int, channel: int, input):
 	if isinstance(input, np.ndarray):
 		return input[channel][loc]
 	else:
 		return mus_in_any(loc, channel, input)
-	
+#--------------- ina ----------------#
 def ina(loc: int, input):
 	if isinstance(input, np.ndarray):
 		return input[channel][loc]
 	else:
 		return mus_in_any(loc, 0, input)
-	
+#--------------- inb ----------------#	
 def inb(loc: int, input):
 	if isinstance(input, np.ndarray):
 		return input[channel][loc]
@@ -2041,26 +2041,8 @@ def inb(loc: int, input):
 
 
 
-# locsig
-# TODO:  output could be array 
-# TODO : revchans vs chans
-#     mus_make_locsig.argtypes = [mus_float_t, mus_float_t, mus_float_t, c_int, POINTER(mus_any), c_int, POINTER(mus_any), mus_interp_t]
-# def make_locsig(degree: Optional[float]=0.0, 
-# 	distance: Optional[float]=1., 
-# 	reverb: Optional[float]=0.0, 
-# 	output: Optional[MUS_ANY_POINTER]=None, 
-# 	revout: Optional[MUS_ANY_POINTER]=None, 
-# 	channels: Optional[int]=2, 
-# 	type: Optional[Interp]=Interp.LINEAR):
-# 	
-# 	
-# 	if not output or not reverb:
-# 		print("error")
-# 		return None
-# 	if not channels:
-# 		channels = mus_channels(output)	
-# 	return mus_make_locsig(degree, distance, reverb, channels, output, channels, revout,  type)
 
+#--------------- locsig ----------------#
 def make_locsig(degree: Optional[float]=0.0, 
 	distance: Optional[float]=1., 
 	reverb: Optional[float]=0.0, 
@@ -2080,7 +2062,6 @@ def make_locsig(degree: Optional[float]=0.0,
 		
 	return mus_make_locsig(degree, distance, reverb, channels, output, channels, revout,  type)
 		
-#(mus_any *ptr, mus_long_t loc, mus_float_t val)
 def locsig(gen: MUS_ANY_POINTER, loc: int, val: float):
 	mus_locsig(gen, loc, val)
 	
@@ -2106,18 +2087,3 @@ def move_locsig(gen: MUS_ANY_POINTER, degree: float, distance: float):
 # locsig-type ()	
 
 # TODO: move-sound  need dlocsig
-
-# def make_move_sound():
-# 	pass
-# 	
-# def move_sound():
-# 	pass
-# 	
-# def is_move_sound():
-# 	pass
-# 	
-# o = make_oscil(260)	
-# print(o)
-# print(o.__class__.__name__)
-
-# 
