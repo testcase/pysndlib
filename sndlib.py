@@ -2743,6 +2743,7 @@ if _libs["sndlib"].has("mus_make_generator", "cdecl"):
     mus_make_generator.argtypes = [c_int, String, CFUNCTYPE(UNCHECKED(None), POINTER(mus_any)), CFUNCTYPE(UNCHECKED(String), POINTER(mus_any)), CFUNCTYPE(UNCHECKED(c_bool), POINTER(mus_any), POINTER(mus_any))]
     mus_make_generator.restype = POINTER(mus_any_class)
 
+
 # clm.h: 87
 if _libs["sndlib"].has("mus_generator_set_length", "cdecl"):
     mus_generator_set_length = _libs["sndlib"].get("mus_generator_set_length", "cdecl")

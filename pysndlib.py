@@ -12,6 +12,7 @@ import numpy.typing as npt
 import os
 import types
 from enum import Enum, IntEnum
+import time
 
 mus_initialize()
 mus_sound_initialize() 
@@ -727,6 +728,8 @@ class Sound(object):
     def __enter__(self):
         #print("enter")
         # in original why use reverb-1?
+        if  self.statistics :
+            self.tic = time.perf_counter()
         if self.output_to_file :
             # writing to File
             #continue_sample2file
@@ -771,6 +774,10 @@ class Sound(object):
         # need some safety if errors
         
         set_srate(self.old_srate)
+        
+        if  self.statistics :
+            toc = time.perf_counter()
+            print(f"Total processing time {toc - self.tic:0.4f} seconds")
 
 
 
