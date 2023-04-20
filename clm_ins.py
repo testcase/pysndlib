@@ -4,6 +4,14 @@ import numpy as np
 from pysndlib import *
 from .env import stretch_envelope
 from .env import interleave
+
+
+def is_zero(n):
+    return n == 0
+    
+def is_number(n):
+    return type(n) == int or type(n) == float
+
 # from pysndlib.env import stretch_envelope
 # --------------- pluck ---------------- #
 
@@ -394,7 +402,7 @@ def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, r
 #         x = x1
 #         outa(i, scale * x)
     
-# TODO: --------------- pqw ---------------- #
+# --------------- pqw ---------------- #
 
 
     
@@ -434,7 +442,7 @@ def pqw(start, dur, spacing_freq, carrier_freq, amplitude,
 
 
 
-# TODO: --------------- tubebell ---------------- #
+# --------------- tubebell ---------------- #
 
 
 def tubebell(beg, dur, freq, amp, base=32.0):
@@ -454,34 +462,361 @@ def tubebell(beg, dur, freq, amp, base=32.0):
                  (env(ampenv2) * oscil(osc2, (.144 * oscil(osc3))))))
     
     
+
+# --------------- wurley ---------------- #
+
+def wurley(beg, dur, freq, amp):
+    osc0 = make_oscil(freq)
+    osc1 = make_oscil(freq * 4.0)
+    osc2 = make_oscil(510.0)
+    osc3 = make_oscil(510.0)
+    ampmod = make_oscil(8.0)
+    g0 = .5 * amp
+    ampenv = make_env([0,0,1,1,9,1,10,0], duration=dur)
+    indenv = make_env([0,0,.001,1,.15,0,max(dur, .16),0], duration=dur, scaler=.117)
+    resenv = make_env([0,0,.001,1,.25,0,max(dur, .26),0], duration=dur, scaler=(.5 * .307 * amp))
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
+    for i in range(st, nd):
+        outa(i, env(ampenv) * 
+            (1.0 + (.007 * oscil(ampmod))) * 
+            ((g0 * oscil(osc0, (.307 * oscil(osc1)))) + (env(resenv) * oscil(osc2, (env(indenv) * oscil(osc3))))))
+            
+
+
+# --------------- rhodey ---------------- #
+
+def rhodey(beg, dur, freq, amp, base=.5):
+    osc0 = make_oscil(freq)
+    osc1 = make_oscil(freq * .5)
+    osc2 = make_oscil(freq)
+    osc3 = make_oscil(freq * 15.0)
+    ampenv1 = make_env([0,0,.005, 1, dur, 0], base=base, duration=dur, scaler=(amp * .5))
+    ampenv2 = make_env([0,0,.001, 1, dur, 0], base=(1.5 * base), duration=dur, scaler=(amp * .5))
+    ampenv3 = make_env([0,0,.001, 1, .25, 0, max(dur, .26), 0], base=(4. * base), duration=dur, scaler= .109)
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
+    for i in range(st, nd):
+        outa(i, ( env(ampenv1)*oscil(osc0, (.535 * oscil(osc1)))) + (env (ampenv2) * oscil(osc2, env(ampenv3) * oscil(osc3))))
+
+# --------------- hammondoid ---------------- #
+
+def hammondoid(beg, dur, freq, amp):
+    osc0 = make_oscil(freq * .999)
+    osc1 = make_oscil(freq * 1.997)
+    osc2 = make_oscil(freq * 3.006)
+    osc3 = make_oscil(freq * 6.009)
+    ampenv1 = make_env([0,0,.005, 1, dur-.008, 1, dur, 0], duration=dur)
+    ampenv2 = make_env([0,0,.005, 1, dur, 0], duration=dur, scaler=(.5 * .75 * amp))
+    g0 = .25 * .75 * amp
+    g1 = .25 * .75 * amp
+    g2 = .5 * amp
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
     
+    for i in range(st, nd):
+        outa(i, (env(ampenv1) * ((g0 * oscil(osc0)) + (g1 * oscil(osc1)) + (g2 * oscil(osc2)))) +
+                    (env(ampenv2)*oscil(osc3)))
+
+# --------------- metal ---------------- #
+
+def metal(beg, dur, freq, amp):
+    osc0 = make_oscil(freq)
+    osc1 = make_oscil(freq * 4.0 * 0.999)
+    osc2 = make_oscil(freq * 3.0 * 1.001)
+    osc3 = make_oscil(freq * 0.50 * 1.002)
+    ampenv0 = make_env([0,0,.001,1, (dur-.002),1,dur,0], duration=dur, scaler=(amp * .615))
+    ampenv1 = make_env([0,0,.001,1,(dur-.011),1,dur,0], duration=dur, scaler=.202)
+    ampenv2 = make_env([0,0,.01,1,(dur-.015),1,dur,0], duration=dur, scaler=.574)
+    ampenv3 = make_env([0,0,.03,1,(dur-.040),1,dur,0], duration=dur, scaler=.116)
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
     
+    for i in range(st, nd):
+        outa(i, (env(ampenv0) * (oscil(osc0, ((env(ampenv1) * oscil(osc1, env(ampenv2) * oscil(osc2))))) +
+                    (env(ampenv3) * oscil(osc3)))))
+                    
+                    
+# --------------- drone ---------------- #
 
-# TODO: --------------- wurley ---------------- #
+def drone(startime, dur, frequency, amp, ampfun, synth, ampat, ampdc, amtrev, deg, dis, rvibamt, rvibfreq):
+    beg = seconds2samples(startime)
+    end = seconds2samples(startime + dur)
+    waveform = partials2wave(synth)
+    amplitude = amp * .25
+    freq = hz2radians(frequency)
+    s = make_table_lookup(frequency, wave=waveform)
+    ampe = stretch_envelope(ampfun, 25, (100 * (ampat / dur)), 75, (100 - (100 * (ampdc / dur))))
+    amp_env = make_env(ampe, scaler=amplitude, duration=dur)
+    ran_vib = make_rand(rvibfreq, rvibamt*freq)
+    loc = make_locsig(deg, dis, amtrev)
+    
+    for i in range(beg, end):
+        locsig(loc, i, env(amp_env) * table_lookup(s, rand(ran_vib)))
 
-# TODO: --------------- rhodey ---------------- #
-
-# TODO: --------------- hammondoid ---------------- #
-
-# TODO: --------------- metal ---------------- #
-
-# TODO: --------------- drone ---------------- #
 
 # TODO: --------------- canter ---------------- #
 
-# TODO: --------------- nrev ---------------- #
+# --------------- nrev ---------------- #
 
-# TODO: --------------- reson ---------------- #
+def is_even(n):
+    return bool(n%2==0)
+    
+def next_prime(n):
+    np=[]
+    isprime=[]
+    for i in range (n+1,n+200):
+        np.append(i)
+    for j in np:
+        val_is_prime = True
+        for x in range(2,j-1):
+            if j % x == 0:
+                val_is_prime = False
+                break
+        if val_is_prime:
+            isprime.append(j)
+    return min(isprime)
+    
+def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
+    srscale = get_srate() / 25641
+    dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19]
+    chans = Sound.output.mus_channels
+    chan2 = chans > 1
+    chan4 = chans == 4
+    
+    for i in range(0,15):
+        val = math.floor(srscale * dly_len[i])
+        if is_even(val):
+            val += 1
+        dly_len[i] = next_prime(val)
+        
+    length = math.floor(get_srate()) + Sound.reverb.mus_length
+    comb1 = make_comb(.822 * reverb_factor, dly_len[0])
+    comb2 = make_comb(.802 * reverb_factor, dly_len[1])
+    comb3 = make_comb(.733 * reverb_factor, dly_len[2])
+    comb4 = make_comb(.753 * reverb_factor, dly_len[3])
+    comb5 = make_comb(.753 * reverb_factor, dly_len[4])
+    comb6 = make_comb(.733 * reverb_factor, dly_len[5])
+    low = make_one_pole(lp_coeff, lp_coeff - 1.0)
+    allpass1 = make_all_pass(-.7000, .700, dly_len[6])
+    allpass2 = make_all_pass(-.7000, .700, dly_len[7])
+    allpass3 = make_all_pass(-.7000, .700, dly_len[8])
+    allpass4 = make_all_pass(-.7000, .700, dly_len[9])
+    allpass5 = make_all_pass(-.7000, .700, dly_len[11])
+    allpass6 = make_all_pass(-.7000, .700, dly_len[12]) if chan2 else None
+    allpass7 = make_all_pass(-.7000, .700, dly_len[13]) if chan4 else None
+    allpass8 = make_all_pass(-.7000, .700, dly_len[14]) if chan4 else None
+    
+    filts = []
+    
+    if not chan2:
+        filts.append(allpass5)
+        if not chan4:
+            filts.extend([allpass5, allpass6])
+        else:
+            filts.extend([allpass5, allpass6, allpass7, allpass8])
+    
+    combs = make_comb_bank([comb1, comb2, comb3, comb4, comb5, comb6])
+    allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
+    for i in range(length):
+        out_bank(filts, i, all_pass(allpass4, one_pole(low, all_pass_bank(allpasses, comb_bank(combs, volume * ina(i, Sound.reverb))))))
+    
+    
 
-# TODO: --------------- cellon ---------------- #
+# --------------- reson ---------------- #
 
-# TODO: --------------- jl_reverb ---------------- #
+def reson(startime, dur, pitch, amp, numformants, indxfun, skewfun, pcskew, skewat, skewdc,
+		      vibfreq, vibpc, ranvibfreq, ranvibpc, degree, distance, reverb_amount, data):
+		      
+    beg = seconds2samples(startime)
+    end = seconds2samples(startime + dur)
+    carriers = [None] * numformants
+    modulator = make_oscil(pitch)
+    ampfs = [None] * numformants
+    indfs = [None] * numformants
+    c_rats = [None] * numformants
+    totalamp = 0.0
+    loc = make_locsig(degree, distance, reverb_amount)
+    pervib = make_triangle_wave(vibfreq, hz2radians(vibpc * pitch))
+    ranvib = make_rand_interp(ranvibfreq, hz2radians(ranvibpc * pitch))
+    frqe = stretch_envelope(skewfun, 25, 100 * (skewat / dur), 75, 100 - (100 * (skewdc / dur)))
+    frqf = make_env(frqe, scaler=hz2radians(pcskew * pitch), duration=dur)
+    
+    for i in range(0,numformants):
+        totalamp += data[i][2]
+        
+    for i in range(0, numformants):
+        frmdat = data[i]
+        freq = frmdat[1]
+        harm = round(freq / pitch)
+        rfamp = frmdat[2]
+        ampat = 100 * (frmdat[3] / dur)
+        ampdc = 100 - (100 * (frmdat[4] / dur))
+        dev0 = hz2radians(frmdat[5] * freq)
+        dev1 = hz2radians(frmdat[6] * freq)
+        indxat = 100 * (frmdat[7] / dur)
+        indxdc = 100 - (100 * (frmdat[8] / dur))
+        ampf = frmdat[0]
+        rsamp = 1.0 - math.fabs(harm - (freq / pitch))
+        cfq = pitch * harm
+        if ampat == 0:
+            ampat = 25
+        if ampdc == 0:
+            ampdc = 75
+        if indxat == 0:
+            indxat = 25
+        if indxdc == 0:
+            indxdc = 75
+        indfs[i] = make_env(stretch_envelope(indxfun, 25, indxat, 75, indxdc), duration=dur, scaler=(dev1 - dev0), offset=dev0)
+        ampfs[i] = make_env(stretch_envelope(ampf, 25, ampat, 75, ampdc), duration=dur, scaler=(rsamp * amp * rfamp) / totalamp)
+        c_rats[i] = harm
+        carriers[i] = make_oscil(cfq)
+        
+    if numformants == 2:
+        e1 = ampfs[0]
+        e2 = ampfs[1]
+        c1 = carriers[0]
+        c2 = carriers[1]
+        i1 = indfs[0]
+        i2 = indfs[1]
+        r1 = c_rats[0]
+        r2 = c_rats[1]
+        
+        for i in range(beg, end):
+            vib = env(frqf) + triangle_wave(pervib) + rand_interp(ranvib)
+            modsig = oscil(modulator, vib)
+            locsig(loc, i, (env(e1) * oscil(c1, (vib * r1) + (env(i1) * modsig))) + (env(e2) * oscil(c2, (vib * r2) + (env(i2) * modsig))))
+        
+    else:
+        for i in range(beg, end):
+            outsum = 0.0
+            vib = env(frqf) + triangle_wave(pervib) + rand_interp(ranvib)
+            modsig = oscil(modulator, vib)
+            
+            for k in range(0,numformants):
+                outsum += env(ampfs[k]) * oscil(carriers[k], (vib * c_rats[k]) + (env(indfs[k]) * modsig))
+            
+            locsig(loc, i, outsum)       
+        
 
-# TODO: --------------- gran_synth ---------------- #
+# --------------- cellon ---------------- #
 
-# TODO: --------------- touch_tone ---------------- #
 
-# TODO: --------------- spectra ---------------- #
+def cellon(beg, dur, pitch0, amp, ampfun, betafun, beta0, beta1, betaat, betadc, ampat, ampdc, dis, pcrev, deg,
+            pitch1, glissfun, glissat, glissdc, pvibfreq, pvibpc, pvibfun=[0,1,100,1], pvibat=0, pvibdc=0, rvibfreq=0, rvibpc=0, rvibfun=[0,1,100,1]):
+	
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
+    pit1 = pitch0 if pitch1 == 0.0 else pitch1
+    loc = make_locsig(deg, dis, pcrev)
+    carrier = make_oscil(pitch0)
+    low = make_one_zero(.5, -.5)
+    fm = 0.0
+    fmosc = make_oscil(pitch0)
+    pvib = make_triangle_wave(pvibfreq, 1.0)
+    rvib = make_rand_interp(rvibfreq, 1.0)
+    ampap = (100 * (ampat / dur)) if ampat > 0.0 else 25
+    ampdp = (100 * (1.0 - (ampdc / dur))) if ampdc > 0.0 else 75
+    glsap = (100 * (glissat / dur)) if glissat > 0.0 else 25
+    glsdp = (100 * (1.0 - (glissdc / dur))) if glissdc > 0.0 else 75
+    betap = (100 * (betaat / dur)) if betaat > 0.0 else 25
+    betdp = (100 * (1.0 - (betadc / dur))) if betadc > 0.0 else 75
+    pvbap = (100 * (pvbap / dur)) if pvibat > 0.0 else 25
+    pvbdp = (100 * (1.0 - (pvibdc / dur))) if pvibdc > 0.0 else 75
+    
+    pvibenv = make_env(stretch_envelope(pvibfun, 25, pvbap, 75, pvbdp), duration=dur, scaler=hz2radians(pvibpc * pitch0))
+    rvibenv = make_env(rvibfun, duration=dur, scaler=hz2radians(rvibpc * pitch0))
+    glisenv = make_env(stretch_envelope(pvibfun, 25, pvbap, 75, pvbdp), duration=dur, scaler=hz2radians(pvibpc * pitch0))
+    amplenv = make_env(stretch_envelope(ampfun, 25, ampap, 75, ampdp), scaler=amp, duration=dur)
+    betaenv = make_env(stretch_envelope(betafun, 25, betap, 75, betdp), duration=dur, scaler=(beta1 - beta0), offset=beta0)
+    
+    if (pitch0 == pitch1) and (is_zero(pvibfreq) or is_zero(pvibpc)) and (is_zero(rvibfreq) or is_zero(rvibpc)):
+        for i in range(st, nd):
+            fm = one_zero(low, env(betaenv) * oscil(fmosc, fm))
+            locsig(loc, i, env(amplenv)*oscil(carrier,fm))
+    else:
+        for i in range(st, nd):
+            vib = (env(pvibenv)*triangle_wave(pvib)) + (env(rvibenv)*rand_interp(rvib)) + env(glisenv)
+            fm = one_zero(low, env(betaenv) * oscil(fmosc, (fm+vib)))
+            locsig(loc, i, env(amplenv)*oscil(carrier,fm+vib))
+    
+    
+# --------------- jl_reverb ---------------- #
+
+def jl_reverb(decay=3.0, volume=1.0):
+    allpass1 = make_all_pass(-.700, .700, 2111)
+    allpass2 = make_all_pass(-.700, .700, 673)
+    allpass3 = make_all_pass(-.700, .700, 223)
+    comb1 = make_comb(.742, 9601)
+    comb2 = make_comb(.733, 10007)
+    comb3 = make_comb(.715, 10799)
+    comb4 = make_comb(.697, 11597)
+    outdel1 = make_delay(seconds2samples(.013))
+    outdel2 = make_delay(seconds2samples(.011))
+    length = math.floor((decay * get_srate()) + Sound.reverb.mus_length)
+    filts = [outdel1, outdel2]
+    combs = make_comb_bank([comb1, comb2, comb3, comb4])
+    allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
+    for i in range(0, length):
+        out_bank(filts, i, volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, Sound.reverb))))
+
+# --------------- gran_synth ---------------- #
+
+def gran_synth(startime, duration, audio_freq, grain_dur, grain_interval, amp):
+    grain_size = math.ceil(max(grain_dur, grain_interval) * get_srate())
+    beg = seconds2samples(startime)
+    end = seconds2samples(startime + duration)
+    grain_env = make_env([0,0,25,1,75,1,100,0], duration=grain_dur)
+    carrier = make_oscil(audio_freq)
+    grain = [(env(grain_env) * oscil(carrier)) for i in range(grain_size)]
+    grains = make_wave_train(1.0 / grain_interval, grain)
+    
+    for i in range(beg, end):
+        outa(i, amp * wave_train(grains))
+
+# --------------- touch_tone ---------------- #
+
+def touch_tone(start, telephone_number):
+    touch_tab_1 = [0,697,697,697,770,770,770,852,852,852,941,941,941]
+    touch_tab_2 = [0,1209,1336,1477,1209,1336,1477,1209,1336,1477,1209,1336,1477]
+    
+    for i in range(len(telephone_number)):
+        k = telephone_number[i]
+        beg = seconds2samples(start + (i * .4))
+        end = beg + seconds2samples(.3)
+        if is_number(k):
+            i = k if not (0 == k) else 11
+        else:
+            i = 10 if k == '*' else 12
+        
+        frq1 = make_oscil(touch_tab_1[i])
+        frq2 = make_oscil(touch_tab_2[i])
+        
+        for j in range(beg, end):
+            outa(j, (.1 * (oscil(frq1) + oscil(frq2))))
+        
+# --------------- spectra ---------------- #
+
+def spectra(startime, duration, frequency, amplitude, partials=[1,1,2,0.5], amp_envelope=[0,0,50,1,100,0], 
+                vibrato_amplitude=0.005, vibrato_speed=5.0,degree=0.0, distance=1.0, reverb_amount=0.005):
+
+    beg = seconds2samples(startime)
+    end = seconds2samples(startime + duration)
+    waveform = partials2wave(partials)
+    freq = hz2radians(frequency)
+    s = make_table_lookup(frequency=frequency, wave=waveform)
+    amp_env = make_env(amp_envelope, scaler=amplitude, duration=duration)
+    per_vib = make_triangle_wave(vibrato_speed, vibrato_amplitude * freq)
+    loc = make_locsig(degree, distance, reverb_amount)
+    ran_vib = make_rand_interp(vibrato_speed + 1.0, vibrato_amplitude * freq)
+    for i in range(beg, end):
+        locsig(loc, i, env(amp_env) * table_lookup(s, triangle_wave(per_vib) + rand_interp(ran_vib)))
+
+
+
+
+    
+    
 
 # TODO: --------------- two_tab ---------------- #
 
