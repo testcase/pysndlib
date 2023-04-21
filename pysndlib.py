@@ -1,21 +1,22 @@
-#! /Users/toddingalls/Developer/Python/venvs/pysndlib-venv/bin/python
-
-
-from typing import Optional
 from contextlib import contextmanager
-import subprocess
-import functools
+from enum import Enum, IntEnum
 from functools import partial
-from sndlib import *
+import os
+from typing import Optional
+import subprocess
+import time
+import types
+
 import numpy as np
 import numpy.typing as npt
-import os
-import types
-from enum import Enum, IntEnum
-import time
+
+from .sndlib import *
 
 mus_initialize()
 mus_sound_initialize() 
+
+import soundfile as sf
+
 
 
 # ENUMS
@@ -249,16 +250,22 @@ class Error(IntEnum):
     NUM_ERRORS = MUS_NUM_ERRORS
 
 
+
+
+# is this a hack? i don't know. this seems to add the properties i want
+MUS_ANY_POINTER = POINTER(mus_any)
+
 INPUTCALLBACK = CFUNCTYPE(c_double, c_void_p, c_int)
 EDITCALLBACK = CFUNCTYPE(c_int, c_void_p)
 ANALYSISCALLBACK = CFUNCTYPE(c_bool, c_void_p, CFUNCTYPE(c_double, c_void_p, c_int))
 SYNTHESISCALLBACK = CFUNCTYPE(c_double, c_void_p)
-#FF = CFUNCTYPE(c_double, c_double)
-
+LOCSIGDETOURCALLBACK = CFUNCTYPE(UNCHECKED(None), POINTER(mus_any), mus_long_t)
+#LOCSIGDETOURCALLBACK = CFUNCTYPE(None, POINTER(mus_any), mus_long_t)
 MUS_CLM_DEFAULT_TABLE_SIZE = 512
+    
+    
 
-# is this a hack? i don't know. this seems to add the properties i want
-MUS_ANY_POINTER = POINTER(mus_any)
+
     
 get_mus_frequency = lambda s: mus_frequency(s)
 set_mus_frequency = lambda s,v : mus_set_frequency(s,v)
@@ -362,6 +369,7 @@ MUS_ANY_POINTER.__str__ = lambda s : f'{MUS_ANY_POINTER} {str(mus_describe(s).da
 # the original array. that should mean as long as I cache the
 # result of data_as I should not need to cache the original 
 # numpy array. right?
+# these could be singledispatch
 def get_array_ptr(arr):
     if isinstance(arr, list):
         res = (c_double * len(arr))(*arr)
@@ -374,7 +382,22 @@ def get_array_ptr(arr):
 
     return res    
 
-
+def is_iterable(x):
+    return hasattr(x, '__iter__')
+    
+    
+    
+def clm_channels(x):
+    if isinstance(x, mus_any):
+        return x.mus_channels
+    if is_iterable(x):
+        return len(x)
+        
+def clm_length(x):
+    if isinstance(x, mus_any):
+        return x.mus_length
+    if is_iterable(x):
+        return len(x[0])
 
 def radians2hz(radians: float):
     """Convert radians per sample to frequency in "Hz: rads * srate / (2 * pi)"""
@@ -677,8 +700,9 @@ def array2file(arr, filename, sr=None):
     chans = np.shape(arr)[0]
     length = np.shape(arr)[1]
     flatarray = arr.flatten(order='F')
-    return mus_array_to_file(filename, flatarray.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),length, sr, chans)
-
+    print(length, int(sr), chans)
+    return mus_array_to_file(filename, flatarray.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),length, int(sr), chans)
+#[String, POINTER(mus_float_t), mus_long_t, c_int, c_int]
 ########context with sound#######    
 class Sound(object):
     output = None
@@ -726,6 +750,10 @@ class Sound(object):
         self.reverb_to_file = self.reverb and isinstance(self.output, str)
         self.old_srate = get_srate()
     def __enter__(self):
+    
+    
+        #TODO: this all needs to be cleaned up. I think it could be simplified and does not need all the options in scheme version
+    
         #print("enter")
         # in original why use reverb-1?
         if  self.statistics :
@@ -736,53 +764,70 @@ class Sound(object):
             if self.continue_old_file:
                 Sound.output = continue_sample2file(self.filename)
                 set_srate(mus_sound_srate(self.filename))
-                
             else:
                 set_srate(self.srate)
                 Sound.output = make_sample2file(self.output,self.channels, format=self.sample_type , type=self.header_type)
+        elif is_iterable(self.output):
+            set_srate(self.srate)
+            Sound.output = self.output
+
         else:
-            print("can't write to array yet")
-            
+            print("not supported writing to", self.output)
             
         if self.reverb_to_file:
             if self.continue_old_file:
                 Sound.reverb = continue_sample2file(self.revfile)
             else:
                 Sound.reverb = make_sample2file(self.revfile,self.reverb_channels, format=self.sample_type , type=self.header_type)
+        
+        if self.reverb and not self.reverb_to_file and is_iterable(self.output):
+            Sound.reverb = np.zeros((self.reverb_channels, np.shape(Sound.output)[1]), dtype=Sound.output.dtype)
+    
 
         return self
         
     def __exit__(self, *args):
         #print("exit")
-
         if self.reverb: 
             if self.reverb_to_file:
                 mus_close(Sound.reverb)
                 Sound.reverb = make_file2sample(self.revfile)
                 #print(self.reverb)
-                self.reverb()
+                if self.reverb_data:
+                    self.reverb(**self.reverb_data)
+                else:
+                    self.reverb()
                 mus_close(Sound.reverb)
+
+            if is_iterable(Sound.reverb):
+                if self.reverb_data:
+                    print("applying reverb with data")
+                    self.reverb(**self.reverb_data)
+                else:
+                    self.reverb()          
                 
         if self.output_to_file:
             mus_close(Sound.output)
             
             
         # Statistics and scaling go here    
-                        
-        if self.play :
+        if  self.statistics :
+            toc = time.perf_counter()
+            print(f"Total processing time {toc - self.tic:0.4f} seconds")
+            
+                           
+        if self.play and self.output_to_file:
             subprocess.run(["afplay",self.output])
         # need some safety if errors
         
         set_srate(self.old_srate)
         
-        if  self.statistics :
-            toc = time.perf_counter()
-            print(f"Total processing time {toc - self.tic:0.4f} seconds")
+
 
 
 
 # ---------------- oscil ---------------- #
-def make_oscil(    frequency: Optional[float]=0., initial_phase: Optional[float] = 0.0):
+def make_oscil( frequency: Optional[float]=0., initial_phase: Optional[float] = 0.0):
     """Return a new oscil (sinewave) generator"""
     return mus_make_oscil(frequency, initial_phase)
     
@@ -1081,7 +1126,7 @@ def wave_train(w: MUS_ANY_POINTER, fm: Optional[float]=None):
     if fm:
         return mus_wave_train(w, fm)
     else:
-        return mus_wave_train_unmodulated(w, fm)
+        return mus_wave_train_unmodulated(w)
     
 def is_wave_train(w: MUS_ANY_POINTER):
     return mus_is_wave_train(w)
@@ -1137,8 +1182,8 @@ def is_rand_interp(r: MUS_ANY_POINTER):
     return mus_is_rand_interp(r)    
     
     
-def mus_random(amplitude: float):
-    return mus_random(amplitude)
+# def mus_random(amplitude: float):
+#     return mus_random(amplitude)
 
 # TODO 
 # def mus_rand_seed():
@@ -1324,7 +1369,7 @@ def is_iir_filter(fl: MUS_ANY_POINTER):
 # TODO: if max!=size type should default to linear
 
 def make_delay(size: int, 
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
                 type=Interp.NONE):
@@ -1376,7 +1421,7 @@ def delay_tick(d: MUS_ANY_POINTER, input: float):
 # ---------------- comb ---------------- #
 def make_comb(scaler: float,
                 size: int, 
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
                 type=MUS_INTERP_NONE):
@@ -1438,7 +1483,7 @@ def is_comb_bank(combs: MUS_ANY_POINTER):
 def make_filtered_comb(scaler: float,
                 size: int, 
                 filter: Optional[mus_any]=None, #not really optional
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
                 type=Interp.NONE):
@@ -1488,7 +1533,7 @@ def is_filtered_comb_bank(fcombs: MUS_ANY_POINTER):
 # TODO: cache if initial contents
 def make_notch(scaler: float,
                 size: int, 
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
                 type=Interp.NONE):
@@ -1528,7 +1573,7 @@ def is_notch(cflt: MUS_ANY_POINTER):
 def make_all_pass(feedback: float, 
                 feedforward: float,
                 size: int, 
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
                 type=Interp.NONE):
@@ -1611,7 +1656,7 @@ def is_moving_average(f: MUS_ANY_POINTER):
 # ---------------- moving-max ---------------- #
 # TODO: cache if initial contents
 def make_moving_max(size: int, 
-                initial_contents: Optional[npt.NDArray[np.float64]]=None, 
+                initial_contents=None, 
                 initial_element: Optional[float]=0.0):
     
     initial_contents_ptr = None
@@ -1722,8 +1767,9 @@ def make_frample2file(name, chans: Optional[int]=1, format: Optional[Sample]=Sam
     else:
         return mus_make_frample_to_file_with_comment(name, chans, format, type, comment)
 
-def frample2file(obj: MUS_ANY_POINTER,samp: int, chan:int , val: npt.NDArray[np.float64]):
-    mus_sample_to_file(obj, samp, chan, val.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+def frample2file(obj: MUS_ANY_POINTER,samp: int, chan:int , val):
+    frample_ptr = get_array_ptr(val)
+    mus_sample_to_file(obj, samp, chan, frample_ptr)
     return val
     
 def is_frample2file(obj: MUS_ANY_POINTER):
@@ -2002,7 +2048,7 @@ def phase_vocoder_phase_increments(gen: MUS_ANY_POINTER):
 #  TODO : output to array out-any loc data channel (output *output*)    
 def out_any(loc: int, data: float, channel,  output=None):
     if output is not None:
-        if isinstance(output, np.ndarray):
+        if is_iterable(output):
             output[channel][loc] += data
         else:
             mus_out_any(loc, data, channel, output)        
@@ -2046,7 +2092,7 @@ def out_bank(gens, loc, input):
 
 #--------------- in-any ----------------#
 def in_any(loc: int, channel: int, input):
-    if isinstance(input, np.ndarray):
+    if is_iterable(input):
         return input[channel][loc]
     elif isinstance(input, types.GeneratorType):
         return next(input)
@@ -2067,12 +2113,22 @@ def inb(loc: int, input):
 
 
 # --------------- locsig ---------------- #
+
+# outn, revn 
+# 
+# outf 
+# 
+# revf
+
+
+
 def make_locsig(degree: Optional[float]=0.0, 
     distance: Optional[float]=1., 
     reverb: Optional[float]=0.0, 
     output: Optional[MUS_ANY_POINTER]=None, 
     revout: Optional[MUS_ANY_POINTER]=None, 
-    channels: Optional[int]=2, 
+    channels: Optional[int]=None, 
+    reverb_channels: Optional[int]=None,
     type: Optional[Interp]=Interp.LINEAR):
     
     if not output:
@@ -2082,9 +2138,50 @@ def make_locsig(degree: Optional[float]=0.0,
         revout = Sound.reverb
 
     if not channels:
-        channels = mus_channels(output)    
+        channels = clm_channels(output)
+    
+    if not reverb_channels:
+        reverb_channels = clm_channels(revout)
         
-    return mus_make_locsig(degree, distance, reverb, channels, output, channels, revout,  type)
+   # print(np.shape(output))
+    
+    # TODO: What if revout is not an iterable? While possible not going to deal with it right now :)   
+    if is_iterable(output):
+        if not reverb_channels:
+            reverb_channels = 0
+            
+        #print(degree, distance, reverb, channels, None, reverb_channels, None, type)
+        res = mus_make_locsig(degree, distance, reverb, channels, None, reverb_channels, None, type)
+        def locsig_detour_func(gen, loc):
+            print(mus_locsig_outf(gen)[1])
+            #print(gen, loc)
+            #return None
+            #
+           # outf = mus_locsig_outf(gen)
+           # revf = mus_locsig_revf(gen)
+    
+            # for i in range(channels):
+#                 Sound.output[i][loc] = outf[i]
+#             for i in range(reverb_channels):
+#                 Sound.reverb[i][loc] = revf[i]
+                
+                
+        @LOCSIGDETOURCALLBACK
+        def locsig_to_array(gen, loc):
+            #print(1)
+            locsig_detour_func(gen, loc)
+            #return None
+            
+
+        mus_locsig_set_detour(res, locsig_to_array)
+        #mus_set_environ(res, res)
+        #print(mus_environ(res))
+        setattr(res,'_locsigdetour', locsig_to_array)   
+
+        return res
+            
+    else:
+        return mus_make_locsig(degree, distance, reverb, channels, output, reverb_channels, revout,  type)
         
 def locsig(gen: MUS_ANY_POINTER, loc: int, val: float):
     mus_locsig(gen, loc, val)
@@ -2100,7 +2197,7 @@ def locsig_set(gen: MUS_ANY_POINTER, chan: int, val:float):
     
 def locsig_reverb_ref(gen: MUS_ANY_POINTER, chan: int):
     return mus_locsig_reverb_ref(gen, chan)
-    loc
+
 def locsig_reverb_set(gen: MUS_ANY_POINTER, chan: int, val: float):
     return mus_locsig_reverb_set(gen, chan, val)
     
