@@ -301,6 +301,18 @@ def rkoddssb(gen, fm=0.):
 
 # TODO: --------------- j2cos ---------------- # 
 
+# TODO: --------------- jpcos ---------------- # 
+
+# TODO: --------------- jncos ---------------- # 
+
+# TODO: --------------- j0j1cos  ---------------- # 
+
+# TODO: --------------- jycos  ---------------- # 
+
+# TODO: --------------- jcos  ---------------- # 
+
+# TODO: --------------- blackman  ---------------- # 
+
 # --------------- fmssb ---------------- #
 
 make_fmssb, is_fmssb = make_generator('fmssb', {'frequency' : 0.0, 'ratio' : 1.0, 'index' : 1.0, 'angle' : 0.0}, wrapper=convert_frequency)
@@ -314,4 +326,71 @@ def fmssb(gen, fm=0.):
 
 
 
-    
+# TODO: --------------- k3sin  ---------------- # 
+
+# TODO: --------------- izcos  ---------------- # 
+
+# TODO: --------------- adjustable-square-wave ---------------- # 
+
+# TODO: --------------- adjustable-triangle-wave ---------------- # 
+
+# TODO: --------------- adjustable-sawtooth-wave ---------------- # 
+
+# TODO: --------------- adjustable-oscil-wave ---------------- # 
+
+# TODO: --------------- make-table-lookup-with-env ---------------- # 
+
+# TODO: --------------- make-wave-train-with-env ---------------- # 
+
+# TODO: --------------- round-interp ---------------- # 
+
+
+# TODO: --------------- env-any functions ---------------- # 
+
+# TODO: --------------- run-with-fm-and-pm ---------------- # 
+
+# TODO: --------------- nchoosekcos ---------------- # 
+
+# TODO: --------------- sinc-train ---------------- # 
+
+# TODO: --------------- pink-noise ---------------- # 
+
+# TODO: --------------- brown-noise ---------------- # 
+
+# TODO: --------------- green-noise ---------------- # 
+
+# TODO: --------------- green-noise-interp ---------------- # 
+
+# TODO: --------------- moving-sum ---------------- # 
+
+# TODO: --------------- moving-variance ---------------- # 
+
+# TODO: --------------- moving-rms ---------------- # 
+
+# TODO: --------------- moving-length ---------------- # 
+
+# TODO: --------------- weighted-moving-average ---------------- # 
+
+# TODO: --------------- exponentially-weighted-moving-average ---------------- # 
+
+# TODO: --------------- polyoid ---------------- # 
+
+# TODO: --------------- noid ---------------- # 
+
+# TODO: --------------- knoid ---------------- # 
+
+# TODO: --------------- roid ---------------- # 
+
+# TODO: --------------- tanhsin ---------------- # 
+
+# TODO: --------------- moving-fft ---------------- # 
+
+# TODO: --------------- moving-spectrum ---------------- # 
+
+# TODO: --------------- moving-scentroid ---------------- # 
+
+# TODO: --------------- moving-autocorrelation ---------------- # 
+
+# TODO: --------------- moving-pitch ---------------- # 
+
+# TODO: --------------- flocsig ---------------- # 

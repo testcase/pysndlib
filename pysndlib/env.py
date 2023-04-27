@@ -52,6 +52,8 @@ def _(e: list, scl, offset=0.):
 def _(e: np.ndarray, scl, offset=0.):
     return e * scl + offset
     
+
+
     
 
 
@@ -95,8 +97,62 @@ def envelope_last_x(e):
     return e[-2]
 
 
-# TODO: ---------------  stretch_envelope   ---------------- #  
+# ---------------  stretch_envelope   ---------------- #  
 
+
+#TODO: need to make sure envelop is valid on return - that each x greater than previ
+def stretch_envelope(fn, old_att, new_att, old_dec, new_dec):
+    #test args
+   # print(old_att, new_att, old_dec, new_dec)
+    if not new_att and old_att:
+        print("error") # TODO raise exception
+        
+    else:
+        if not new_att:
+            return fn
+        else:
+            if old_dec and not new_dec:
+                print('error') # TODO raise exception
+            
+            else:
+                new_x = x0 = fn[0]
+                last_x = fn[-2]
+                y0 = fn[1]
+                new_fn = [x0,y0]
+                scl = (new_att-x0) / max(.0001, old_att-x0)
+                
+                if old_dec and (old_dec == old_att):
+                    old_dec = old_dec + (.000001 * last_x)
+                
+                for i in range(2,len(fn)-1, 2):
+                    x1 = fn[i]
+                    y1 = fn[i+1]
+                    
+                    if x0 < old_att and x1 >= old_att:
+                        y0 = y1 if x1==old_att else y0 + (y1 - y0) * ((old_att - x0) / (x1 - x0))
+                        
+                        x0 = old_att
+
+                        new_x = new_att
+                        new_fn.extend((new_x,y0))   
+                        
+                        scl = (new_dec - new_att) / (old_dec - old_att) if old_dec else (last_x - new_att) / (last_x - old_att)
+                
+                if old_dec and x0 < old_dec and x1 >= old_dec:
+                    y0 = y1 if x1 == old_dec else y0 + (y1 - y0) * ((old_dec - x0) / (x1 - x0))
+                    x0 = old_dec
+                    new_x = new_dec
+                   
+                    new_fn.extend((new_x,y0))
+                    scl = (last_x - new_dec) / (last_x - old_dec)
+                    #print(new_fn)
+                if x0 != x1:
+                    new_x = new_x + scl * (x1 - x0)
+                    new_fn.extend((new_x,y1))
+                    x0 = x1
+                    y0 = y1
+                #print(new_fn)
+                return new_fn
 
 # --------------- scale_envelope  ---------------- # 
 
@@ -123,7 +179,7 @@ def normalize_envelope(e, new_max=1.0):
     return scale_envelope(e, scl)
 
 # invert-envelope seens in mix.scm seeme like general good idea
-print(normalize_envelope([0.,1., .5, 2., .8, 1.7, 1.0, 0.0], .2))
+#print(normalize_envelope([0.,1., .5, 2., .8, 1.7, 1.0, 0.0], .2))
 
 # a = [0,1, .5, .8, 1.0, 0.]
 # print(reverse_envelope(a))
