@@ -593,117 +593,73 @@ def make_fft_window(type: int, size: int, beta: Optional[float]=0.0, alpha: Opti
     mus_make_fft_window_with_window(type, size, beta, alpha, win.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
     return win
 
-def rectangular2polar(rdat, idat):
+def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """Convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a spectrum)"""
-    if isinstance(rdat, list):
-        rdat = np.array(rdat, dtype=np.double)
-    if isinstance(idat, list):
-        idat = np.array(idat, dtype=np.double)
     size = len(rdat)
-    # want to return new ndarrays instead of changing in-place
-    rl = np.copy(rdat)
-    im = np.copy(idat)
-    mus_rectangular_to_polar(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return rl, img
-    
-def rectangular2magnitudes(rdat, idat):
-    """Convert real/imaginary  data in rl and im from rectangular form (fft output) to polar form, but ignore the phases"""
-    if isinstance(rdat, list):
-        rdat = np.array(rdat, dtype=np.double)
-    if isinstance(idat, list):
-        idat = np.array(idat, dtype=np.double)
-    size = len(rdat)
-    # want to return new ndarrays instead of changing in-place
-    rl = np.copy(rdat)
-    im = np.copy(idat)
-    mus_rectangular_to_magnitudes(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return rl, img
-    
-def polar2rectangular(rdat, idat):
-    """Convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)"""
-    if isinstance(rdat, list):
-        rdat = np.array(rdat, dtype=np.double)
-    if isinstance(idat, list):
-        idat = np.array(idat, dtype=np.double)
-    size = len(rdat)
-    # want to return new ndarrays instead of changing in-place
-    rl = np.copy(rdat)
-    im = np.copy(idat)
-    mus_polar_to_rectangular(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), im.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return rl, img
+    mus_rectangular_to_polar(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
 
-def spectrum(rdat, idat, window, norm_type: int):
+
+def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """Convert real/imaginary  data in rl and im from rectangular form (fft output) to polar form, but ignore the phases"""
+    size = len(rdat)
+    mus_rectangular_to_magnitudes(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+
+
+def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """Convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)"""
+    size = len(rdat)
+    # want to return new ndarrays instead of changing in-place
+    mus_polar_to_rectangular(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+
+
+def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window, norm_type: int):
     """Real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the fft data window (a ndarray as returned by 
         make_fft_window  and type determines how the spectral data is scaled:
               0 = data in dB,
               1 (default) = linear and normalized
               2 = linear and un-normalized."""
-                      
-    if isinstance(rdat, list):
-        rdat = np.array(rdat, dtype=np.double)
-    if isinstance(idat, list):
-        idat = np.array(idat, dtype=np.double)
     if isinstance(window, list):
         window = np.array(window, dtype=np.double)
     size = len(rdat)
     # want to return new ndarray instead of changing in-place
-    rl = np.copy(rdat)
-    mus_spectrum(rl.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), window.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size, norm_type)
-    return rl
 
-def convolution(rl1, rl2):
+    mus_spectrum(rdat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), idat.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), window.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size, norm_type)
+    return rdat
+
+def convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64]):
     """Convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1"""
-    if isinstance(rl1, list):
-        rl1 = np.array(rl1, dtype=np.double)
-    if isinstance(rl2, list):
-        rl2 = np.array(rl2, dtype=np.double)
     size = len(rl1)
     # want to return new ndarrays instead of changing in-place
-    rl1_1 = np.copy(rl1)
-    mus_convolution(rl1_1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), rl2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return rl1_1
+    mus_convolution(rl1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), rl2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+    return rl1
 
-def autocorrelate(data):
+def autocorrelate(data: npt.NDArray[np.float64]):
     """In place autocorrelation of data (a ndarray)"""
-    if isinstance(data, list):
-        data = np.array(data, dtype=np.double)
     size = len(data)
-    dt = data.copy()
-    mus_autocorrelate(dt.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return dt
+    mus_autocorrelate(data.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+    return data
     
-def correlate(data1, data2):
+def correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
     """In place cross-correlation of data1 and data2 (both ndarrays)"""
-    if isinstance(data1, list):
-        data1 = np.array(data1, dtype=np.double)
-    if isinstance(data2, list):
-        data2 = np.array(data2, dtype=np.double)
     size = len(data1)
     # want to return new ndarrays instead of changing in-place
-    dt1 = data1.copy()
-    dt2 = data2.copy()
-    mus_correlate(dt1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), dt2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return dt
+    mus_correlate(data1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), data2.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+    return data1
 
-def cepstrum(data):
+def cepstrum(data: npt.NDArray[np.float64]):
     """Return cepstrum of signal"""
-    if isinstance(data, list):
-        data = np.array(data, dtype=np.double)
     size = len(data)
-    # want to return new ndarray instead of changing in-place
-    dt1 = data.copy()
-    mus_cepstrum(dt1.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
-    return dt1
+    mus_cepstrum(data.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), size)
+    return data
     
 def partials2wave(partials, wave=None, norm: Optional[bool]=True ):
     """Take a list of partials (harmonic number and associated amplitude) and produce a waveform for use in table_lookup"""
     partials_ptr = get_array_ptr(partials)                
-                    
     if isinstance(wave, list):
         wave = np.array(wave, dtype=np.double)
                         
     if (not wave):
-        wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
+        wave = np.zeros(CLM.table_size)
     
     mus_partials_to_wave(partials_ptr, len(partials) // 2, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
     # return a ndarray
@@ -717,31 +673,24 @@ def phase_partials2wave(partials, wave=None, norm: Optional[bool]=True ):
     partials_ptr = get_array_ptr(partials)        
                     
     if (not wave):
-        wave = np.zeros(MUS_CLM_DEFAULT_TABLE_SIZE)
+        wave = np.zeros(CLM.table_size)
         
     mus_partials_to_wave(partials_ptr, len(partials) // 3, wave.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), len(wave), norm)
-    
     return wave
     
 def partials2polynomial(partials, kind: Optional[int]=Polynomial.FIRST_KIND):
     """Returns a Chebyshev polynomial suitable for use with the polynomial generator to create (via waveshaping) the harmonic spectrum described by the partials argument."""
     if isinstance(partials, list):
-        prtls = np.array(partials, dtype=np.double)
-    if isinstance(partials, np.ndarray):
-        prtls = partials.copy()
-    
-    mus_partials_to_polynomial(len(partials), prtls.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
-    return prtls
+        partials = np.array(partials, dtype=np.double)
+    mus_partials_to_polynomial(len(partials), partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
+    return partials
 
 def normalize_partials(partials):
     """Scales the partial amplitudes in the list/array or list 'partials' by the inverse of their sum (so that they add to 1.0)."""
     if isinstance(partials, list):
-        prtls = np.array(partials, dtype=np.double)
-    if isinstance(partials, np.ndarray):
-        prtls = partials.copy()
-    
-    mus_normalize_partials(len(partials), prtls.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-    return prtls
+        partials = np.array(partials, dtype=np.double)    
+    mus_normalize_partials(len(partials), partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+    return partials
     
 def chebyshev_tu_sum(x: float, tcoeffs, ucoeffs):
     """Returns the sum of the weighted Chebyshev polynomials Tn and Un (vectors or " S_vct "s), with phase x"""
@@ -866,7 +815,6 @@ class Sound(object):
                         scaled_by = False,
                         play = None,
                         clipped = None,
-#                        notehook = False, #cm thing
                         ignore_output = False):
         self.output = output
         self.channels = channels or CLM.channels
@@ -885,7 +833,6 @@ class Sound(object):
         self.scaled_by = scaled_by
         self.play = play or CLM.play
         self.clipped = clipped or CLM.clipped
-#        self.notehook = notehook
         self.ignore_output = ignore_output
         self.output_to_file = isinstance(self.output, str)
         self.reverb_to_file = self.reverb and isinstance(self.output, str)
@@ -901,6 +848,7 @@ class Sound(object):
         # in original why use reverb-1?
         if  self.statistics :
             self.tic = time.perf_counter()
+        
         if self.output_to_file :
             # writing to File
             #continue_sample2file
@@ -934,6 +882,7 @@ class Sound(object):
             if self.reverb_to_file:
                 mus_close(Sound.reverb)
                 Sound.reverb = make_file2sample(self.revfile)
+                
                 if self.reverb_data:
                     self.reverb(**self.reverb_data)
                 else:
@@ -941,6 +890,7 @@ class Sound(object):
                 mus_close(Sound.reverb)
 
             if is_iterable(Sound.reverb):
+
                 if self.reverb_data:
                     print("applying reverb with data")
                     self.reverb(**self.reverb_data)
@@ -990,6 +940,7 @@ def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=Non
         return mus_oscil_fm(os, fm)
     
 def is_oscil(os: MUS_ANY_POINTER):
+    """Returns True if gen is an oscil"""
     return mus_is_oscil(os)
 
     
@@ -1001,18 +952,19 @@ def make_oscil_bank(freqs, phases, amps, stable: Optional[bool]=False):
     phases_ptr = get_array_ptr(phases)
     amps_ptr = get_array_ptr(amps)
 
-    gen =  mus_make_oscil_bank(freqs_ptr, phases_ptr, amps_ptr, stable)
+    gen =  mus_make_oscil_bank(len(freqs), freqs_ptr, phases_ptr, amps_ptr, stable)
     gen._cache = [freqs_ptr, phases_ptr, amps_ptr]
     return gen
 
-def oscil_bank(os: MUS_ANY_POINTER, fms):
+def oscil_bank(os: MUS_ANY_POINTER):
     """sum an array of oscils"""
     if os == None:
         raise TypeError (f"cannot pass None in place of gen oscil_bank.")
-    fms_prt = get_array_ptr(fms)
-    return mus_oscil_bank(os, fms_prt)
+    #fms_prt = get_array_ptr(fms)
+    return mus_oscil_bank(os)
     
 def is_oscil_bank(os: MUS_ANY_POINTER):
+    """Returns True if gen is an oscil_bank"""
     return mus_is_oscil_bank(os)
     
 # ---------------- env ---------------- #
@@ -1034,9 +986,15 @@ def env(e: MUS_ANY_POINTER):
     return mus_env(e)
     
 def is_env(e: MUS_ANY_POINTER):
+    """Returns True if gen is an env"""
     return mus_is_env(e)
     
 def env_interp(x: float, env: MUS_ANY_POINTER):
+    if e == None:
+        raise_none_error('env')
+    return mus_env_interp(x, env)
+    
+def envelope_interp(x: float, env: MUS_ANY_POINTER):
     if e == None:
         raise_none_error('env')
     return mus_env_interp(x, env)
@@ -1064,6 +1022,7 @@ def pulsed_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
 # TODO envelope-interp different than env-interp
 
 def is_pulsedenv(e: MUS_ANY_POINTER):
+    """Returns True if gen is a pulsed_env"""
     return mus_is_pulsed_env(e)
 
 # ---------------- table-lookup ---------------- #
@@ -1088,6 +1047,7 @@ def table_lookup(tl: MUS_ANY_POINTER, fm_input: Optional[float]=None):
         return mus_table_lookup_unmodulated(tl)
         
 def is_table_lookup(tl: MUS_ANY_POINTER):
+    """Returns True if gen is a table_lookup"""
     return mus_is_table_lookup(tl)
 
 # TODO make-table-lookup-with-env
@@ -1124,6 +1084,7 @@ def polywave(w: MUS_ANY_POINTER, fm: Optional[float]=None):
         return mus_polywave_unmodulated(w)
         
 def is_polywave(w: MUS_ANY_POINTER):
+    """Returns True if gen is a polywave"""
     return mus_is_polywave(w)
 
 
@@ -1153,6 +1114,7 @@ def polyshape(w: MUS_ANY_POINTER, index: Optional[float]=1.0, fm: Optional[float
         return mus_polyshape_unmodulated(w, index)
         
 def is_polyshape(w: MUS_ANY_POINTER):
+    """Returns True if gen is a polyshape"""
     return mus_is_polyshape(w)
     
 
@@ -1162,6 +1124,7 @@ def make_triangle_wave(frequency: float, amplitude: Optional[float]=1.0, phase: 
     return mus_make_triangle_wave(frequency, amplitude, phase)
     
 def triangle_wave(s: MUS_ANY_POINTER, fm: float=None):
+    """next triangle wave sample from generator"""
     if s == None:
         raise_none_error('triangle_wave')
     if fm:
@@ -1170,6 +1133,7 @@ def triangle_wave(s: MUS_ANY_POINTER, fm: float=None):
         return mus_triangle_wave_unmodulated(s)
     
 def is_triangle_wave(s: MUS_ANY_POINTER):
+    """Returns True if gen is a triangle_wave"""
     return mus_is_triangle_wave(s)
 
 # ---------------- square-wave ---------------- #    
@@ -1178,6 +1142,7 @@ def make_square_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Op
     return mus_make_square_wave(frequency, amplitude, phase)
     
 def square_wave(s: MUS_ANY_POINTER, fm: float=None):
+    """next square wave sample from generator"""
     if s == None:
         raise_none_error('square_wave')
     if fm:
@@ -1186,6 +1151,7 @@ def square_wave(s: MUS_ANY_POINTER, fm: float=None):
         return mus_square_wave_unmodulated(s)
     
 def is_square_wave(s: MUS_ANY_POINTER):
+    """Returns True if gen is a square_wave"""
     return mus_is_square_wave(s)
     
 # ---------------- sawtooth-wave ---------------- #    
@@ -1194,6 +1160,7 @@ def make_sawtooth_wave(frequency: float, amplitude: Optional[float]=1.0, phase: 
     return mus_mus_make_sawtooth_wave(frequency, amplitude, phase)
     
 def sawtooth_wave(s: MUS_ANY_POINTER):
+    """next sawtooth wave sample from generator"""
     if s == None:
         raise_none_error('sawtooth_wave')
     if fm:
@@ -1202,6 +1169,7 @@ def sawtooth_wave(s: MUS_ANY_POINTER):
         return mus_sawtooth_wave_unmodulated(s)
     
 def is_sawtooth_wave(s: MUS_ANY_POINTER):
+    """Returns True if gen is a sawtooth_wave"""
     return mus_is_sawtooth_wave(s)
 
 # ---------------- pulse-train ---------------- #        
@@ -1210,6 +1178,7 @@ def make_pulse_train(frequency: float, amplitude: Optional[float]=1.0, phase: Op
     return mus_make_pulse_train(frequency, amplitude, phase)
     
 def pulse_train(s: MUS_ANY_POINTER, fm: float):
+    """next pulse train sample from generator"""
     if s == None:
         raise_none_error('pulse_train')
     if fm:
@@ -1218,6 +1187,7 @@ def pulse_train(s: MUS_ANY_POINTER, fm: float):
         return mus_sawtooth_wave_unmodulated(s)
      
 def is_pulse_train(s: MUS_ANY_POINTER):
+    """Returns True if gen is a pulse_train"""
     return mus_is_pulse_train()
     
     
@@ -1234,6 +1204,7 @@ def ncos(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
     return mus_ncos(nc, fm)
 
 def is_ncos(nc: MUS_ANY_POINTER):
+    """Returns True if gen is a ncos"""
     return mus_is_ncos(nc)
     
     
@@ -1249,6 +1220,7 @@ def nsin(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
     return mus_nsin(nc, fm)
     
 def is_nsin(nc: MUS_ANY_POINTER):
+    """Returns True if gen is a nsin"""
     return mus_is_nsin(nc)
     
 # ---------------- nrxysin and nrxycos ---------------- #
@@ -1258,11 +1230,13 @@ def make_nrxysin(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1
     return mus_make_nrxysin(frequency, ratio, n, r)
     
 def nrxysin(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+    """next sample of nrxysin generator"""
     if s == None:
         raise_none_error('nrxysin')
     return mus_nrxysin(s, fm)
     
 def is_nrxysin(s: MUS_ANY_POINTER):
+    """Returns True if gen is a nrxysin"""
     return mus_is_nrxysin(s)
     
     
@@ -1271,11 +1245,13 @@ def make_nrxycos(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1
     return mus_make_nrxycos(frequency, ratio, n, r)
     
 def nrxycos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+    """next sample of nrxycos generator"""
     if s == None:
         raise_none_error('nrxycos')
     return mus_nrxycos(s, fm)
     
 def is_nrxycos(s: MUS_ANY_POINTER):
+    """Returns True if gen is a nrxycos"""
     return mus_is_nrxycos(s)
     
     
@@ -1285,11 +1261,13 @@ def make_rxykcos(frequency: float, phase: float, r: Optional[float]=.5, ratio: O
     return mus_make_rxykcos(frequency, phase, r, ratio)
     
 def rxykcos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+    """next sample of rxykcos generator"""
     if s == None:
         raise_none_error('rxykcos')
     return mus_rxykcos(s, fm)
     
 def is_rxykcos(s: MUS_ANY_POINTER):
+    """Returns True if gen is a rxykcos"""
     return mus_is_rxykcos(s)
 
 def make_rxyksin(frequency: float, phase: float, r: Optional[float]=.5, ratio: Optional[float]=1.):
@@ -1297,11 +1275,13 @@ def make_rxyksin(frequency: float, phase: float, r: Optional[float]=.5, ratio: O
     return mus_make_rxyksin(frequency, phase, r, ratio)
 
 def rxyksin(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
+    """next sample of rxyksin generator"""
     if s == None:
         raise_none_error('rxyksin')
     return mus_rxyksin(s, fm)
     
 def is_rxyksin(s: MUS_ANY_POINTER):
+    """Returns True if gen is a rxyksin"""
     return mus_is_rxyksin(s)
         
 # ---------------- ssb-am ---------------- #    
@@ -1320,6 +1300,7 @@ def ssb_am(gen: MUS_ANY_POINTER, insig: Optional[float]=0.0, fm: Optional[float]
         return mus_ssb_am_unmodulated(gen, insig)
         
 def is_ssb_am(gen: MUS_ANY_POINTER):
+    """Returns True if gen is a ssb_am"""
     return mus_is_ssb_am(gen)
 
 
@@ -1343,12 +1324,9 @@ def wave_train(w: MUS_ANY_POINTER, fm: Optional[float]=None):
         return mus_wave_train_unmodulated(w)
     
 def is_wave_train(w: MUS_ANY_POINTER):
+    """Returns True if gen is a wave_train"""    
     return mus_is_wave_train(w)
 
-
-
-    
-# TODO make-wave-train-with-env
 
 def make_wave_train_with_env(frequency: float, pulse_env, size=None):
     size = size or CLM.table_size
@@ -1359,7 +1337,7 @@ def make_wave_train_with_env(frequency: float, pulse_env, size=None):
     return make_wave_train(frequency, ve)    
 
 # ---------------- rand, rand_interp ---------------- #
-def make_rand(frequency: float, amplitude: float, distribution=None):
+def make_rand(frequency: float, amplitude: Optional[float]=1.0, distribution=None):
     """Return a new rand generator, producing a sequence of random numbers (a step  function). frequency is the rate at which new numbers are chosen."""
     if (distribution):
         distribution_ptr = get_array_ptr(distribution)
@@ -1379,6 +1357,7 @@ def rand(r: MUS_ANY_POINTER, sweep: Optional[float]=None):
         return mus_rand_unmodulated(r)
     
 def is_rand(r: MUS_ANY_POINTER):
+    """Returns True if gen is a rand"""
     return mus_is_rand(r)
 
 def make_rand_interp(frequency: float, amplitude: float,distribution=None):
@@ -1402,6 +1381,7 @@ def rand_interp(r: MUS_ANY_POINTER, sweep: Optional[float]=0.):
         return mus_rand_interp_unmodulated(r)
     
 def is_rand_interp(r: MUS_ANY_POINTER):
+    """Returns True if gen is a rand_interp"""
     return mus_is_rand_interp(r)    
     
     
@@ -1419,6 +1399,7 @@ def one_pole(f: MUS_ANY_POINTER, input: float):
     return mus_one_pole(f, input)
     
 def is_one_pole(f: mus_any):
+    """Returns True if gen is an one_pole"""
     return mus_is_one_pole(f)
     
 def make_one_zero(a0: float, a1: float):
@@ -1432,10 +1413,12 @@ def one_zero(f: MUS_ANY_POINTER, input: float):
     return mus_one_zero(f, input)
     
 def is_one_zero(f: MUS_ANY_POINTER):
+    """Returns True if gen is an one_zero"""
     return mus_is_one_zero(f)    
 
+# TODO implement keyword args as well
 def make_two_pole(*args):
-    """return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
+    """Return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
 
     if(len(args) == 2):
         return mus_make_two_pole_from_frequency_and_radius(args[0], args[1])
@@ -1445,7 +1428,7 @@ def make_two_pole(*args):
         print("error") # make this real error
 
 def two_pole(f: MUS_ANY_POINTER, input: float):
-    """return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
+    """Return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
     if f == None:
         raise_none_error('two_pole')
     return mus_two_pole(f, input)
@@ -1453,6 +1436,7 @@ def two_pole(f: MUS_ANY_POINTER, input: float):
 def is_two_pole(f: MUS_ANY_POINTER):
     return mus_is_two_pole(f)
 
+# TODO implement keyword args as well
 def make_two_zero(*args):
     """Return a new two_zero filter; a0*x(n) + a1*x(n-1) + a2*x(n-2)"""
     if(len(args) == 2):
@@ -1469,6 +1453,7 @@ def two_zero(f: MUS_ANY_POINTER, input: float):
     return mus_two_zero(f, input)
     
 def is_two_zero(f: MUS_ANY_POINTER):
+    """Returns True if gen is a two_zero"""
     return mus_is_two_zero(f)
 
 # ---------------- formant ---------------- #
@@ -1488,6 +1473,7 @@ def formant(f: MUS_ANY_POINTER, input: float, radians: Optional[float]=None):
         return mus_formant(f, input)
     
 def is_formant(f: MUS_ANY_POINTER):
+    """Returns True if gen is a formant"""
     return mus_is_formant(f)
     
     
@@ -1518,6 +1504,7 @@ def formant_bank(f: MUS_ANY_POINTER, inputs):
         return mus_formant_bank(f, inputs)
         
 def is_formant_bank(f: MUS_ANY_POINTER):
+    """Returns True if gen is a formant_bank"""
     return mus_is_formant_bank(f)
     
 
@@ -1539,6 +1526,7 @@ def firmant(f: MUS_ANY_POINTER, input: float,radians: Optional[float]=None ):
         return mus_firmant(f, input)
             
 def is_firmant(f: MUS_ANY_POINTER):
+    """Returns True if gen is a firmant"""
     return mus_is_firmant(f)
 
 
@@ -1548,7 +1536,8 @@ def is_firmant(f: MUS_ANY_POINTER):
 
 # ---------------- filter ---------------- #
 
-def make_filter(order: int, xcoeffs, ycoeffs):        
+def make_filter(order: int, xcoeffs, ycoeffs):   
+    """Return a new direct form FIR/IIR filter, coeff args are list/ndarray"""     
     xcoeffs_ptr = get_array_ptr(xcoeffs)    
     ycoeffs_ptr = get_array_ptr(ycoeffs)    
         
@@ -1557,34 +1546,39 @@ def make_filter(order: int, xcoeffs, ycoeffs):
     return gen
     
 def filter(fl: MUS_ANY_POINTER, input: float):
+    """next sample from filter"""
     if fl == None:
         raise_none_error('filter')
     return mus_filter(fl, input)
     
 def is_filter(fl: MUS_ANY_POINTER):
+    """Returns True if gen is a filter"""
     return mus_is_filter(fl)
 
 # ---------------- fir-filter ---------------- #
     
 def make_fir_filter(order: int, xcoeffs):
+    """return a new FIR filter, xcoeffs a list/ndarray"""
     xcoeffs_ptr = get_array_ptr(xcoeffs)    
-
     gen =  mus_make_fir_filter(order, xcoeffs_ptr)
     gen._cache = [xcoeffs_ptr]
     return gen
     
 def fir_filter(fl: MUS_ANY_POINTER, input: float):
+    """next sample from fir filter"""
     if fl == None:
         raise_none_error('fir_filter')
     return mus_fir_filter(fl, input)
     
 def is_fir_filter(fl: MUS_ANY_POINTER):
+    """Returns True if gen is a fir_filter"""
     return mus_is_fir_filter(fl)
 
 
 # ---------------- iir-filter ---------------- #
 
 def make_iir_filter(order: int, ycoeffs):
+    """return a new IIR filter, ycoeffs a list/ndarray"""
     ycoeffs_ptr = get_array_ptr(ycoeffs)    
         
     gen = mus_make_iir_filter(order, ycoeffs_ptr, None)
@@ -1592,11 +1586,13 @@ def make_iir_filter(order: int, ycoeffs):
     return gen
     
 def iir_filter(fl: MUS_ANY_POINTER, input: float ):
+    """next sample from iir filter"""
     if fl == None:
         raise_none_error('iir_filter')
     return mus_iir_filter(fl, input)
     
 def is_iir_filter(fl: MUS_ANY_POINTER):
+    """Returns True if gen is an iir_filter"""
     return mus_is_iir_filter(fl)
 
 
@@ -1661,10 +1657,12 @@ def delay(d: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
         
     
 def is_delay(d: MUS_ANY_POINTER):
+    """Returns True if gen is a delay"""
     return mus_is_delay(d)
 
     
 def tap(d: MUS_ANY_POINTER, offset: Optional[float]=None):
+    """tap the delay generator offset by pm"""
     if d == None:
         raise_none_error('delay')
     if offset:
@@ -1673,6 +1671,7 @@ def tap(d: MUS_ANY_POINTER, offset: Optional[float]=None):
         return mus_tap_unmodulated(d)
     
 def is_tap(d: MUS_ANY_POINTER):
+    """Returns True if gen is a tap"""
     return mus_is_tap(d)
     
 def delay_tick(d: MUS_ANY_POINTER, input: float):
@@ -1725,6 +1724,7 @@ def comb(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
         return mus_comb_unmodulated(cflt, input)
     
 def is_comb(cflt: MUS_ANY_POINTER):
+    """Returns True if gen is a comb"""
     return mus_is_comb(cflt)    
 
 # ---------------- comb-bank ---------------- #
@@ -1747,13 +1747,10 @@ def comb_bank(combs: MUS_ANY_POINTER, input: float):
     return mus_comb_bank(combs, input)
     
 def is_comb_bank(combs: MUS_ANY_POINTER):
+    """Returns True if gen is a comb_bank"""
     return mus_is_comb_bank(combs)
 
 
-
-# ---------------- filtered-comb ---------------- #
-
-# TODO: cache if initial contents
 
 
 # ---------------- filtered-comb ---------------- #
@@ -1797,11 +1794,13 @@ def filtered_comb(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None)
         return mus_filtered_comb_unmodulated(cflt, input)
         
 def is_filtered_comb(cflt: MUS_ANY_POINTER):
+    """Returns True if gen is a filtered_comb"""
     return mus_is_filtered_comb(cflt)
     
 # ---------------- filtered-comb-bank ---------------- #    
 # TODO: cache if initial contents    
 def make_filtered_comb_bank(fcombs: list):
+    """Return a new filtered_comb-bank generator."""
     if False in (is_filtered_comb(v) for v in filters):
         raise TypeError(f'filter list contains at least one element that is not a filtered_comb.')
     fcomb_array = (POINTER(mus_any) * len(fcombs))()
@@ -1817,6 +1816,7 @@ def filtered_comb_bank(fcomb: MUS_ANY_POINTER):
     return mus_filtered_comb_bank(fcombs, input)
     
 def is_filtered_comb_bank(fcombs: MUS_ANY_POINTER):
+    """Returns True if gen is a filtered_comb_bank"""
     return mus_is_filtered_comb_bank(fcombs)
 
 # ---------------- notch ---------------- #
@@ -1861,6 +1861,7 @@ def notch(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
         return mus_notch_unmodulated(cflt, input)
     
 def is_notch(cflt: MUS_ANY_POINTER):
+    """Returns True if gen is a notch"""
     return mus_is_notch(cflt)
     
     
@@ -1905,6 +1906,7 @@ def all_pass(f: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
         return mus_all_pass_unmodulated(f, input)
     
 def is_all_pass(f: MUS_ANY_POINTER):
+    """Returns True if gen is an all_pass"""
     return mus_is_all_pass(f)
     
 # ---------------- all-pass-bank ---------------- #
@@ -1926,6 +1928,7 @@ def all_pass_bank(all_passes: MUS_ANY_POINTER, input: float):
     return mus_all_pass_bank(all_passes, input)
     
 def is_all_pass_bank(o: MUS_ANY_POINTER):
+    """Returns True if gen is an all_pass_bank"""
     return mus_is_all_pass_bank(o)
         
         
@@ -1962,6 +1965,7 @@ def moving_average(f: MUS_ANY_POINTER, input: float):
     return mus_moving_average(f, input)
     
 def is_moving_average(f: MUS_ANY_POINTER):
+    """Returns True if gen is a moving_average"""
     return mus_is_moving_average(f)
 
 # ---------------- moving-max ---------------- #
@@ -1997,6 +2001,7 @@ def moving_max(f: MUS_ANY_POINTER, input: float):
     return mus_moving_max(f, input)
     
 def is_moving_max(f: MUS_ANY_POINTER):
+    """Returns True if gen is a moving_max"""
     return mus_is_moving_max(f)
     
 # ---------------- moving-norm ---------------- #
@@ -2015,6 +2020,7 @@ def moving_norm(f: MUS_ANY_POINTER, input: float):
     return mus_moving_norm(f, input)
     
 def is_moving_norm(f: MUS_ANY_POINTER):
+    """Returns True if gen is a moving_norm"""
     return mus_is_moving_norm(f)
     
 
@@ -2036,55 +2042,64 @@ def asymmetric_fm(af: MUS_ANY_POINTER, index: float, fm: Optional[float]=None):
         return mus_asymmetric_fm_unmodulated(af, index)
     
 def is_asymmetric_fm(af: MUS_ANY_POINTER):
+    """Returns True if gen is an asymmetric_fm"""
     return mus_is_asymmetric_fm(af)
     
     
 
     
 # ---------------- file-to-sample ---------------- #
-def make_file2sample(name, buffer_size: Optional[int]=None):
+def make_file2sample(filename, buffer_size: Optional[int]=None):
+    """Return an input generator reading 'filename' (a sound file)"""
     buffer_size = buffer_size or CLM.buffer_size
-    return mus_make_file_to_sample_with_buffer_size(name, buffer_size)
+    return mus_make_file_to_sample_with_buffer_size(filename, buffer_size)
     
-def file2sample(obj: MUS_ANY_POINTER, loc: int, chan: int):
+def file2sample(obj: MUS_ANY_POINTER, loc: int, chan: Optional[int]=0):
+    """sample value in sound file read by 'obj' in channel chan at frample"""
     if obj == None:
         raise_none_error('file2sample')
     return mus_file_to_sample(obj, loc, chan)
     
 def is_file2sample(gen: MUS_ANY_POINTER):
+    """Returns True if gen is an file2sample"""
     return mus_is_file_to_sample(gen)
     
     
 # ---------------- sample-to-file ---------------- #
 
-def make_sample2file(name, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
+def make_sample2file(filename, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
+    """Return an output generator writing the sound file 'filename' which is set up to have chans' channels of 'sample_type' 
+        samples with a header of 'header_type'.  The latter should be sndlib identifiers:"""
     sample_type = sample_type or CLM.sample_type
     header_type = header_type or CLM.header_type
     if comment:
-        return mus_make_sample_to_file(name, chans, sample_type, header_type)
+        return mus_make_sample_to_file(filename, chans, sample_type, header_type)
     else:
-        return mus_make_sample_to_file_with_comment(name, chans, sample_type, header_type, comment)
+        return mus_make_sample_to_file_with_comment(filename, chans, sample_type, header_type, comment)
 
-def sample2file(obj: MUS_ANY_POINTER,samp: int, chan:int , val: float):
+def sample2file(obj: MUS_ANY_POINTER, samp: int, chan:int , val: float):
+    """add val to the output stream handled by the output generator 'obj', in channel 'chan' at frample 'samp'"""
     if obj == None:
         raise_none_error('sample2file')
     return mus_sample_to_file(obj, samp, chan, val)
     
 def is_sample2file(obj: MUS_ANY_POINTER):
+    """Returns True if gen is an sample2file"""
     return mus_is_sample_to_file(obj)
     
 
 def continue_sample2file(name):
     return mus_continue_sample_to_file(name)
     
-    
 
 # ---------------- file-to-frample ---------------- #
-def make_file2frample(name, buffer_size: Optional[int]=None):
+def make_file2frample(filename, buffer_size: Optional[int]=None):
+    """Return an input generator reading 'filename' (a sound file)"""
     buffer_size = buffer_size or CLM.buffer_size
-    return mus_make_file_to_frample_with_buffer_size(name, buffer_size)
+    return mus_make_file_to_frample_with_buffer_size(filename, buffer_size)
     
 def file2frample(obj: MUS_ANY_POINTER, loc: int):
+    """frample of samples at frample 'samp' in sound file read by 'obj'"""
     if obj == None:
         raise_none_error('file2frample')
     outf = np.zeros(mus_channels(obj), dtype=np.double);
@@ -2092,20 +2107,23 @@ def file2frample(obj: MUS_ANY_POINTER, loc: int):
     return outf
     
 def is_file2frample(gen: MUS_ANY_POINTER):
+    """Returns True if gen is an file2frample"""
     return mus_is_file_to_frample(gen)
     
     
 # ---------------- frample-to-file ---------------- #
-def make_frample2file(name, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
-    
+def make_frample2file(filename, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
+    """Return an output generator writing the sound file 'filename' which is set up to have 'chans' channels of 'sample_type' 
+        samples with a header of 'header_type'.  The latter should be sndlib identifiers."""
     sample_type = sample_type or CLM.sample_type
     header_type = header_type or CLM.header_type
     if comment:
         return mus_make_frample_to_fileheader_type
     else:
-        return mus_make_frample_to_file_with_comment(name, chans, sample_type, header_type, comment)
+        return mus_make_frample_to_file_with_comment(filename, chans, sample_type, header_type, comment)
 
 def frample2file(obj: MUS_ANY_POINTER,samp: int, chan:int , val):
+    """add frample 'val' to the output stream handled by the output generator 'obj' at frample 'samp'"""
     if obj == None:
         raise_none_error('frample2file')
     frample_ptr = get_array_ptr(val)
@@ -2113,6 +2131,7 @@ def frample2file(obj: MUS_ANY_POINTER,samp: int, chan:int , val):
     return val
     
 def is_frample2file(obj: MUS_ANY_POINTER):
+    """Returns True if gen is a frample2file"""
     if obj == None:
         raise_none_error('frample2file')
     return mus_is_sample_to_file(obj)
@@ -2122,39 +2141,45 @@ def continue_frample2file(name):
     return mus_continue_sample_to_file(name)
     
     
-#def file2array(file, channel: Optional[int]=1, beg: int, dur: int):
-#def array2file(file, data, len, srate, channels)    
+
 
 # TODO : move these
 def mus_close(obj):
     return mus_close_file(obj)
     
 def mus_is_output(obj):
+    """Returns True if gen is a type of output"""
     return mus_is_output(obj)
     
 def mus_is_input(obj):
+    """Returns True if gen is a type of output"""
     return mus_is_input(obj)
 
 
 # ---------------- readin ---------------- #
 
 def make_readin(filename: str, chan: int=0, start: int=0, direction: Optional[int]=1, buffer_size: Optional[int]=None):
+    """return a new readin (file input) generator reading the sound file 'file' starting at frample 'start' in channel 'channel' and reading forward if 'direction' is not -1"""
     buffer_size = buffer_size or CLM.buffer_size
     return mus_make_readin_with_buffer_size(filename, chan, start, direction, buffersize)
     
 def readin(rd: MUS_ANY_POINTER):
+    """next sample from readin generator (a sound file reader)"""
     if rd == None:
         raise_none_error('readin')
     return mus_readin(rd)
     
 def is_readin(rd: MUS_ANY_POINTER):
+    """Returns True if gen is a readin"""
     return mus_is_readin(rd)
     
     
     
 # ---------------- src ---------------- #
 
-def make_src(input, srate: Optional[float]=1.0, width: Optional[int]=5):
+def make_src(input, srate: Optional[float]=1.0, width: Optional[int]=10):
+    """Return a new sampling-rate conversion generator (using 'warped sinc interpolation'). 'srate' is the ratio between the new rate and the old. 'width' is the sine 
+        width (effectively the steepness of the low-pass filter), normally between 10 and 100. 'input' if given is an open file stream."""
     if(isinstance(input, MUS_ANY_POINTER)):
         @INPUTCALLBACK
         def ifunc(gen, inc):
@@ -2177,18 +2202,22 @@ def make_src(input, srate: Optional[float]=1.0, width: Optional[int]=5):
 
     
 def src(s: MUS_ANY_POINTER, sr_change: Optional[float]=0.0):
+    """next sampling rate conversion sample. 'pm' can be used to change the sampling rate on a sample-by-sample basis.  
+        'input-function' is a function of one argument (the current input direction, normally ignored) that is called internally 
+        whenever a new sample of input data is needed.  If the associated make_src included an 'input' argument, input-function is ignored."""
     if s == None:
         raise_none_error('src')
     return mus_src(s, sr_change, s._inputcallback)
     
 def is_src(s: MUS_ANY_POINTER):
+    """Returns True if gen is a type of src"""
     return mus_is_src(s)
     
     
 # ---------------- convolve ---------------- #
 
 def make_convolve(input, filter: npt.NDArray[np.float64], fft_size: int, filter_size: Optional[int]=None ):
-
+    """Return a new convolution generator which convolves its input with the impulse response 'filter'."""
     if isinstance(filter, list):
         filter = np.array(filter, dtype=np.double)
         
@@ -2216,11 +2245,13 @@ def make_convolve(input, filter: npt.NDArray[np.float64], fft_size: int, filter_
 
     
 def convolve(gen: MUS_ANY_POINTER):
+    """next sample from convolution generator"""
     if gen == None:
         raise_none_error('convolve')
     return mus_convolve(gen, gen._inputcallback)
     
 def is_convolve(gen: MUS_ANY_POINTER):
+    """Returns True if gen is a convolve"""
     return mus_is_convolve(gen)
     
     
@@ -2228,13 +2259,13 @@ def convolve_files(file1, file2, maxamp: float, outputfile):
     mus_convolve_files(file1, file2, maxamp,outputfile )
 
 # TODO - is this not already defined?
-def cepstrum(data: npt.NDArray[np.float64], n):
-    if isinstance(data, list):
-        data = np.array(data, dtype=np.double)
-    size = len(data)
-    dt = data.copy()
-    mus_cepstrum(dt.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), n)
-    return dt
+# def cepstrum(data: npt.NDArray[np.float64], n):
+#     if isinstance(data, list):
+#         data = np.array(data, dtype=np.double)
+#     size = len(data)
+#     dt = data.copy()
+#     mus_cepstrum(dt.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), n)
+#     return dt
 
 # TODO convolve-files file1 file2 (maxamp 1.0) (output-file "tmp.snd")
     
@@ -2249,6 +2280,13 @@ def make_granulate(input,
                     jitter: Optional[float]=1.0,
                     max_size: Optional[int]=0,
                     edit=None):
+    """Return a new granular synthesis generator.  'length' is the grain length (seconds), 'expansion' is the ratio in timing
+         between the new and old (expansion > 1.0 slows things down), 'scaler' scales the grains
+        to avoid overflows, 'hop' is the spacing (seconds) between successive grains upon output.
+        'jitter' controls the randomness in that spacing, 'input' can be a file pointer. 'edit' can
+        be a function of one arg, the current granulate generator.  It is called just before
+        a grain is added into the output buffer. The current grain is accessible via mus_data.
+        The edit function, if any, should return the length in samples of the grain, or 0."""
     
     if edit:
         @EDITCALLBACK    
@@ -2279,8 +2317,9 @@ def make_granulate(input,
     return res
     
     
-#mus_granulate_grain_max_length
+#TODO: mus_granulate_grain_max_length
 def granulate(e: MUS_ANY_POINTER):
+    """next sample from granular synthesis generator"""
     if e == None:
         raise_none_error('granulate')
     if e._editcallback:
@@ -2289,6 +2328,7 @@ def granulate(e: MUS_ANY_POINTER):
         return mus_granulate(e, e._inputcallback)
 
 def is_granulate(e: MUS_ANY_POINTER):
+    """Returns True if gen is a granulate"""
     return mus_is_granulate(e)
     
     
@@ -2303,6 +2343,15 @@ def make_phase_vocoder(input,
                         analyze=None, 
                         edit=None, 
                         synthesize=None):
+                        
+    """Return a new phase-vocoder generator; input is the input function (it can be set at run-time), analyze, edit,
+        and synthesize are either None or functions that replace the default innards of the generator, fft-size, overlap
+        and interp set the fftsize, the amount of overlap between ffts, and the time between new analysis calls.
+        'analyze', if given, takes 2 args, the generator and the input function; if it returns True, the default analysis 
+        code is also called.  'edit', if given, takes 1 arg, the generator; if it returns True, the default edit code 
+        is run.  'synthesize' is a function of 1 arg, the generator; it is called to get the current vocoder 
+        output."""
+
     
     if analyze:
         @ANALYSISCALLBACK
@@ -2354,6 +2403,7 @@ def make_phase_vocoder(input,
 
     
 def phase_vocoder(pv: MUS_ANY_POINTER):
+    """next phase vocoder value"""
     if v == None:
         raise_none_error('phase_vocoder')
     if pv._analyzecallback or pv._synthesizecallback or pv._editcallback :
@@ -2362,10 +2412,12 @@ def phase_vocoder(pv: MUS_ANY_POINTER):
         return mus_phase_vocoder(pv, pv._inputcallback)
     
 def is_phase_vocoder(pv: MUS_ANY_POINTER):
+    """Returns True if gen is a phase_vocoder"""
     return mus_is_phase_vocoder(pv)
     
 
 def phase_vocoder_amps(gen: MUS_ANY_POINTER):
+    """Returns a ndarray containing the current output sinusoid amplitudes"""
     if gen == None:
         raise_none_error('phase_vocoder')
     size = mus_length(gen)
@@ -2374,24 +2426,28 @@ def phase_vocoder_amps(gen: MUS_ANY_POINTER):
     return amps
 
 def phase_vocoder_amp_increments(gen: MUS_ANY_POINTER):
+    """Returns a ndarray containing the current output sinusoid amplitude increments per sample"""    
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_phase_vocoder_amp_increments(gen), shape=size)
     amp_increments = np.copy(p)
     return amp_increments
     
 def phase_vocoder_freqs(gen: MUS_ANY_POINTER):
+    """Returns a ndarray containing the current output sinusoid frequencies"""
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_phase_vocoder_freqs(gen), shape=size)
     freqs = np.copy(p)
     return freqs
     
 def phase_vocoder_phases(gen: MUS_ANY_POINTER):
+    """Returns a ndarray containing the current output sinusoid phases"""
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_phase_vocoder_phases(gen), shape=size)
     phases = np.copy(p)
     return phase
     
 def phase_vocoder_phase_increments(gen: MUS_ANY_POINTER):
+    """Returns a ndarray containing the current output sinusoid phase increments"""
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_phase_vocoder_phase_increments(gen), shape=size)
     phases_increments = np.copy(p)
@@ -2445,6 +2501,7 @@ def out_bank(gens, loc, input):
 
 #--------------- in-any ----------------#
 def in_any(loc: int, channel: int, input):
+    """input stream sample at frample in channel chan"""
     if is_iterable(input):
         return input[channel][loc]
     elif isinstance(input, types.GeneratorType):
@@ -2483,6 +2540,8 @@ def make_locsig(degree: Optional[float]=0.0,
     channels: Optional[int]=None, 
     reverb_channels: Optional[int]=None,
     type: Optional[Interp]=Interp.LINEAR):
+    
+    """Return a new generator for signal placement in n channels.  Channel 0 corresponds to 0 degrees."""
     
     if not output:
         output = Sound.output  #TODO : check if this exists
@@ -2530,26 +2589,33 @@ def make_locsig(degree: Optional[float]=0.0,
         return mus_make_locsig(degree, distance, reverb, channels, output, reverb_channels, revout,  type)
         
 def locsig(gen: MUS_ANY_POINTER, loc: int, val: float):
+    """locsig 'gen' channel 'chan' scaler"""
     if gen == None:
         raise_none_error('locsig')
     mus_locsig(gen, loc, val)
     
 def is_locsig(gen: MUS_ANY_POINTER):
+    """Returns True if gen is a locsig"""
     return mus_is_locsig(gen)
     
 def locsig_ref(gen: MUS_ANY_POINTER, chan: int):
+    """locsig 'gen' channel 'chan' scaler"""
     return mus_locsig_ref(gen, chan)
     
 def locsig_set(gen: MUS_ANY_POINTER, chan: int, val:float):
+    """set the locsig generator's channel 'chan' scaler to 'val'"""
     return mus_locsig_set(gen, chan, val)
     
 def locsig_reverb_ref(gen: MUS_ANY_POINTER, chan: int):
+    """ locsig reverb channel 'chan' scaler"""
     return mus_locsig_reverb_ref(gen, chan)
 
 def locsig_reverb_set(gen: MUS_ANY_POINTER, chan: int, val: float):
+    """set the locsig reverb channel 'chan' scaler to 'val"""
     return mus_locsig_reverb_set(gen, chan, val)
     
 def move_locsig(gen: MUS_ANY_POINTER, degree: float, distance: float):
+    """move locsig gen to reflect degree and distance"""
     mus_move_locsig(gen, degree, distance)
     
 
