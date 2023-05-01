@@ -1,13 +1,14 @@
 from contextlib import contextmanager
 from enum import Enum, IntEnum
 import functools
+from functools import singledispatch
 import os
 from typing import Optional
 import subprocess
 import time
 import types
 import musx
-
+import math
 import numpy as np
 import numpy.typing as npt
 
@@ -424,6 +425,8 @@ MUS_ANY_POINTER.__del__ = lambda s :  mus_free(s)
 MUS_ANY_POINTER.__str__ = lambda s : f'{MUS_ANY_POINTER} {str(mus_describe(s).data, "utf-8")}'
 
 
+
+
 # NOTE from what I understand about numpy.ndarray.ctypes 
 # it says that when data_as is used that it keeps a reference to 
 # the original array. that should mean as long as I cache the
@@ -448,25 +451,138 @@ def get_array_ptr(arr):
 # check if something is iterable 
 def is_iterable(x):
     return hasattr(x, '__iter__')
+
+def is_zero(n):
+    return n == 0
     
+def is_number(n):
+    return type(n) == int or type(n) == float   
     
-    
+### some utilites as generic functions
+
+
+
 # TODO: what other clm functions need. 
 #  using clm_* to avoid clashing with 
 # what are likely typically used variable names
 # 
-def clm_channels(x):
-    if isinstance(x, MUS_ANY_POINTER):
-        return x.mus_channels
-    if is_iterable(x):
-        return len(x)
-        
-def clm_length(x):
-    if isinstance(x, MUS_ANY_POINTER):
-        return x.mus_length
-    if is_iterable(x):
-        return len(x[0])
 
+@singledispatch
+def clm_channels(x):
+    pass
+    
+@clm_channels.register
+def _(x: str):  #assume it is a file
+    return mus_sound_chans(x)
+    
+@clm_channels.register
+def _(x: MUS_ANY_POINTER):  #assume it is a gen
+    return x.mus_channels
+    
+@clm_channels.register
+def _(x: list):  
+    return len(x)
+    
+@clm_channels.register
+def _(x: np.ndarray):  
+    return len(x)
+
+@singledispatch
+def clm_length(x):
+    pass
+    
+@clm_length.register
+def _(x: str):# assume file
+    return mus_sound_length(x)
+
+@clm_length.register
+def _(x: MUS_ANY_POINTER):# assume file
+    return x.mus_length
+        
+@clm_length.register
+def _(x: list):
+    return len(x[0])
+
+@clm_length.register
+def _(x: np.ndarray):
+    return len(x[0])
+
+@singledispatch
+def clm_srate(x):
+    pass
+
+#TODO: do we need others ?
+@clm_srate.register
+def _(x: str): #file
+    mus_sound_srate(file)
+  
+  
+@singledispatch
+def clamp(x, lo, hi):
+    pass
+    
+@clamp.register
+def _(x: float, lo, hi):
+    return float(max(min(x, hi),lo))
+    
+@clamp.register
+def _(x: int, lo, hi):
+    return int(max(min(x, hi),lo))
+    
+@singledispatch
+def clip(x, lo, hi):
+    pass
+    
+@clip.register
+def _(x: float, lo, hi):
+    return float(max(min(x, hi),lo))
+    
+@clip.register
+def _(x: int, lo, hi):
+    return int(max(min(x, hi),lo))
+
+@singledispatch
+def fold(x, lo, hi):
+    pass
+    
+@fold.register
+def _(x: float, lo, hi):
+    r = hi-lo
+    v = (x-lo)/r
+    return r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo
+    
+@fold.register
+def _(x: int, lo, hi):
+    r = hi-lo
+    v = (x-lo)/r
+    return int(r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo)
+
+@singledispatch    
+def wrap(x, lo, hi):
+    pass
+
+@wrap.register
+def _(x: float, lo, hi):
+    r = hi-lo
+    if x >= lo and x <= hi:
+        return x
+    if x < lo:
+        return hi + (math.fmod((x-lo), r))
+    if x > hi:
+        return lo + (math.fmod((x-hi), r))
+ 
+@wrap.register
+def _(x: int, lo, hi):
+    r = hi-lo
+    if x >= lo and x <= hi:
+        return x
+    if x < lo:
+        return int(hi + (math.fmod((x-lo), r)))
+    if x > hi:
+        return int(lo + (math.fmod((x-hi), r)))
+        
+
+    
 
 # CLM utility functions
 # these could all be done in pure python
@@ -1177,14 +1293,14 @@ def make_pulse_train(frequency: float, amplitude: Optional[float]=1.0, phase: Op
     """return a new pulse_train generator. This produces a sequence of impulses."""
     return mus_make_pulse_train(frequency, amplitude, phase)
     
-def pulse_train(s: MUS_ANY_POINTER, fm: float):
+def pulse_train(s: MUS_ANY_POINTER, fm: Optional[float]=None):
     """next pulse train sample from generator"""
     if s == None:
         raise_none_error('pulse_train')
     if fm:
-        return mus_sawtooth_wave(s)
+        return mus_pulse_train(s, fm)
     else:
-        return mus_sawtooth_wave_unmodulated(s)
+        return mus_pulse_train_unmodulated(s)
      
 def is_pulse_train(s: MUS_ANY_POINTER):
     """Returns True if gen is a pulse_train"""
@@ -1684,8 +1800,8 @@ def delay_tick(d: MUS_ANY_POINTER, input: float):
 
 
 # ---------------- comb ---------------- #
-def make_comb(scaler: float,
-                size: int, 
+def make_comb(scaler: Optional[float]=1.0,
+                size: Optional[int]=None, 
                 initial_contents=None, 
                 initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
@@ -1699,7 +1815,7 @@ def make_comb(scaler: float,
         max_size = size
     
     if initial_contents:
-        initial_contents_ptr = get_array_ptr(intial_contents)
+        initial_contents_ptr = get_array_ptr(initial_contents)
 
     elif initial_element:
         initial_contents = np.zeros(max_size)
@@ -1821,8 +1937,8 @@ def is_filtered_comb_bank(fcombs: MUS_ANY_POINTER):
 
 # ---------------- notch ---------------- #
 
-def make_notch(scaler: float,
-                size: int, 
+def make_notch(scaler: Optional[float]=1.0,
+                size: Optional[int]=None, 
                 initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
@@ -2161,7 +2277,7 @@ def mus_is_input(obj):
 def make_readin(filename: str, chan: int=0, start: int=0, direction: Optional[int]=1, buffer_size: Optional[int]=None):
     """return a new readin (file input) generator reading the sound file 'file' starting at frample 'start' in channel 'channel' and reading forward if 'direction' is not -1"""
     buffer_size = buffer_size or CLM.buffer_size
-    return mus_make_readin_with_buffer_size(filename, chan, start, direction, buffersize)
+    return mus_make_readin_with_buffer_size(filename, chan, start, direction, buffer_size)
     
 def readin(rd: MUS_ANY_POINTER):
     """next sample from readin generator (a sound file reader)"""
@@ -2277,7 +2393,7 @@ def make_granulate(input,
                     scaler: Optional[float]=.6,
                     hop: Optional[float]=.05,
                     ramp: Optional[float]=.4,
-                    jitter: Optional[float]=1.0,
+                    jitter: Optional[float]=0.0,
                     max_size: Optional[int]=0,
                     edit=None):
     """Return a new granular synthesis generator.  'length' is the grain length (seconds), 'expansion' is the ratio in timing
@@ -2297,14 +2413,14 @@ def make_granulate(input,
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return mus_apply(input,inc, 0.)
-    
+        
         res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), input)
     
     elif isinstance(input, types.FunctionType):
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return input(inc)
-                
+            
         res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), None)
     else:
         print("error") # need error
@@ -2623,7 +2739,10 @@ def move_locsig(gen: MUS_ANY_POINTER, degree: float, distance: float):
 
 # TODO: move-sound  need dlocsig
 
-
+def calc_length(start, dur):
+    st = seconds2samples(start)
+    nd = seconds2samples(start+dur)
+    return st, nd
 
 # attempting some kind of defgenerator
 
@@ -2648,8 +2767,20 @@ def make_generator(name, slots, wrapper=None, methods=None):
     def is_a(gen):
         return isinstance(gen, mus_gen) and gen.name == name
     return functools.partial(make_generator, **slots), is_a
-    
-    
+
+
+def array_reader(arr, chan):
+    ind = 0
+    if chan > (clm_channels(arr)):
+        raise ValueError(f'array has {clm_channels(arr)} channels but {chan} asked for')
+    length = clm_length(arr)
+    def reader(direction):
+        nonlocal ind
+        v = arr[chan][ind]
+        ind += direction
+        ind = clip(ind, 0, length)
+        return v
+    return reader    
     
 # musx integration
 # TODO move to another file

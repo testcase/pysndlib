@@ -1,8 +1,3 @@
-#! /Users/toddingalls/Developer/Python/venvs/pysndlib-venv/bin/python
-
-# from functools import 
-
-#from pysndlib import *
 from functools import singledispatch
 import operator
 import types
@@ -10,9 +5,6 @@ import types
 import numpy as np
 import numpy.typing as npt
 
-from pysndlib import make_generator
-
-# def window_envelop(beg, end, e):
 
 @singledispatch
 def mapper(e1,e2,op):
@@ -52,10 +44,6 @@ def _(e: list, scl, offset=0.):
 def _(e: np.ndarray, scl, offset=0.):
     return e * scl + offset
     
-
-
-    
-
 
 # --------------- map_envelopes ---------------- #
 
@@ -177,33 +165,3 @@ def normalize_envelope(e, new_max=1.0):
     maxy = max_envelope(e)
     scl = new_max / maxy
     return scale_envelope(e, scl)
-
-# invert-envelope seens in mix.scm seeme like general good idea
-#print(normalize_envelope([0.,1., .5, 2., .8, 1.7, 1.0, 0.0], .2))
-
-# a = [0,1, .5, .8, 1.0, 0.]
-# print(reverse_envelope(a))
-  
-#print(scale_envelope(np.array([1,2,3,4]), 2.5, 1.))
-#print([1,2,3] + 2)
-# print(interleave([1,2,3], [5,6,7]))   
-# print(interleave(np.array([1,2,3]), np.array([5,6,7])) )
-# print(integrate_envelope([0, 0, 1, 1]))
-# print(integrate_envelope([0, 1, 1, 1]))
-# print(integrate_envelope([0, 0, 1, 1, 2, .5]))
-# print(max_envelope([1,2,3, 10, 2, 1, 9, 20]))
-# print(max_envelope(np.array([1,2,3, 10, 2, 1, 9, 20])))
-
-
-
-# print(mapper([1,2,3],[5,6,7], operator.add))
-# print(mapper(np.array([1.00,2.00,3.00], dtype=np.double),np.array([5,6,7]), operator.add))
-# print(np.array([6.00,8.00,10.00], dtype=np.double))
-#def map_envelopes(op, e1, e2):
-
-    
-
-
-# print(list(map(operator.add, [1,2,3],[4,5,6])))
-# 
-# print(np.array(map(operator.add, np.array([1,2,3]), np.array([1,2,3]))))

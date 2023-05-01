@@ -1,5 +1,3 @@
-#! /Users/toddingalls/Developer/Python/venvs/pysndlib-venv/bin/python
-
 import math
 
 from pysndlib import *
