@@ -1,4 +1,3 @@
-#! /Users/toddingalls/Developer/Python/venvs/pysndlib-venv/bin/python
 import math
 import numpy as np
 from pysndlib import *
