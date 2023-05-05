@@ -6,12 +6,12 @@ import os
 from typing import Optional
 import subprocess
 import time
+import tempfile
 import types
-import musx
 import math
 import numpy as np
 import numpy.typing as npt
-
+import musx
 from .sndlib import *
 
 mus_initialize()
@@ -419,6 +419,7 @@ MUS_ANY_POINTER.mus_filename = property(get_mus_filename, None, None) # not seta
 # just putting note here so i a remember if seeing
 # any errors that could be related.
 MUS_ANY_POINTER.__del__ = lambda s :  mus_free(s)
+#MUS_ANY_POINTER.__del__ = lambda s :  print("freeme", s)
 
 # this could use some work but good enough for the moment.
 # maybe want to be able to switch between more verbose printing and terser
@@ -458,8 +459,13 @@ def is_zero(n):
 def is_number(n):
     return type(n) == int or type(n) == float   
     
-### some utilites as generic functions
+def is_power_of_2(x):
+    return (((x) - 1) & (x)) == 0
 
+def next_power_of_2(x):
+    return 2**int(1 + (float(math.log(x + 1)) / math.log(2.0)))
+    
+### some utilites as generic functions
 
 
 # TODO: what other clm functions need. 
@@ -485,7 +491,13 @@ def _(x: list):
     
 @clm_channels.register
 def _(x: np.ndarray):  
-    return len(x)
+    if x.ndim == 1:
+        return 1
+    elif x.ndim == 2:
+        return np.shape(x)[0]
+    else:
+        print("error") # raise error
+        
 
 @singledispatch
 def clm_length(x):
@@ -505,7 +517,12 @@ def _(x: list):
 
 @clm_length.register
 def _(x: np.ndarray):
-    return len(x[0])
+    if x.ndim == 1:
+        return np.shape(x)[0]
+    elif x.ndim == 2:
+        return np.shape(x)[1]
+    else:
+        print("error") # raise error
 
 @singledispatch
 def clm_srate(x):
@@ -580,9 +597,20 @@ def _(x: int, lo, hi):
         return int(hi + (math.fmod((x-lo), r)))
     if x > hi:
         return int(lo + (math.fmod((x-hi), r)))
+
         
 
     
+    
+    
+    
+#     length = mus_sound_framples(filename)
+#     chans = mus_sound_chans(filename)
+#     srate = mus_sound_srate(filename)
+#     out = np.zeros((chans, length), dtype=np.double)
+#     for i in range(chans):
+#         mus_file_to_array(filename,i, 0, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+#     return out, srate    
 
 # CLM utility functions
 # these could all be done in pure python
@@ -857,15 +885,15 @@ def sndinfo(filename):
     sample_type = Sample(mus_sound_sample_type(filename))
     
     loop_info = mus_sound_loop_info(filename)
+    if loop_info:
+        loop_modes = [loop_info[6], loop_info[7]]
+        loop_starts = [loop_info[0], loop_info[2]]
+        loop_ends = [loop_info[1], loop_info[3]]
+        base_note = loop_info[4]
+        base_detune = loop_info[5]
     
-    loop_modes = [loop_info[6], loop_info[7]]
-    loop_starts = [loop_info[0], loop_info[2]]
-    loop_ends = [loop_info[1], loop_info[3]]
-    base_note = loop_info[4]
-    base_detune = loop_info[5]
-    
-    loop_info = {'loop_modes' : loop_modes, 'loop_start' : loop_starts, 'loop_ends' : loop_ends, 
-                   'base_note' : base_note,  'base_detune' : base_detune}
+        loop_info = {'loop_modes' : loop_modes, 'loop_start' : loop_starts, 'loop_ends' : loop_ends, 
+                       'base_note' : base_note,  'base_detune' : base_detune}
     
     info = {'date' : time.localtime(date), 'srate' : srate, 'chans' : chans, 'samples' : samples,
             'comment' : comment, 'length' : length, 'header_type' : header_type, 'sample_type' : sample_type,
@@ -883,6 +911,15 @@ def file2array(filename):
     out = np.zeros((chans, length), dtype=np.double)
     for i in range(chans):
         mus_file_to_array(filename,i, 0, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+    return out, srate
+
+
+def channel2array(filename):
+    length = mus_sound_framples(filename)
+    chans = mus_sound_chans(filename)
+    srate = mus_sound_srate(filename)
+    out = np.zeros((1, length), dtype=np.double)
+    mus_file_to_array(filename,i, 0, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
     return out, srate
 
     
@@ -1656,12 +1693,11 @@ def make_filter(order: int, xcoeffs, ycoeffs):
     """Return a new direct form FIR/IIR filter, coeff args are list/ndarray"""     
     xcoeffs_ptr = get_array_ptr(xcoeffs)    
     ycoeffs_ptr = get_array_ptr(ycoeffs)    
-        
-    gen =  mus_make_filter(order, xcoeffs_ptr, ycoeffs_ptr)
-    gen._cache = [xcoeffs, ycoeffs]
+    gen =  mus_make_filter(order, xcoeffs_ptr, ycoeffs_ptr, None)
+    gen._cache = [xcoeffs_ptr, ycoeffs_ptr]
     return gen
     
-def filter(fl: MUS_ANY_POINTER, input: float):
+def clm_filter(fl: MUS_ANY_POINTER, input: float): # TODO : conflicts with buitl in function
     """next sample from filter"""
     if fl == None:
         raise_none_error('filter')
@@ -1676,7 +1712,7 @@ def is_filter(fl: MUS_ANY_POINTER):
 def make_fir_filter(order: int, xcoeffs):
     """return a new FIR filter, xcoeffs a list/ndarray"""
     xcoeffs_ptr = get_array_ptr(xcoeffs)    
-    gen =  mus_make_fir_filter(order, xcoeffs_ptr)
+    gen =  mus_make_fir_filter(order, xcoeffs_ptr, None)
     gen._cache = [xcoeffs_ptr]
     return gen
     
@@ -2332,58 +2368,76 @@ def is_src(s: MUS_ANY_POINTER):
     
 # ---------------- convolve ---------------- #
 
-def make_convolve(input, filter: npt.NDArray[np.float64], fft_size: int, filter_size: Optional[int]=None ):
+def make_convolve(input, filt: npt.NDArray[np.float64], fft_size: Optional[int]=512, filter_size: Optional[int]=None ):
     """Return a new convolution generator which convolves its input with the impulse response 'filter'."""
-    if isinstance(filter, list):
-        filter = np.array(filter, dtype=np.double)
-        
+    
+    filter_ptr = get_array_ptr(filt)
+
     if not filter_size:
-        filter_size = len(filter)
+        filter_size = clm_length(filt)
+     
+    fft_len = 0
+    
+    if fft_size < 0 or fft_size == 0:
+        print('error') #TODO Raise eeror
+        
+    if fft_size > mus_max_malloc():
+         print('error') #TODO Raise eeror
+        
+    if is_power_of_2(filter_size):
+        fft_len = filter_size * 2
+    else :
+        fft_len = next_power_of_2(filter_size)
+        
+    if fft_size < fft_len:
+        fft_size = fft_len
 
     if(isinstance(input, MUS_ANY_POINTER)):
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return mus_apply(input, inc, 0.)
-        
-        res = mus_make_convolve(ifunc, filter.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), fft_size, filter_size)
+
+        res = mus_make_convolve(ifunc, filter_ptr, fft_size, filter_size, input)
     
     elif isinstance(input, types.FunctionType):
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return input(inc)
-            
-        res = mus_make_convolve(ifunc, srate, width, None)
+
+        res = mus_make_convolve(ifunc, filter_ptr, fft_size, filter_size, None)
     else:
         print("error") # need error
-        
-    res._inputcallback = ifunc
+    
+    res._inputcallback = ifunc 
+    res._cache = [filter_ptr]
     return res
 
     
 def convolve(gen: MUS_ANY_POINTER):
     """next sample from convolution generator"""
     if gen == None:
-        raise_none_error('convolve')
-    return mus_convolve(gen, gen._inputcallback)
+        raise_none_error('convolve')   
+    return mus_convolve(gen, gen._inputcallback)  
     
 def is_convolve(gen: MUS_ANY_POINTER):
     """Returns True if gen is a convolve"""
     return mus_is_convolve(gen)
     
     
-def convolve_files(file1, file2, maxamp: float, outputfile):
-    mus_convolve_files(file1, file2, maxamp,outputfile )
+# Added some options . TODO: what about sample rate conversion    
+def convolve_files(file1, file2, maxamp: Optional[float]=1., outputfile='test.aif', sample_type=CLM.sample_type, header_type=CLM.header_type):
+    if header_type == Header.NEXT:
+        mus_convolve_files(file1, file2, maxamp,outputfile)
+    else:
+        temp_file = tempfile.gettempdir() + '/' + 'temp-' + outputfile
+        mus_convolve_files(file1, file2, maxamp, temp_file)
+        with Sound(outputfile, header_type=header_type, sample_type=sample_type):
+            length = seconds2samples(mus_sound_duration(temp_file))
+            reader = make_readin(temp_file)
+            for i in range(0, length):
+                outa(i, readin(reader))
+    return outputfile
 
-# TODO - is this not already defined?
-# def cepstrum(data: npt.NDArray[np.float64], n):
-#     if isinstance(data, list):
-#         data = np.array(data, dtype=np.double)
-#     size = len(data)
-#     dt = data.copy()
-#     mus_cepstrum(dt.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), n)
-#     return dt
-
-# TODO convolve-files file1 file2 (maxamp 1.0) (output-file "tmp.snd")
     
 # --------------- granulate ---------------- #
 
@@ -2423,13 +2477,12 @@ def make_granulate(input,
             
         res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), None)
     else:
-        print("error") # need error
+        print("error") # TODO: need error
         
     res._inputcallback = ifunc
     res._editcallback  = None
     if edit:
         res._editcallback = efunc
-        #print(edit)
     return res
     
     
@@ -2508,7 +2561,7 @@ def make_phase_vocoder(input,
                 sfunc if synthesize else cast(None, SYNTHESISCALLBACK),
                 None)
     else:
-        print("error") # need error
+        print("error") # TODO: need error
         
     setattr(res,'_inputcallback', ifunc)        
     setattr(res,'_analyzecallback', afunc if analyze else None)
@@ -2739,6 +2792,9 @@ def move_locsig(gen: MUS_ANY_POINTER, degree: float, distance: float):
 
 # TODO: move-sound  need dlocsig
 
+
+
+
 def calc_length(start, dur):
     st = seconds2samples(start)
     nd = seconds2samples(start+dur)
@@ -2769,17 +2825,26 @@ def make_generator(name, slots, wrapper=None, methods=None):
     return functools.partial(make_generator, **slots), is_a
 
 
-def array_reader(arr, chan):
+def array_reader(arr, chan, loop=0):
     ind = 0
     if chan > (clm_channels(arr)):
         raise ValueError(f'array has {clm_channels(arr)} channels but {chan} asked for')
     length = clm_length(arr)
-    def reader(direction):
-        nonlocal ind
-        v = arr[chan][ind]
-        ind += direction
-        ind = clip(ind, 0, length)
-        return v
+    if loop:
+        def reader(direction):
+            nonlocal ind
+            v = arr[chan][ind]
+            ind += direction
+            ind = wrap(ind, 0, length-1)
+            return v
+            
+    else: 
+        def reader(direction):
+            nonlocal ind
+            v = arr[chan][ind]
+            ind += direction
+            ind = clip(ind, 0, length-1)
+            return v
     return reader    
     
 # musx integration
@@ -2810,4 +2875,4 @@ def write_clm(seq):
         args = ("{},"*(len(v.args))).format(*v.args)
         kwargs = ','.join([f'{k}={v}' for k,v in v.keywords.items()])
         #print(args)
-        print(f'({funcname} {args}{kwargs})')
+        print(f'({funcname} {args}{kwargs})') #TODO: write to actual file
