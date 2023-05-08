@@ -55,14 +55,14 @@ def src_fit_envelope(e, target_dur):
     
 # --------------- down_oct ---------------- #
     
-def down_oct(n, snd, chn):
-    length = clm_length(snd)
-    fftlen = math.floor(2**math.ceil(math.log(length, 2)))
-    fftlen2 = fftlen / 2
-    fft_1 = (n * fftlen) - 1
-    fftscale = (1.0 / fftlen)
-    rl = 
-    
+# def down_oct(n, snd, chn):
+#     length = clm_length(snd)
+#     fftlen = math.floor(2**math.ceil(math.log(length, 2)))
+#     fftlen2 = fftlen / 2
+#     fft_1 = (n * fftlen) - 1
+#     fftscale = (1.0 / fftlen)
+#     rl = 
+#     
 
 # --------------- highpass ---------------- #
 # freq in radians

@@ -1,11 +1,9 @@
 import math
-
+import random
 from pysndlib import *
-
+# from .internals.utils import clamp
 NEARLY_ZERO = 1.0e-10
-
-def clamp(num, min_value, max_value):
-   return max(min(num, max_value), min_value)
+TWO_PI = math.pi * 2
 
 
 # --------------- nssb ---------------- #
@@ -351,15 +349,125 @@ def fmssb(gen, fm=0.):
 
 # TODO: --------------- sinc-train ---------------- # 
 
-# TODO: --------------- pink-noise ---------------- # 
+# --------------- pink-noise ---------------- # 
 
-# TODO: --------------- brown-noise ---------------- # 
+def pink_noise_wrapper(g):
+    g.data = np.zeros(g.n*2, dtype=np.double)
+    amp = 1.0 / (2.5 * math.sqrt(g.n))
+    g.data[0] = amp
+    for i in range(2,2*g.n,2):
+        g.data[i] =  mus_random(amp)
+        g.data[i+1] = random.random()
+    return g
+    
+make_pink_noise, is_pink_noise = make_generator('pink_noise', {'n' : 1}, wrapper=pink_noise_wrapper,
+    docstring="""Creates a pink-noise generator with n octaves of rand (12 is recommended).""")
 
-# TODO: --------------- green-noise ---------------- # 
+def pink_noise(gen):
+    """Returns the next random value in the 1/f stream produced by gen."""
+    x = 0.5 
+    s = 0.0
+    amp = gen.data[0]
+    size = gen.n*2
 
-# TODO: --------------- green-noise-interp ---------------- # 
+    for i in range(2,size,2):
+        s += gen.data[i]
+        gen.data[i+1] -= x
+        
+        if gen.data[i+1] < 0.0:
+            gen.data[i] = mus_random(amp)
+            gen.data[i+1] += 1.0
+        x *= .5
+    return s + mus_random(amp)
+
+# --------------- brown-noise ---------------- # 
+
+def brown_noise_wrapper(g):
+    g.prev = 0.0 
+    g.sum = 0.0
+    g.gr = make_rand(g.frequency, g.amplitude)
+    return g
+    
+make_brown_noise, is_brown_noise = make_generator('brown_noise', {'frequency' : 0, 'amplitude' : 1.0}, 
+                                    wrapper=brown_noise_wrapper,
+                                    docstring="""Returns a generator that produces brownian noise.""")
+
+def brown_noise(gen, fm=0.0):
+    """returns the next brownian noise sample"""
+    val = rand(gen.gr, fm)
+    if not val == gen.prev:
+        gen.prev = val
+        gen.sum += val
+    return gen.sum
+
+
+
+
+# --------------- green-noise ---------------- # 
+
+def green_noise_wrapper(g):
+    g.gr = make_rand(g.frequency, g.amplitude)
+    g.sum = .5 * (g.low + g.high)
+    g.prev = 0.0 
+    return g
+    
+make_green_noise, is_green_noise = make_generator('green_noise', {'frequency' : 0.0, 'amplitude' : 1.0, 'low' : -1.0, 'high' : 1.0},    
+                                wrapper=green_noise_wrapper, docstring="""returns a new green-noise (bounded brownian noise) generator.""")
+                                
+                                
+def green_noise(gen, fm=0.0):
+    """Returns the next sample in a sequence of bounded brownian noise samples."""
+    val = rand(gen.gr, fm)
+    if not val == gen.prev:
+        gen.prev = val
+        gen.sum += val
+        if not (gen.low <= gen.sum <= gen.high):
+            gen.sum -= 2*val
+    return gen.sum        
+    
+    
+
+# --------------- green-noise-interp ---------------- # 
+
+def green_noise_interp_wrapper(g):
+    g.sum = .5 * (g.low + g.high)
+    g.dv = 1.0 / math.ceil(CLM.srate / max(1.0, g.frequency))
+    convert_frequency(g)
+    g.incr = mus_random(g.amplitude) * g.dv
+    g.angle = 0.0
+    return g
+    
+make_green_noise_interp, is_green_noise_interp = make_generator('green_noise_interp', {'frequency' : 0.0, 'amplitude' : 1.0, 'low' : -1.0, 'high' : 1.0},
+                            wrapper = green_noise_interp_wrapper, docstring="""Returns a new interpolating green noise (bounded brownian noise) generator.""")
+
+def green_noise_interp(gen, fm=0.0):
+    """Returns the next sample in a sequence of interpolated bounded brownian noise samples."""
+    if not (0.0 <= gen.angle and gen.angle <= TWO_PI):
+        val = mus_random(gen.amplitude)
+        gen.angle %= TWO_PI # in scheme version modulo used which should be same as %
+        if gen.angle < 1.0:
+            gen.angle += TWO_PI
+        if not (gen.low <= (gen.sum+val) <= gen.high):
+            val = min(gen.high-gen.sum, max(gen.low-gen.sum, -val))
+        gen.incr = gen.dv * val
+    gen.angle += fm + gen.frequency
+    gen.sum += gen.incr
+    return gen.sum
+    
+        
 
 # TODO: --------------- moving-sum ---------------- # 
+
+def moving_sum_wrapper(g):
+    g.gen = make_moving_average(g.n)
+    g.gen.mus_increment = 1.0
+    return g
+
+make_moving_sum, is_moving_sum = make_generator('moving_sum', {'n' : 128}, wrapper=moving_sum_wrapper,docstring="""Returns a moving-sum generator""")
+
+def moving_sum(gen, inpt):
+    """Returns the sum of the absolute values in a moving window over the last n inputs."""
+    return moving_average(gen.gen, abs(inpt))
 
 # TODO: --------------- moving-variance ---------------- # 
 
@@ -371,17 +479,119 @@ def fmssb(gen, fm=0.):
 
 # TODO: --------------- exponentially-weighted-moving-average ---------------- # 
 
-# TODO: --------------- polyoid ---------------- # 
+# --------------- polyoid ---------------- # 
 
-# TODO: --------------- noid ---------------- # 
+def make_polyoid(frequency, partial_amps_and_phases):
+    length = len(partial_amps_and_phases)
+    n = 0
+    for i in range(0, length, 3):
+        n = max(n, math.floor(partial_amps_and_phases[i]))   
+    topk = n + 1
+    sin_amps = np.zeros(topk, dtype=np.double)
+    cos_amps = np.zeros(topk, dtype=np.double)
+    for j in range(0,length,3):
+        n = math.floor((partial_amps_and_phases[j]))
+        amp = partial_amps_and_phases[j+1]
+        phase = partial_amps_and_phases[j+2]
+        if n > 0:
+            sin_amps[n] = amp * math.cos(phase)
+        cos_amps[n] = amp * math.sin(phase)
+    return make_polywave(frequency, xcoeffs=cos_amps, ycoeffs=sin_amps)
+
+def is_polyoid(g):
+    return is_polywave(g) and g.mus_channel == Polynomial.BOTH_KINDS
+    
+polyoid = polywave
+
+#def polyoid_env
+
+# --------------- noid ---------------- # 
+# def make_noid(frequency=0.0, n=1, phases=None, choice='all'):  
+# the full version of this requires potentially loading a file so
+# wondering good way to do this. using maybe binary numpy files
+       
+    
+    
+    
+#         
+        
+
 
 # TODO: --------------- knoid ---------------- # 
 
 # TODO: --------------- roid ---------------- # 
 
+# --------------- tanhsin ---------------- # 
+
+# is_waveshape = is_polyshape
+
+
 # TODO: --------------- tanhsin ---------------- # 
 
+def tanhsin_wrapper(g):
+    g.osc = make_oscil(g.frequency, g.initial_phase)
+    g.frequency = hz2radians(g.frequency)
+    return g
+    
+make_tanhsin, is_tanhsin = make_generator('tanhsin', {'frequency' : 0.0, 'r' : 1.0, 
+            'initial_phase' : 0.0}, wrapper=tanhsin_wrapper,
+            docstring="""Returns a tanhsin generator.""")
+                            
+
+def tanhsin(gen, fm=0.0):
+    """Produces tanh(r*sin) which approaches a square wave as r increases."""
+    return math.tanh(gen.r * oscil(gen.osc,fm))
+
+
+
 # TODO: --------------- moving-fft ---------------- # 
+
+def moving_fft_wrapper(g):
+    g.rl = np.zeros(g.n, dtype=np.double)
+    g.im = np.zeros(g.n, dtype=np.double)
+    g.data = np.zeros(g.n, dtype=np.double)
+    g.window = make_fft_window(g.window, g.n)
+    s = np.sum(g.window)
+   # g.window = g.window * (2./s)
+    g.outctr = g.n+1
+   # print(g.window)
+    return g
+    
+moving_fft_methods = {'mus_data' : [lambda g : g.data, None],
+                        'mus_xcoeffs' : [lambda g : g.rl, None],
+                        'mus_ycoeffs' : [lambda g : g.im, None],
+                        'mus_run' : [lambda g,arg1,arg2 : moving_fft(g), None]}
+
+make_moving_fft, is_moving_fft = make_generator('moving_fft', 
+                {'input' : False, 
+                'n' : 512, 
+                'hop' : 128, 
+                'window' : Window.HAMMING},
+                wrapper=moving_fft_wrapper, 
+                methods=moving_fft_methods,
+                docstring="""returns a moving-fft generator.""")
+
+def moving_fft(gen):
+    new_data = False
+    if gen.outctr >= gen.hop:
+        if gen.outctr > gen.n:
+            for i in range(gen.n):
+                gen.data[i] = readin(gen.input)
+            mid = gen.n - gen.hop
+            np.roll(gen.data, gen.hop)
+            for i in range(mid,gen.n):
+                gen.data[i] =readin(gen.input)   
+        gen.outctr = 0
+        new_data = True
+        gen.im.fill(0.0)
+        np.copyto(gen.rl, gen.data)
+        np.multiply(gen.rl,gen.window, gen.rl)
+
+        fft(gen.rl,gen.im, gen.n,1)
+        rectangular2polar(gen.rl,gen.im)
+    gen.outctr += 1
+    return new_data
+
 
 # TODO: --------------- moving-spectrum ---------------- # 
 
