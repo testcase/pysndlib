@@ -1,15 +1,44 @@
 import subprocess
 import time
 from typing import Optional
+from functools import singledispatch
 import numpy as np
 import numpy.typing as npt
 from .sndlib import *
 from .enums import *
+from .mus_any_pointer import *
 # NOTE from what I understand about numpy.ndarray.ctypes 
 # it says that when data_as is used that it keeps a reference to 
 # the original array. that should mean as long as I cache the
 # result of data_as I should not need to cache the original 
 # numpy array. right?
+
+# --------------- clm_channels ---------------- #
+@singledispatch
+def clm_channels(x):
+    pass
+    
+@clm_channels.register
+def _(x: str):  #assume it is a file
+    return mus_sound_chans(x)
+    
+@clm_channels.register
+def _(x: MUS_ANY_POINTER):  #assume it is a gen
+    return x.mus_channels
+    
+@clm_channels.register
+def _(x: list):  
+    return len(x)
+    
+@clm_channels.register
+def _(x: np.ndarray):  
+    if x.ndim == 1:
+        return 1
+    elif x.ndim == 2:
+        return np.shape(x)[0]
+    else:
+        print("error") # raise error
+        
 
 
 def get_array_ptr(arr):

@@ -10,6 +10,7 @@ import math
 import numpy as np
 import numpy.typing as npt
 
+
 from .internals.sndlib import *
 from .internals.enums import *
 from .internals.clm import *
@@ -33,32 +34,7 @@ mus_set_rand_seed(int(time.time()))
 # prepending clm to functions to avoid name classhes
 
 
-# --------------- clm_channels ---------------- #
-@singledispatch
-def clm_channels(x):
-    pass
-    
-@clm_channels.register
-def _(x: str):  #assume it is a file
-    return mus_sound_chans(x)
-    
-@clm_channels.register
-def _(x: MUS_ANY_POINTER):  #assume it is a gen
-    return x.mus_channels
-    
-@clm_channels.register
-def _(x: list):  
-    return len(x)
-    
-@clm_channels.register
-def _(x: np.ndarray):  
-    if x.ndim == 1:
-        return 1
-    elif x.ndim == 2:
-        return np.shape(x)[0]
-    else:
-        print("error") # raise error
-        
+
 # --------------- clm_length ---------------- #
 @singledispatch
 def clm_length(x):

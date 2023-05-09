@@ -858,7 +858,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs([])
+add_library_search_dirs(["/usr/local/lib"])
 
 # Begin libraries
 _libs["sndlib"] = load_library("sndlib")
