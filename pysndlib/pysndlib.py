@@ -21,139 +21,7 @@ mus_initialize()
 mus_sound_initialize() 
 mus_set_rand_seed(int(time.time()))
 
-# these could be singledispatch but is manageable this way for now
-### some utilites as generic functions
-
-
-# TODO: what other clm functions need. 
-#  using clm_* to avoid clashing with 
-# what are likely typically used variable names
-# 
-
-# --------------- generic functions ---------------- #
-# prepending clm to functions to avoid name classhes
-
-
-
-# --------------- clm_length ---------------- #
-@singledispatch
-def clm_length(x):
-    pass
-    
-@clm_length.register
-def _(x: str):# assume file
-    return mus_sound_length(x)
-
-@clm_length.register
-def _(x: MUS_ANY_POINTER):# assume file
-    return x.mus_length
-        
-@clm_length.register
-def _(x: list):
-    return len(x[0])
-
-@clm_length.register
-def _(x: np.ndarray):
-    if x.ndim == 1:
-        return np.shape(x)[0]
-    elif x.ndim == 2:
-        return np.shape(x)[1]
-    else:
-        print("error") # raise error
-
-@singledispatch
-def clm_srate(x):
-    pass
-
-#TODO: do we need others ?
-@clm_srate.register
-def _(x: str): #file
-    mus_sound_srate(file)
-  
-
-
-# --------------- range utils ---------------- #
-
-# --------------- clamp ---------------- #
-@singledispatch
-def clamp(x, lo, hi):
-    pass
-    
-@clamp.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clamp.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-    
-@singledispatch
-def clip(x, lo, hi):
-    pass
-
-# --------------- clip ---------------- #
-# same as clamp
-@clip.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clip.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-
-# --------------- fold ---------------- #
-
-@singledispatch
-def fold(x, lo, hi):
-    pass
-    
-@fold.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo
-    
-@fold.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return int(r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo)
-
-
-# --------------- wrap ---------------- #
-
-@singledispatch    
-def wrap(x, lo, hi):
-    pass
-
-@wrap.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return hi + (math.fmod((x-lo), r))
-    if x > hi:
-        return lo + (math.fmod((x-hi), r))
- 
-@wrap.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return int(hi + (math.fmod((x-lo), r)))
-    if x > hi:
-        return int(lo + (math.fmod((x-hi), r)))
-
-        
-
-    
-    
-    
-
-
-        
+     
 #########################################
 # basic file reading/writing to/from nympy arrays
 # note all of this assumes numpy dtype is np.double
@@ -277,8 +145,6 @@ def array2file(filename: str, arr, length=None, sr=None, #channels=None,
 
 
     
-
-# locsig-type ()    
 
 # TODO: move-sound  need dlocsig
 
