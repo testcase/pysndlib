@@ -4,6 +4,7 @@ from typing import Optional
 from functools import singledispatch
 import numpy as np
 import numpy.typing as npt
+import math
 from .sndlib import *
 from .enums import *
 from .mus_any_pointer import *
@@ -77,88 +78,6 @@ def clm_srate(x):
 def _(x: str): #file
     mus_sound_srate(file)
   
-
-
-# --------------- range utils ---------------- #
-
-# --------------- clamp ---------------- #
-@singledispatch
-def clamp(x, lo, hi):
-    pass
-    
-@clamp.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clamp.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-    
-@singledispatch
-def clip(x, lo, hi):
-    pass
-
-# --------------- clip ---------------- #
-# same as clamp
-@clip.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clip.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-
-# --------------- fold ---------------- #
-
-@singledispatch
-def fold(x, lo, hi):
-    pass
-    
-@fold.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo
-    
-@fold.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return int(r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo)
-
-
-# --------------- wrap ---------------- #
-
-@singledispatch    
-def wrap(x, lo, hi):
-    pass
-
-@wrap.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return hi + (math.fmod((x-lo), r))
-    if x > hi:
-        return lo + (math.fmod((x-hi), r))
- 
-@wrap.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return int(hi + (math.fmod((x-lo), r)))
-    if x > hi:
-        return int(lo + (math.fmod((x-hi), r)))
-
-        
-
-    
-    
-    
-
 
 
 
@@ -439,3 +358,20 @@ def chebyshev_u_sum(x: float, ucoeffs):
     """returns the sum of the weighted Chebyshev polynomials Un"""
     ucoeffs_ptr = get_array_ptr(ucoeffs)
     return mus_chebyshev_tu_sum(x, ucoeffs_ptr)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+

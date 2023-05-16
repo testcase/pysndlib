@@ -143,6 +143,14 @@ class Sound(object):
         if self.reverb: 
             if self.reverb_to_file:
                 mus_close(Sound.reverb)
+                
+                if self.statistics:
+                    chans = clm_channels(self.revfile)
+                    vals = np.zeros(chans, dtype=np.double)
+                    times = np.zeros(chans, dtype=np.int_)
+                    revmax = mus_sound_maxamps(self.revfile, chans, vals.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), times.ctypes.data_as(ctypes.POINTER(ctypes.c_long)))
+                    print('revmax', vals, times)
+                
                 Sound.reverb = make_file2sample(self.revfile)
                 
                 if self.reverb_data:
