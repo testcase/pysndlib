@@ -119,7 +119,6 @@ MUS_ANY_POINTER.mus_filename = property(get_mus_filename, None, None) # not seta
 # just putting note here so i a remember if seeing
 # any errors that could be related.
 MUS_ANY_POINTER.__del__ = lambda s :  mus_free(s)
-#MUS_ANY_POINTER.__del__ = lambda s :  print("freeme", s)
 
 # this could use some work but good enough for the moment.
 # maybe want to be able to switch between more verbose printing and terser

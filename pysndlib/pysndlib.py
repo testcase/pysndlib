@@ -15,7 +15,6 @@ from .internals.sndlib import *
 from .internals.enums import *
 from .internals.clm import *
 from .internals.mus_any_pointer import *
-from .internals.utils import *
 
 mus_initialize()
 mus_sound_initialize() 
