@@ -49,6 +49,8 @@ mean some aspects may not be pythonic.
 			for i in range(44100):
 				outa(i, .5 * oscil(gen))
 	    
+- not implemented clip ot scaling in with Sound	    
+
 - Sound.output and Sound.reverb are define when calling something from with Sound and 
 	should be used instead of CLM.out and CLM.reverb although i am looking at this to see
 	if these could just use the CLM namespace. 	    
@@ -65,7 +67,16 @@ pysndfile
 - some clm functions like `length` or `channels` have clm prepended to name e.g. clm_length
  clm_channels. 
 
+
+ - clm_filter to run filter. _
+
 ## experimental
+
+
+make_generator can be used to create generators. Python lacks macros so this works a little different
+
+make_generator returns two functions, the function to make the generator and the function to test if generator 
+is a type. see generators.py for examples
 
 There is an experimental integration with [musx](https://github.com/musx-admin/musx) by Rick Taube which is being included
 in this package at the moment. It uses a decorator to translate a simple function into something useful for musx. The ability

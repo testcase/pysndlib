@@ -18,7 +18,7 @@ EDITCALLBACK = CFUNCTYPE(c_int, c_void_p)
 ANALYSISCALLBACK = CFUNCTYPE(c_bool, c_void_p, CFUNCTYPE(c_double, c_void_p, c_int))
 SYNTHESISCALLBACK = CFUNCTYPE(c_double, c_void_p)
 LOCSIGDETOURCALLBACK = CFUNCTYPE(UNCHECKED(None), c_void_p, mus_long_t) #making void to avoid creating pointe objec
-
+ENVFUNCTION = CFUNCTYPE(UNCHECKED(mus_float_t), mus_float_t) # for env_any
 
 # 
 #these may need to be set based on system type etc
@@ -204,7 +204,7 @@ class Sound(object):
 ### so including check for that
 
 def raise_none_error(gen):
-    raise TypeError (f"cannot pass None in place of gen {gen}.") # going to call this a type error instead of a ValueError ?
+    raise TypeError (f"cannot pass None in place of gen {gen}.")
 
 # ---------------- oscil ---------------- #
 def make_oscil( frequency: Optional[float]=0., initial_phase: Optional[float] = 0.0):
@@ -215,13 +215,16 @@ def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=Non
     """Return next sample from oscil  gen: val = sin(phase + pm); phase += (freq + fm)"""
     if os == None:
         raise_none_error('oscil')
-    if not fm:
-        if not pm:
-            return mus_oscil_unmodulated(os)
-        else: 
-            return mus_oscil_pm(os, pm)
-    else:
+    
+    if not (fm or pm):
+        return mus_oscil_unmodulated(os)
+    elif fm and not pm:
         return mus_oscil_fm(os, fm)
+    else:
+        return mus_oscil(os, fm, pm)
+       
+        
+        
     
 def is_oscil(os: MUS_ANY_POINTER):
     """Returns True if gen is an oscil"""
@@ -230,12 +233,15 @@ def is_oscil(os: MUS_ANY_POINTER):
     
 # ---------------- oscil-bank ---------------- #
 
-def make_oscil_bank(freqs, phases, amps, stable: Optional[bool]=False):
+def make_oscil_bank(freqs, phases, amps=None, stable: Optional[bool]=False):
     """Return a new oscil-bank generator. (freqs in radians)"""
     freqs_ptr = get_array_ptr(freqs)
     phases_ptr = get_array_ptr(phases)
-    amps_ptr = get_array_ptr(amps)
-
+    if amps:
+        amps_ptr = get_array_ptr(amps)
+    else:
+         amps_ptr = None
+    
     gen =  mus_make_oscil_bank(len(freqs), freqs_ptr, phases_ptr, amps_ptr, stable)
     gen._cache = [freqs_ptr, phases_ptr, amps_ptr]
     return gen
@@ -283,9 +289,9 @@ def envelope_interp(x: float, env: MUS_ANY_POINTER):
         raise_none_error('env')
     return mus_env_interp(x, env)
 
-# TODO needs testing    
-# def env_any(e: MUS_ANY_POINTER, connection_function):
-#     return mus_env_any(e, FF(connection_function))
+  
+def env_any(e: MUS_ANY_POINTER, connection_function):
+    return mus_env_any(e, ENVFUNCTION(connection_function))
 
 # ---------------- pulsed-env ---------------- #    
 def make_pulsed_env(envelope, duration, frequency):    
@@ -293,7 +299,7 @@ def make_pulsed_env(envelope, duration, frequency):
     ge = make_env(envelope, scaler=1.0, duration=duration)
     gen = mus_make_pulsed_env(ge, pl)
     gen._cache = [pl, ge]
-    return 
+    return gen
     
 def pulsed_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
     if gen == None:
@@ -336,6 +342,33 @@ def is_table_lookup(tl: MUS_ANY_POINTER):
 
 # TODO make-table-lookup-with-env
 
+
+#clm2xen has more error checks 
+# should work if harms is ndarray
+
+@singledispatch
+def list_to_partials(x):
+    pass
+    
+@list_to_partials.register
+def _(harms: list):
+    p = harms[::2]
+    maxpartial = max(p)
+    partials = np.zeros(maxpartial+1, dtype=np.double)
+    for i in range(0, len(harms),2):
+        partials[int(harms[i])] = harms[i+1]
+    return partials
+    
+@list_to_partials.register
+def _(harms: np.ndarray):
+    p = harms[::2]
+    maxpartial = np.max(p)
+    partials = np.zeros(int(maxpartial)+1, dtype=np.double)
+    for i in range(0, len(harms),2):
+        partials[int(harms[i])] = harms[i+1]
+    return partials
+    
+    
 # ---------------- polywave ---------------- #
 def make_polywave(frequency: float, 
                     partials = [0.,1.], 
@@ -351,9 +384,9 @@ def make_polywave(frequency: float,
         gen._cache = [xcoeffs_ptr,ycoeffs_ptr]
         return gen
     else:
-        prtls = normalize_partials(partials)
+        prtls = list_to_partials(partials)
         prtls_ptr = get_array_ptr(prtls)
-        gen = mus_make_polywave(frequency, prtls_ptr, len(partials), type)
+        gen = mus_make_polywave(frequency, prtls_ptr, len(prtls), type)
         gen._cache = [prtls_ptr]
         return gen
     
@@ -372,6 +405,10 @@ def is_polywave(w: MUS_ANY_POINTER):
     return mus_is_polywave(w)
 
 
+
+    
+        
+
 # ---------------- polyshape ---------------- #
 # TODO like in docs should be a coeffs argument but don't see how
 def make_polyshape(frequency: float,
@@ -382,11 +419,16 @@ def make_polyshape(frequency: float,
                     
     """Return a new polynomial-based waveshaping generator."""
 
-    poly = partials2polynomial(partials)    
-    poly_ptr = get_array_ptr(poly)
+    if coeffs:
+        coeffs_ptr = get_array_ptr(coeffs)
 
-    gen = mus_make_polyshape(frequency, initial_phase, poly_ptr, len(partials))
-    gen._cache = [poly_ptr]
+    else:
+        p = partials2polynomial(partials, kind)
+        coeffs_ptr = get_array_ptr(p)
+        
+        
+    gen = mus_make_polyshape(frequency, initial_phase, coeffs_ptr, len(p), kind)
+    gen._cache = [coeffs_ptr]
     return gen
     
 def polyshape(w: MUS_ANY_POINTER, index: Optional[float]=1.0, fm: Optional[float]=None):
@@ -2276,10 +2318,12 @@ def phase_partials2wave(partials, wave=None, norm: Optional[bool]=True ):
     
 def partials2polynomial(partials, kind: Optional[int]=Polynomial.FIRST_KIND):
     """Returns a Chebyshev polynomial suitable for use with the polynomial generator to create (via waveshaping) the harmonic spectrum described by the partials argument."""
-    if isinstance(partials, list):
-        partials = np.array(partials, dtype=np.double)
-    mus_partials_to_polynomial(len(partials), partials.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
-    return partials
+    # if isinstance(partials, list):
+#         partials = np.array(partials, dtype=np.double)
+        
+    p = list_to_partials(partials)
+    mus_partials_to_polynomial(len(p), p.ctypes.data_as(ctypes.POINTER(ctypes.c_double)) ,kind)
+    return p
 
 def normalize_partials(partials):
     """Scales the partial amplitudes in the list/array or list 'partials' by the inverse of their sum (so that they add to 1.0)."""
@@ -2299,12 +2343,12 @@ def chebyshev_tu_sum(x: float, tcoeffs, ucoeffs):
 def chebyshev_t_sum(x: float, tcoeffs):
     """returns the sum of the weighted Chebyshev polynomials Tn"""
     tcoeffs_ptr = get_array_ptr(tcoeffs)
-    return mus_chebyshev_t_sum(x,tcoeffs_ptr)
+    return mus_chebyshev_t_sum(x,len(tcoeffs), tcoeffs_ptr)
 
 def chebyshev_u_sum(x: float, ucoeffs):
     """returns the sum of the weighted Chebyshev polynomials Un"""
     ucoeffs_ptr = get_array_ptr(ucoeffs)
-    return mus_chebyshev_tu_sum(x, ucoeffs_ptr)
+    return mus_chebyshev_tu_sum(x,len(ucoeffs),  ucoeffs_ptr)
     
     
     

@@ -2,7 +2,7 @@
 # showing basic examples of built-in generators
 from pysndlib import *
 import math
-
+from random import uniform
 
 with Sound(play=True):
     gen = make_oscil(440.0)
@@ -25,7 +25,7 @@ with Sound(play=True):
 with Sound(play=True):
     gen = make_polywave(440, partials=[1., .5, 2, .5])
     for i in range(44100):
-        outa(i, .1 * polywave(gen))
+        outa(i, .5 * polywave(gen))
 
 
 with Sound(play=True):
@@ -183,3 +183,274 @@ with Sound(channels=2, play=True):
     osc = make_oscil(440.0)
     for i in range(44100):
         locsig(loc, i, .5 * oscil(osc))
+        
+
+# -----------------------------
+# some other examples from sndclm
+
+def simp(beg, dur, freq, amp, envelope):
+    os = make_oscil(freq)
+    amp_env = make_env(envelope, duration=dur, scaler=amp)
+    start = seconds2samples(beg)
+    end = seconds2samples(beg + dur)
+    for i in range(start, end):
+        outa(i, env(amp_env) * oscil(os))
+        
+with Sound(play=True):
+    simp(0,2,440,.1,[0,0,.1,1.0,1.0,0.0])
+    
+    
+def simp(start, end, freq, amp, frq_env):
+    os = make_oscil(freq)
+    frqe = make_env(frq_env, length= (end+1) - start, scaler=hz2radians(freq))
+    for i in range(start, end):
+        outa(i, amp * oscil(os, env(frqe)))
+        
+with Sound(play=True):
+    simp(0,10000,440,.1,[0, 0, 1, 1])
+    
+    
+def simple_fm(beg, dur, freq, amp, mc_ratio, idx, amp_env=None, index_env=None):
+    start = seconds2samples(beg)
+    end = start + seconds2samples(dur)
+    cr = make_oscil(freq)
+    md = make_oscil(freq * mc_ratio)
+    fm_index = hz2radians(idx * mc_ratio * freq)
+    ampf = make_env(amp_env or [0,0,.5,1,1,0],scaler=amp, duration=dur)
+    indf = make_env(index_env or [0,0,.5,1,1,0], scaler=fm_index, duration=dur)
+    for i in range(start, end):
+        outa(i, env(ampf) * oscil(cr, env(indf) * oscil(md)))  
+    
+with Sound(play=True):
+    simple_fm(0, 1, 440, .1, 2, 1.0)
+    
+    
+    
+with Sound(play=True, statistics=True):
+    peaks = [23,0.0051914,32,0.0090310,63,0.0623477,123,0.1210755,185,0.1971876,
+            209,0.0033631,247,0.5797809,309,1.0000000,370,0.1713255,432,0.9351965,
+            481,0.0369873,495,0.1335089,518,0.0148626,558,0.1178001,617,0.6353443,
+            629,0.1462804,661,0.0208941,680,0.1739281,701,0.0260423,742,0.1203807,
+            760,0.0070301,803,0.0272111,865,0.0418878,926,0.0090197,992,0.0098687,
+            1174,0.00444,1298,0.0039722,2223,0.0033486,2409,0.0083675,2472,0.0100995,
+            2508,0.004262,2533,0.0216248,2580,0.0047732,2596,0.0088663,2612,0.0040592,
+            2657,0.005971,2679,0.0032541,2712,0.0048836,2761,0.0050938,2780,0.0098877,
+            2824,0.003421,2842,0.0134356,2857,0.0050194,2904,0.0147466,2966,0.0338878,
+            3015,0.004832,3027,0.0095497,3040,0.0041434,3092,0.0044802,3151,0.0038269,
+            3460,0.003633,3585,0.0050849,4880,0.0042301,5121,0.0037906,5136,0.0048349,
+            5158,0.004336,5192,0.0037841,5200,0.0038025,5229,0.0035555,5356,0.0045781,
+            5430,0.003687,5450,0.0055170,5462,0.0057821,5660,0.0041789,5673,0.0044932,
+            5695,0.007370,5748,0.0031716,5776,0.0037921,5800,0.0062308,5838,0.0034629,
+            5865,0.005942,5917,0.0032254,6237,0.0046164,6360,0.0034708,6420,0.0044593,
+            6552,0.005939,6569,0.0034665,6752,0.0041965,7211,0.0039695,7446,0.0031611,
+            7468,0.003330,7482,0.0046322,8013,0.0034398,8102,0.0031590,8121,0.0031972,
+            8169,0.003345,8186,0.0037020,8476,0.0035857,8796,0.0036703,8927,0.0042374,
+            9388,0.003173,9443,0.0035844,9469,0.0053484,9527,0.0049137,9739,0.0032365,
+            9853,0.004297,10481,0.0036424,10490,0.0033786,10606,0.0031366]
+    
+    length = len(peaks) // 2
+    dur = 10
+    oscs = [None] * length
+    amps = [None] * length
+    ramps = [None] * length
+    freqs = [None] * length
+    vib = make_rand_interp(50, hz2radians(.01))
+    ampf = make_env([0,0,1,1,10,1,11,0], duration=dur, scaler=.1)
+    samps = seconds2samples(dur)
+    for i in range(length):
+        freqs[i] = peaks[i*2]
+        oscs[i] = make_oscil(freqs[i], uniform(0, math.pi))
+        amps[i] = peaks[1+(2*i)]
+        ramps[i] = make_rand_interp(1.0 + (i * (20.0 / length)), 
+                                    (.1 + (i * (3.0 / length)))*amps[i])
+    
+    for i in range(samps):
+        sm = 0.0
+        fm = rand_interp(vib)
+        for k in range(length):
+            sm += (amps[k] + rand_interp(ramps[k])) * oscil(oscs[k], freqs[k]*fm)
+        
+        outa(i, env(ampf) * sm)
+    
+    
+with Sound(channels=2, play=True):
+    dur = 2.0
+    samps = seconds2samples(dur)
+    pitch = 1000
+    modpitch = 100
+    pm_index = 4.0
+    fm_index = hz2radians(4.0 * modpitch)
+    car1 = make_oscil(pitch)
+    mod1 = make_oscil(modpitch)
+    car2 = make_oscil(pitch)
+    mod2 = make_oscil(modpitch)
+    frqf = make_env([0,0,1,1], duration=dur)
+    ampf = make_env([0,0,1,1,20,1,21,0], duration=dur, scaler=.5)
+    for i in range(samps):
+        frq = env(frqf)
+        rfrq = hz2radians(frq)
+        amp = env(ampf)
+        outa(i, amp * (oscil(car1, (rfrq*pitch) + (fm_index * (frq + 1) * oscil(mod1, (rfrq * modpitch))))))
+        outb(i, amp * (oscil(car2, (rfrq*pitch) , pm_index * oscil(mod2, rfrq * modpitch))))
+        
+        
+    car1 = make_oscil(pitch)
+    mod1 = make_oscil(modpitch)
+    car2 = make_oscil(pitch)
+    mod2 = make_oscil(modpitch)
+    frqf = make_env([0,0,1,1], duration=dur)
+    ampf = make_env([0,0,1,1,20,1,21,0], duration=dur, scaler=.5)
+    for i in range(samps):
+        frq = env(frqf)
+        rfrq = hz2radians(frq)
+        amp = env(ampf)
+        outa(i, amp * (oscil(car1, (rfrq*pitch) + (fm_index * oscil(mod1, (rfrq * modpitch))))))
+        outb(i, amp * (oscil(car2, (rfrq*pitch) , (pm_index / (frq + 1)) * oscil(mod2, rfrq * modpitch))))
+
+
+
+      
+    
+    
+with Sound(play=True, statistics=False):
+    phases98 = [0.000000, -0.183194, 0.674802, 1.163820, -0.147489, 1.666302, 0.367236, 0.494059, 0.191339,
+                0.714980, 1.719816, 0.382307, 1.017937, 0.548019, 0.342322, 1.541035, 0.966484, 0.936993,
+                -0.115147, 1.638513, 1.644277, 0.036575, 1.852586, 1.211701, 1.300475, 1.231282, 0.026079,
+                0.393108, 1.208123, 1.645585, -0.152499, 0.274978, 1.281084, 1.674451, 1.147440,0.906901,
+                1.137155, 1.467770, 0.851985, 0.437992, 0.762219, -0.417594, 1.884062, 1.725160, -0.230688,
+		        0.764342, 0.565472, 0.612443, 0.222826, -0.016453, 1.527577, -0.045196, 0.585089, 0.031829,
+		        0.486579, 0.557276, -0.040985, 1.257633, 1.345950, 0.061737, 0.281650, -0.231535, 0.620583,
+		        0.504202, 0.817304, -0.010580, 0.584809, 1.234045, 0.840674, 1.222939, 0.685333, 1.651765,
+		        0.299738, 1.890117, 0.740013, 0.044764, 1.547307, 0.169892, 1.452239, 0.352220, 0.122254,
+		        1.524772, 1.183705, 0.507801, 1.419950, 0.851259, 0.008092, 1.483245, 0.608598, 0.212267,
+		        0.545906, 0.255277, 1.784889, 0.270552, 1.164997, -0.083981, 0.200818, 1.204088]
+		        
+    freq = 10.0
+    dur = 5.0
+    n = 98
+	
+    samps = math.floor(dur * 44100)
+    onedivn = 1.0 / n
+    freqs = np.zeros(n)
+    phases = np.zeros(n)
+    phases.fill(math.pi*.5)
+    for i in range(n):
+        off = (math.pi * (.5 - phases98[i])) / dur / 44100
+        h = hz2radians(freq*(i+1))
+        freqs[i] = h + off
+    
+    ob = make_oscil_bank(freqs, phases)
+    for i in range(1000): #get rid of the distracting initial click
+        nada = oscil_bank(ob) # added in this assignment because otherwise was printing output
+    for k in range(samps):
+        outa(k, onedivn * oscil_bank(ob))
+    
+
+
+
+
+def mapenv(beg, dur, frq, amp, en):
+    start = seconds2samples(beg)
+    end = start + seconds2samples(dur)
+    osc = make_oscil(frq)
+    zv = make_env(en, 1.0, dur)
+    for i in range(start, end):
+        zval = env(zv)
+        outa(i, amp * math.sin(.5*math.pi*zval*zval*zval)*oscil(osc))
+    
+with Sound(play=True):
+    mapenv(0, 1, 440, .5, [0,0,50,1,75,0,86,.5,100,0])   
+    
+    
+
+with Sound():
+    e = make_env([0,0,1,1,2,.25,3,1,4,0], duration=.5)
+    for i in range(44100):
+          outa(i, env_any(e, lambda y : y * y))
+    
+
+    
+def sine_env(e):
+    return env_any(e, lambda y : .5 * (1.0 + math.sin((-.5*math.pi) + (math.pi*y))))
+    
+with Sound():
+    e = make_env([0,0,1,1,2,.25,3,1,4,0], duration=.5)
+    for i in range(44100):
+        outa(i, sine_env(e))
+
+
+with Sound():
+    e = make_pulsed_env([0,0,1,1,2,0], .01, 1)
+    frq = make_env([0,0,1,1], duration=1.0, scaler=hz2radians(50))
+    for i in range(44100):
+        outa(i, .5 * pulsed_env(e, env(frq)))
+    
+
+with Sound(play=True):
+    wav = make_polyshape(frequency=500, partials=[1, .5, 2, .3, 3, .2])
+    for i in range(40000):
+        outa(i, 1. * polyshape(wav))
+    
+    
+
+with Sound(play=True):
+    harms = np.zeros(10)
+    k = 1
+    for i in range(0,10,2):
+        harms[i] = k
+        harms[i+1] = (1.0 / math.sqrt(k))
+        k+= 3 
+    gen = make_polywave(200, harms)
+    ampf = make_env([0,0,1,1,10,1,11,0], duration=1.0, scaler=.5)
+    for i in range(44100):
+        outa(i, env(ampf) * polywave(gen) * .5)
+    
+    
+def pqw(start, dur, spacing, carrier, partials):
+    spacing_cos = make_oscil(spacing, math.pi / 2.0)
+    spacing_sin = make_oscil(spacing)
+    carrier_cos = make_oscil(carrier, math.pi / 2.0)
+    carrier_sin = make_oscil(carrier)
+    sin_coeffs = partials2polynomial(partials, Polynomial.SECOND_KIND)
+    cos_coeffs = partials2polynomial(partials, Polynomial.FIRST_KIND)
+    beg = seconds2samples(start)
+    end = beg + seconds2samples(dur)
+    for i in range(beg, end):
+        ax = oscil(spacing_cos)
+        outa(i, (oscil(carrier_sin) * oscil(spacing_sin) * polynomial(sin_coeffs, ax)) -
+                (oscil(carrier_cos) * polynomial(cos_coeffs, ax)))
+    
+    
+with Sound(play=True):
+    pqw(0,1,200.0,1000.0, [2,.2,3,.3,6,.5])
+    
+    
+with Sound(play=True):
+    modulator = make_polyshape(100, partials=[0,.4,1,.4,2,.1,3,.05,4,.05])    
+    carrier = make_oscil(1000.)
+    for i in range(20000):
+        outa(i, .5 * oscil(carrier) * polyshape(modulator))
+    
+
+with Sound(play=True):
+    dur = 1
+    samps = seconds2samples(dur)
+    coeffs = [0.0, 0.5, .25, .125, .125]
+    x = 0.0
+    incr = hz2radians(100)
+    ampf = make_env([0,0,1,1,10,1,11,0], duration=dur, scaler=.5)
+    harmf = make_env([0, .125, 1, .25], duration=dur)
+    for i in range(samps):
+        harm = env(harmf)
+        coeffs[3] = harm
+        coeffs[4] = .25 - harm
+        outa(i, env(ampf) * chebyshev_t_sum( x, coeffs))
+        x += incr
+    
+    
+with Sound(play=True):
+    gen = make_polyshape(100, partials=[11,1,20,1])
+    ampf = make_env([0,0,1,1,20,1,21,0], scaler=.4, length=88200)
+    indf = make_env([0, 0, 1, 1, 1.1, 1], length=88200)
+    for i in range(88200):
+        outa(i, env(ampf)*polyshape(gen, env(indf)))
