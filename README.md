@@ -1,5 +1,6 @@
 # pysndlib
 
+
 This package provides a python wrapper around sndlib, by Bill Schottstaedt (bil@ccrma.stanford.edu)
 Sources for sndlib can be found [here](https://ccrma.stanford.edu/software/snd/sndlib/)
 
@@ -9,6 +10,7 @@ had the opportunity to generate/test on windows.
 This also requires numpy.
 
 ## style
+
 My intention was to be as literal as possible with translation so that it would be easy to port existing examples. This may
 mean some aspects may not be pythonic. 
 
@@ -29,10 +31,6 @@ mean some aspects may not be pythonic.
 	
 	`(set! f (mus-frequency gen))` => `f = gen.mus_frequency`
 	
-	
-	
-
-
 - there is a simple name space CLM that hold global variables one would use in clm
 	
 	e.g. instead of \*clm-srate\* you would use CLM.srate
@@ -49,11 +47,8 @@ mean some aspects may not be pythonic.
 			for i in range(44100):
 				outa(i, .5 * oscil(gen))
 	    
-- not implemented clip ot scaling in with Sound	    
-
-- Sound.output and Sound.reverb are define when calling something from with Sound and 
-	should be used instead of CLM.out and CLM.reverb although i am looking at this to see
-	if these could just use the CLM namespace. 	    
+- not yet implemented clip or scaling in with Sound	 
+ 
 	    
 An 'instrument' will just be defined as a function (see examples in clm_ins.py and demos)
 
@@ -68,7 +63,7 @@ pysndfile
  clm_channels. 
 
 
- - clm_filter to run filter. _
+ - clm_filter to run filter unclear what to do with this name clash.
 
 ## experimental
 

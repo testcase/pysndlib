@@ -1258,7 +1258,7 @@ def make_all_pass(feedback: float,
         initial_contents_ptr = get_array_ptr(intial_contents)
             
 
-    gen = mus_make_all_pass(feedback,feedforward,  size, initial_contents_ptr, max_size, type)    
+    gen = mus_make_all_pass(feedback,feedforward,  size, initial_contents_ptr, max_size, interp_type)    
     gen._cache = [initial_contents_ptr]
     return gen
     

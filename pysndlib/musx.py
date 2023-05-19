@@ -1,4 +1,6 @@
 import musx
+import functools
+from pysndlib import Sound
 
 # musx integration
 # TODO move to another file
