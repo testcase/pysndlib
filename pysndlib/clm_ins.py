@@ -692,7 +692,7 @@ def next_prime(n):
 def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
     srscale = get_srate() / 25641
     dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19]
-    chans = Sound.output.mus_channels
+    chans = CLM.output.mus_channels
     chan2 = chans > 1
     chan4 = chans == 4
     
@@ -702,7 +702,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
             val += 1
         dly_len[i] = next_prime(val)
         
-    length = math.floor(get_srate()) + Sound.reverb.mus_length
+    length = math.floor(get_srate()) + CLM.reverb.mus_length
     comb1 = make_comb(.822 * reverb_factor, dly_len[0])
     comb2 = make_comb(.802 * reverb_factor, dly_len[1])
     comb3 = make_comb(.733 * reverb_factor, dly_len[2])
@@ -731,7 +731,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
     combs = make_comb_bank([comb1, comb2, comb3, comb4, comb5, comb6])
     allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
     for i in range(length):
-        out_bank(filts, i, all_pass(allpass4, one_pole(low, all_pass_bank(allpasses, comb_bank(combs, volume * ina(i, Sound.reverb))))))
+        out_bank(filts, i, all_pass(allpass4, one_pole(low, all_pass_bank(allpasses, comb_bank(combs, volume * ina(i, CLM.reverb))))))
     
     
 
@@ -865,12 +865,12 @@ def jl_reverb(decay=3.0, volume=1.0):
     comb4 = make_comb(.697, 11597)
     outdel1 = make_delay(seconds2samples(.013))
     outdel2 = make_delay(seconds2samples(.011))
-    length = math.floor((decay * get_srate()) + Sound.reverb.mus_length)
+    length = math.floor((decay * get_srate()) + CLM.reverb.mus_length)
     filts = [outdel1, outdel2]
     combs = make_comb_bank([comb1, comb2, comb3, comb4])
     allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
     for i in range(0, length):
-        out_bank(filts, i, volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, Sound.reverb))))
+        out_bank(filts, i, volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb))))
 
 # --------------- gran_synth ---------------- #
 
@@ -1224,7 +1224,7 @@ def za(time, dur, freq, amp, length1, length2, feedback, feedforward):
 
 def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev, start_in_file=False):
     stf = math.floor((start_in_file or 0)*clm_srate(input_file))
-    two_chans = clm_channels(input_file) == 2 and clm_channels(Sound.output) == 2
+    two_chans = clm_channels(input_file) == 2 and clm_channels(CLM.output) == 2
     revit = CLM.reverb and rev
     st = seconds2samples(beg)
     exA = make_granulate(make_readin(input_file, chan=0, start=stf), expansion=exp_ratio)
@@ -1253,13 +1253,13 @@ def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev, start_in_fi
                 valB = amp * src(srcB)
                 outa(i, valA)
                 outb(i, valB)
-                outa(i, rev_amp * (valA + valB), Sound.reverb)
+                outa(i, rev_amp * (valA + valB), CLM.reverb)
         else:
             
             for i in range(st, nd):
                 valA = amp * src(srcA)
                 outa(i, valA)
-                outb(i, rev_amp * valA, Sound.reverb)
+                outb(i, rev_amp * valA, CLM.reverb)
     else:
         if two_chans:
             for i in range(st, nd):

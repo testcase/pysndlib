@@ -65,8 +65,8 @@ CLM.player = 'afplay'
 # TODO: Clipping etc, 
 
 class Sound(object):
-    output = None
-    reverb = None
+#     output = None
+#     reverb = None
 
     def __init__(self, output=None, 
                         channels=None, 
@@ -85,6 +85,7 @@ class Sound(object):
                         scaled_by = False,
                         play = None,
                         clipped = None,
+                        finalize = None,
                         ignore_output = False):
         self.output = output or CLM.file_name
         self.channels = channels or CLM.channels
@@ -107,12 +108,9 @@ class Sound(object):
         self.output_to_file = isinstance(self.output, str)
         self.reverb_to_file = self.reverb and isinstance(self.output, str)
         self.old_srate = get_srate()
-
+        self.finalize = finalize
     def __enter__(self):
         
-    
-        #TODO: this all needs to be cleaned up. I think it could be simplified and does not need all the options in scheme version
-    
         set_srate(self.srate)
 
         # in original why use reverb-1?
@@ -123,25 +121,25 @@ class Sound(object):
             # writing to File
             #continue_sample2file
             if self.continue_old_file:
-                Sound.output = continue_sample2file(self.filename)
+                CLM.output = continue_sample2file(self.filename)
                 set_srate(mus_sound_srate(self.filename)) # maybe print warning or at least note 
             else:
                 
-                Sound.output = make_sample2file(self.output,self.channels, sample_type=self.sample_type , header_type=self.header_type)
+                CLM.output = make_sample2file(self.output,self.channels, sample_type=self.sample_type , header_type=self.header_type)
         elif is_iterable(self.output):
-            Sound.output = self.output
+            CLM.output = self.output
 
         else:
             print("not supported writing to", self.output)
             
         if self.reverb_to_file:
             if self.continue_old_file:
-                Sound.reverb = continue_sample2file(self.revfile)
+                CLM.reverb = continue_sample2file(self.revfile)
             else:
-                Sound.reverb = make_sample2file(self.revfile,self.reverb_channels, sample_type=self.sample_type , header_type=self.header_type)
+                CLM.reverb = make_sample2file(self.revfile,self.reverb_channels, sample_type=self.sample_type , header_type=self.header_type)
         
         if self.reverb and not self.reverb_to_file and is_iterable(self.output):
-            Sound.reverb = np.zeros((self.reverb_channels, np.shape(Sound.output)[1]), dtype=Sound.output.dtype)
+            CLM.reverb = np.zeros((self.reverb_channels, np.shape(CLM.output)[1]), dtype=CLM.output.dtype)
     
 
         return self
@@ -150,7 +148,7 @@ class Sound(object):
 
         if self.reverb: 
             if self.reverb_to_file:
-                mus_close(Sound.reverb)
+                mus_close(CLM.reverb)
                 
                 if self.statistics:
                     chans = clm_channels(self.revfile)
@@ -159,15 +157,15 @@ class Sound(object):
                     revmax = mus_sound_maxamps(self.revfile, chans, vals.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), times.ctypes.data_as(ctypes.POINTER(ctypes.c_long)))
                     print('revmax', vals, times)
                 
-                Sound.reverb = make_file2sample(self.revfile)
+                CLM.reverb = make_file2sample(self.revfile)
                 
                 if self.reverb_data:
                     self.reverb(**self.reverb_data)
                 else:
                     self.reverb()
-                mus_close(Sound.reverb)
+                mus_close(CLM.reverb)
 
-            if is_iterable(Sound.reverb):
+            if is_iterable(CLM.reverb):
 
                 if self.reverb_data:
                     print("applying reverb with data")
@@ -176,7 +174,7 @@ class Sound(object):
                     self.reverb()          
                 
         if self.output_to_file:
-            mus_close(Sound.output)
+            mus_close(CLM.output)
             
             
         # Statistics and scaling go here    
@@ -191,7 +189,9 @@ class Sound(object):
         
         set_srate(self.old_srate)
         
-
+        if self.finalize:
+            self.finalize(self.output)
+            
 
 
 
@@ -813,7 +813,7 @@ def formant(f: MUS_ANY_POINTER, input: float, radians: Optional[float]=None):
     """Next sample from resonator generator."""
     if f == None:
         raise_none_error('formant')
-    if fm:
+    if radians:
         return mus_formant_with_frequency(f, input, radians)
     else:
         return mus_formant(f, input)
@@ -825,13 +825,16 @@ def is_formant(f: MUS_ANY_POINTER):
     
 # ---------------- formant-bank ---------------- #
     
-def make_formant_bank(filters, amps):
+def make_formant_bank(filters, amps=None):
     """Return a new formant-bank generator."""
     if False in (is_formant(v) for v in filters):
         raise TypeError(f'filter list contains at least one element that is not a formant.')
-    filt_array = (POINTER(mus_any) * len(filters))()
-    filt_array[:] = [filters[i] for i in range(len(filters))]    
-    amps_ptr = get_array_ptr(amps)
+    filt_array = (MUS_ANY_POINTER * len(filters))(*filters)
+
+    if amps:
+        amps_ptr = get_array_ptr(amps)
+    else:
+        amps_ptr = None
     
     gen = mus_make_formant_bank(len(filters),filt_array, amps_ptr)
     gen._cache = [filt_array, amps_ptr]
@@ -841,7 +844,7 @@ def formant_bank(f: MUS_ANY_POINTER, inputs):
     """Sum a bank of formant generators"""
     if f == None:
         raise_none_error('formant_bank')
-    if inputs:
+    if is_iterable(inputs):
         inputs_ptr = get_array_ptr(inputs)
         gen =  mus_formant_bank_with_inputs(f, inputs_ptr)
         gen._cache.append(inputs_ptr)
@@ -968,7 +971,7 @@ def make_delay(size: int,
                 initial_contents=None, 
                 initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
-                type=Interp.NONE):
+                interp_type=Interp.NONE):
     """Return a new delay line of size elements. If the delay length will be changing at run-time, max-size sets its maximum length"""
 
     
@@ -976,6 +979,10 @@ def make_delay(size: int,
     
     if not max_size:
         max_size = size
+        
+    if max_size != size and interp_type == Interp.NONE:
+        interp_type = Interp.LAGRANGE #think this is correct from clm2xen.c
+        
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(intial_contents)
@@ -986,7 +993,7 @@ def make_delay(size: int,
         initial_contents_ptr = get_array_ptr(intial_contents)
         
 
-    gen = mus_make_delay(size, None, max_size, type)
+    gen = mus_make_delay(size, None, max_size, interp_type)
     gen._cache = [initial_contents_ptr]
     return gen
     
@@ -1034,7 +1041,7 @@ def make_comb(scaler: Optional[float]=1.0,
                 initial_contents=None, 
                 initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
-                type=Interp.NONE):
+                interp_type=Interp.NONE):
     """Return a new comb filter (a delay line with a scaler on the feedback) of size elements. 
         If the comb length will be changing at run-time, max-size sets its maximum length."""                
                 
@@ -1042,6 +1049,9 @@ def make_comb(scaler: Optional[float]=1.0,
     
     if not max_size:
         max_size = size
+        
+    if max_size != size and interp_type == Interp.NONE:
+        interp_type = Interp.BEZIER #think this is correct from clm2xen.c
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(initial_contents)
@@ -1052,7 +1062,7 @@ def make_comb(scaler: Optional[float]=1.0,
         initial_contents_ptr = get_array_ptr(intial_contents)
                 
 
-    gen = mus_make_comb(scaler, size, initial_contents_ptr, max_size, type)
+    gen = mus_make_comb(scaler, size, initial_contents_ptr, max_size, interp_type)
     gen._cache = [initial_contents_ptr]
     return gen    
         
@@ -1078,8 +1088,8 @@ def make_comb_bank(combs: list):
 
     if False in (is_comb(v) for v in combs):
         raise TypeError(f'comb list contains at least one element that is not a comb.')
-    comb_array = (MUS_ANY_POINTER * len(combs))()
-    comb_array[:] = [combs[i] for i in range(len(combs))]
+    comb_array = (MUS_ANY_POINTER * len(combs))(*combs)
+   # comb_array[:] = [combs[i] for i in range(len(combs))]
     
     gen = mus_make_comb_bank(len(combs), comb_array)
     gen._cache = comb_array
@@ -1106,7 +1116,7 @@ def make_filtered_comb(scaler: float,
                 initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
-                type=Interp.NONE):
+                interp_type=Interp.NONE):
                 
     """Return a new filtered comb filter (a delay line with a scaler and a filter on the feedback) of size elements.
         If the comb length will be changing at run-time, max-size sets its maximum length."""
@@ -1115,6 +1125,9 @@ def make_filtered_comb(scaler: float,
     
     if not max_size:
         max_size = size
+        
+    if max_size != size and interp_type == Interp.NONE:
+        interp_type = Interp.BEZIER #think this is correct from clm2xen.c
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(intial_contents)
@@ -1124,7 +1137,7 @@ def make_filtered_comb(scaler: float,
         initial_contents.fill(initial_element)
         initial_contents_ptr = get_array_ptr(intial_contents)
                 
-    gen = mus_make_filtered_comb(scaler, size, initial_contents_ptr, max_size, type, filter)
+    gen = mus_make_filtered_comb(scaler, size, initial_contents_ptr, max_size, interp_type, filter)
     gen._cache = [initial_contents_ptr]
     return gen    
         
@@ -1148,8 +1161,8 @@ def make_filtered_comb_bank(fcombs: list):
     """Return a new filtered_comb-bank generator."""
     if False in (is_filtered_comb(v) for v in filters):
         raise TypeError(f'filter list contains at least one element that is not a filtered_comb.')
-    fcomb_array = (POINTER(mus_any) * len(fcombs))()
-    fcomb_array[:] = [fcombs[i] for i in range(len(fcombs))]
+    fcomb_array = (POINTER(mus_any) * len(fcombs))(*fcombs)
+    #fcomb_array[:] = [fcombs[i] for i in range(len(fcombs))]
     gen =  mus_make_filtered_comb_bank(len(fcombs), fcomb_array)
     gen._cache = [fcomb_array]
     return gen
@@ -1171,7 +1184,7 @@ def make_notch(scaler: Optional[float]=1.0,
                 initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
-                type=Interp.NONE):
+                interp_type=Interp.NONE):
 
     """return a new notch filter (a delay line with a scaler on the feedforward) of size elements.
         If the notch length will be changing at run-time, max-size sets its maximum length"""
@@ -1180,6 +1193,10 @@ def make_notch(scaler: Optional[float]=1.0,
     
     if not max_size:
         max_size = size
+        
+    if max_size != size and interp_type == Interp.NONE:
+        interp_type = Interp.BEZIER #think this is correct from clm2xen.c
+     
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(intial_contents)
@@ -1190,7 +1207,7 @@ def make_notch(scaler: Optional[float]=1.0,
         initial_contents_ptr = get_array_ptr(intial_contents)
     
 
-    gen = mus_make_notch(scaler, size, initial_contents_ptr, max_size, type)
+    gen = mus_make_notch(scaler, size, initial_contents_ptr, max_size, interp_type)
     gen._cache = [initial_contents_ptr]
     return gen    
     
@@ -1218,7 +1235,7 @@ def make_all_pass(feedback: float,
                 initial_contents=None, 
                 initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
-                type=Interp.NONE):
+                interp_type=Interp.NONE):
 
     """Return a new allpass filter (a delay line with a scalers on both the feedback and the feedforward).
         length will be changing at run-time, max-size sets its maximum length."""
@@ -1227,6 +1244,10 @@ def make_all_pass(feedback: float,
     
     if not max_size:
         max_size = size
+        
+    if max_size != size and interp_type == Interp.NONE:
+        interp_type = Interp.HERMITE #think this is correct from clm2xen.c
+     
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(intial_contents)
@@ -1323,8 +1344,6 @@ def make_moving_max(size: int,
     
     initial_contents_ptr = None
     
-    if not max_size:
-        max_size = size
     
     if initial_contents:
         initial_contents_ptr = get_array_ptr(intial_contents)
@@ -1824,37 +1843,37 @@ def out_any(loc: int, data: float, channel,  output=None):
         else:
             mus_out_any(loc, data, channel, output)        
     else:
-        mus_out_any(loc, data, channel, Sound.output)    
+        mus_out_any(loc, data, channel, CLM.output)    
         
 def outa(loc: int, data: float, output=None):
     if output is not None:
         out_any(loc, data, 0, output)        
     else:
-        out_any(loc, data, 0, Sound.output)    
+        out_any(loc, data, 0, CLM.output)    
 # --------------- outa ---------------- #
 def outa(loc: int, data: float, output=None):
     if output is not None:
         out_any(loc, data, 0, output)        
     else:
-        out_any(loc, data, 0, Sound.output)    
+        out_any(loc, data, 0, CLM.output)    
 # --------------- outb ---------------- #    
 def outb(loc: int, data: float, output=None):
     if output is not None:
         out_any(loc, data, 1, output)        
     else:
-        out_any(loc, data, 1, Sound.output)
+        out_any(loc, data, 1, CLM.output)
 # --------------- outc ---------------- #    
 def outc(loc: int, data: float, output=None):
     if output is not None:
         out_any(loc, data, 2, output)        
     else:
-        out_any(loc, data, 2, Sound.output)        
+        out_any(loc, data, 2, CLM.output)        
 # --------------- outd ---------------- #    
 def outd(loc: int, data: float, output=None):
     if output is not None:
         out_any(loc, data, 3, output)        
     else:
-        out_any(loc, data, 3, Sound.output)    
+        out_any(loc, data, 3, CLM.output)    
 # --------------- out-bank ---------------- #    
 def out_bank(gens, loc, input):
     for i in range(len(gens)):
@@ -1898,11 +1917,11 @@ def make_locsig(degree: Optional[float]=0.0,
     """Return a new generator for signal placement in n channels.  Channel 0 corresponds to 0 degrees."""
     
     if not output:
-        output = Sound.output  #TODO : check if this exists
+        output = CLM.output  #TODO : check if this exists
     
     if not revout:
-        if Sound.reverb:
-            revout = Sound.reverb
+        if CLM.reverb:
+            revout = CLM.reverb
         else: 
             revout = cast(None, MUS_ANY_POINTER) #this generates and error but still works
 
@@ -1929,9 +1948,9 @@ def make_locsig(degree: Optional[float]=0.0,
             outf = mus_locsig_outf(res)
             revf = mus_locsig_revf(res)
             for i in range(channels):
-                 Sound.output[i][loc] += outf[i] # += correct?
+                 CLM.output[i][loc] += outf[i] # += correct?
             for i in range(reverb_channels):
-                 Sound.reverb[i][loc] += revf[i]  # 
+                 CLM.reverb[i][loc] += revf[i]  # 
 
         mus_locsig_set_detour(res, locsig_to_array)
 

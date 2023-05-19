@@ -4232,6 +4232,7 @@ if _libs["sndlib"].has("mus_make_formant_bank", "cdecl"):
     mus_make_formant_bank.argtypes = [c_int, POINTER(POINTER(mus_any)), POINTER(mus_float_t)]
     mus_make_formant_bank.restype = POINTER(mus_any)
 
+
 # clm.h: 384
 if _libs["sndlib"].has("mus_is_formant_bank", "cdecl"):
     mus_is_formant_bank = _libs["sndlib"].get("mus_is_formant_bank", "cdecl")

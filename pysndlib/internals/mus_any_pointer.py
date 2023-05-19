@@ -118,8 +118,14 @@ MUS_ANY_POINTER.mus_filename = property(get_mus_filename, None, None) # not seta
 # c pointer. so need to be careful with this in future
 # just putting note here so i a remember if seeing
 # any errors that could be related.
-MUS_ANY_POINTER.__del__ = lambda s :  mus_free(s)
+MUS_ANY_POINTER.__del__ = lambda s : mus_free(s) 
 
 # this could use some work but good enough for the moment.
 # maybe want to be able to switch between more verbose printing and terser
 MUS_ANY_POINTER.__str__ = lambda s : f'{MUS_ANY_POINTER} {str(mus_describe(s).data, "utf-8")}'
+
+
+def run_function(s,arg1=0.0, arg2=0.0):
+    return mus_apply(s, arg1,arg2)
+
+MUS_ANY_POINTER.__call__ = run_function

@@ -94,22 +94,34 @@ def sound_loop_info(filename):
     
     
 # slightly different than clm version can read multiple channels 
-def file2array(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
-    """Return an ndarray with samples from file and the sample rate of the data"""
+# def file2array(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
+#     """Return an ndarray with samples from file and the sample rate of the data"""
+#     length = dur or mus_sound_framples(filename)
+#     chans = mus_sound_chans(filename)
+#     srate = mus_sound_srate(filename)
+#     bg = beg or 0
+#     out = np.zeros((1 if channel else chans, length), dtype=np.double)
+#         
+#     if not channel:
+#         # read in all channels
+#         for i in range(chans):
+#             mus_file_to_array(filename,i, bg, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+#     else:
+#         mus_file_to_array(filename,i, bg, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+#     return out, srate
+
+def file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
+    """Return an ndarray with samples from file"""
     length = dur or mus_sound_framples(filename)
     chans = mus_sound_chans(filename)
     srate = mus_sound_srate(filename)
     bg = beg or 0
-    out = np.zeros((1 if channel else chans, length), dtype=np.double)
+    out = np.zeros(length, dtype=np.double)
         
-    if not channel:
-        # read in all channels
-        for i in range(chans):
-            mus_file_to_array(filename,i, bg, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-    else:
-        mus_file_to_array(filename,i, bg, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-    return out, srate
-
+    mus_file_to_array(filename,channel, bg, length, out.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+    return out
+    
+    
 
 def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None): 
     length = dur or mus_sound_framples(filename)
@@ -117,7 +129,7 @@ def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=No
     bg = beg or 0
     out = np.zeros((1, length), dtype=np.double)
     mus_file_to_array(filename,channel, bg, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-    return out, srate
+    return out
 
     
 def array2file(filename: str, arr, length=None, sr=None, #channels=None, 

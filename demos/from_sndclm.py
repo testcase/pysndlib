@@ -1,8 +1,11 @@
+#! /Users/toddingalls/Developer/Python/venvs/pysndlib-venv/bin/python
 # Examples from https://ccrma.stanford.edu/software/snd/snd/sndclm.html#oscildoc
 # showing basic examples of built-in generators
-from pysndlib import *
 import math
 from random import uniform
+import numpy as np
+from pysndlib import *
+
 
 with Sound(play=True):
     gen = make_oscil(440.0)
@@ -454,3 +457,250 @@ with Sound(play=True):
     indf = make_env([0, 0, 1, 1, 1.1, 1], length=88200)
     for i in range(88200):
         outa(i, env(ampf)*polyshape(gen, env(indf)))
+
+
+with Sound(play=True):
+    gen = make_polyshape(1000.0, partials=[1, .25, 2, .25, 3, .125, 4, .125, 5, .25])
+    indf = make_env([0,0,1,1,2,0], duration = 2.0)
+    ampf = make_env([0,0,1,1,2,1,3,0], duration=2.0)
+    mx = make_moving_max(256)
+    samps = seconds2samples(2.0)
+    for i in range(samps):
+        val = polyshape(gen, env(indf))
+        outa(i, (env(ampf)*val) / max(.001, moving_max(mx, val)))
+    
+
+with Sound(play=True, reverb=jc_reverb):
+    pcoeffs = partials2polynomial([5,1])
+    gen1 = make_oscil(100.)
+    gen2 = make_oscil(2000.0)
+    for i in range(44100):
+        outa(i, polynomial(pcoeffs, .5 * (oscil(gen1) + oscil(gen2))))
+    
+with Sound(play=True, channels=2):
+    dur = 2.0
+    samps = seconds2samples(dur)
+    p1 = make_polywave(800, [1,.1,2,.3,3,.4,5,.2])
+    p2 = make_polywave(400, [1,.1,2,.3,3,.4,5,.2])
+    interpf = make_env([0,0,1,1], duration=dur)
+    p3 = partials2polynomial([1,.1,2,.3,3,.4,5,.2])
+    g1 = make_oscil(800)
+    g2 = make_oscil(400)
+    ampf = make_env([0,0,1,1,10,1,11,0], duration=dur)
+    
+    for i in range(samps):
+        interp = env(interpf)
+        amp = env(ampf)
+        #chan A: interpolate from one spectrum to the next directly
+        outa(i, amp * ((interp * polywave(p1)) + ((1.0 - interp) * polywave(p2))))
+        #chan B: interpolate inside the sum of Tns!
+        outb(i, amp*(polynomial(p3, (interp * oscil(g1)) + ((1.0-interp) * oscil(g2)))))
+
+
+
+with Sound(play=True):
+    duty_factor = .25
+    p_on = make_pulse_train(100, .5)
+    p_off = make_pulse_train(100, -.5, (2 * math.pi * (1 - duty_factor)))
+    sm = 0.0
+    for i in range(44100):
+        sm += pulse_train(p_on) + pulse_train(p_off)
+        outa(i, sm)
+
+
+def simple_soc(beg, dur, freq, amp):
+    os = make_ncos(freq, 10)
+    start = seconds2samples(beg)
+    end = start + seconds2samples(dur)
+    for i in range(start, end):
+        outa(i, amp*ncos(os))
+
+
+with Sound(play=True):
+    simple_soc(0,1,100,.9)
+    
+    
+    
+    
+with Sound(play=True):
+    gen1 = make_nrxycos(400, 1, 15, .95)
+    indr = make_env([0,-1,1,1], length=80000, scaler=.9999)
+    for i in range(80000):
+        gen1.mus_scaler = env(indr)
+        outa(i, .5 * nrxycos(gen1, 0.0))
+
+
+
+def shift_pitch(beg, dur, file, freq, order=40):
+    st = seconds2samples(beg)
+    nd = st + seconds2samples(dur)
+    gen = make_ssb_am(freq, order)
+    rd = make_readin(file)
+    for i in range(st, nd):
+        outa(i, ssb_am(gen, readin(rd)))
+
+with Sound(play=True):
+    shift_pitch(0, 3, 'oboe.snd', 1108.0)
+
+
+
+
+def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ve=[0,1,100,1], ae=[0,0,25,1,75,1,100,0]):
+    start = seconds2samples(beg)
+    end = start + seconds2samples(dur)
+    ampf = make_env(ae, scaler=amp, duration=dur)
+    frq0 = hz2radians(f0)
+    frq1 = hz2radians(f1)
+    frq2 = hz2radians(f2)
+    foflen = 100 if CLM.srate == 22050 else 200
+    vibr = make_oscil(6)
+    vibenv = make_env(ve , scaler=vib, duration=dur)
+    win_freq = (2 * math.pi) / foflen
+    foftab = np.zeros(foflen)
+    wt0 = make_wave_train(frq, foftab)
+    for i in range(foflen):
+        #this is not the pulse shape used by B&R
+        foftab[i] = ((a0 * math.sin(i*frq0)) + (a1 * math.sin(i*frq1)) +
+                    (a2 * math.sin(i*frq2))) * .5 * (1.0 - math.cos(i * win_freq))
+              
+    for i in range(start, end):
+        outa(i, env(ampf) * wave_train(wt0, env(vibenv) * oscil(vibr)))  
+
+with Sound(play=True):
+    fofins(0, 1, 270, .2, .001, 730, .6, 1090, .3, 2440, .1) # "Ahh"
+
+
+with Sound( play = True ): #one of JC's favorite demos
+    fofins(0,4,270,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+            [0,0,.5,1,3,.5,10,.2,20,.1,50,.1,60,.2,85,1,100,0])
+    fofins(0,4,(6/5 * 540),.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+            [0,0,.5,.5,3,.25,6,.1,10,.1,50,.1,60,.2,85,1,100,0])
+    fofins(0,4,135,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+            [0,0,1,3,3,1,6,.2,10,.1,50,.1,60,.2,85,1,100,0])
+            
+            
+            
+            
+def when(start, duration, start_freq, end_freq, grain_file):
+    beg = seconds2samples(start)
+    length = seconds2samples(duration)
+    end = beg + length
+    grain_dur = mus_sound_duration(grain_file)
+    frqf = make_env([0,0,1,1], scaler = hz2radians(end_freq - start_freq), duration=duration)
+    click_track = make_pulse_train(start_freq)
+    grain_size = seconds2samples(grain_dur)
+    grain_arr = file2array(grain_file, 0, 0, grain_size) #different than scheme version
+    grains = make_wave_train(start_freq, grain_arr) # TODO: make_wave_train just take size arg
+    original_grain = np.copy(grain_arr)
+    ampf = make_env([0,1,1,0], scaler=.7, offset=.3, duration=duration, base=3.0)
+     #grain = grains.mus_data this needs work TODO:
+    grain = mus_data(grains)
+#     
+    for i in range(beg, end):
+        gliss = env(frqf)
+        outa(i, env(ampf) * wave_train(grains, gliss))
+        click = pulse_train(click_track, gliss)
+        if click > 0.0:
+            scaler = max(.1, (1.0 * ((i - beg) / length)))
+            comb_len = 32
+            c1 = make_comb(scaler, comb_len)
+            c2 = make_comb(scaler, math.floor(comb_len * .75))
+            c3 = make_comb(scaler, math.floor(comb_len * 1.25))
+            for k in range(0, grain_size):
+                x = original_grain[k]
+                #print(x)
+                grain[k] = .25 * (comb(c1, x) + comb(c2, x) + comb(c3, x))
+
+
+with Sound(play=True):
+    when(0, 4, 2.0, 8.0, 'flute_trill_1.wav')
+
+
+
+def fractal(start, duration, m, x, amp):
+    # use formula of M J Feigenbaum
+    beg = seconds2samples(start)
+    end = beg + seconds2samples(duration)
+    for i in range(beg, end):
+        outa(i, amp * x)
+        x = (1.0 - (m * x * x))
+
+with Sound():
+    fractal(0, 1, .5, 0, .5)
+    
+with Sound():
+    fractal(0, 1, 1.5, .20, .2)
+
+
+def attract(beg, dur, amp, c):
+    # by James McCartney, from CMJ vol 21 no 3 p 6
+    st = seconds2samples(beg)
+    nd = st + seconds2samples(dur)
+    a = .2
+    b = .2
+    dt = .04
+    scale = (.5 * amp) / c
+    x1 = 0.0
+    x = -1.
+    y = 0.0
+    z = 0.0
+    for i in range(st,nd):
+        x1 = x - (dt * (y+z))
+        y += dt * (x + (a * y))
+        z += dt * ((b+(x*z)) - (c * z))
+        x = x1
+        outa(i, (scale*x))
+        
+            
+with Sound(play=True):
+    attract(0, 2, .5, 7.4)
+    attract(2, 2, .5, 4.19)
+    attract(4, 2, .5, 6.37)
+    
+        
+        
+def test_filter(flt):
+    osc = make_oscil()
+    samps = seconds2samples(.5)
+    ramp = make_env([0,0,1,1], scaler=hz2radians(samps), length=samps)
+    with Sound():
+        for i in range(0, samps):
+            outa(i, flt(oscil(osc, env(ramp))))    
+            
+test_filter(make_one_zero(.5,.5))  
+test_filter(make_one_pole(.1,-.9))      
+test_filter(make_two_pole(.1,.1,.9))  
+test_filter(make_two_zero(.5,.2,.3))  
+
+
+
+def echo(beg, dur, scaler, secs, file):
+    dly = make_delay(seconds2samples(secs))
+    rd = make_readin(file)
+    for i in range(beg,dur):
+        inval = rd()
+        outa(i, inval + delay(dly, scaler * (tap(dly) + inval)))
+        
+with Sound(play=True):
+    echo(0, 60000, .5, 1.0, 'pistol.snd')
+    
+
+
+
+# another version in clm_ins.py
+def zc(time, dur, freq, amp, length1, length2, feedback):
+    beg = seconds2samples(time)
+    end = seconds2samples(time + dur)
+    s = make_pulse_train(freq)
+    d0 = make_comb(feedback, size=length1, max_size=(max(length1, length2)))
+    aenv = make_env([0,0,.1,1,.9,1,1,0], scaler=amp, duration=dur)
+    zenv = make_env([0,0,1,1], scaler=(length2-length1), base=12, duration=dur)
+    for i in range(beg, end):
+        outa(i, env(aenv) * comb(d0, pulse_train(s), env(zenv)))
+        
+        
+with Sound(play=True):
+    zc(0,3,100,.1,20,100,.5)
+    zc(3.5,3,100,.1,90,100,.95)
+
+
