@@ -92,24 +92,6 @@ def sound_loop_info(filename):
     
     return info
     
-    
-# slightly different than clm version can read multiple channels 
-# def file2array(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
-#     """Return an ndarray with samples from file and the sample rate of the data"""
-#     length = dur or mus_sound_framples(filename)
-#     chans = mus_sound_chans(filename)
-#     srate = mus_sound_srate(filename)
-#     bg = beg or 0
-#     out = np.zeros((1 if channel else chans, length), dtype=np.double)
-#         
-#     if not channel:
-#         # read in all channels
-#         for i in range(chans):
-#             mus_file_to_array(filename,i, bg, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-#     else:
-#         mus_file_to_array(filename,i, bg, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-#     return out, srate
-
 def file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
     """Return an ndarray with samples from file"""
     length = dur or mus_sound_framples(filename)
@@ -132,25 +114,10 @@ def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=No
     return out
 
     
-def array2file(filename: str, arr, length=None, sr=None, #channels=None, 
-    sample_type=CLM.sample_type, header_type=CLM.header_type, comment=None ):
-    """Write an ndarray of samples to file"""
-    if not sr:
-        sr = CLM.srate
-    
-    chans = np.shape(arr)[0]
-    length = length or np.shape(arr)[1]
-    fd = mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, comment)
- 
-    obuftype = POINTER(c_double) * chans
-    obuf = obuftype()
-    
-    for i in range(chans):
-        obuf[i] = arr[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
-    err = mus_sound_write(fd, 0, length, chans, obuf)
     
-    mus_sound_close_output(fd, length*mus_bytes_per_sample(sample_type)*chans)
+    
+
 
 
 

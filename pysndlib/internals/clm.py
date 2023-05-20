@@ -9,6 +9,7 @@ from functools import singledispatch
 import numpy as np
 import numpy.typing as npt
 import math
+import tempfile
 from .sndlib import *
 from .enums import *
 from .mus_any_pointer import *
@@ -24,7 +25,7 @@ ENVFUNCTION = CFUNCTYPE(UNCHECKED(mus_float_t), mus_float_t) # for env_any
 #these may need to be set based on system type etc
 DEFAULT_OUTPUT_SRATE = 44100
 DEFAULT_OUTPUT_CHANS = 1
-DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.B24INT
+DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT
 DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
 
 
@@ -63,6 +64,44 @@ CLM.player = 'afplay'
 ########context with sound#######    
 
 # TODO: Clipping etc, 
+
+def file2ndarray(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
+    """Return an ndarray with samples from file and the sample rate of the data"""
+    length = dur or mus_sound_framples(filename)
+    chans = mus_sound_chans(filename)
+    srate = mus_sound_srate(filename)
+    bg = beg or 0
+    out = np.zeros((1 if (channel != None) else chans, length), dtype=np.double)
+        
+    if not channel:
+        # read in all channels
+        for i in range(chans):
+            mus_file_to_array(filename,i, bg, length, out[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+    else:
+        mus_file_to_array(filename,i, bg, length, out[0].ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
+    return out, srate
+    
+#TOD handle 1 dim arrays
+def array2file(filename: str, arr, length=None, sr=None, #channels=None, 
+    sample_type=CLM.sample_type, header_type=CLM.header_type, comment=None ):
+    """Write an ndarray of samples to file"""
+    if not sr:
+        sr = CLM.srate
+    
+    chans = np.shape(arr)[0]
+    length = length or np.shape(arr)[1]
+    fd = mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, comment)
+ 
+    obuftype = POINTER(c_double) * chans
+    obuf = obuftype()
+    
+    for i in range(chans):
+        obuf[i] = arr[i].ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+
+    err = mus_sound_write(fd, 0, length, chans, obuf)
+    
+    mus_sound_close_output(fd, length*mus_bytes_per_sample(sample_type)*chans)
+    return length
 
 class Sound(object):
 #     output = None
@@ -103,19 +142,29 @@ class Sound(object):
         self.scaled_to = scaled_to
         self.scaled_by = scaled_by
         self.play = play or CLM.play
-        self.clipped = clipped or CLM.clipped
+        self.clipped = clipped
         self.ignore_output = ignore_output
         self.output_to_file = isinstance(self.output, str)
         self.reverb_to_file = self.reverb and isinstance(self.output, str)
         self.old_srate = get_srate()
         self.finalize = finalize
     def __enter__(self):
+                
+        if not self.clipped:
+            if (self.scaled_by or self.scaled_to) and (self.sample_type in [Sample.BFLOAT, Sample.LFLOAT, Sample.BDOUBLE, Sample.LDOUBLE]):
+                mus_set_clipping(False)
+            else:
+                mus_set_clipping(CLM.clipped)
+        else:
+             mus_set_clipping(self.clipped)
         
         set_srate(self.srate)
 
         # in original why use reverb-1?
         if  self.statistics :
             self.tic = time.perf_counter()
+        
+
         
         if self.output_to_file :
             # writing to File
@@ -183,6 +232,21 @@ class Sound(object):
             print(f"Total processing time {toc - self.tic:0.4f} seconds")
             
          
+        if self.scaled_to:
+            if self.output_to_file:
+                arr, _ = file2ndarray(self.output)
+                arr *= (self.scaled_to / np.max(np.abs(arr)))
+                # handle error
+                array2file(self.output, arr)
+            else:
+                self.output *= (self.scaled_to / np.max(np.abs(self.output)))
+        elif self.scaled_by:
+            if self.output_to_file:
+                arr, _ = file2ndarray(self.output)
+                arr *= self.scaled_by
+                array2file(self.output, arr)
+            else:
+                self.output *= self.scaled_by
         if self.play and self.output_to_file:
             subprocess.run([CLM.player,self.output])
         # need some safety if errors
@@ -196,7 +260,8 @@ class Sound(object):
 
 
 
-
+def sndplay(file):
+    subprocess.run([CLM.player,file])
 
 
 
@@ -1062,7 +1127,7 @@ def make_comb(scaler: Optional[float]=1.0,
         initial_contents_ptr = get_array_ptr(intial_contents)
                 
 
-    gen = mus_make_comb(scaler, size, initial_contents_ptr, max_size, interp_type)
+    gen = mus_make_comb(scaler, int(size), initial_contents_ptr, int(max_size), interp_type)
     gen._cache = [initial_contents_ptr]
     return gen    
         
@@ -1089,7 +1154,6 @@ def make_comb_bank(combs: list):
     if False in (is_comb(v) for v in combs):
         raise TypeError(f'comb list contains at least one element that is not a comb.')
     comb_array = (MUS_ANY_POINTER * len(combs))(*combs)
-   # comb_array[:] = [combs[i] for i in range(len(combs))]
     
     gen = mus_make_comb_bank(len(combs), comb_array)
     gen._cache = comb_array
@@ -2039,7 +2103,10 @@ def _(x: MUS_ANY_POINTER):# assume gen
         
 @clm_length.register
 def _(x: list):
-    return len(x[0])
+    if isinstance(x[0], list):
+        return len(x[0])
+    else:
+        return len(x)
 
 @clm_length.register
 def _(x: np.ndarray):

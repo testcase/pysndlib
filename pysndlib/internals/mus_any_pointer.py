@@ -1,4 +1,5 @@
 import types
+import numpy as np
 from .sndlib import *
 
 
@@ -59,9 +60,8 @@ get_mus_channel = lambda s: mus_channel(s)
 
 def get_mus_data(gen: MUS_ANY_POINTER):
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_data(gen), shape=size)
-    data = np.copy(p)
-    return data
+    p = np.ctypeslib.as_array(mus_data(gen), shape=[size])
+    return p
 
 # TODO: mus_set_data does not make a copy so need to add to cache
 # but if called repeatedly cache will keep growing. 
@@ -74,14 +74,14 @@ def set_mus_data(gen: mus_any, data):
 def get_mus_xcoeffs(gen: MUS_ANY_POINTER):
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_xcoeffs(gen), shape=size)
-    xcoeffs = np.copy(p)
-    return xcoeffs
+    #xcoeffs = np.copy(p)
+    return p
     
 def get_mus_ycoeffs(gen: MUS_ANY_POINTER):
     size = mus_length(gen)
     p = np.ctypeslib.as_array(mus_ycoeffs(gen), shape=size)
-    ycoeffs = np.copy(p)
-    return ycoeffs
+    #ycoeffs = np.copy(p)
+    return p
 
 
 MUS_ANY_POINTER.mus_frequency = property(get_mus_frequency, set_mus_frequency, None)

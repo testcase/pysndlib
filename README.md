@@ -47,9 +47,7 @@ mean some aspects may not be pythonic.
 			for i in range(44100):
 				outa(i, .5 * oscil(gen))
 	    
-- not yet implemented clip or scaling in with Sound	 
- 
-	    
+
 An 'instrument' will just be defined as a function (see examples in clm_ins.py and demos)
 
 - Errors need a lot more work so ....
