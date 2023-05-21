@@ -1733,31 +1733,31 @@ def make_granulate(input,
         be a function of one arg, the current granulate generator.  It is called just before
         a grain is added into the output buffer. The current grain is accessible via mus_data.
         The edit function, if any, should return the length in samples of the grain, or 0."""
-    
-    if edit:
-        @EDITCALLBACK    
-        def efunc(gen):
-            return edit(gen)
         
     if(isinstance(input, MUS_ANY_POINTER)):
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return mus_apply(input,inc, 0.)
+        # i don't want to have to cast gen input to edit function so adding it after gen is made
+        res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, cast(None, EDITCALLBACK), input)
         
-        res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), input)
-    
     elif isinstance(input, types.FunctionType):
         @INPUTCALLBACK
         def ifunc(gen, inc):
             return input(inc)
             
-        res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, efunc if edit else cast(None, EDITCALLBACK), None)
+        res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, cast(None, EDITCALLBACK), None)
     else:
         print("error") # TODO: need error
         
     res._inputcallback = ifunc
     res._editcallback  = None
     if edit:
+        @EDITCALLBACK
+        def efunc(gen):
+            return edit(res) # just pass res to avoid having to cast in  callback
+        
+        mus_granulate_set_edit_function(res, efunc)
         res._editcallback = efunc
     return res
     
@@ -1798,20 +1798,7 @@ def make_phase_vocoder(input,
         output."""
 
     
-    if analyze:
-        @ANALYSISCALLBACK
-        def afunc(gen, inputfunc):
-            return analyze(gen, inputfunc)
-                
-    if edit:
-        @EDITCALLBACK    
-        def efunc(gen):
-            return edit(gen)
-
-    if synthesize:
-        @SYNTHESISCALLBACK
-        def sfunc(gen):
-            return synthesize(gen)
+   
         
     if(isinstance(input, MUS_ANY_POINTER)):
         @INPUTCALLBACK
@@ -1820,9 +1807,9 @@ def make_phase_vocoder(input,
              return mus_apply(input, inc, 0.)
     
         res = mus_make_phase_vocoder(ifunc, fft_size, overlap, interp, pitch, 
-                        afunc if analyze else cast(None, ANALYSISCALLBACK),
-                        efunc if edit else cast(None, EDITCALLBACK),
-                        sfunc if synthesize else cast(None, SYNTHESISCALLBACK),
+                        cast(None, ANALYSISCALLBACK),
+                        cast(None, EDITCALLBACK),
+                        cast(None, SYNTHESISCALLBACK),
                         input)
     
     
@@ -1832,18 +1819,35 @@ def make_phase_vocoder(input,
             return input(inc)
                 
         res = mus_make_phase_vocoder(ifunc, fft_size, overlap, interp, pitch, 
-                afunc if analyze else cast(None, ANALYSISCALLBACK),
-                efunc if edit else cast(None, EDITCALLBACK),
-                sfunc if synthesize else cast(None, SYNTHESISCALLBACK),
+                cast(None, ANALYSISCALLBACK),
+                cast(None, EDITCALLBACK),
+                cast(None, SYNTHESISCALLBACK),
                 None)
     else:
         print("error") # TODO: need error
         
+    
+    #again need to create phase vocoder befor defining editors.
+    # so 
+    if analyze:
+        @ANALYSISCALLBACK
+        def afunc(gen, inputfunc):
+            return analyze(res, inputfunc)
+                
+    if edit:
+        @EDITCALLBACK
+        def efunc(gen):
+            return edit(res)
+
+    if synthesize:
+        @SYNTHESISCALLBACK
+        def sfunc(gen):
+            return synthesize(res)
+        
     setattr(res,'_inputcallback', ifunc)        
     setattr(res,'_analyzecallback', afunc if analyze else None)
-    setattr(res,'_synthesizecallback', sfunc if analyze else None)
+    setattr(res,'_synthesizecallback', sfunc if synthesize else None)
     setattr(res,'_editcallback', efunc if edit else None )
-    
     return res
 
     
@@ -1852,7 +1856,8 @@ def phase_vocoder(pv: MUS_ANY_POINTER):
     if pv == None:
         raise_none_error('phase_vocoder')
     if pv._analyzecallback or pv._synthesizecallback or pv._editcallback :
-        return mus_phase_vocoder_with_editors(pv, pv._inputcallback, pv._analyzecallback, pv._editcallback, pv._synthesizecallback)
+        return mus_phase_vocoder_with_editors(pv, pv._inputcallback, cast(pv._analyzecallback, ANALYSISCALLBACK), cast(pv._editcallback, EDITCALLBACK), cast(pv._synthesizecallback, SYNTHESISCALLBACK))
+        #return mus_phase_vocoder_with_editors(pv, pv._inputcallback, cast(None, ANALYSISCALLBACK), cast(None, EDITCALLBACK), pv._synthesizecallback
     else:
         return mus_phase_vocoder(pv, pv._inputcallback)
     
@@ -1860,43 +1865,37 @@ def is_phase_vocoder(pv: MUS_ANY_POINTER):
     """Returns True if gen is a phase_vocoder"""
     return mus_is_phase_vocoder(pv)
     
-
 def phase_vocoder_amps(gen: MUS_ANY_POINTER):
     """Returns a ndarray containing the current output sinusoid amplitudes"""
     if gen == None:
         raise_none_error('phase_vocoder')
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_phase_vocoder_amps(gen), shape=size)
-    amps = np.copy(p)
-    return amps
+    p = np.ctypeslib.as_array(mus_phase_vocoder_amps(gen), shape=[size])
+    return p
 
 def phase_vocoder_amp_increments(gen: MUS_ANY_POINTER):
     """Returns a ndarray containing the current output sinusoid amplitude increments per sample"""    
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_phase_vocoder_amp_increments(gen), shape=size)
-    amp_increments = np.copy(p)
-    return amp_increments
+    p = np.ctypeslib.as_array(mus_phase_vocoder_amp_increments(gen), shape=[size])
+    return p
     
 def phase_vocoder_freqs(gen: MUS_ANY_POINTER):
     """Returns a ndarray containing the current output sinusoid frequencies"""
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_phase_vocoder_freqs(gen), shape=size)
-    freqs = np.copy(p)
-    return freqs
+    p = np.ctypeslib.as_array(mus_phase_vocoder_freqs(gen), shape=[size])
+    return p
     
 def phase_vocoder_phases(gen: MUS_ANY_POINTER):
     """Returns a ndarray containing the current output sinusoid phases"""
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_phase_vocoder_phases(gen), shape=size)
-    phases = np.copy(p)
-    return phase
+    p = np.ctypeslib.as_array(mus_phase_vocoder_phases(gen), shape=[size])
+    return p
     
 def phase_vocoder_phase_increments(gen: MUS_ANY_POINTER):
     """Returns a ndarray containing the current output sinusoid phase increments"""
     size = mus_length(gen)
-    p = np.ctypeslib.as_array(mus_phase_vocoder_phase_increments(gen), shape=size)
-    phases_increments = np.copy(p)
-    return phases_increments
+    p = np.ctypeslib.as_array(mus_phase_vocoder_phase_increments(gen), shape=[size])
+    return p
     
 # --------------- out-any ---------------- #
 #  TODO : output to array out-any loc data channel (output *output*)    
@@ -2127,7 +2126,7 @@ def clm_srate(x):
 #TODO: do we need others ?
 @clm_srate.register
 def _(x: str): #file
-    mus_sound_srate(file)
+    return mus_sound_srate(x)
   
 # --------------- clm_framples ---------------- #
 @singledispatch
