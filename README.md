@@ -9,6 +9,8 @@ had the opportunity to generate/test on windows.
 
 This also requires numpy.
 
+*IMPORTANT* If you get crashes loading libsndlib try building a version of sndlib using`without-s7` option when running ./configure  I have seen this issue and need to track down cause  
+
 ## style
 
 My intention was to be as literal as possible with translation so that it would be easy to port existing examples. This may
