@@ -254,6 +254,7 @@ class Sound(object):
         set_srate(self.old_srate)
         
         if self.finalize:
+            print(self.output)
             self.finalize(self.output)
             
 
@@ -278,7 +279,7 @@ def make_oscil( frequency: Optional[float]=0., initial_phase: Optional[float] = 
     
 def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=None):
     """Return next sample from oscil  gen: val = sin(phase + pm); phase += (freq + fm)"""
-    if os == None:
+    if os is None:
         raise_none_error('oscil')
     
     if not (fm or pm):
@@ -302,18 +303,18 @@ def make_oscil_bank(freqs, phases, amps=None, stable: Optional[bool]=False):
     """Return a new oscil-bank generator. (freqs in radians)"""
     freqs_ptr = get_array_ptr(freqs)
     phases_ptr = get_array_ptr(phases)
-    if amps:
+    if amps is not None:
         amps_ptr = get_array_ptr(amps)
     else:
          amps_ptr = None
-    
+    # TODO make sure same length
     gen =  mus_make_oscil_bank(len(freqs), freqs_ptr, phases_ptr, amps_ptr, stable)
     gen._cache = [freqs_ptr, phases_ptr, amps_ptr]
     return gen
 
 def oscil_bank(os: MUS_ANY_POINTER):
     """sum an array of oscils"""
-    if os == None:
+    if os is None:
         raise TypeError (f"cannot pass None in place of gen oscil_bank.")
     #fms_prt = get_array_ptr(fms)
     return mus_oscil_bank(os)
@@ -336,7 +337,7 @@ def make_env(envelope, scaler: Optional[float]=1.0, duration: Optional[float]=1.
     return gen
     
 def env(e: MUS_ANY_POINTER):
-    if e == None:
+    if e is None:
         raise_none_error('env')
     return mus_env(e)
     
@@ -345,12 +346,12 @@ def is_env(e: MUS_ANY_POINTER):
     return mus_is_env(e)
     
 def env_interp(x: float, env: MUS_ANY_POINTER):
-    if e == None:
+    if e is None:
         raise_none_error('env')
     return mus_env_interp(x, env)
     
 def envelope_interp(x: float, env: MUS_ANY_POINTER):
-    if e == None:
+    if e is None:
         raise_none_error('env')
     return mus_env_interp(x, env)
 
@@ -367,7 +368,7 @@ def make_pulsed_env(envelope, duration, frequency):
     return gen
     
 def pulsed_env(gen: MUS_ANY_POINTER, fm: Optional[float]=None):
-    if gen == None:
+    if gen is None:
         raise_none_error('pulsed_env')
     if(fm):
         return mus_pulsed_env(gen, fm)
@@ -394,7 +395,7 @@ def make_table_lookup(frequency: Optional[float]=0.0,
     return gen
     
 def table_lookup(tl: MUS_ANY_POINTER, fm_input: Optional[float]=None):
-    if tl == None:
+    if tl is None:
         raise_none_error('table_lookup')
     if fm_input:
         return mus_table_lookup(tl, fm_input)
@@ -458,7 +459,7 @@ def make_polywave(frequency: float,
     
 def polywave(w: MUS_ANY_POINTER, fm: Optional[float]=None):
     """Next sample of polywave waveshaper"""
-    if w == None:
+    if w is None:
         raise_none_error('polywave')
     if fm:
         return mus_polywave(w, fm)
@@ -498,7 +499,7 @@ def make_polyshape(frequency: float,
     
 def polyshape(w: MUS_ANY_POINTER, index: Optional[float]=1.0, fm: Optional[float]=None):
     """Next sample of polynomial-based waveshaper"""
-    if w == None:
+    if w is None:
         raise_none_error('polyshape')
     if fm:
         return mus_polyshape(w, index, fm)
@@ -517,7 +518,7 @@ def make_triangle_wave(frequency: float, amplitude: Optional[float]=1.0, phase: 
     
 def triangle_wave(s: MUS_ANY_POINTER, fm: float=None):
     """next triangle wave sample from generator"""
-    if s == None:
+    if s is None:
         raise_none_error('triangle_wave')
     if fm:
         return mus_triangle_wave(s)
@@ -535,7 +536,7 @@ def make_square_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Op
     
 def square_wave(s: MUS_ANY_POINTER, fm: float=None):
     """next square wave sample from generator"""
-    if s == None:
+    if s is None:
         raise_none_error('square_wave')
     if fm:
         return mus_square_wave(s)
@@ -553,7 +554,7 @@ def make_sawtooth_wave(frequency: float, amplitude: Optional[float]=1.0, phase: 
     
 def sawtooth_wave(s: MUS_ANY_POINTER):
     """next sawtooth wave sample from generator"""
-    if s == None:
+    if s is None:
         raise_none_error('sawtooth_wave')
     if fm:
         return mus_sawtooth_wave(s)
@@ -571,7 +572,7 @@ def make_pulse_train(frequency: float, amplitude: Optional[float]=1.0, phase: Op
     
 def pulse_train(s: MUS_ANY_POINTER, fm: Optional[float]=None):
     """next pulse train sample from generator"""
-    if s == None:
+    if s is None:
         raise_none_error('pulse_train')
     if fm:
         return mus_pulse_train(s, fm)
@@ -591,7 +592,7 @@ def make_ncos(frequency: float, n: Optional[int]=1):
     
 def ncos(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
     """Get the next sample from 'gen', an ncos generator"""
-    if nc == None:
+    if nc is None:
         raise_none_error('ncos')
     return mus_ncos(nc, fm)
 
@@ -607,7 +608,7 @@ def make_nsin(frequency: float, n: Optional[int]=1):
     
 def nsin(nc: MUS_ANY_POINTER, fm: Optional[float]=0.0):
     """Get the next sample from 'gen', an nsin generator"""
-    if nc == None:
+    if nc is None:
         raise_none_error('nsin')
     return mus_nsin(nc, fm)
     
@@ -623,7 +624,7 @@ def make_nrxysin(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1
     
 def nrxysin(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
     """next sample of nrxysin generator"""
-    if s == None:
+    if s is None:
         raise_none_error('nrxysin')
     return mus_nrxysin(s, fm)
     
@@ -638,7 +639,7 @@ def make_nrxycos(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1
     
 def nrxycos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
     """next sample of nrxycos generator"""
-    if s == None:
+    if s is None:
         raise_none_error('nrxycos')
     return mus_nrxycos(s, fm)
     
@@ -654,7 +655,7 @@ def make_rxykcos(frequency: float, phase: float, r: Optional[float]=.5, ratio: O
     
 def rxykcos(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
     """next sample of rxykcos generator"""
-    if s == None:
+    if s is None:
         raise_none_error('rxykcos')
     return mus_rxykcos(s, fm)
     
@@ -668,7 +669,7 @@ def make_rxyksin(frequency: float, phase: float, r: Optional[float]=.5, ratio: O
 
 def rxyksin(s: MUS_ANY_POINTER, fm: Optional[float]=0.):
     """next sample of rxyksin generator"""
-    if s == None:
+    if s is None:
         raise_none_error('rxyksin')
     return mus_rxyksin(s, fm)
     
@@ -684,7 +685,7 @@ def make_ssb_am(frequency: float, n: Optional[int]=40):
     
 def ssb_am(gen: MUS_ANY_POINTER, insig: Optional[float]=0.0, fm: Optional[float]=None):
     """get the next sample from ssb_am generator"""
-    if gen == None:
+    if gen is None:
         raise_none_error('ssb_am')
     if(fm):
         return mus_ssb_am(gen, insig, fm)
@@ -708,7 +709,7 @@ def make_wave_train(frequency: float, wave, phase: Optional[float]=0., type=Inte
     
 def wave_train(w: MUS_ANY_POINTER, fm: Optional[float]=None):
     """next sample of wave_train"""
-    if w == None:
+    if w is None:
         raise_none_error('wave_train')
     if fm:
         return mus_wave_train(w, fm)
@@ -731,7 +732,7 @@ def make_wave_train_with_env(frequency: float, pulse_env, size=None):
 # ---------------- rand, rand_interp ---------------- #
 def make_rand(frequency: float, amplitude: Optional[float]=1.0, distribution=None):
     """Return a new rand generator, producing a sequence of random numbers (a step  function). frequency is the rate at which new numbers are chosen."""
-    if (distribution):
+    if distribution:
         distribution_ptr = get_array_ptr(distribution)
         gen =  mus_make_rand_with_distribution(frequency, amplitude, distribution_ptr, len(distribution))
         gen._cache= [distribution_ptr]
@@ -741,7 +742,7 @@ def make_rand(frequency: float, amplitude: Optional[float]=1.0, distribution=Non
 
 def rand(r: MUS_ANY_POINTER, sweep: Optional[float]=None):
     """gen's current random number. fm modulates the rate at which the current number is changed."""
-    if r == None:
+    if r is None:
         raise_none_error('rand')
     if(sweep):
         return mus_rand(r, sweep)
@@ -755,7 +756,7 @@ def is_rand(r: MUS_ANY_POINTER):
 def make_rand_interp(frequency: float, amplitude: float,distribution=None):
     """Return a new rand_interp generator, producing linearly interpolated random numbers. frequency is the rate at which new end-points are chosen."""
     
-    if (distribution):
+    if distribution:
         distribution_ptr = get_array_ptr(distribution)
         gen = mus_make_rand_interp_with_distribution(frequency, amplitude, distribution_ptr, len(distribution))
         gen._cache = [distribution_ptr]
@@ -765,7 +766,7 @@ def make_rand_interp(frequency: float, amplitude: float,distribution=None):
     
 def rand_interp(r: MUS_ANY_POINTER, sweep: Optional[float]=0.):
     """gen's current (interpolating) random number. fm modulates the rate at which new segment end-points are chosen."""
-    if r == None:
+    if r is None:
         raise_none_error('rand_interp')
     if(sweep):
         return mus_rand_interp(r, sweep)
@@ -786,7 +787,7 @@ def make_one_pole(a0: float, b1: float):
     
 def one_pole(f: MUS_ANY_POINTER, input: float):
     """One pole filter of input."""
-    if f == None:
+    if f is None:
         raise_none_error('one_pole')
     return mus_one_pole(f, input)
     
@@ -800,7 +801,7 @@ def make_one_zero(a0: float, a1: float):
     
 def one_zero(f: MUS_ANY_POINTER, input: float):
     """One zero filter of input."""
-    if f == None:
+    if f is None:
         raise_none_error('one_zero')
     return mus_one_zero(f, input)
     
@@ -821,7 +822,7 @@ def make_two_pole(*args):
 
 def two_pole(f: MUS_ANY_POINTER, input: float):
     """Return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
-    if f == None:
+    if f is None:
         raise_none_error('two_pole')
     return mus_two_pole(f, input)
     
@@ -840,7 +841,7 @@ def make_two_zero(*args):
 
 def two_zero(f: MUS_ANY_POINTER, input: float):
     """Two zero filter of input."""
-    if f == None:
+    if f is None:
         raise_none_error('two_zero')
     return mus_two_zero(f, input)
     
@@ -857,7 +858,7 @@ def make_one_pole_all_pass(size: int, coeff: float):
     
 def one_pole_all_pass(f: MUS_ANY_POINTER, input: float):
     """One pole all pass filter of input."""
-    if f == None:
+    if f is None:
         raise_none_error('one_pole')
     return mus_one_pole_all_pass(f, input)
     
@@ -876,7 +877,7 @@ def make_formant(frequency: float, radius: float):
 
 def formant(f: MUS_ANY_POINTER, input: float, radians: Optional[float]=None):
     """Next sample from resonator generator."""
-    if f == None:
+    if f is None:
         raise_none_error('formant')
     if radians:
         return mus_formant_with_frequency(f, input, radians)

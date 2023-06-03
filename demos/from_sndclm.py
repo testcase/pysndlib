@@ -940,3 +940,24 @@ with Sound(statistics=True, play=True):
 
 
 
+def pvedit(gen):
+    length = gen.mus_length
+    amps = phase_vocoder_amp_increments(gen)
+    #tmp = freqs + .1
+   # print(np.min(freqs))
+    tmp = np.where(amps < 0., amps, amps*7.)
+    np.copyto(amps, tmp)
+    return length
+
+
+
+
+with Sound(statistics=True, play=True):
+    pv = make_phase_vocoder(make_readin("goodness.aiff"), 512, 4, 128, 1.0, edit=pvedit)
+    for i in range(0, clm_length(("goodness.aiff"))):
+        outa(i, phase_vocoder(pv))
+        
+        
+        
+        
+
