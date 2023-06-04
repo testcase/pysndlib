@@ -20,7 +20,9 @@ mus_initialize()
 mus_sound_initialize() 
 mus_set_rand_seed(int(time.time()))
 
-print(mus_error_handler_t)
+
+
+
 
 # CFUNCTYPE(UNCHECKED(None), c_int, String)# sndlib.h: 158
 @mus_error_handler_t # from sndlib.py
