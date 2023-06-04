@@ -20,25 +20,23 @@ mus_initialize()
 mus_sound_initialize() 
 mus_set_rand_seed(int(time.time()))
 
-
-
-
-
+class SNDLIBError(Exception):
+    """This is general class to raise an print errors as defined in sndlib. It is to be used internally by the 
+        defined error handler registered with sndlib
+    """
+    def ___init___(self, message):
+        self.message = message + mus_error_to_string(error_type)
+        super().__init__(self.message)
+        
 # CFUNCTYPE(UNCHECKED(None), c_int, String)# sndlib.h: 158
-@mus_error_handler_t # from sndlib.py
-def clm_error_handler(t: int, msg: String):
-    
-    print(t, msg)
-# 
-# 
+# from sndlib.py
+@mus_error_handler_t
+def clm_error_handler(error_type: int, msg: String):
+    message =  msg + ". "  +  mus_error_type_to_string(error_type)
+    raise SNDLIBError(message) 
+
 mus_error_set_handler(clm_error_handler)
-# 
-# # CFUNCTYPE(UNCHECKED(None), String)# 
-# @mus_print_handler_t
-# def print_handler(msg: String):
-#     print('--- @ ')
-# 
-# mus_print_set_handler(print_handler)
+
 
 
 #########################################

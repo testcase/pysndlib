@@ -103,8 +103,6 @@ def array2file(filename: str, arr, length=None, sr=None, #channels=None,
     return length
 
 class Sound(object):
-#     output = None
-#     reverb = None
 
     def __init__(self, output=None, 
                         channels=None, 
@@ -141,12 +139,13 @@ class Sound(object):
         self.scaled_to = scaled_to
         self.scaled_by = scaled_by
         self.play = play if play is not None else CLM.play
-        self.clipped = clipped
+        self.clipped = clipped if clipped is not None else CLM.clipped
         self.ignore_output = ignore_output
         self.output_to_file = isinstance(self.output, str)
         self.reverb_to_file = self.reverb is not None and isinstance(self.output, str)
         self.old_srate = get_srate()
         self.finalize = finalize
+        
     def __enter__(self):
                 
         if not self.clipped:
@@ -163,21 +162,16 @@ class Sound(object):
         if  self.statistics :
             self.tic = time.perf_counter()
         
-
-        
         if self.output_to_file :
-            # writing to File
-            #continue_sample2file
             if self.continue_old_file:
                 CLM.output = continue_sample2file(self.filename)
                 set_srate(mus_sound_srate(self.filename)) # maybe print warning or at least note 
             else:
                 CLM.output = make_sample2file(self.output,self.channels, sample_type=self.sample_type , header_type=self.header_type)
-        elif is_iterable(self.output):
+        elif is_list_or_ndarray(self.output):
             CLM.output = self.output
-
         else:
-            print("not supported writing to", self.output)
+            raise TypeError(f"Writing to  {type(self.output)} not supported")
             
         if self.reverb_to_file:
             if self.continue_old_file:
@@ -185,10 +179,9 @@ class Sound(object):
             else:
                 CLM.reverb = make_sample2file(self.revfile,self.reverb_channels, sample_type=self.sample_type , header_type=self.header_type)
         
-        if self.reverb and not self.reverb_to_file and is_iterable(self.output):
+        if self.reverb and not self.reverb_to_file and is_list_or_ndarray(self.output):
             CLM.reverb = np.zeros((self.reverb_channels, np.shape(CLM.output)[1]), dtype=CLM.output.dtype)
     
-
         return self
         
     def __exit__(self, *args):
@@ -196,14 +189,6 @@ class Sound(object):
         if self.reverb: 
             if self.reverb_to_file:
                 mus_close(CLM.reverb)
-                
-                if self.statistics:
-                    chans = clm_channels(self.revfile)
-                    vals = np.zeros(chans, dtype=np.double)
-                    times = np.zeros(chans, dtype=np.int_)
-                    revmax = mus_sound_maxamps(self.revfile, chans, vals.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), times.ctypes.data_as(ctypes.POINTER(ctypes.c_long)))
-                    print('revmax', vals, times)
-                
                 CLM.reverb = make_file2sample(self.revfile)
                 
                 if self.reverb_data:
@@ -212,23 +197,63 @@ class Sound(object):
                     self.reverb()
                 mus_close(CLM.reverb)
 
-            if is_iterable(CLM.reverb):
-
+            if is_list_or_ndarray(CLM.reverb):
                 if self.reverb_data:
-                    print("applying reverb with data")
                     self.reverb(**self.reverb_data)
                 else:
                     self.reverb()          
-                
+
         if self.output_to_file:
             mus_close(CLM.output)
             
-            
-        # Statistics and scaling go here    
+    
         if  self.statistics :
             toc = time.perf_counter()
-            print(f"Total processing time {toc - self.tic:0.4f} seconds")
             
+            statstr = ''
+            if isinstance(self.output, str):
+                statstr = f"{self.output}: "
+            if self.output_to_file:
+                    chans = clm_channels(self.output)
+                    vals = np.zeros(chans, dtype=np.double)
+                    times = np.zeros(chans, dtype=np.int_)
+                    maxamp = mus_sound_maxamps(self.output, chans, vals.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), times.ctypes.data_as(ctypes.POINTER(ctypes.c_long)))
+                    statstr += f": maxamp: {vals} {times} "
+            else:
+                chans = clm_channels(self.output)
+                vals = np.zeros(chans, dtype=np.double)
+                times = np.zeros(chans, dtype=np.int_)
+                for i in range(chans):
+                    mabs = np.abs(self.output[i])
+                    vals[i] = np.amax(mabs)
+                    times[i] = np.argmax(mabs)
+                statstr += f"maxamp: {vals} {times} "
+                
+              
+            if self.scaled_by or self.scaled_to:
+                statstr += "(before scaling) "
+            
+            statstr += f"compute time: {toc - self.tic:0.8f} seconds. "
+            
+            
+            if self.reverb_to_file:
+                    chans = clm_channels(self.revfile)
+                    vals = np.zeros(chans, dtype=np.double)
+                    times = np.zeros(chans, dtype=np.int_)
+                    maxamp = mus_sound_maxamps(self.revfile, chans, vals.ctypes.data_as(ctypes.POINTER(ctypes.c_double)), times.ctypes.data_as(ctypes.POINTER(ctypes.c_long)))
+                    statstr += f"revmax: {vals} {times}"
+            elif self.reverb and not self.reverb_to_file and is_list_or_ndarray(self.output):
+                chans = clm_channels(CLM.reverb)
+                
+                vals = np.zeros(chans, dtype=np.double)
+                times = np.zeros(chans, dtype=np.int_)
+                for i in range(chans):
+                    mabs = np.abs(CLM.reverb[i])
+                    vals[i] = np.amax(mabs)
+                    times[i] = np.argmax(mabs)
+                statstr += f"revmax: {vals} {times}"
+            
+            print(statstr)
          
         if self.scaled_to:
             if self.output_to_file:
@@ -252,7 +277,6 @@ class Sound(object):
         set_srate(self.old_srate)
         
         if self.finalize:
-            print(self.output)
             self.finalize(self.output)
             
 
@@ -288,8 +312,6 @@ def oscil(os: MUS_ANY_POINTER, fm: Optional[float]=None, pm: Optional[float]=Non
         return mus_oscil(os, fm, pm)
        
         
-        
-    
 def is_oscil(os: MUS_ANY_POINTER):
     """Returns True if gen is an oscil"""
     return mus_is_oscil(os)
@@ -816,7 +838,8 @@ def make_two_pole(*args):
     elif(len(args) == 3):
         return mus_make_two_pole(args[0], args[1], args[2])
     else:
-        print("error") # make this real error
+        raise RuntimeError("Requires either 2 or 3 args but received {len(args)}.")
+       
 
 def two_pole(f: MUS_ANY_POINTER, input: float):
     """Return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)"""
@@ -835,7 +858,7 @@ def make_two_zero(*args):
     elif(len(args) == 3):
         return mus_make_two_zero(args[0], args[1], args[2])
     else:
-        print("error") # make this real error
+        raise RuntimeError("Requires either 2 or 3 args but received {len(args)}.")
 
 def two_zero(f: MUS_ANY_POINTER, input: float):
     """Two zero filter of input."""
@@ -908,7 +931,7 @@ def formant_bank(f: MUS_ANY_POINTER, inputs):
     """Sum a bank of formant generators"""
     if f == None:
         raise_none_error('formant_bank')
-    if is_iterable(inputs):
+    if is_list_or_ndarray(inputs):
         inputs_ptr = get_array_ptr(inputs)
         gen =  mus_formant_bank_with_inputs(f, inputs_ptr)
         gen._cache.append(inputs_ptr)
@@ -1139,7 +1162,6 @@ def comb(cflt: MUS_ANY_POINTER, input: float, pm: Optional[float]=None):
     if pm:
         return mus_comb(cflt, input, pm)
     else:
-        #print(input)    
         return mus_comb_unmodulated(cflt, input)
     
 def is_comb(cflt: MUS_ANY_POINTER):
@@ -1621,7 +1643,7 @@ def make_src(input, srate: Optional[float]=1.0, width: Optional[int]=10):
             
         res = mus_make_src(ifunc, srate, width, None)
     else:
-        print("error") # need error
+        raise TypeError(f"Input needs to be a clm gen or function not a {type(input)}")
         
     
     res._inputcallback = ifunc
@@ -1654,10 +1676,11 @@ def make_convolve(input, filt: npt.NDArray[np.float64], fft_size: Optional[int]=
     fft_len = 0
     
     if fft_size < 0 or fft_size == 0:
-        print('error') #TODO Raise eeror
+        raise ValueError(f'fft_size must be a positive number greater than 0 not {fft_size}')
+        
         
     if fft_size > mus_max_malloc():
-         print('error') #TODO Raise eeror
+         raise ValueError(f'fft_size too large. cannot allocate {fft_size} size fft')
         
     if is_power_of_2(filter_size):
         fft_len = filter_size * 2
@@ -1681,7 +1704,7 @@ def make_convolve(input, filt: npt.NDArray[np.float64], fft_size: Optional[int]=
 
         res = mus_make_convolve(ifunc, filter_ptr, fft_size, filter_size, None)
     else:
-        print("error") # need error
+        raise TypeError(f"Input needs to be a clm gen or function not a {type(input)}")
     
     res._inputcallback = ifunc 
     res._cache = [filter_ptr]
@@ -1747,7 +1770,7 @@ def make_granulate(input,
             
         res = mus_make_granulate(ifunc, expansion, length, scaler, hop, ramp, jitter, max_size, cast(None, EDITCALLBACK), None)
     else:
-        print("error") # TODO: need error
+        raise TypeError(f"Input needs to be a clm gen or function not a {type(input)}")
         
     res._inputcallback = ifunc
     res._editcallback  = None
@@ -1823,7 +1846,7 @@ def make_phase_vocoder(input,
                 cast(None, SYNTHESISCALLBACK),
                 None)
     else:
-        print("error") # TODO: need error
+        raise TypeError(f"Input needs to be a clm gen or function not a {type(input)}")
         
     
     #again need to create phase vocoder befor defining editors.
@@ -1900,7 +1923,7 @@ def phase_vocoder_phase_increments(gen: MUS_ANY_POINTER):
 #  TODO : output to array out-any loc data channel (output *output*)    
 def out_any(loc: int, data: float, channel,  output=None):
     if output is not None:
-        if is_iterable(output):
+        if is_list_or_ndarray(output):
             output[channel][loc] += data
         else:
             mus_out_any(loc, data, channel, output)        
@@ -1945,7 +1968,7 @@ def out_bank(gens, loc, input):
 #--------------- in-any ----------------#
 def in_any(loc: int, channel: int, input):
     """input stream sample at frample in channel chan"""
-    if is_iterable(input):
+    if is_list_or_ndarray(input):
         return input[channel][loc]
     elif isinstance(input, types.GeneratorType):
         return next(input)
@@ -1982,7 +2005,7 @@ def make_locsig(degree: Optional[float]=0.0,
         output = CLM.output  #TODO : check if this exists
     
     if not revout:
-        if CLM.reverb:
+        if CLM.reverb is not None:
             revout = CLM.reverb
         else: 
             revout = cast(None, MUS_ANY_POINTER) #this generates and error but still works
@@ -1992,12 +2015,12 @@ def make_locsig(degree: Optional[float]=0.0,
     
     if not reverb_channels:
         reverb_channels = clm_channels(revout)
-        #print(reverb_channels)
+
         
    # print(np.shape(output))
     
     # TODO: What if revout is not an iterable? While possible not going to deal with it right now :)   
-    if is_iterable(output):
+    if is_list_or_ndarray(output):
         if not reverb_channels:
             reverb_channels = 0
             
@@ -2082,7 +2105,7 @@ def _(x: np.ndarray):
     elif x.ndim == 2:
         return np.shape(x)[0]
     else:
-        print("error") # raise error
+        raise RuntimeError(f'ndarray must have 1 or 2 dimensions not {x.ndim}. ')
         
 
 
@@ -2113,7 +2136,7 @@ def _(x: np.ndarray):
     elif x.ndim == 2:
         return np.shape(x)[1]
     else:
-        print("error") # raise error
+        raise RuntimeError(f'ndarray must have 1 or 2 dimensions not {x.ndim}. ')
 
 
 # --------------- clm_srate ---------------- #
@@ -2151,7 +2174,7 @@ def _(x: np.ndarray):
     elif x.ndim == 2:
         return np.shape(x)[1]
     else:
-        print("error") # raise error
+        raise RuntimeError(f'ndarray must have 1 or 2 dimensions not {x.ndim}. ')
 
 
 # NOTE from what I understand about numpy.ndarray.ctypes 
@@ -2175,6 +2198,9 @@ def get_array_ptr(arr):
 # check if something is iterable 
 def is_iterable(x):
     return hasattr(x, '__iter__')
+    
+def is_list_or_ndarray(x):
+    return isinstance(x, list) or isinstance(x, np.ndarray)
 
 def is_zero(n):
     return n == 0
