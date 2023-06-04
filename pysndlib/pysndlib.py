@@ -20,7 +20,25 @@ mus_initialize()
 mus_sound_initialize() 
 mus_set_rand_seed(int(time.time()))
 
-     
+print(mus_error_handler_t)
+
+# CFUNCTYPE(UNCHECKED(None), c_int, String)# sndlib.h: 158
+@mus_error_handler_t # from sndlib.py
+def clm_error_handler(t: int, msg: String):
+    
+    print(t, msg)
+# 
+# 
+mus_error_set_handler(clm_error_handler)
+# 
+# # CFUNCTYPE(UNCHECKED(None), String)# 
+# @mus_print_handler_t
+# def print_handler(msg: String):
+#     print('--- @ ')
+# 
+# mus_print_set_handler(print_handler)
+
+
 #########################################
 # basic file reading/writing to/from nympy arrays
 # note all of this assumes numpy dtype is np.double

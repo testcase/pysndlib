@@ -18,8 +18,9 @@ INPUTCALLBACK = CFUNCTYPE(c_double, c_void_p, c_int)
 EDITCALLBACK = CFUNCTYPE(c_int, c_void_p)
 ANALYSISCALLBACK = CFUNCTYPE(c_bool, c_void_p, CFUNCTYPE(c_double, c_void_p, c_int))
 SYNTHESISCALLBACK = CFUNCTYPE(c_double, c_void_p)
-LOCSIGDETOURCALLBACK = CFUNCTYPE(UNCHECKED(None), c_void_p, mus_long_t) #making void to avoid creating pointe objec
+LOCSIGDETOURCALLBACK = CFUNCTYPE(UNCHECKED(None), c_void_p, mus_long_t) #making void to avoid creating pointer objec
 ENVFUNCTION = CFUNCTYPE(UNCHECKED(mus_float_t), mus_float_t) # for env_any
+
 
 # 
 #these may need to be set based on system type etc
@@ -58,12 +59,10 @@ CLM  = types.SimpleNamespace(
 
 
 CLM.player = 'afplay'
-# set srate to default 
-#mus_sound_set_srate(CLM.srate)
+
 
 ########context with sound#######    
 
-# TODO: Clipping etc, 
 
 def file2ndarray(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
     """Return an ndarray with samples from file and the sample rate of the data"""
@@ -126,26 +125,26 @@ class Sound(object):
                         clipped = None,
                         finalize = None,
                         ignore_output = False):
-        self.output = output or CLM.file_name
-        self.channels = channels or CLM.channels
-        self.srate = srate or CLM.srate
-        self.sample_type = sample_type or CLM.sample_type
-        self.header_type = header_type or CLM.header_type
+        self.output = output if output is not None else CLM.file_name
+        self.channels = channels if channels is not None else CLM.channels
+        self.srate = srate if srate is not None else CLM.srate
+        self.sample_type = sample_type if sample_type is not None else CLM.sample_type
+        self.header_type = header_type if header_type is not None else  CLM.header_type
         self.comment = comment
-        self.verbose = verbose or CLM.verbose
-        self.reverb = reverb  or CLM.reverb
-        self.revfile = revfile or CLM.reverb_file_name
-        self.reverb_data = reverb_data or CLM.reverb_data
-        self.reverb_channels = reverb_channels or CLM.reverb_channels
+        self.verbose = verbose if verbose is not None else CLM.verbose
+        self.reverb = reverb  if reverb is not None else CLM.reverb
+        self.revfile = revfile if revfile is not None else CLM.reverb_file_name
+        self.reverb_data = reverb_data if reverb_data is not None else CLM.reverb_data
+        self.reverb_channels = reverb_channels if reverb_channels is not None else CLM.reverb_channels
         self.continue_old_file = continue_old_file
-        self.statistics = statistics or CLM.statistics
+        self.statistics = statistics if statistics is not None else CLM.statistics
         self.scaled_to = scaled_to
         self.scaled_by = scaled_by
-        self.play = play or CLM.play
+        self.play = play if play is not None else CLM.play
         self.clipped = clipped
         self.ignore_output = ignore_output
         self.output_to_file = isinstance(self.output, str)
-        self.reverb_to_file = self.reverb and isinstance(self.output, str)
+        self.reverb_to_file = self.reverb is not None and isinstance(self.output, str)
         self.old_srate = get_srate()
         self.finalize = finalize
     def __enter__(self):
@@ -173,7 +172,6 @@ class Sound(object):
                 CLM.output = continue_sample2file(self.filename)
                 set_srate(mus_sound_srate(self.filename)) # maybe print warning or at least note 
             else:
-                
                 CLM.output = make_sample2file(self.output,self.channels, sample_type=self.sample_type , header_type=self.header_type)
         elif is_iterable(self.output):
             CLM.output = self.output

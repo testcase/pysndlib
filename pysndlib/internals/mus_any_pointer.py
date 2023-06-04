@@ -63,10 +63,6 @@ def get_mus_data(gen: MUS_ANY_POINTER):
     p = np.ctypeslib.as_array(mus_data(gen), shape=[size])
     return p
 
-# TODO: mus_set_data does not make a copy so need to add to cache
-# but if called repeatedly cache will keep growing. 
-# maybe cache idea needs to be refined. data could
-# go into other instance variable (_data) and just keep replacing
 def set_mus_data(gen: mus_any, data):
     data_ptr = data.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
     return mus_set_data(gen, data_ptr)

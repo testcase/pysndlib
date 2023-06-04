@@ -1320,11 +1320,20 @@ if _libs["sndlib"].has("mus_format", "cdecl"):
 
 mus_error_handler_t = CFUNCTYPE(UNCHECKED(None), c_int, String)# sndlib.h: 158
 
+# # sndlib.h: 159
+# if _libs["sndlib"].has("mus_error_set_handler", "cdecl"):
+#     mus_error_set_handler = _libs["sndlib"].get("mus_error_set_handler", "cdecl")
+#     mus_error_set_handler.argtypes = [POINTER(mus_error_handler_t)]
+#     mus_error_set_handler.restype = POINTER(mus_error_handler_t)
+
+# TMI ctypegens is getting confused here 
+# the argtypes needs to be a function pointer
 # sndlib.h: 159
 if _libs["sndlib"].has("mus_error_set_handler", "cdecl"):
     mus_error_set_handler = _libs["sndlib"].get("mus_error_set_handler", "cdecl")
-    mus_error_set_handler.argtypes = [POINTER(mus_error_handler_t)]
+    mus_error_set_handler.argtypes = [CFUNCTYPE(UNCHECKED(None), c_int, String)]
     mus_error_set_handler.restype = POINTER(mus_error_handler_t)
+
 
 # sndlib.h: 160
 if _libs["sndlib"].has("mus_error_type_to_string", "cdecl"):
