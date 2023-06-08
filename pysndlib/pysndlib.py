@@ -133,15 +133,6 @@ def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=No
 
     
 
-    
-    
-
-
-
-
-
-    
-
 # TODO: move-sound  need dlocsig
 
 

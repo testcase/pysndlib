@@ -10,6 +10,7 @@ import numpy as np
 import numpy.typing as npt
 import math
 import tempfile
+import random
 from .sndlib import *
 from .enums import *
 from .mus_any_pointer import *
@@ -130,7 +131,7 @@ class Sound(object):
         self.header_type = header_type if header_type is not None else  CLM.header_type
         self.comment = comment
         self.verbose = verbose if verbose is not None else CLM.verbose
-        self.reverb = reverb  if reverb is not None else CLM.reverb
+        self.reverb = reverb
         self.revfile = revfile if revfile is not None else CLM.reverb_file_name
         self.reverb_data = reverb_data if reverb_data is not None else CLM.reverb_data
         self.reverb_channels = reverb_channels if reverb_channels is not None else CLM.reverb_channels
@@ -2462,10 +2463,63 @@ def chebyshev_u_sum(x: float, ucoeffs):
     
     
     
+# --------------- clamp ---------------- #
+@singledispatch
+def clamp(x, lo, hi):
+    pass
     
+@clamp.register
+def _(x: float, lo, hi):
+    return float(max(min(x, hi),lo))
     
+@clamp.register
+def _(x: int, lo, hi):
+    return int(max(min(x, hi),lo))
+    
+@clamp.register
+def _(x:  np.ndarray, lo, hi):
+    return np.clip(x, lo, hi)
 
 
+@clamp.register
+def _(x:  list, lo, hi):    
+    return list(map(lambda z : clamp(z,lo,hi), x))
+
+    
+# --------------- random ---------------- # 
+@singledispatch
+def _random(x):
+    pass
+
+@_random.register
+def _(x: float):
+    return random.random()
+        
+@_random.register
+def _(x: int):
+    return random.randrange(x)
+
+@singledispatch
+def _random2(x, y):
+    pass
+    
+@_random2.register
+def _(x:float , y: float):
+    return random.uniform(x,y)
+    
+@_random2.register
+def _(x:int , y: int):
+    return random.randrange(x, y)
+
+def clm_random(*args):
+    if len(args) == 0:
+        return random.random()
+    elif len(args) == 1:
+        return _random(args[0])
+    else:
+        return _random2(args[0], args[1])
+    
+    
 # TODO: pink_noise  listed in clm2xen.c
 # TODO: piano_noise listed in clm2xen.c
 # TODO: singer_filter listed in clm2xen.c
