@@ -18,7 +18,6 @@ extensions = [
 if __name__ == '__main__':
 
     setup(
-         packages=["pysndlib", "pysndlib.clm", "pysndlib.sndlib"],
         ext_modules = cythonize(extensions, compiler_directives={'language_level': '3str'})
     )
 

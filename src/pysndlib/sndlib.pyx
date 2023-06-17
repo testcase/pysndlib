@@ -1,7 +1,7 @@
 # cython: c_string_type=unicode
 # cython: c_string_encoding=utf8
 
-cimport csndlib
+cimport pysndlib.csndlib as csndlib
 
 csndlib.mus_sound_initialize()
 

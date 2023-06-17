@@ -8,7 +8,30 @@ cython is used to generate bindings
 
 This also requires numpy.
 
-*IMPORTANT* If you get crashes loading libsndlib try building a version of sndlib using`without-s7` option when running ./configure  I have seen this issue and need to track down cause  
+*IMPORTANT* 
+At least on macos, this needs to be linked against sndlib built in specific way
+
+sndlib is normally build as an .so as a loadable bundle with the -bundle flag to ld. Cython needs to link
+against a dylib built with -dynamiclib flag. Technically I believe it would still work with .so extension but 
+I have changed this to make sure I can keep different versions straight.
+
+
+
+###run###
+`./configure --without-s7`
+
+###edit the makefile##
+
+LDSO_FLAGS line should look like this:
+
+`LDSO_FLAGS = -dynamic -dynamiclib -undefined suppress -flat_namespace`
+
+Change SO_NAME line to this:
+
+`SO_NAME = libsndlib.dylib`
+
+
+
 
 ## style
 
