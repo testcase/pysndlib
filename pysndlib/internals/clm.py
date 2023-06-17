@@ -1930,12 +1930,7 @@ def out_any(loc: int, data: float, channel,  output=None):
             mus_out_any(loc, data, channel, output)        
     else:
         mus_out_any(loc, data, channel, CLM.output)    
-        
-def outa(loc: int, data: float, output=None):
-    if output is not None:
-        out_any(loc, data, 0, output)        
-    else:
-        out_any(loc, data, 0, CLM.output)    
+
 # --------------- outa ---------------- #
 def outa(loc: int, data: float, output=None):
     if output is not None:
