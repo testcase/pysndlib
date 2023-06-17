@@ -4,8 +4,7 @@
 This package provides a python wrapper around sndlib, by Bill Schottstaedt (bil@ccrma.stanford.edu)
 Sources for sndlib can be found [here](https://ccrma.stanford.edu/software/snd/sndlib/)
 
-ctypesgen (https://github.com/ctypesgen/ctypesgen) has been used to to generate bindings from sndlib header files. Currently these are only for osx and posix systems as I have not
-had the opportunity to generate/test on windows. 
+cython is used to generate bindings
 
 This also requires numpy.
 
