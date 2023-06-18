@@ -115,7 +115,7 @@ cdef class mus_any:
     cdef cclm.edit_cb _editcallback
     cdef cclm.analyze_cb _analyzecallback
     cdef cclm.synthesize_cb _synthesizecallback
-    _cache: list
+    cdef list _cache
     
     def __cinit__(self):
         self.ptr_owner = False
@@ -124,6 +124,7 @@ cdef class mus_any:
         self._editcallback = NULL
         self._analyzecallback = NULL
         self._synthesizecallback = NULL
+        self._cache = [make_moving_average]
 
         
     def __delalloc__(self):
@@ -150,11 +151,17 @@ cdef class mus_any:
         wrapper.ptr_owner = owner
         return wrapper
        
-    cdef cache_append(self, obj):
+    cpdef cache_append(self, obj):
         self._cache.append(obj) 
 
-    cdef cache_extend(self, obj):
-        self._cache.append(obj) 
+    cpdef cache_extend(self, obj):
+        self._cache.extend(obj) 
+        
+    def __call__(self, arg1=0.0, arg2=0.0):
+        return cclm.mus_apply(self._ptr, arg1,arg2)
+        
+    def print_cache(self):
+        print(self._cache)
 
     def __str__(self):
         return f'{mus_any} {cclm.mus_describe(self._ptr)}'
@@ -337,6 +344,7 @@ cdef class mus_any_array:
         return wrapper
         
 
+# meant for very temporary allocation for 
 cdef class mus_float_array:
     """A wrapper class arrays mus_float_t (double)"""
     data: cython.p_double
@@ -464,18 +472,22 @@ cdef void locsig_detour_callback_func(cclm.mus_any *ptr, cclm.mus_long_t val):
 # --------------- file2ndarray, array2file ---------------- #                 
 cpdef file2ndarray(filename: str, channel: Optional[int]=None, beg: Optional[int]=None, dur: Optional[int]=None):
     """Return an ndarray with samples from file and the sample rate of the data"""
+    print("file to arrat")
     length = dur or csndlib.mus_sound_framples(filename)
     chans = csndlib.mus_sound_chans(filename)
     srate = csndlib.mus_sound_srate(filename)
     bg = beg or 0
     out = np.zeros((1 if (channel != None) else chans, length), dtype=np.double)
-        
+    print(length, chans, srate, bg, out, np.shape(out))
     if not channel:
         # read in all channels
+        print('not channel')
+      #TODO:  this is all wrong need to use views
         for i in range(chans):
             arr_ptr = mus_float_array.from_ndarray(out[i])
             csndlib.mus_file_to_array(filename, i, bg, length, arr_ptr.data)
     else:
+        print(' channel')
         arr_ptr = mus_float_array.from_ndarray(out[0])
         csndlib.mus_file_to_array(filename,0, bg, length, arr_ptr.data)
     return out, srate
@@ -1116,7 +1128,7 @@ cpdef cython.double set_srate(r: cython.double ):
     """Set current sample rate"""
     return cclm.mus_set_srate(r)
     
-cpdef cython.double seconds2samples(secs: cython.double ):
+cpdef int seconds2samples(secs: cython.double ):
     """Use mus_srate to convert seconds to samples."""
     return cclm.mus_seconds_to_samples(secs)
 
@@ -1142,24 +1154,26 @@ cpdef cython.double dot_product(data1, data2):
     data2_ptr = mus_float_array.from_this(data2)    
     return cclm.mus_dot_product(data1_ptr.data, data2_ptr.data, len(data1))
     
-cpdef cython.double polynomial(coeffs, x: cython.double ):
+    
+cpdef cython.double polynomial(coeffs: npt.NDArray[np.float64], x: cython.double ):
     """Evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term."""
-    coeffs_ptr = mus_float_array.from_this(coeffs)
-    return cclm.mus_polynomial(coeffs_ptr.data, x, len(coeffs_ptr))
+    cdef double [:] coeffs_view = coeffs
+    return cclm.mus_polynomial(&coeffs_view[0], x, len(coeffs))
+    
 
-cpdef cython.double array_interp(fn, x: cython.double , size: int):
+cpdef cython.double array_interp(fn: npt.NDArray[np.float64], x: cython.double , size: int):
     """Taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer."""    
-    fn_ptr = mus_float_array.from_this(fn)
-    return cclm.mus_array_interp(fn_ptr.data, x, size)
+    cdef double [:] fn_view = fn
+    return cclm.mus_array_interp(&fn_view[0], x, size)
 
 cpdef cython.double bessi0(x: cython.double):
     """Bessel function of zeroth order"""
     return cclm.mus_bessi0(x)
     
-cpdef cython.double mus_interpolate(interp_type: Interp, x: cython.double, table, size: int, y1: cython.double):
+cpdef cython.double mus_interpolate(interp_type: Interp, x: cython.double, table: npt.NDArray[np.float64], size: int, y1: cython.double):
     """Interpolate in data ('table' is a ndarray) using interpolation 'type', such as Interp.LINEAR."""
-    table_ptr = mus_float_array.from_this(table)
-    return cclm.mus_interpolate(<cclm.mus_interp_t>interp_type, x, table_ptr.data, size, y1)
+    cdef double [:] table_view = table
+    return cclm.mus_interpolate(<cclm.mus_interp_t>interp_type, x, &table_view[0], size, y1)
    
 cpdef np.ndarray fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fftsize: int, sign: int):
     """Return the fft of rl and im which contain the real and imaginary parts of the data; len should be a power of 2, dir = 1 for fft, -1 for inverse-fft"""    
@@ -1251,7 +1265,7 @@ cpdef np.ndarray partials2wave(partials, wave=None, table_size: Optional[int]=No
     if isinstance(wave, list):
         wave = np.array(wave, dtype=np.double)
                         
-    if (not wave):
+    if not wave:
         if table_size:
             wave = np.zeros(table_size)
         else:
@@ -1309,10 +1323,8 @@ cpdef np.ndarray normalize_partials(partials):
 
 cpdef cython.double chebyshev_tu_sum(x: cython.double, tcoeffs, ucoeffs):
     """Returns the sum of the weighted Chebyshev polynomials Tn and Un (vectors or " S_vct "s), with phase x"""
-    
     tcoeffs_ptr = mus_float_array.from_this(tcoeffs)
     ucoeffs_ptr = mus_float_array.from_this(ucoeffs)
-
     return cclm.mus_chebyshev_tu_sum(x, len(tcoeffs), tcoeffs_ptr.data, ucoeffs_ptr.data)
     
 cpdef cython.double chebyshev_t_sum(x: cython.double, tcoeffs):
@@ -1695,11 +1707,12 @@ cpdef bint is_ssb_am(gen: mus_any):
 
 
 # ---------------- wave-train ----------------#
-cpdef mus_any make_wave_train(frequency: cython.double, wave, phase: Optional[cython.double]=0., interp_type=Interp.LINEAR):
+cpdef mus_any make_wave_train(frequency: cython.double, wave: npt.NDArray[np.float64], phase: Optional[cython.double]=0., interp_type=Interp.LINEAR):
     """Return a new wave-train generator (an extension of pulse-train). Frequency is the repetition rate of the wave found in wave. Successive waves can overlap."""
-    wave_ptr = mus_float_array.from_this(wave)
-    gen = mus_any.from_ptr(cclm.mus_make_wave_train(frequency, phase, wave_ptr.data, len(wave), interp_type))
-    gen.cache_append(wave_ptr)
+    #wave_ptr = mus_float_array.from_this(wave)
+    cdef double [:] wave_view = wave
+    gen = mus_any.from_ptr(cclm.mus_make_wave_train(frequency, phase, &wave_view[0], len(wave), interp_type))
+    gen.cache_extend([wave])
     return gen
     
 cpdef cython.double wave_train(w: mus_any, fm: Optional[float]=None):
@@ -1980,7 +1993,6 @@ cpdef mus_any make_delay(size: int,
     """Return a new delay line of size elements. If the delay length will be changing at run-time, max-size sets its maximum length"""
   
     initial_contents_ptr = None
-    contents = initial_contents
     
     if not max_size:
         max_size = size
@@ -1989,19 +2001,19 @@ cpdef mus_any make_delay(size: int,
         interp_type = Interp.LAGRANGE #think this is correct from clm2xen.c
         
     if initial_contents is not None:
-        initial_contents_ptr = mus_float_array.from_this(contents)
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
 
     elif initial_element:
         initial_contents = np.zeros(max_size, dtype=np.double)
         initial_contents.fill(initial_element)
-        initial_contents_ptr = mus_float_array.from_this(contents)
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
 
     if initial_contents_ptr is not None:
         gen = mus_any.from_ptr(cclm.mus_make_delay(size, initial_contents_ptr.data, max_size, interp_type))
     else:   
         gen = mus_any.from_ptr(cclm.mus_make_delay(size, NULL, max_size, interp_type))
     
-    gen.cache_append(initial_contents_ptr)
+    gen.cache_extend([initial_contents_ptr, initial_contents])
     return gen
     
 cpdef cython.double delay(d: mus_any, insig: cython.double, pm: Optional[cython.double]=None):
@@ -2044,7 +2056,6 @@ cpdef mus_any make_comb(scaler: Optional[cython.double]=1.0,
         If the comb length will be changing at run-time, max-size sets its maximum length."""                
                 
     initial_contents_ptr = None
-    contents = initial_contents
     
     if not max_size:
         max_size = size
@@ -2052,16 +2063,19 @@ cpdef mus_any make_comb(scaler: Optional[cython.double]=1.0,
     if max_size != size and interp_type == Interp.NONE:
         interp_type = Interp.BEZIER #think this is correct from clm2xen.c
     
-    if initial_contents:
-        initial_contents_ptr = mus_float_array.from_this(contents)
+    if initial_contents is not None:
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
 
     elif initial_element:
         initial_contents = np.zeros(max_size)
         initial_contents.fill(initial_element)
-        initial_contents_ptr = mus_float_array.from_this(contents)
-                
-    gen = mus_any.from_ptr(cclm.mus_make_comb(scaler, size, initial_contents_ptr.data, max_size, interp_type))
-    gen.cache_append(initial_contents_ptr)
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
+        
+    if initial_contents_ptr is not None:
+        gen = mus_any.from_ptr(cclm.mus_make_comb(scaler, size, initial_contents_ptr.data, max_size, interp_type))
+    else:
+        gen = mus_any.from_ptr(cclm.mus_make_comb(scaler, size, NULL, max_size, interp_type))
+    gen.cache_append([initial_contents_ptr, initial_contents])
     return gen    
            
 cpdef cython.double comb(cflt: mus_any, insig: cython.double, pm: Optional[cython.double]=None):
@@ -2091,7 +2105,7 @@ cpdef mus_any make_comb_bank(combs: list):
 
 cpdef cython.double comb_bank(combs: mus_any, insig: cython.double):
     """Sum an array of comb filters."""
-    return cclm.mus_comb_bank(combs._ptr, input)
+    return cclm.mus_comb_bank(combs._ptr, insig)
     
 cpdef bint is_comb_bank(combs: mus_any):
     """Returns True if gen is a comb_bank"""
@@ -2257,7 +2271,7 @@ cpdef is_all_pass(f: mus_any):
 # ---------------- all-pass-bank ---------------- #
 cpdef mus_any make_all_pass_bank(all_passes: list):
     """Return a new all_pass-bank generator."""
-    p = list(map(is_formant, all_passes))
+    p = list(map(is_all_pass, all_passes))
     if not all(p):
         raise TypeError(f'allpass list contains at least one element that is not a all_pass.')
         
@@ -2279,19 +2293,17 @@ cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_elem
     """Return a new moving_average generator. """
 
     initial_contents_ptr = None
-    contents = initial_contents
     
-    if initial_contents:
-        initial_contents_ptr = mus_float_array.from_this(contents)
-
-    elif initial_element:
+    if initial_contents is not None:
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
+    else:
         initial_contents = np.zeros(size)
         initial_contents.fill(initial_element)
-        initial_contents_ptr = mus_float_array.from_this(contents)
-                        
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
     gen = mus_any.from_ptr(cclm.mus_make_moving_average(size, initial_contents_ptr.data))
-    gen.cache_append(initial_contents_ptr)
+    gen.cache_extend([initial_contents_ptr, initial_contents])
     return gen
+        
         
 cpdef cython.double moving_average(f: mus_any, input: cython.double):
     """Moving window average."""
@@ -2309,18 +2321,15 @@ cpdef mus_any make_moving_max(size: int,
     """Return a new moving-max generator."""                
     
     initial_contents_ptr = None
-    contents = initial_contents
     
-    if initial_contents:
-        initial_contents_ptr = mus_float_array.from_this(contents)
-
-    elif initial_element:
+    if initial_contents is not None:
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
+    else:
         initial_contents = np.zeros(size)
         initial_contents.fill(initial_element)
-        initial_contents_ptr = mus_float_array.from_this(contents)
-                    
+        initial_contents_ptr = mus_float_array.from_this(initial_contents)
     gen = mus_any.from_ptr(cclm.mus_make_moving_max(size, initial_contents_ptr.data))
-    gen.cache_append(initial_contents_ptr)
+    gen.cache_extend([initial_contents_ptr, initial_contents])
     return gen
     
 cpdef cython.double moving_max(f: mus_any, insig: float):
@@ -2337,7 +2346,7 @@ cpdef mus_any make_moving_norm(size: int,scaler: Optional[float]=1.):
     initial_contents = np.zeros(size, dtype=np.double)
     initial_contents_ptr = mus_float_array.from_ndarray(initial_contents)
     gen = mus_any.from_ptr(cclm.mus_make_moving_norm(size, initial_contents_ptr.data, scaler))
-    gen.cache_append(initial_contents_ptr)
+    gen.cache_extend([initial_contents_ptr, initial_contents])
     return gen
     
 cpdef cython.double moving_norm(f: mus_any, insig: cython.double):
@@ -2757,7 +2766,8 @@ cpdef in_any(loc: int, channel: int, inp):
     elif callable(inp):
         return inp(loc, channel)
     else:
-        return cclm.mus_in_any(loc, channel, <cclm.mus_any_ptr>inp._ptr)
+        ipt = <mus_any>inp
+        return cclm.mus_in_any(loc, channel, ipt._ptr)
 
 #--------------- ina ----------------#
 cpdef ina(loc: int, inp):
@@ -2925,16 +2935,17 @@ cpdef convolve_files(file1: str, file2: str, maxamp: Optional[cython.double]=1.,
 #                     'sustain_mode' : loop_modes[0], 'release_mode' : loop_modes[1]}
 #     return info
 #     
-# def file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
-#     """Return an ndarray with samples from file"""
-#     length = dur or mus_sound_framples(filename)
-#     chans = mus_sound_chans(filename)
-#     srate = mus_sound_srate(filename)
-#     bg = beg or 0
-#     out = np.zeros(length, dtype=np.double)
-#         
-#     mus_file_to_array(filename,channel, bg, length, out.ctypes.data_as(ctypes.POINTER(ctypes.c_double)))
-#     return out
+cpdef np.ndarray file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
+    """Return an ndarray with samples from file"""
+    length = dur or csndlib.mus_sound_framples(filename)
+    chans = csndlib.mus_sound_chans(filename)
+    srate = csndlib.mus_sound_srate(filename)
+    bg = beg or 0
+    out = np.zeros(length, dtype=np.double)
+    arr_ptr = mus_float_array.from_ndarray(out)
+
+    csndlib.mus_file_to_array(filename,channel, bg, length, arr_ptr.data)
+    return out
 #     
 # def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None): 
 #     length = dur or mus_sound_framples(filename)

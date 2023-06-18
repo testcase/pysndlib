@@ -1,5 +1,5 @@
 # pysndlib
-
+****This is updated to use cython but many things are not working as of yet.****
 
 This package provides a python wrapper around sndlib, by Bill Schottstaedt (bil@ccrma.stanford.edu)
 Sources for sndlib can be found [here](https://ccrma.stanford.edu/software/snd/sndlib/)
@@ -30,8 +30,27 @@ Change SO_NAME line to this:
 
 `SO_NAME = libsndlib.dylib`
 
+changed install and uninstall targets to following:
+
+`install: sndlib
+	$(mkinstalldirs) $(bindir)
+	$(mkinstalldirs) $(libdir)
+	$(mkinstalldirs) $(includedir)
+	$(SO_INSTALL) libsndlib.dylib $(libdir)/libsndlib.dylib
+	$(A_INSTALL) libsndlib.a $(libdir)/libsndlib.a
+	$(INSTALL) sndlib.h $(includedir)/sndlib.h
+	$(INSTALL) sndlib-config $(bindir)/sndlib-config
+	$(INSTALL) sndlib.pc $(pkgconfigdir)/sndlib.pc`
+	
+`uninstall:
+	rm -f $(libdir)/libsndlib.dylib
+	rm -f $(libdir)/libsndlib.a`
 
 
+
+
+`pip install -e .
+`
 
 ## style
 

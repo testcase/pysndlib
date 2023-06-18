@@ -1,4 +1,4 @@
-from pysndlib import *
+from pysndlib.clm import *
 
 
 def jc_reverb(lowpass=False, volume=1., amp_env = None):
