@@ -18,13 +18,16 @@ I have changed this to make sure I can keep different versions straight.
 
 
 ###run###
+
 `./configure --without-s7`
 
-###edit the makefile##
+###edit the makefile###
 
 LDSO_FLAGS line should look like this:
 
+
 `LDSO_FLAGS = -dynamic -dynamiclib -undefined suppress -flat_namespace`
+
 
 Change SO_NAME line to this:
 
