@@ -1,4 +1,5 @@
 cdef extern from "/usr/local/include/sndlib.h":
+
     ctypedef long long mus_long_t
     ctypedef int mus_header_t
     ctypedef double mus_sample_t
@@ -180,6 +181,7 @@ cdef extern from "/usr/local/include/sndlib.h":
     bint mus_is_sample_type(int n)
     bint mus_is_header_type(int n)
 
+
     mus_long_t mus_header_samples()
     mus_long_t mus_header_data_location()
     int mus_header_chans()
@@ -234,6 +236,8 @@ cdef extern from "/usr/local/include/sndlib.h":
     int mus_header_change_location(const char *filename, mus_header_t type, mus_long_t new_location)
     int mus_header_change_comment(const char *filename, mus_header_t type, const char *new_comment)
     int mus_header_change_data_size(const char *filename, mus_header_t type, mus_long_t bytes)
+    
+    #complex double mus_edot_product(complex double freq, complex double *data, mus_long_t size)
 
     #typedef void mus_header_write_hook_t(const char *filename)
     #mus_header_write_hook_t *mus_header_write_set_hook(mus_header_write_hook_t *new_hook)

@@ -3,6 +3,7 @@
 
 cimport pysndlib.csndlib as csndlib
 
+
 csndlib.mus_sound_initialize()
 
 cpdef enum Header:

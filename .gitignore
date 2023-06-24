@@ -44,6 +44,7 @@
 *.aif
 *.aiff
 *.rev
+*.sh
 venv/
 __pycache__/
 .ipynb_checkpoints/Untitled-checkpoint.ipynb

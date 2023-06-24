@@ -12,8 +12,10 @@ cdef extern from "/usr/local/include/clm.h":
     typedef mus_any* mus_any_ptr;
     typedef mus_any** mus_any_ptr_ptr;
     typedef long long mus_long_t;
-    
     """
+    
+    
+    
     
     ctypedef long long mus_long_t
     ctypedef int mus_sample_t
@@ -50,14 +52,14 @@ cdef extern from "/usr/local/include/clm.h":
     ctypedef mus_float_t (*connect_points_cb)(mus_float_t val)
     ctypedef mus_float_t (*input_cb)(void *arg, int direction)
     ctypedef bint (*analyze_cb)(void *arg, mus_float_t (*input)(void *arg1, int direction))
-    ctypedef int (*edit_cb)(void *arg)
+    ctypedef int (*edit_cb)(void *closure)
     ctypedef void (*detour_cb)(mus_any *ptr, mus_long_t val)
     ctypedef mus_float_t (*synthesize_cb)(void *arg)
 
     void mus_initialize()
 
     int mus_make_generator_type()
-
+    
 
 
     mus_any_class *mus_generator_class(mus_any *ptr)
@@ -433,6 +435,7 @@ cdef extern from "/usr/local/include/clm.h":
     int mus_env_breakpoints(mus_any *gen)     # /* for Snd */
     mus_float_t mus_env_any(mus_any *e, mus_float_t (*connect_points)(mus_float_t val))
     mus_float_t (*mus_env_function(mus_any *g))(mus_any *gen)
+
 
     mus_any *mus_make_pulsed_env(mus_any *e, mus_any *p)
     bint mus_is_pulsed_env(mus_any *ptr)

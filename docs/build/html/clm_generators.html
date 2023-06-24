@@ -1,0 +1,828 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>CLM Generators &#8212; pysndlib 0.0.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'clm_generators';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CLM Utility Functions" href="clm_utility_functions.html" />
+    <link rel="prev" title="mus_any" href="mus_any.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysndlib 0.0.6 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">mus_any</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Init</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/clm_generators.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CLM Generators</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oscil">oscil</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_oscil"><code class="docutils literal notranslate"><span class="pre">make_oscil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.oscil"><code class="docutils literal notranslate"><span class="pre">oscil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_oscil"><code class="docutils literal notranslate"><span class="pre">is_oscil()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oscil-bank">oscil_bank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_oscil_bank"><code class="docutils literal notranslate"><span class="pre">make_oscil_bank()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.oscil_bank"><code class="docutils literal notranslate"><span class="pre">oscil_bank()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_oscil_bank"><code class="docutils literal notranslate"><span class="pre">is_oscil_bank()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#env">env</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_env"><code class="docutils literal notranslate"><span class="pre">make_env()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.env"><code class="docutils literal notranslate"><span class="pre">env()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_env"><code class="docutils literal notranslate"><span class="pre">is_env()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-pass">all_pass</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_all_pass"><code class="docutils literal notranslate"><span class="pre">make_all_pass()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.all_pass"><code class="docutils literal notranslate"><span class="pre">all_pass()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_all_pass"><code class="docutils literal notranslate"><span class="pre">is_all_pass()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="clm-generators">
+<h1>CLM Generators<a class="headerlink" href="#clm-generators" title="Permalink to this heading">#</a></h1>
+<section id="oscil">
+<h2>oscil<a class="headerlink" href="#oscil" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.make_oscil">
+<span class="sig-name descname"><span class="pre">make_oscil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_oscil" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a new oscil (sinewave) generator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Frequency in Hz</p></li>
+<li><p><strong>initial_phase</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Initial phase in radians</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>oscil gen</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.oscil">
+<span class="sig-name descname"><span class="pre">oscil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.oscil" title="Permalink to this definition">#</a></dt>
+<dd><p>Return next sample from oscil gen: val = sin(phase + pm); phase += (freq + fm)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – oscil gen</p></li>
+<li><p><strong>fm</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – FM input</p></li>
+<li><p><strong>pm</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – PM input</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.is_oscil">
+<span class="sig-name descname"><span class="pre">is_oscil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.is_oscil" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns True if gen is an oscil</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – Oscil gen</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Result</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="table table-left" id="id3" style="width: 60%">
+<caption><span class="caption-text">oscil properties</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mus_frequency</p></td>
+<td><p>frequency in Hz</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_phase</p></td>
+<td><p>phase in radians</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_length</p></td>
+<td><p>1 (no setable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_increment</p></td>
+<td><p>frequency in radians per sample</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example usage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mf">440.0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
+                <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>  <span class="n">oscil</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#oscildoc">sndlib all-pass</a></p>
+</div>
+</section>
+<section id="oscil-bank">
+<h2>oscil_bank<a class="headerlink" href="#oscil-bank" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.make_oscil_bank">
+<span class="sig-name descname"><span class="pre">make_oscil_bank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_oscil_bank" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a new oscil_bank generator. (freqs in radians)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>freqs</strong> – list or np.ndarray of frequencies in radians</p></li>
+<li><p><strong>phases</strong> – list or np.ndarray of initial phases in radians</p></li>
+<li><p><strong>stable</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – If it is True, oscil_bank can assume that the frequency. This is not operative</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>oscil_bank gen</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any">mus_any</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.oscil_bank">
+<span class="sig-name descname"><span class="pre">oscil_bank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.oscil_bank" title="Permalink to this definition">#</a></dt>
+<dd><p>sum an array of oscils</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – oscil_bank gen</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.is_oscil_bank">
+<span class="sig-name descname"><span class="pre">is_oscil_bank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">os</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.is_oscil_bank" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns True if gen is an oscil_bank
+:param gen: gen
+:return: Result
+:rtype: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>os</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Example usage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">phases98</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.000000</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.183194</span><span class="p">,</span> <span class="mf">0.674802</span><span class="p">,</span> <span class="mf">1.163820</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.147489</span><span class="p">,</span> <span class="mf">1.666302</span><span class="p">,</span> <span class="mf">0.367236</span><span class="p">,</span> <span class="mf">0.494059</span><span class="p">,</span> <span class="mf">0.191339</span><span class="p">,</span>
+                                <span class="mf">0.714980</span><span class="p">,</span> <span class="mf">1.719816</span><span class="p">,</span> <span class="mf">0.382307</span><span class="p">,</span> <span class="mf">1.017937</span><span class="p">,</span> <span class="mf">0.548019</span><span class="p">,</span> <span class="mf">0.342322</span><span class="p">,</span> <span class="mf">1.541035</span><span class="p">,</span> <span class="mf">0.966484</span><span class="p">,</span> <span class="mf">0.936993</span><span class="p">,</span>
+                                <span class="o">-</span><span class="mf">0.115147</span><span class="p">,</span> <span class="mf">1.638513</span><span class="p">,</span> <span class="mf">1.644277</span><span class="p">,</span> <span class="mf">0.036575</span><span class="p">,</span> <span class="mf">1.852586</span><span class="p">,</span> <span class="mf">1.211701</span><span class="p">,</span> <span class="mf">1.300475</span><span class="p">,</span> <span class="mf">1.231282</span><span class="p">,</span> <span class="mf">0.026079</span><span class="p">,</span>
+                                <span class="mf">0.393108</span><span class="p">,</span> <span class="mf">1.208123</span><span class="p">,</span> <span class="mf">1.645585</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.152499</span><span class="p">,</span> <span class="mf">0.274978</span><span class="p">,</span> <span class="mf">1.281084</span><span class="p">,</span> <span class="mf">1.674451</span><span class="p">,</span> <span class="mf">1.147440</span><span class="p">,</span><span class="mf">0.906901</span><span class="p">,</span>
+                                <span class="mf">1.137155</span><span class="p">,</span> <span class="mf">1.467770</span><span class="p">,</span> <span class="mf">0.851985</span><span class="p">,</span> <span class="mf">0.437992</span><span class="p">,</span> <span class="mf">0.762219</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.417594</span><span class="p">,</span> <span class="mf">1.884062</span><span class="p">,</span> <span class="mf">1.725160</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.230688</span><span class="p">,</span>
+                                <span class="mf">0.764342</span><span class="p">,</span> <span class="mf">0.565472</span><span class="p">,</span> <span class="mf">0.612443</span><span class="p">,</span> <span class="mf">0.222826</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.016453</span><span class="p">,</span> <span class="mf">1.527577</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.045196</span><span class="p">,</span> <span class="mf">0.585089</span><span class="p">,</span> <span class="mf">0.031829</span><span class="p">,</span>
+                                <span class="mf">0.486579</span><span class="p">,</span> <span class="mf">0.557276</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.040985</span><span class="p">,</span> <span class="mf">1.257633</span><span class="p">,</span> <span class="mf">1.345950</span><span class="p">,</span> <span class="mf">0.061737</span><span class="p">,</span> <span class="mf">0.281650</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.231535</span><span class="p">,</span> <span class="mf">0.620583</span><span class="p">,</span>
+                                <span class="mf">0.504202</span><span class="p">,</span> <span class="mf">0.817304</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.010580</span><span class="p">,</span> <span class="mf">0.584809</span><span class="p">,</span> <span class="mf">1.234045</span><span class="p">,</span> <span class="mf">0.840674</span><span class="p">,</span> <span class="mf">1.222939</span><span class="p">,</span> <span class="mf">0.685333</span><span class="p">,</span> <span class="mf">1.651765</span><span class="p">,</span>
+                                <span class="mf">0.299738</span><span class="p">,</span> <span class="mf">1.890117</span><span class="p">,</span> <span class="mf">0.740013</span><span class="p">,</span> <span class="mf">0.044764</span><span class="p">,</span> <span class="mf">1.547307</span><span class="p">,</span> <span class="mf">0.169892</span><span class="p">,</span> <span class="mf">1.452239</span><span class="p">,</span> <span class="mf">0.352220</span><span class="p">,</span> <span class="mf">0.122254</span><span class="p">,</span>
+                                <span class="mf">1.524772</span><span class="p">,</span> <span class="mf">1.183705</span><span class="p">,</span> <span class="mf">0.507801</span><span class="p">,</span> <span class="mf">1.419950</span><span class="p">,</span> <span class="mf">0.851259</span><span class="p">,</span> <span class="mf">0.008092</span><span class="p">,</span> <span class="mf">1.483245</span><span class="p">,</span> <span class="mf">0.608598</span><span class="p">,</span> <span class="mf">0.212267</span><span class="p">,</span>
+                                <span class="mf">0.545906</span><span class="p">,</span> <span class="mf">0.255277</span><span class="p">,</span> <span class="mf">1.784889</span><span class="p">,</span> <span class="mf">0.</span> <span class="mi">270552</span><span class="p">,</span> <span class="mf">1.164997</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.083981</span><span class="p">,</span> <span class="mf">0.200818</span><span class="p">,</span> <span class="mf">1.204088</span><span class="p">]</span>
+
+        <span class="n">freq</span> <span class="o">=</span> <span class="mf">10.0</span>
+        <span class="n">dur</span> <span class="o">=</span> <span class="mf">5.0</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">98</span>
+
+        <span class="n">samps</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">dur</span> <span class="o">*</span> <span class="mi">44100</span><span class="p">)</span>
+        <span class="n">onedivn</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">phases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">phases</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">.5</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">off</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="mf">.5</span> <span class="o">-</span> <span class="n">phases98</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">/</span> <span class="n">dur</span> <span class="o">/</span> <span class="mi">44100</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">hz2radians</span><span class="p">(</span><span class="n">freq</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">freqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">off</span>
+
+        <span class="n">ob</span> <span class="o">=</span> <span class="n">make_oscil_bank</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span> <span class="n">phases</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span> <span class="c1">#get rid of the distracting initial click</span>
+                <span class="n">nada</span> <span class="o">=</span> <span class="n">oscil_bank</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span> <span class="c1"># added in this assignment because otherwise was printing output</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">samps</span><span class="p">):</span>
+                <span class="n">outa</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">onedivn</span> <span class="o">*</span> <span class="n">oscil_bank</span><span class="p">(</span><span class="n">ob</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#oscildoc">sndlib all-pass</a></p>
+</div>
+</section>
+<section id="env">
+<h2>env<a class="headerlink" href="#env" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.make_env">
+<span class="sig-name descname"><span class="pre">make_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">envelope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_env" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a new envelope generator.  ‘envelope’ is a list/array of break-point pairs. To create the envelope, these points are offset by ‘offset’, scaled by ‘scaler’, and mapped over the time interval defined by
+either ‘duration’ (seconds) or ‘length’ (samples).  If ‘base’ is 1.0, the connecting segments 
+are linear, if 0.0 you get a step function, and anything else produces an exponential connecting segment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>envelope</strong> – List or np.ndarry of breakpoint pairs</p></li>
+<li><p><strong>scaler</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Scaler on every y value (before offset is added)</p></li>
+<li><p><strong>duration</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – duration in seconds</p></li>
+<li><p><strong>offset</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – value added to every y value</p></li>
+<li><p><strong>base</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – type of connecting line between break-points</p></li>
+<li><p><strong>length</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – duration in samples</p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p>env gen</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any">mus_any</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.env">
+<span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.env" title="Permalink to this definition">#</a></dt>
+<dd><p>Next sample from envelope generator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – env gen
+:return: env output
+:rtype: float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.is_env">
+<span class="sig-name descname"><span class="pre">is_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.is_env" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns True if gen is an env
+:param gen: gen
+:return: Result
+:rtype: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="table table-left" id="id4" style="width: 60%">
+<caption><span class="caption-text">env properties</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mus_location</p></td>
+<td><p>number of calls so far on this env</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_increment</p></td>
+<td><p>base</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_data</p></td>
+<td><p>original breakpoint list</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_scaler</p></td>
+<td><p>scaler</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_offset</p></td>
+<td><p>offset</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_length</p></td>
+<td><p>duration in samples</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_channels</p></td>
+<td><p>current position in the break-point list</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example usage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mf">440.0</span><span class="p">)</span>
+        <span class="n">ampf</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">44100</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
+                <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>  <span class="n">env</span><span class="p">(</span><span class="n">ampf</span><span class="p">)</span><span class="o">*</span><span class="n">oscil</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a href="#id6"><span class="problematic" id="id7">`sndlib env https://ccrma.stanford.edu/software/snd/snd/sndclm.html#envdoc&gt;`_</span></a></p>
+</div>
+</section>
+<section id="all-pass">
+<h2>all_pass<a class="headerlink" href="#all-pass" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.make_all_pass">
+<span class="sig-name descname"><span class="pre">make_all_pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedforward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Interp.NONE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_all_pass" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a new allpass filter (a delay line with a scalers on both the feedback and the feedforward). If length will be changing at run-time, max-size sets its maximum length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feedback</strong> (<em>float</em>) – Scaler on feedback</p></li>
+<li><p><strong>feedforward</strong> (<em>float</em>) – Scaler on input</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Length in samples of the delay line</p></li>
+<li><p><strong>initial_contents</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>) – Delay line’s initial values, defaults to None</p></li>
+<li><p><strong>initial_element</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Delay line’s initial element, defaults to 0.0</p></li>
+<li><p><strong>max_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Maximum delay size in case the delay changes, defaults to None</p></li>
+<li><p><strong>interp_type</strong> (<em>Optional</em><em>[</em><em>Interp</em><em>]</em>) – Interpolation type, defaults to Interp.NONE</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new allpass filter</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any">mus_any</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.all_pass">
+<span class="sig-name descname"><span class="pre">all_pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.all_pass" title="Permalink to this definition">#</a></dt>
+<dd><p>All-pass filter insig value, pm changes the delay length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – </p></li>
+<li><p><strong>insig</strong> (<em>float</em>) – </p></li>
+<li><p><strong>pm</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.is_all_pass">
+<span class="sig-name descname"><span class="pre">is_all_pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.is_all_pass" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns True if gen is an all_pass</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gen</strong> (<a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any" title="pysndlib.clm.mus_any"><em>mus_any</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="table table-left" id="id5" style="width: 60%">
+<caption><span class="caption-text">all_pass properties</span><a class="headerlink" href="#id5" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mus_length</p></td>
+<td><p>length of delay</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_order</p></td>
+<td><p>same as mus-length</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_data</p></td>
+<td><p>delay line itself (no setable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_feedback</p></td>
+<td><p>feedback scaler</p></td>
+</tr>
+<tr class="row-even"><td><p>mus_feedforward</p></td>
+<td><p>feedforward scaler</p></td>
+</tr>
+<tr class="row-odd"><td><p>mus_interp-type</p></td>
+<td><p>interpolation choice (no setable)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example usage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">alp</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">seconds2samples</span><span class="p">(</span><span class="mf">0.4</span><span class="p">))</span>
+        <span class="n">osc</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mf">440.0</span><span class="p">)</span>
+        <span class="n">ampf</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mi">4410</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">88200</span><span class="p">):</span>
+                <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">all_pass</span><span class="p">(</span><span class="n">alp</span><span class="p">,</span> <span class="n">env</span><span class="p">(</span><span class="n">ampf</span><span class="p">)</span> <span class="o">*</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc</span><span class="p">))))</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#all-passdoc">sndlib all-pass</a></p>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mus_any.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mus_any</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="clm_utility_functions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CLM Utility Functions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oscil">oscil</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_oscil"><code class="docutils literal notranslate"><span class="pre">make_oscil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.oscil"><code class="docutils literal notranslate"><span class="pre">oscil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_oscil"><code class="docutils literal notranslate"><span class="pre">is_oscil()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#oscil-bank">oscil_bank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_oscil_bank"><code class="docutils literal notranslate"><span class="pre">make_oscil_bank()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.oscil_bank"><code class="docutils literal notranslate"><span class="pre">oscil_bank()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_oscil_bank"><code class="docutils literal notranslate"><span class="pre">is_oscil_bank()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#env">env</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_env"><code class="docutils literal notranslate"><span class="pre">make_env()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.env"><code class="docutils literal notranslate"><span class="pre">env()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_env"><code class="docutils literal notranslate"><span class="pre">is_env()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-pass">all_pass</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_all_pass"><code class="docutils literal notranslate"><span class="pre">make_all_pass()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.all_pass"><code class="docutils literal notranslate"><span class="pre">all_pass()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_all_pass"><code class="docutils literal notranslate"><span class="pre">is_all_pass()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Todd Ingalls
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023, Todd Ingalls.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

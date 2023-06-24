@@ -1,7 +1,7 @@
 from setuptools import Extension, setup
 from Cython.Build import cythonize
 import Cython.Compiler.Options
-#Cython.Compiler.Options.annotate = True
+Cython.Compiler.Options.annotate = True
 import numpy
 
 extensions = [
@@ -18,7 +18,8 @@ extensions = [
 if __name__ == '__main__':
 
     setup(
-        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3str'})
+
+        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3str', 'embedsignature' : False})
     )
 
 

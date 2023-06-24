@@ -545,29 +545,29 @@ from pysndlib.jcrev import jc_reverb
 # # 
 # # 
 # # 
-def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ve=[0,1,100,1], ae=[0,0,25,1,75,1,100,0]):
-    start = seconds2samples(beg)
-    end = start + seconds2samples(dur)
-    ampf = make_env(ae, scaler=amp, duration=dur)
-    frq0 = hz2radians(f0)
-    frq1 = hz2radians(f1)
-    frq2 = hz2radians(f2)
-    foflen = 100 if CLM.srate == 22050 else 200
-    vibr = make_oscil(6)
-    vibenv = make_env(ve , scaler=vib, duration=dur)
-    win_freq = (2 * math.pi) / foflen
-    foftab = np.zeros(foflen)
-
-    wt0 = make_wave_train(frq, foftab)
-
-    for i in range(foflen):
-        #this is not the pulse shape used by B&R
-        foftab[i] = ((a0 * math.sin(i*frq0)) + (a1 * math.sin(i*frq1)) +
-                    (a2 * math.sin(i*frq2))) * .5 * (1.0 - math.cos(i * win_freq))
-    
-    for i in range(start, end):
-        outa(i, env(ampf) * wave_train(wt0, env(vibenv) * oscil(vibr)))  
-
+# def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ve=[0,1,100,1], ae=[0,0,25,1,75,1,100,0]):
+#     start = seconds2samples(beg)
+#     end = start + seconds2samples(dur)
+#     ampf = make_env(ae, scaler=amp, duration=dur)
+#     frq0 = hz2radians(f0)
+#     frq1 = hz2radians(f1)
+#     frq2 = hz2radians(f2)
+#     foflen = 100 if CLM.srate == 22050 else 200
+#     vibr = make_oscil(6)
+#     vibenv = make_env(ve , scaler=vib, duration=dur)
+#     win_freq = (2 * math.pi) / foflen
+#     foftab = np.zeros(foflen)
+# 
+#     wt0 = make_wave_train(frq, foftab)
+# 
+#     for i in range(foflen):
+#         #this is not the pulse shape used by B&R
+#         foftab[i] = ((a0 * math.sin(i*frq0)) + (a1 * math.sin(i*frq1)) +
+#                     (a2 * math.sin(i*frq2))) * .5 * (1.0 - math.cos(i * win_freq))
+#     
+#     for i in range(start, end):
+#         outa(i, env(ampf) * wave_train(wt0, env(vibenv) * oscil(vibr)))  
+#
 # with Sound(play=True):
 #     fofins(0, 1, 270, .2, .001, 730, .6, 1090, .3, 2440, .1) # "Ahh"
 #
@@ -730,37 +730,37 @@ def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ve=[0,1,100,1], ae=[
 # 
 # #callable for fucntion callback tests?
 # 
-def flux(start, file, frequency, combs0, combs1, scaler=.99, comb_len=32):
-    beg = seconds2samples(start)
-    end = beg + clm_length(file)
-    num_combs0 = len(combs0)
-    num_combs1 = len(combs1)
-    cmbs0 = [None] * num_combs0
-    cmbs1 = [None] * num_combs1
-    cmbs0_scl = 1 / num_combs0
-    cmbs1_scl = 1 / num_combs1
-    osc = make_oscil(frequency)
-    rd = make_readin(file)
-    for k in range(num_combs0):
-        cmbs0[k] = make_comb(scaler, math.floor(comb_len * combs0[k]))
-    for k in range(num_combs1):
-        cmbs1[k] = make_comb(scaler, math.floor(comb_len * combs1[k]))
-
-    nc0 = make_comb_bank(cmbs0)
-    nc1 = make_comb_bank(cmbs1)
-    
-    for i in range(beg, end):
-        interp = oscil(osc)
-        x = readin(rd)
-        outa(i, (interp * comb_bank(nc0,x)) + ((1.0 - interp) * comb_bank(nc1, x)))
-        
-with Sound(play=True, scaled_to=.5, clipped=False):
-    flux(0, 'oboe.snd', 10.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6])
-    flux(2, 'flute_trill_1.wav', 4.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0])
-    flux(4, 'flute_trill_1.wav', 1.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .995, 20)
-    flux(6, 'flute_trill_1.wav', 10.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 10)
-    flux(8, 'flute_trill_1.wav', 10.0, [2.0], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 120)
-    flux(10, 'fyow.snd', .5, [1.0, 2.0, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 120)
+# def flux(start, file, frequency, combs0, combs1, scaler=.99, comb_len=32):
+#     beg = seconds2samples(start)
+#     end = beg + clm_length(file)
+#     num_combs0 = len(combs0)
+#     num_combs1 = len(combs1)
+#     cmbs0 = [None] * num_combs0
+#     cmbs1 = [None] * num_combs1
+#     cmbs0_scl = 1 / num_combs0
+#     cmbs1_scl = 1 / num_combs1
+#     osc = make_oscil(frequency)
+#     rd = make_readin(file)
+#     for k in range(num_combs0):
+#         cmbs0[k] = make_comb(scaler, math.floor(comb_len * combs0[k]))
+#     for k in range(num_combs1):
+#         cmbs1[k] = make_comb(scaler, math.floor(comb_len * combs1[k]))
+# 
+#     nc0 = make_comb_bank(cmbs0)
+#     nc1 = make_comb_bank(cmbs1)
+#     
+#     for i in range(beg, end):
+#         interp = oscil(osc)
+#         x = readin(rd)
+#         outa(i, (interp * comb_bank(nc0,x)) + ((1.0 - interp) * comb_bank(nc1, x)))
+#         
+# with Sound(play=True, scaled_to=.5, clipped=False):
+#     flux(0, 'oboe.snd', 10.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6])
+#     flux(2, 'flute_trill_1.wav', 4.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0])
+#     flux(4, 'flute_trill_1.wav', 1.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .995, 20)
+#     flux(6, 'flute_trill_1.wav', 10.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 10)
+#     flux(8, 'flute_trill_1.wav', 10.0, [2.0], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 120)
+#     flux(10, 'fyow.snd', .5, [1.0, 2.0, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .99, 120)
 # 
 # 
 # 
@@ -800,7 +800,7 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #     e = make_env(srcenv, duration=duration)
 #     inp = make_file2sample(filename)
 #     #wish python lambdas were better
-#     def reader(d): 
+#     def reader(gen, d): 
 #         nonlocal loc
 #         loc += d
 #         val =  ina(loc, inp)
@@ -813,24 +813,21 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #     
 # with Sound(play=True):
 #     src_change('pistol.snd', 0, 2, 0, [0,.5, 1, -1.5])
-#     
-# 
-# 
-# 
+#    
 # def convins(beg, dur, filt, file, size=128):
 #     start = seconds2samples(beg)
 #     end = start + seconds2samples(dur)
 #     ff = make_convolve(make_readin(file), filt, fft_size=size)
 #     for i in range(start, end):
 #         outa(i, convolve(ff))
-#         
+        
 # with Sound(play=True):
 #     convins(0, 2, [1.0, .5, .25, .125], 'oboe.snd')
 #     
 # with Sound(play=True):
-#     flt = np.zeros(10000, dtype=np.double)
+#     flt = np.zeros(100000, dtype=np.double)
 #     flt[0] = 1.0
-#     flt[9000] = .3
+#     flt[40000] = .3
 #     convins(0, 2, flt, 'pistol.snd')
 # 
 # 
@@ -847,7 +844,11 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 # # def convolve_files(file1, file2, maxamp: Optional[float]=1., outputfile='test.aif', sample_type=CLM.sample_type, header_type=CLM.header_type):
 # # sndlay just convenvience 
 # # plays sound with whatevern CLM.player is 
+# import subprocess
+# def sndplay(file):
+#     subprocess.run([CLM.player,file])
 # convolve_files('pistol.snd', 'noiseverb.aif', outputfile='pistol_conv.aif')
+# sndplay('pistol_conv.aif')
 # convolve_files('flute_trill_1.wav', 'noiseverb.aif', outputfile='flute_trill_1_conv.aif')
 # 
 # 
@@ -861,10 +862,11 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #     for i in range(st, nd):
 #         outa(i, granulate(exA))
 #         
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     granulate_sound('flute_trill_1.wav', 0, 3.0, 0., 2.0)
 #     
 #     
+# import cython
 # def grev(beg, dur, exp_amt, file, file_beg):
 #     fil = make_file2sample(file)
 #     ctr = file_beg
@@ -872,7 +874,10 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #     # function run. this is less efficient with how i have implemented callbacks
 #     # than defining in make_granulate. something to look at in future
 #     #TODO Add ability to change callback functionin granulate function
-#     def reader(d):
+#     def reader(gen, d):
+#         print(gen)
+#        #  g = cython.cast(mus_any, gen)
+#         print(g)
 #         nonlocal fil
 #         nonlocal ctr
 #         inval = file2sample(fil, ctr, 0)
@@ -895,21 +900,30 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #             loc -= 1
 #         yield inval
 #         
+#         
+#         
 # def grev(beg, dur, exp_amt, file, file_beg):
 #     fil = make_file2sample(file)
 #     ctr = file_beg
 #     reader = read_backwards(fil, ctr)
 #     exA = make_granulate(lambda d : next(reader, 0.0) , exp_amt) # in this example direction is ignored
+#     
 #     for i in range(beg, beg+dur):
 #         outa(i, granulate(exA))
-#             
+# #             
 # with Sound(play=True):
-#     grev(0, 100000, 2.0, 'pistol.snd', 40000)    
+#     grev(0, 100000, 2.0, 'flute_trill_1.wav', 40000)    
 #     
+# # 
 # 
-# with Sound(play=True):
+# 
+# 
+# with Sound(play=True, statistics= True):
 #     forward = True
 #     rd = make_readin('flute_trill_1.wav')
+#     #         
+#     def reader(d): 
+#         return readin(rd)
 #     def grain_edit(g):
 #         forward = True
 #         grain = g.mus_data
@@ -917,33 +931,34 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #         if forward:
 #             forward = False
 #             tmp = np.flip(grain)
-#             np.copyto(grain, tmp)# note the use of copy to here
+#             g.mus_data = tmp# note the use of copy to here
 #         return length
 #     
-#     grn = make_granulate(rd, edit=grain_edit)  
+#     grn = make_granulate(reader, edit=grain_edit, hop=.1, length=.3)  
 #     for i in range(0,rd.mus_length):
 #         outa(i, granulate(grn))
-# 
-# 
+
 # 
 # 
 # ## This is different than the sndclm examples
 # ## I am having difficulty with the resynthesize callback
 # ## but this example uses the edit callback to filter 
 # ## out amps below .1 
-# 
+# # 
+# import cython
 # def pvedit(gen):
 #     length = gen.mus_length
 #     pvamps = phase_vocoder_amps(gen)
-#     tmp = np.where(pvamps > .1, pvamps, 0.0)
+#     tmp = pvamps
 #     np.copyto(pvamps, tmp)
 #     return length
 # 
 # with Sound(statistics=True, play=True):
-#     pv = make_phase_vocoder(make_readin("oboe.snd"), 512, 4, 128, 1.0, edit=pvedit)
+#     pv = make_phase_vocoder(make_readin('flute_trill_1.wav'), 512, 4, 128, 1.0, edit=pvedit)
 #     for i in range(0, 44100):
 #         outa(i, phase_vocoder(pv))
-# 
+
+# # 
 # 
 # 
 # 
@@ -968,28 +983,8 @@ with Sound(play=True, scaled_to=.5, clipped=False):
 #       
 
 
+# en = make_env(np.array([0.0, 0.0, 1.0, 1.0]), length=100)
+# for i in range(100):
+#     print(env(en))
 
-#     for i in range(beg, end):
-#         ax = oscil(spacing_cos)
-#         outa(i, (oscil(carrier_sin) * oscil(spacing_sin) * polynomial(sin_coeffs, ax)) -
-#                 (oscil(carrier_cos) * polynomial(cos_coeffs, ax)))
 
-# 
-# a = np.array([ -0.7,  -0.9 ,  9.4,   1.2, -24.,    0.,   16. ], dtype=np.double)
-# print(a)
-#   
-# b = polynomial(a, .3)
-# print(b)
-#cpdef cython.double polynomial(coeffs, x: cython.double ):
-  #  mus_float_t mus_polynomial(mus_float_t *coeffs, mus_float_t x, int ncoeffs)
-
-# sin_coeffs = partials2polynomial([2,.2,3,.3,6,.5], Polynomial.SECOND_KIND)
-# print(type(sin_coeffs))
-# cos_coeffs = partials2polynomial([2,.2,3,.3,6,.5], Polynomial.FIRST_KIND)
-# c = make_oscil(1)
-# d  = [2,.2,3,.3,6,.5]
-# for i in range(3):
-#     v = oscil(c)
-#     polynomial(sin_coeffs,v  )
-
-#print(chebyshev_t_sum(.2, [.1, -.2, .3, .9]))
