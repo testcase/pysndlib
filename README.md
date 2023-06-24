@@ -17,11 +17,11 @@ I have changed this to make sure I can keep different versions straight.
 
 
 
-###run###
+### run ###
 
 `./configure --without-s7`
 
-###edit the makefile###
+### edit the makefile ###
 
 LDSO_FLAGS line should look like this:
 
