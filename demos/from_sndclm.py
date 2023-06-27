@@ -1068,3 +1068,122 @@ from pysndlib.jcrev import jc_reverb
 
 #     
 
+
+# # this will generate a sound file with two sine waves
+# # if will play after rendering using CLM.player
+# # clipped is False which means it does not clip the signal at -1 to 1
+# # scaled_to with normalize amplitude to .5
+# # if clipped was True (the default) the signal would be clipped first and then scaled
+# # which gives a very different output in this example
+# with Sound(play=True, statistics=True, scaled_to=.5, clipped=False):
+#     osc1 = make_oscil(330)
+#     osc2 = make_oscil(500)
+#     for i in range(44100):
+#         outa(i, oscil(osc1) + oscil(osc2))
+
+
+
+# this example shows writing to an nd.nparray. 
+
+
+
+
+# 
+
+from matplotlib import pyplot as plt
+
+def plot_mono_soundfile(filename):
+    y, _ = file2ndarray(filename)
+    plt.figure(figsize=(6,6))
+    plt.plot(y[0], color='gray')
+    plt.tight_layout()
+    plt.show()
+
+
+
+def bad_mono_rev1(volume=1.):
+    ap1 = allpass1 = make_all_pass(-.9, .9, 1051)
+    ap2 = allpass2 = make_all_pass(-.9, .9, 1207)
+    ap3 = allpass3 = make_all_pass(-.9, .9, 1000)
+    dly = make_delay(seconds2samples(.011))
+    length = clm_length(CLM.reverb)
+    
+    apb = make_all_pass_bank([ap1, ap2, ap3])
+    
+    for i in range(length):
+        outa(i, delay(dly, volume * all_pass_bank(apb, ina(i, CLM.reverb))))
+        
+        
+def blip(start, dur, freq):
+    osc = make_oscil(freq)
+    beg = seconds2samples(start)
+    end = beg + seconds2samples(dur)
+    e = make_env([0.,0.0, .05, .8, .4, 0.0, 1.0, 0.0], duration=dur*.5)
+    for i in range(beg, end):
+        val = oscil(osc) * env(e)
+        outa(i, val*.6)
+        outa(i, val*.4, CLM.reverb)
+
+
+with Sound('ex2.aiff', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
+    blip(0, 1, 400)
+    blip(1, 1, 500)
+    blip(2, 1, 600)
+    blip(3, 1, 900)
+    for i in np.arange(4, 6, .333333):
+        blip(i, .5, 800)
+
+
+
+
+# 
+# 
+# def jc_reverb(lowpass=False, volume=1., amp_env = None):
+#    
+#     allpass1 = make_all_pass(-.7, .7, 1051)
+#     allpass2 = make_all_pass(-.7, .7, 337)
+#     allpass3 = make_all_pass(-.7, .7, 113)
+#     comb1 = make_comb(.742, 4799)
+#     comb2 = make_comb(.733, 4999)
+#     comb3 = make_comb(.715, 5399)
+#     comb4 = make_comb(.697, 5801)
+#     chans = clm_channels(CLM.output)
+#     
+#     length = clm_length(CLM.reverb)
+#     filts = [make_delay(seconds2samples(.013))] if chans == 1 else [make_delay(seconds2samples(.013)),make_delay(seconds2samples(.011)) ]
+#     combs = make_comb_bank([comb1, comb2, comb3, comb4])
+#     allpasses = make_all_pass_bank([allpass1,allpass2,allpass3])
+#     
+#     if lowpass or amp_env:
+#         flt = make_fir_filter(3, [.25, .5, .25]) if lowpass else None
+#         envA = make_env(amp_env, scaler=volume, duration = length / CLM.srate)
+#         
+#         if lowpass:
+#             for i in range(length):
+#                 out_bank(filts, i, (env(envA) * fir_filter(flt, comb_bank(combs, all_pass(allpasses, ina(i, CLM.reverb))))))
+#         else:
+#             for i in range(length):
+#                 out_bank(filts, i, (env(envA) * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb)))))
+#     else:
+#         if chans == 1:
+#             
+#             gen = filts[0]
+#             for i in range(length):
+#                 outa(i, delay(gen, volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb)))))
+#         else:    
+#             gen1 = filts[0]
+#             gen2 = filts[1]
+#             for i in range(length):
+#                 val = volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb))) 
+#                 outa(i, delay(gen1, val))
+#                 outb(i, delay(gen2, val))
+
+
+
+
+
+
+
+
+
+

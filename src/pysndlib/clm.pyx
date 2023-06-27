@@ -240,7 +240,7 @@ cdef class mus_any:
         cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
         if size > 0:
             self._data_ptr = cclm.mus_data(self._ptr)
-            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
             arr.data = <char*>self._data_ptr
             self._data = np.asarray(arr)       
         else:
@@ -667,7 +667,29 @@ cpdef ndarray2file(filename: str, arr: npt.NDArray[np.float64], length=None, sr=
          
 # --------------- with sound context manager ---------------- #      
 class Sound(object):
-
+    """
+    context manager which handles creating output and other options
+    
+    :param output: Can be a filename string or np.ndarray
+    :param channels: number of channels \in main output
+    :param srate:  output sampling rate 
+    :param sample_type: output sample data type
+    :param header_type: output header type 
+    :param comment: any comment to store \in the header
+    :param verbose: if True, print out some info (doesn't do anything now)
+    :param reverb: reverb instrument
+    :param reverb_data: arguments passed to the reverb (dictionary)
+    :param reverb_channels: chans \in the reverb intermediate file
+    :param revfile: reverb intermediate output file name
+    :param continue_old_file: if True, continue a previous computation
+    :param statistics: if True, print info at end of with-sound (compile time, maxamps)
+    :param scaled_to: if a number, scale the output to peak at that amp
+    :param scaled_by: is a number, scale output by that amp
+    :param play: if True, play the sound automatically
+    :param finalize: a function to call on exit from the context. should be a function that takes one argument, the name of the sound file or the ndarray 
+        used as output
+    """           
+    
     def __init__(self, output=None, 
                         channels=None, 
                         srate=None, 
@@ -685,8 +707,7 @@ class Sound(object):
                         scaled_by = False,
                         play = None,
                         clipped = None,
-                        finalize = None,
-                        ignore_output = False):
+                        finalize = None):                  
         self.output = output if output is not None else CLM.file_name
         self.channels = channels if channels is not None else CLM.channels
         self.srate = srate if srate is not None else CLM.srate
@@ -704,7 +725,6 @@ class Sound(object):
         self.scaled_by = scaled_by
         self.play = play if play is not None else CLM.play
         self.clipped = clipped if clipped is not None else CLM.clipped
-        self.ignore_output = ignore_output
         self.output_to_file = isinstance(self.output, str)
         self.reverb_to_file = self.reverb is not None and isinstance(self.output, str)
         self.old_srate = get_srate()
@@ -839,6 +859,7 @@ class Sound(object):
                 ndarray2file(self.output, arr)
             else:
                 self.output *= self.scaled_by
+       
         if self.play and self.output_to_file:
             subprocess.run([CLM.player,self.output])
         # need some safety if errors

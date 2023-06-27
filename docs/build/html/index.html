@@ -42,7 +42,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CLM Generators" href="clm_generators.html" />
+    <link rel="next" title="Sound Context Manager" href="with_sound.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -121,6 +121,7 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
@@ -294,149 +295,20 @@ document.write(`
                   
   <section id="module-pysndlib.clm">
 <span id="welcome-to-pysndlib-s-documentation"></span><h1>Welcome to pysndlib’s documentation!<a class="headerlink" href="#module-pysndlib.clm" title="Permalink to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+<span class="target" id="module-pysndlib.sndlib"></span><div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#oscil">oscil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#oscil-bank">oscil_bank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#env">env</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#pulsed-env">pulsed_env</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#table-lookup">table_lookup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#polywave">polywave</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#polyshape">polyshape</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#triangle-wave">triangle_wave</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#square-wave">square_wave</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#sawtooth-wave">sawtooth_wave</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#pulse-train">pulse_train</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#ncos">ncos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#nsin">nsin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#nrxysin">nrxysin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#nrxycos">nrxycos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#rxykcos">rxykcos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#rxyksin">rxyksin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#ssb-am">ssb_am</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#wave-train">wave_train</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#rand">rand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#rand-interp">rand_interp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#one-pole">one_pole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#one-zero">one_zero</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#two-pole">two_pole</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#two-zero">two_zero</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#formant">formant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#formant-bank">formant_bank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#firmant">firmant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#filter">filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#fir-filter">fir_filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#iir-filter">iir_filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#delay">delay</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#comb">comb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#comb-bank">comb_bank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#filtered-comb">filtered_comb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#filtered-comb-bank">filtered_comb_bank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#notch">notch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#all-pass">all_pass</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#all-pass-bank">all_pass_bank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#one-pole-all-pass">one_pole_all_pass</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#moving-average">moving_average</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#moving-max">moving_max</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#moving-norm">moving_norm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#src">src</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#convolve">convolve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#granulate">granulate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#phase-vocoder">phase_vocoder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#asymmetric-fm">asymmetric_fm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#file2sample">file2sample</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#sample2file">sample2file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#file2frample">file2frample</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#frample2file">frample2file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#readin">readin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_generators.html#locsig">locsig</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#sampling-rate">Sampling rate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#conversions">Conversions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#even-odd-multiples-and-weighting">Even/Odd multiples and weighting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#fft-and-convolution">FFT and Convolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#partials">Partials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_utility_functions.html#chebyshev">Chebyshev</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file_IO.html#pysndlib.clm.file2ndarray"><code class="docutils literal notranslate"><span class="pre">file2ndarray()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_IO.html#pysndlib.clm.ndarray2file"><code class="docutils literal notranslate"><span class="pre">ndarray2file()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.file_name"><code class="docutils literal notranslate"><span class="pre">CLM.file_name</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.srate"><code class="docutils literal notranslate"><span class="pre">CLM.srate</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.channels"><code class="docutils literal notranslate"><span class="pre">CLM.channels</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.sample_type"><code class="docutils literal notranslate"><span class="pre">CLM.sample_type</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.header_type"><code class="docutils literal notranslate"><span class="pre">CLM.header_type</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.verbose"><code class="docutils literal notranslate"><span class="pre">CLM.verbose</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.play"><code class="docutils literal notranslate"><span class="pre">CLM.play</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.statistics"><code class="docutils literal notranslate"><span class="pre">CLM.statistics</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.reverb"><code class="docutils literal notranslate"><span class="pre">CLM.reverb</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.reverb_channels"><code class="docutils literal notranslate"><span class="pre">CLM.reverb_channels</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.reverb_data"><code class="docutils literal notranslate"><span class="pre">CLM.reverb_data</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.reverb_file_name"><code class="docutils literal notranslate"><span class="pre">CLM.reverb_file_name</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.table_size"><code class="docutils literal notranslate"><span class="pre">CLM.table_size</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.buffer_size"><code class="docutils literal notranslate"><span class="pre">CLM.buffer_size</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.locsig_type"><code class="docutils literal notranslate"><span class="pre">CLM.locsig_type</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.clipped"><code class="docutils literal notranslate"><span class="pre">CLM.clipped</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.player"><code class="docutils literal notranslate"><span class="pre">CLM.player</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.output"><code class="docutils literal notranslate"><span class="pre">CLM.output</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_init.html#pysndlib.clm.CLM.delete_reverb"><code class="docutils literal notranslate"><span class="pre">CLM.delete_reverb</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clm_enums.html#pysndlib.clm.Interp"><code class="docutils literal notranslate"><span class="pre">Interp</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_enums.html#pysndlib.clm.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum"><code class="docutils literal notranslate"><span class="pre">Spectrum</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="clm_enums.html#pysndlib.clm.Polynomial"><code class="docutils literal notranslate"><span class="pre">Polynomial</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mus_any.html#pysndlib.clm.mus_any"><code class="docutils literal notranslate"><span class="pre">mus_any</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_samples"><code class="docutils literal notranslate"><span class="pre">mus_sound_samples()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_set_clipping"><code class="docutils literal notranslate"><span class="pre">mus_set_clipping()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_duration"><code class="docutils literal notranslate"><span class="pre">mus_sound_duration()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_framples"><code class="docutils literal notranslate"><span class="pre">mus_sound_framples()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_datum_size"><code class="docutils literal notranslate"><span class="pre">mus_sound_datum_size()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_data_location"><code class="docutils literal notranslate"><span class="pre">mus_sound_data_location()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_chans"><code class="docutils literal notranslate"><span class="pre">mus_sound_chans()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_srate"><code class="docutils literal notranslate"><span class="pre">mus_sound_srate()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_header_type"><code class="docutils literal notranslate"><span class="pre">mus_sound_header_type()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_sample_type"><code class="docutils literal notranslate"><span class="pre">mus_sound_sample_type()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_original_sample_type"><code class="docutils literal notranslate"><span class="pre">mus_sound_original_sample_type()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment_start"><code class="docutils literal notranslate"><span class="pre">mus_sound_comment_start()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment_end"><code class="docutils literal notranslate"><span class="pre">mus_sound_comment_end()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_length"><code class="docutils literal notranslate"><span class="pre">mus_sound_length()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_fact_samples"><code class="docutils literal notranslate"><span class="pre">mus_sound_fact_samples()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_type_specifier"><code class="docutils literal notranslate"><span class="pre">mus_sound_type_specifier()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_block_align"><code class="docutils literal notranslate"><span class="pre">mus_sound_block_align()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_bits_per_sample"><code class="docutils literal notranslate"><span class="pre">mus_sound_bits_per_sample()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_chans"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_chans()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_srate"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_srate()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_header_type"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_header_type()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_sample_type"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_sample_type()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_data_location"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_data_location()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_samples"><code class="docutils literal notranslate"><span class="pre">mus_sound_set_samples()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_header_type_name"><code class="docutils literal notranslate"><span class="pre">mus_header_type_name()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_header_type_to_string"><code class="docutils literal notranslate"><span class="pre">mus_header_type_to_string()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_name"><code class="docutils literal notranslate"><span class="pre">mus_sample_type_name()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_to_string"><code class="docutils literal notranslate"><span class="pre">mus_sample_type_to_string()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_short_name"><code class="docutils literal notranslate"><span class="pre">mus_sample_type_short_name()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment"><code class="docutils literal notranslate"><span class="pre">mus_sound_comment()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 </div>
@@ -463,11 +335,11 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="right-next"
-       href="clm_generators.html"
+       href="with_sound.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">CLM Generators</p>
+        <p class="prev-next-title">Sound Context Manager</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

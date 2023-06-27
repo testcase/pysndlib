@@ -8,12 +8,15 @@ Welcome to pysndlib's documentation!
 
 .. module:: 
     pysndlib.clm
-    
+
+.. module:: 
+    pysndlib.sndlib 
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Contents:
 
+    with_sound
     clm_generators
     clm_utility_functions
     file_IO
@@ -21,6 +24,7 @@ Welcome to pysndlib's documentation!
     clm_enums
     mus_any
     sndlib_functions
+
 
 Indices and tables
 ==================
