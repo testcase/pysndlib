@@ -20,6 +20,7 @@ release = '0.0.6'
 
 extensions = [
     'sphinx.ext.autodoc',
+    'enum_tools.autoenum',
 ]
 
 templates_path = ['_templates']
@@ -28,7 +29,7 @@ autodoc_typehints = "description"
 
 add_module_names = False
 autodoc_typehints = 'description'
-autodoc_type_aliases = {'cclm.mus_long_t' : 'int', 'cython.double' : 'float', 'mus_long_t' : 'int', 'Optional[cython.double]' : 'Optional[float]'}
+autodoc_type_aliases = {'cclm.mus_long_t' : 'int', 'cython.double' : 'float', 'mus_long_t' : 'int' }
 
 
 # -- Options for HTML output -------------------------------------------------

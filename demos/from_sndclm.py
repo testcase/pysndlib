@@ -541,6 +541,18 @@ from pysndlib.jcrev import jc_reverb
 # 
 # with Sound(play=True):
 #     shift_pitch(0, 3, 'oboe.snd', 1108.0)
+    
+
+# With Sound(Play=True):
+#     Gen1 = Make_Ssb_Am(750, 40)
+#     Gen2 = Make_Ssb_Am(700, 40)
+#     Rd = Make_Readin('Oboe.Snd')
+#     For I In Range(44100):
+#         Outa(I, .5*(Ssb_Am(Gen1, Readin(Rd)) + Ssb_Am(Gen2, Readin(Rd))))
+    
+    
+    
+    
 # # 
 # # 
 # # 
@@ -800,7 +812,7 @@ from pysndlib.jcrev import jc_reverb
 #     e = make_env(srcenv, duration=duration)
 #     inp = make_file2sample(filename)
 #     #wish python lambdas were better
-#     def reader(gen, d): 
+#     def reader(d): 
 #         nonlocal loc
 #         loc += d
 #         val =  ina(loc, inp)
@@ -983,8 +995,76 @@ from pysndlib.jcrev import jc_reverb
 #       
 
 
-# en = make_env(np.array([0.0, 0.0, 1.0, 1.0]), length=100)
-# for i in range(100):
-#     print(env(en))
+#print([hz2radians(i) for i in [400,430,490]])
 
+# with Sound(play=True):
+#     ob = make_oscil_bank([hz2radians(i) for i in [400,430,490]], [.5, .2, math.pi+.1], [.5, .3, .2])
+#     for i in range(44100*2):
+#         outa(i, oscil_bank(ob))
+
+
+
+# with Sound(play=True):
+#     gen = make_square_wave(261.0)
+#     e = make_env([0.0, .5, .5, .1, 1.0, .8], length=44100*2)
+#     for i in range(44100*2):
+#         gen.mus_width = env(e)
+#         outa(i, .5 * square_wave(gen))   
+
+
+
+
+# with Sound(play=True):
+#     gen = make_sawtooth_wave(261.0)
+#     lfo = make_oscil(.5)
+#     for i in range(44100*3):
+#         outa(i, .5 * sawtooth_wave(gen, oscil(lfo) * hz2radians(20)))    
+
+
+# with Sound(play=True):
+#     gen = make_pulse_train(100.0)
+#     e = make_env([0.0, 0.0, .5, 1.0, 1.0, 0.0], scaler=400, length=44100*3)
+#     for i in range(44100*3):
+#         outa(i, pulse_train(gen, hz2radians(env(e))))
+
+
+# with Sound(play=True):
+#     gen = make_rxykcos(440.0, r=.5, ratio=1.2)
+#     e = make_env([0.0, .5, 1.0, .0], length=44100*3, base=32)
+#     for i in range(44100*3):
+#         gen.mus_scaler = env(e)
+#         outa(i, .5 * rxykcos(gen))
+
+# with Sound(play=True):
+#     gen = make_rxykcos(440.0, r=.5, ratio=.1)
+#     e = make_env([0.0, 1.2, 1.0, .1], length=44100*3)
+#     for i in range(44100*3):
+#         gen.mus_scaler = env(e)
+#         outa(i, .5 * rxykcos(gen))
+
+
+# with Sound(play=True):
+#     r = make_rand(44100)
+#     op = make_one_zero(.2, .3)
+#     for i in range(44100):
+#         #outa(i, one_pole(op, 0.0))
+#         outa(i, one_zero(op, rand(r)))
+# 
+# 
+# with Sound(play=True):
+#     r = make_rand(44100)
+#     #op = make_two_pole(700, .1)
+#     op = make_one_pole(.1, -.3)
+#     for i in range(44100):
+#         outa(i, one_pole(op, rand(r)))
+#         #outa(i, two_pole(op, rand(r)))
+#     print(op)
+# 
+# with Sound(play=True):
+#     gen = make_sawtooth_wave(261.0)
+#     lfo = make_oscil(.5)
+#     for i in range(44100*3):
+#         outa(i, .5 * sawtooth_wave(gen, oscil(lfo) * hz2radians(20)))   
+
+#     
 

@@ -7,115 +7,167 @@ cimport pysndlib.csndlib as csndlib
 csndlib.mus_sound_initialize()
 
 cpdef enum Header:
+    """
+    file types for audio files
+    """
     UNKNOWN_HEADER, NEXT, AIFC, RIFF, RF64, BICSF, NIST, INRS, ESPS, SVX, VOC, SNDT, RAW, SMP, AVR, IRCAM, SD1, SPPACK, MUS10, HCOM, PSION, MAUD, IEEE, MATLAB, ADC, MIDI, SOUNDFONT, GRAVIS, COMDISCO, GOLDWAVE, SRFS, MIDI_SAMPLE_DUMP, DIAMONDWARE, ADF, SBSTUDIOII, DELUSION, FARANDOLE, SAMPLE_DUMP, ULTRATRACKER, YAMAHA_SY85, YAMAHA_TX16W, DIGIPLAYER, COVOX, AVI, OMF, QUICKTIME, ASF, YAMAHA_SY99, KURZWEIL_2000, AIFF, PAF, CSL, FILE_SAMP, PVF, SOUNDFORGE, TWINVQ, AKAI4, IMPULSETRACKER, KORG, NVF, CAFF, MAUI, SDIF, OGG, FLAC, SPEEX, MPEG, SHORTEN, TTA, WAVPACK, SOX, NUM_HEADERS,
 
 cpdef enum Sample:
+    """
+    numerical sample types
+    """
     UNKNOWN_SAMPLE, BSHORT, MULAW, BYTE, BFLOAT, BINT, ALAW, UBYTE, B24INT, BDOUBLE, LSHORT, LINT, LFLOAT, LDOUBLE, UBSHORT, ULSHORT, L24INT, BINTN, LINTN, BFLOAT_UNSCALED, LFLOAT_UNSCALED, BDOUBLE_UNSCALED, LDOUBLE_UNSCALED, NUM_SAMPLES,
 
 cpdef enum Error:
+    """
+    sndlib and clm errors
+    """
     NO_ERROR, NO_FREQUENCY, NO_PHASE, NO_GEN, NO_LENGTH, NO_DESCRIBE, NO_DATA, NO_SCALER, MEMORY_ALLOCATION_FAILED, CANT_OPEN_FILE, NO_SAMPLE_INPUT, NO_SAMPLE_OUTPUT, NO_SUCH_CHANNEL, NO_FILE_NAME_PROVIDED, NO_LOCATION, NO_CHANNEL, NO_SUCH_FFT_WINDOW, UNSUPPORTED_SAMPLE_TYPE, HEADER_READ_FAILED, UNSUPPORTED_HEADER_TYPE, FILE_DESCRIPTORS_NOT_INITIALIZED, NOT_A_SOUND_FILE, FILE_CLOSED, WRITE_ERROR, HEADER_WRITE_FAILED, CANT_OPEN_TEMP_FILE, INTERRUPTED, BAD_ENVELOPE, AUDIO_CHANNELS_NOT_AVAILABLE, AUDIO_SRATE_NOT_AVAILABLE, AUDIO_SAMPLE_TYPE_NOT_AVAILABLE, AUDIO_NO_INPUT_AVAILABLE, AUDIO_CONFIGURATION_NOT_AVAILABLE, AUDIO_WRITE_ERROR, AUDIO_SIZE_NOT_AVAILABLE, AUDIO_DEVICE_NOT_AVAILABLE, AUDIO_CANT_CLOSE, AUDIO_CANT_OPEN, AUDIO_READ_ERROR, AUDIO_CANT_WRITE, AUDIO_CANT_READ, AUDIO_NO_READ_PERMISSION, CANT_CLOSE_FILE, ARG_OUT_OF_RANGE, NO_CHANNELS, NO_HOP, NO_WIDTH, NO_FILE_NAME, NO_RAMP, NO_RUN, NO_INCREMENT, NO_OFFSET, NO_XCOEFF, NO_YCOEFF, NO_XCOEFFS, NO_YCOEFFS, NO_RESET, BAD_SIZE, CANT_CONVERT, READ_ERROR, NO_FEEDFORWARD, NO_FEEDBACK, NO_INTERP_TYPE, NO_POSITION, NO_ORDER, NO_COPY, CANT_TRANSLATE, NUM_ERRORS,
 
-def mus_sound_samples(file):
+cpdef csndlib.mus_long_t mus_sound_samples(file):
+    """
+    samples of sound according to header 
+    """
     return csndlib.mus_sound_samples(file)
     
-def mus_set_clipping(new_value):
+cpdef mus_set_clipping(new_value):
     return csndlib.mus_set_clipping(new_value)
     
-def mus_sound_samples(file: str):
-    return csndlib.mus_sound_samples(file)
+cpdef float mus_sound_duration(file: str):
+    """
+     sound duration in seconds
+    """
+    return csndlib.mus_sound_duration(file)   
 
-def mus_sound_framples(file: str):
+cpdef csndlib.mus_long_t mus_sound_framples(file: str):
+    """
+    samples per channel
+    """
     return csndlib.mus_sound_framples(file)
+    
+cpdef int mus_bytes_per_sample(samp_type: mus_sample_t):
+    """
+    bytes per sample
+    """
+    return csndlib.mus_bytes_per_sample(samp_type) 
    
-def mus_sound_datum_size(file: str):
+cpdef int mus_sound_datum_size(file: str):
+    """
+    bytes per sample
+    """
     return csndlib.mus_sound_datum_size(file) 
 
-def mus_sound_data_location(file: str):
+cpdef csndlib.mus_long_t mus_sound_data_location(file: str):
+    """
+    location of first sample (bytes)
+    """
     return csndlib.mus_sound_data_location(file) 
     
-def mus_sound_chans(file: str):
+cpdef int mus_sound_chans(file: str):
+    """
+    number of channels (samples are interleaved)
+    """
     return csndlib.mus_sound_chans(file)     
 
-def mus_sound_srate(file: str):
+cpdef float mus_sound_srate(file: str):
+    """
+    sampling rate
+    """
     return csndlib.mus_sound_srate(file)     
 
-def mus_sound_header_type(file: str):
+cpdef csndlib.mus_header_t mus_sound_header_type(file: str):
+    """
+    header type (aiff etc) 
+    """
     return csndlib.mus_sound_header_type(file)     
 
-def mus_sound_sample_type(file: str):
+cpdef csndlib.mus_sample_t mus_sound_sample_type(file: str):
+    """
+    sample type (alaw etc)
+    """
     return csndlib.mus_sound_sample_type(file)  
 
-def mus_sound_original_sample_type(file: str):
+cpdef int mus_sound_original_sample_type(file: str):
     return csndlib.mus_sound_original_sample_type(file)  
 
-def mus_sound_comment_start(file: str):
+cpdef csndlib.mus_long_t mus_sound_comment_start(file: str):
+    """
+    comment start (bytes) if any
+    """
     return csndlib.mus_sound_comment_start(file)  
 
-def mus_sound_comment_end(file: str):
+cpdef csndlib.mus_long_t mus_sound_comment_end(file: str):
+    """
+    comment end (bytes)
+    """
     return csndlib.mus_sound_comment_end(file)  
 
-def mus_sound_length(file: str):
+cpdef csndlib.mus_long_t mus_sound_length(file: str):
+    """
+    true file length in bytes 
+    """
     return csndlib.mus_sound_length(file)  
     
-def mus_sound_fact_samples(file: str):
+cpdef int mus_sound_fact_samples(file: str):
     return csndlib.mus_sound_fact_samples(file)  
 # 
 # def mus_sound_write_date(str: file):
 #     return csndlib.mus_sound_write_date(file)  
 
-def mus_sound_type_specifier(file: str):
+cpdef int mus_sound_type_specifier(file: str):
+    """
+    original header type identifier 
+    """
     return csndlib.mus_sound_type_specifier(file)  
 
-def mus_sound_type_specifier(file: str):
-    return csndlib.mus_sound_type_specifier(file)  
     
-def mus_sound_block_align(file: str):
+cpdef int mus_sound_block_align(file: str):
     return csndlib.mus_sound_block_align(file)   
     
-def mus_sound_bits_per_sample(file: str):
+cpdef int mus_sound_bits_per_sample(file: str):
+    """
+    bits per sample
+    """
     return csndlib.mus_sound_bits_per_sample(file)   
 
-def mus_sound_set_chans(file: str, val: int):
+cpdef int mus_sound_set_chans(file: str, val: int):
     return csndlib.mus_sound_set_chans(file, val)   
 
-def mus_sound_set_srate(file: str, val: int):
+cpdef int mus_sound_set_srate(file: str, val: int):
     return csndlib.mus_sound_set_srate(file, val) 
 
-def mus_sound_set_header_type(file: str, mus_header: mus_header_t):
+cpdef csndlib.mus_header_t mus_sound_set_header_type(file: str, mus_header: csndlib.mus_header_t):
     return csndlib.mus_sound_set_header_type(file, mus_header) 
 
-def mus_sound_set_sample_type(file: str, mus_sample: mus_sample_t):
+cpdef csndlib.mus_sample_t mus_sound_set_sample_type(file: str, mus_sample: csndlib.mus_sample_t):
     return csndlib.mus_sound_set_sample_type(file, mus_sample) 
 
-def mus_sound_set_data_location(file: str, val: mus_long_t):
+cpdef csndlib.mus_long_t mus_sound_set_data_location(file: str, val: csndlib.mus_long_t):
     return csndlib.mus_sound_set_data_location(file, val) 
 
-def mus_sound_set_samples(file: str, val: mus_long_t):
+cpdef csndlib.mus_long_t mus_sound_set_samples(file: str, val: csndlib.mus_long_t):
     return csndlib.mus_sound_set_samples(file, val) 
 
-def mus_header_type_name(header_type: mus_header_t):
+cpdef str mus_header_type_name(header_type: csndlib.mus_header_t):
     return csndlib.mus_header_type_name(header_type) 
 
-def mus_header_type_to_string(header_type: mus_header_t):
+cpdef str mus_header_type_to_string(header_type: csndlib.mus_header_t):
     return csndlib.mus_header_type_to_string(header_type) 
 
-def mus_sample_type_name(samp_type: mus_sample_t):
+cpdef str  mus_sample_type_name(samp_type: csndlib.mus_sample_t):
     return csndlib.mus_sample_type_name(samp_type) 
 
-def mus_sample_type_to_string(samp_type: mus_sample_t):
+cpdef str mus_sample_type_to_string(samp_type: csndlib.mus_sample_t):
     return csndlib.mus_sample_type_to_string(samp_type) 
 
-def mus_sample_type_short_name(samp_type: mus_sample_t):
+cpdef str mus_sample_type_short_name(samp_type: csndlib.mus_sample_t):
     return csndlib.mus_sample_type_short_name(samp_type) 
 
-def mus_sound_comment(file: str):
+cpdef str mus_sound_comment(file: str):
     return csndlib.mus_sound_comment(file) 
     
-def mus_bytes_per_sample(samp_type: mus_sample_t):
-    return csndlib.mus_bytes_per_sample(samp_type) 
 
-def mus_sound_duration(file: str):
-    return csndlib.mus_sound_duration(file)   
+
 
 
 # MUS_EXPORT int mus_sound_override_header(const char *arg, int srate, int chans, mus_sample_t samp_type, mus_header_t type, mus_long_t location, mus_long_t size);

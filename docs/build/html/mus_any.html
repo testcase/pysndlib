@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>mus_any &#8212; pysndlib 0.0.6 documentation</title>
+    <title>CLM Generator Properties &#8212; pysndlib 0.0.6 documentation</title>
   
   
   
@@ -43,8 +42,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'mus_any';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CLM Generators" href="clm_generators.html" />
-    <link rel="prev" title="Welcome to pysndlib’s documentation!" href="index.html" />
+    <link rel="next" title="Sndlib Functions" href="sndlib_functions.html" />
+    <link rel="prev" title="CLM Enums" href="clm_enums.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -123,13 +122,16 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">mus_any</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
 
 </ul>
 
@@ -267,7 +269,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>mus_any</h1>
+    <h1>CLM Generator Properties</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -309,13 +311,13 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="mus-any">
-<h1>mus_any<a class="headerlink" href="#mus-any" title="Permalink to this heading">#</a></h1>
+  <section id="clm-generator-properties">
+<h1>CLM Generator Properties<a class="headerlink" href="#clm-generator-properties" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mus_any</span></span><a class="headerlink" href="#pysndlib.clm.mus_any" title="Permalink to this definition">#</a></dt>
-<dd><p>A wrapper class for mus_any pointers in C</p>
-<p>Instances of this class have the following properties, which may be 
+<dd><p>a wrapper class for mus_any pointers in c</p>
+<p>instances of this class have the following properties, which may be 
 used if supported by the type of generator used to make the instance:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any.mus_channel">
@@ -350,7 +352,7 @@ used if supported by the type of generator used to make the instance:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any.mus_frequency">
 <span class="sig-name descname"><span class="pre">mus_frequency</span></span><a class="headerlink" href="#pysndlib.clm.mus_any.mus_frequency" title="Permalink to this definition">#</a></dt>
-<dd><p>frequency (Hz), float</p>
+<dd><p>frequency (hz), float</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -368,7 +370,7 @@ used if supported by the type of generator used to make the instance:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any.mus_interp_type">
 <span class="sig-name descname"><span class="pre">mus_interp_type</span></span><a class="headerlink" href="#pysndlib.clm.mus_any.mus_interp_type" title="Permalink to this definition">#</a></dt>
-<dd><p>Interpolation type (Inter.LINEAR, etc), Interp
+<dd><p>interpolation type (inter.linear, etc), interp
 not setable</p>
 </dd></dl>
 
@@ -417,15 +419,15 @@ not setable</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any.mus_xcoeffs">
 <span class="sig-name descname"><span class="pre">mus_xcoeffs</span></span><a class="headerlink" href="#pysndlib.clm.mus_any.mus_xcoeffs" title="Permalink to this definition">#</a></dt>
-<dd><p>x (input) coefficient, float
-not settable</p>
+<dd><p>x (input) coefficient, np.ndarray
+not setable</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_any.mus_ycoeffs">
 <span class="sig-name descname"><span class="pre">mus_ycoeffs</span></span><a class="headerlink" href="#pysndlib.clm.mus_any.mus_ycoeffs" title="Permalink to this definition">#</a></dt>
-<dd><p>y (output, feedback) coefficient, float
-not settable</p>
+<dd><p>y (output, feedback) coefficient, np.ndarray
+not setable</p>
 </dd></dl>
 
 </dd></dl>
@@ -454,20 +456,20 @@ not settable</p>
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="clm_enums.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Welcome to pysndlib’s documentation!</p>
+        <p class="prev-next-title">CLM Enums</p>
       </div>
     </a>
     <a class="right-next"
-       href="clm_generators.html"
+       href="sndlib_functions.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">CLM Generators</p>
+        <p class="prev-next-title">Sndlib Functions</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

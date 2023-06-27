@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>File IO &#8212; pysndlib 0.0.6 documentation</title>
   
@@ -43,7 +42,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'file_IO';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CLM Init" href="clm_init.html" />
+    <link rel="next" title="CLM Initialization" href="clm_init.html" />
     <link rel="prev" title="CLM Utility Functions" href="clm_utility_functions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -123,14 +122,15 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="mus_any.html">mus_any</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">File IO</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM generator properties</a></li>
 </ul>
 
     </div>
@@ -300,21 +300,21 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.file2ndarray">
 <span class="sig-name descname"><span class="pre">file2ndarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.file2ndarray" title="Permalink to this definition">#</a></dt>
-<dd><p>Return an ndarray with samples from file and the sample rate of the data</p>
+<dd><p>return an ndarray with samples from file and the sample rate of the data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Filename</p></li>
-<li><p><strong>channel</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – If None, will read all channels, otherwise just channel specified</p></li>
-<li><p><strong>beg</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Beginning positions to read in samples</p></li>
-<li><p><strong>dur</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Duration in samples to read</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – filename</p></li>
+<li><p><strong>channel</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – if None, will read all channels, otherwise just channel specified</p></li>
+<li><p><strong>beg</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – beginning positions to read in samples</p></li>
+<li><p><strong>dur</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – duration in samples to read</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple of np.ndarray and sample rate</p>
+<dd class="field-even"><p>tuple of np.ndarray and sample rate</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,20 +322,20 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.ndarray2file">
 <span class="sig-name descname"><span class="pre">ndarray2file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Sample.BFLOAT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Header.AIFC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ndarray2file" title="Permalink to this definition">#</a></dt>
-<dd><p>Write an ndarray of samples to file</p>
+<dd><p>write an ndarray of samples to file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – Filename</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – name of file</p></li>
 <li><p><strong>arr</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – np.ndarray of samples</p></li>
-<li><p><strong>length</strong> – Length of samples to write. If None write all</p></li>
-<li><p><strong>sr</strong> – Sample rate of file to write</p></li>
-<li><p><strong>sample_type</strong> (<em>Optional</em><em>[</em><em>sndlib.Sample</em><em>]</em>) – Type of sample type to use. Defaults to CLM.sample_type</p></li>
-<li><p><strong>header_type</strong> (<em>Optional</em><em>[</em><em>sndlib.Header</em><em>]</em>) – Header of sample type to use. Defaults to CLM.header_type</p></li>
+<li><p><strong>length</strong> – length of samples to write. if None write all</p></li>
+<li><p><strong>sr</strong> – sample rate of file to write</p></li>
+<li><p><strong>sample_type</strong> (<em>Optional</em><em>[</em><em>sndlib.sample</em><em>]</em>) – type of sample type to use. defaults to clm.sample_type</p></li>
+<li><p><strong>header_type</strong> (<em>Optional</em><em>[</em><em>sndlib.header</em><em>]</em>) – header of sample type to use. defaults to clm.header_type</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Length in samples of file</p>
+<dd class="field-even"><p>length in samples of file</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -379,7 +379,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">CLM Init</p>
+        <p class="prev-next-title">CLM Initialization</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

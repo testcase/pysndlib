@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -120,13 +119,16 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="mus_any.html">mus_any</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
 
 </ul>
 
@@ -241,6 +243,7 @@ document.write(`
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -249,19 +252,27 @@ document.write(`
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.ALL_PASS">ALL_PASS (Interp attribute)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.all_pass">all_pass() (in module pysndlib.clm)</a>
 </li>
-      <li><a href="clm_utility_functions.html#pysndlib.clm.amplitude_modulate">amplitude_modulate() (in module pysndlib.clm)</a>
+      <li><a href="clm_generators.html#pysndlib.clm.all_pass_bank">all_pass_bank() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.amplitude_modulate">amplitude_modulate() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.array_interp">array_interp() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.asymmetric_fm">asymmetric_fm() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.autocorrelate">autocorrelate() (in module pysndlib.clm)</a>
 </li>
@@ -271,10 +282,38 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BARTLETT">BARTLETT (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BARTLETT_HANN">BARTLETT_HANN (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.bessi0">bessi0() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.BEZIER">BEZIER (Interp attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN10">BLACKMAN10 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN2">BLACKMAN2 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN3">BLACKMAN3 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN4">BLACKMAN4 (Window attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN5">BLACKMAN5 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN6">BLACKMAN6 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN7">BLACKMAN7 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN8">BLACKMAN8 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BLACKMAN9">BLACKMAN9 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.BOHMAN">BOHMAN (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Polynomial.BOTH_KINDS">BOTH_KINDS (Polynomial attribute)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.buffer_size">buffer_size (CLM attribute)</a>
 </li>
   </ul></td>
@@ -283,6 +322,8 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.CAUCHY">CAUCHY (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.cepstrum">cepstrum() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.channels">channels (CLM attribute)</a>
@@ -291,15 +332,27 @@ document.write(`
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.chebyshev_tu_sum">chebyshev_tu_sum() (in module pysndlib.clm)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_utility_functions.html#pysndlib.clm.chebyshev_u_sum">chebyshev_u_sum() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.clipped">clipped (CLM attribute)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.comb">comb() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.comb_bank">comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.CONNES">CONNES (Window attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.continue_frample2file">continue_frample2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.continue_sample2file">continue_sample2file() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.contrast_enhancement">contrast_enhancement() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.convolution">convolution() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.convolve">convolve() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.correlate">correlate() (in module pysndlib.clm)</a>
 </li>
@@ -313,11 +366,19 @@ document.write(`
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.degrees2radians">degrees2radians() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.delay">delay() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.delay_tick">delay_tick() (in module pysndlib.clm)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_init.html#pysndlib.clm.CLM.delete_reverb">delete_reverb (CLM attribute)</a>
 </li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.DOLPH_CHEBYSHEV">DOLPH_CHEBYSHEV (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.dot_product">dot_product() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.DPSS">DPSS (Window attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -325,13 +386,23 @@ document.write(`
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Polynomial.EITHER_KIND">EITHER_KIND (Polynomial attribute)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.env">env() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.env_any">env_any() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.env_interp">env_interp() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.envelope_interp">envelope_interp() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.even_multiple">even_multiple() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.even_weight">even_weight() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.EXPONENTIAL">EXPONENTIAL (Window attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -341,11 +412,35 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_utility_functions.html#pysndlib.clm.fft">fft() (in module pysndlib.clm)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.file2frample">file2frample() (in module pysndlib.clm)</a>
+</li>
       <li><a href="file_IO.html#pysndlib.clm.file2ndarray">file2ndarray() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.file2sample">file2sample() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.file_name">file_name (CLM attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.filter">filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.filtered_comb">filtered_comb() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.filtered_comb_bank">filtered_comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.fir_filter">fir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.firmant">firmant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Polynomial.FIRST_KIND">FIRST_KIND (Polynomial attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.FLAT_TOP">FLAT_TOP (Window attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.formant">formant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.formant_bank">formant_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.frample2file">frample2file() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -353,7 +448,13 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.GAUSSIAN">GAUSSIAN (Window attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_utility_functions.html#pysndlib.clm.get_srate">get_srate() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.granulate">granulate() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -361,10 +462,18 @@ document.write(`
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clm_init.html#pysndlib.clm.CLM.header_type">header_type (CLM attribute)</a>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.HAMMING">HAMMING (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.HANN">HANN (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.HANN_POISSON">HANN_POISSON (Window attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_init.html#pysndlib.clm.CLM.header_type">header_type (CLM attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.HERMITE">HERMITE (Interp attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.hz2radians">hz2radians() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
@@ -373,15 +482,135 @@ document.write(`
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.iir_filter">iir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.in_any">in_any() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Spectrum.IN_DB">IN_DB (Spectrum attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.ina">ina() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.inb">inb() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.is_all_pass">is_all_pass() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_all_pass_bank">is_all_pass_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_asymmetric_fm">is_asymmetric_fm() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_comb">is_comb() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_comb_bank">is_comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_convolve">is_convolve() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_delay">is_delay() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.is_env">is_env() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_file2frample">is_file2frample() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_file2sample">is_file2sample() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_filter">is_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_filtered_comb">is_filtered_comb() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_filtered_comb_bank">is_filtered_comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_fir_filter">is_fir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_firmant">is_firmant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_formant">is_formant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_formant_bank">is_formant_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_frample2file">is_frample2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_granulate">is_granulate() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_iir_filter">is_iir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_locsig">is_locsig() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_moving_average">is_moving_average() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_moving_max">is_moving_max() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_moving_norm">is_moving_norm() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_ncos">is_ncos() (in module pysndlib.clm)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.is_notch">is_notch() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_nrxycos">is_nrxycos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_nrxysin">is_nrxysin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_nsin">is_nsin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_one_pole">is_one_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_one_pole_all_pass">is_one_pole_all_pass() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_one_zero">is_one_zero() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.is_oscil">is_oscil() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.is_oscil_bank">is_oscil_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_phase_vocoder">is_phase_vocoder() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_polyshape">is_polyshape() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_polywave">is_polywave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_pulse_train">is_pulse_train() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_pulsed_env">is_pulsed_env() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_rand">is_rand() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_rand_interp">is_rand_interp() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_readin">is_readin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_rxykcos">is_rxykcos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_rxyksin">is_rxyksin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_sample2file">is_sample2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_sawtooth_wave">is_sawtooth_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_square_wave">is_square_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_src">is_src() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_ssb_am">is_ssb_am() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_table_lookup">is_table_lookup() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_tap">is_tap() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_triangle_wave">is_triangle_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_two_pole">is_two_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_two_zero">is_two_zero() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.is_wave_train">is_wave_train() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.KAISER">KAISER (Window attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -389,10 +618,24 @@ document.write(`
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.LAGRANGE">LAGRANGE (Interp attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.LINEAR">LINEAR (Interp attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.linear2db">linear2db() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.locsig">locsig() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.locsig_ref">locsig_ref() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.locsig_reverb_ref">locsig_reverb_ref() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.locsig_reverb_set">locsig_reverb_set() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.locsig_set">locsig_set() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.locsig_type">locsig_type (CLM attribute)</a>
 </li>
   </ul></td>
@@ -403,13 +646,121 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_generators.html#pysndlib.clm.make_all_pass">make_all_pass() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_all_pass_bank">make_all_pass_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_asymmetric_fm">make_asymmetric_fm() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_comb">make_comb() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_comb_bank">make_comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_convolve">make_convolve() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_delay">make_delay() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.make_env">make_env() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.make_fft_window">make_fft_window() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_file2frample">make_file2frample() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_file2sample">make_file2sample() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_filter">make_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_filtered_comb">make_filtered_comb() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_filtered_comb_bank">make_filtered_comb_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_fir_filter">make_fir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_firmant">make_firmant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_formant">make_formant() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_formant_bank">make_formant_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_frample2file">make_frample2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_granulate">make_granulate() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_iir_filter">make_iir_filter() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_locsig">make_locsig() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_moving_average">make_moving_average() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_moving_max">make_moving_max() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_moving_norm">make_moving_norm() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_ncos">make_ncos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_notch">make_notch() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_nrxycos">make_nrxycos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_nrxysin">make_nrxysin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_nsin">make_nsin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_one_pole">make_one_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_one_pole_all_pass">make_one_pole_all_pass() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_one_zero">make_one_zero() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.make_oscil">make_oscil() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.make_oscil_bank">make_oscil_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_phase_vocoder">make_phase_vocoder() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_polyshape">make_polyshape() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_polywave">make_polywave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_pulse_train">make_pulse_train() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_pulsed_env">make_pulsed_env() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_rand">make_rand() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_rand_interp">make_rand_interp() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_readin">make_readin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_rxykcos">make_rxykcos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_rxyksin">make_rxyksin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_sample2file">make_sample2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_sawtooth_wave">make_sawtooth_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_square_wave">make_square_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_src">make_src() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_ssb_am">make_ssb_am() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_table_lookup">make_table_lookup() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_table_lookup_with_env">make_table_lookup_with_env() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_triangle_wave">make_triangle_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_two_pole">make_two_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_two_zero">make_two_zero() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_wave_train">make_wave_train() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.make_wave_train_with_env">make_wave_train_with_env() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.MLT_SINE">MLT_SINE (Window attribute)</a>
 </li>
       <li>
     module
@@ -418,6 +769,14 @@ document.write(`
         <li><a href="index.html#module-pysndlib.clm">pysndlib.clm</a>
 </li>
       </ul></li>
+      <li><a href="clm_generators.html#pysndlib.clm.move_locsig">move_locsig() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.moving_average">moving_average() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.moving_max">moving_max() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.moving_norm">moving_norm() (in module pysndlib.clm)</a>
+</li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any">mus_any (class in pysndlib.clm)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_channel">mus_channel (mus_any attribute)</a>
@@ -430,9 +789,11 @@ document.write(`
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_feedforward">mus_feedforward (mus_any attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_frequency">mus_frequency (mus_any attribute)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_header_type_name">mus_header_type_name() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_header_type_to_string">mus_header_type_to_string() (in module pysndlib.sndlib)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_hop">mus_hop (mus_any attribute)</a>
 </li>
@@ -452,7 +813,63 @@ document.write(`
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_ramp">mus_ramp (mus_any attribute)</a>
 </li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_name">mus_sample_type_name() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_short_name">mus_sample_type_short_name() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_to_string">mus_sample_type_to_string() (in module pysndlib.sndlib)</a>
+</li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_scaler">mus_scaler (mus_any attribute)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_set_clipping">mus_set_clipping() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_bits_per_sample">mus_sound_bits_per_sample() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_block_align">mus_sound_block_align() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_chans">mus_sound_chans() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment">mus_sound_comment() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment_end">mus_sound_comment_end() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_comment_start">mus_sound_comment_start() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_data_location">mus_sound_data_location() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_datum_size">mus_sound_datum_size() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_duration">mus_sound_duration() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_fact_samples">mus_sound_fact_samples() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_framples">mus_sound_framples() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_header_type">mus_sound_header_type() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_length">mus_sound_length() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_original_sample_type">mus_sound_original_sample_type() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_sample_type">mus_sound_sample_type() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_samples">mus_sound_samples() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_chans">mus_sound_set_chans() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_data_location">mus_sound_set_data_location() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_header_type">mus_sound_set_header_type() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_sample_type">mus_sound_set_sample_type() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_samples">mus_sound_set_samples() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_set_srate">mus_sound_set_srate() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_srate">mus_sound_srate() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_type_specifier">mus_sound_type_specifier() (in module pysndlib.sndlib)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_width">mus_width (mus_any attribute)</a>
 </li>
@@ -466,11 +883,25 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.ncos">ncos() (in module pysndlib.clm)</a>
+</li>
       <li><a href="file_IO.html#pysndlib.clm.ndarray2file">ndarray2file() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.NONE">NONE (Interp attribute)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.normalize_partials">normalize_partials() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clm_utility_functions.html#pysndlib.clm.normalize_partials">normalize_partials() (in module pysndlib.clm)</a>
+      <li><a href="clm_enums.html#pysndlib.clm.Spectrum.NORMALIZED">NORMALIZED (Spectrum attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.notch">notch() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.nrxycos">nrxycos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.nrxysin">nrxysin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.nsin">nsin() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -482,11 +913,29 @@ document.write(`
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.odd_weight">odd_weight() (in module pysndlib.clm)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.one_pole">one_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.one_pole_all_pass">one_pole_all_pass() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.one_zero">one_zero() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_generators.html#pysndlib.clm.oscil">oscil() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.oscil_bank">oscil_bank() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.out_any">out_any() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.out_bank">out_bank() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.outa">outa() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.outb">outb() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.outc">outc() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.outd">outd() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.output">output (CLM attribute)</a>
 </li>
@@ -496,21 +945,47 @@ document.write(`
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.PAPOULIS">PAPOULIS (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.partials2polynomial">partials2polynomial() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.partials2wave">partials2wave() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.PARZEN">PARZEN (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.phase_partials2wave">phase_partials2wave() (in module pysndlib.clm)</a>
 </li>
-      <li><a href="clm_init.html#pysndlib.clm.CLM.play">play (CLM attribute)</a>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder">phase_vocoder() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder_amp_increments">phase_vocoder_amp_increments() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder_amps">phase_vocoder_amps() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder_freqs">phase_vocoder_freqs() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder_phase_increments">phase_vocoder_phase_increments() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.phase_vocoder_phases">phase_vocoder_phases() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_init.html#pysndlib.clm.CLM.play">play (CLM attribute)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.player">player (CLM attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.POISSON">POISSON (Window attribute)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.polar2rectangular">polar2rectangular() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.polynomial">polynomial() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.polyshape">polyshape() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.polywave">polywave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.pulse_train">pulse_train() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.pulsed_env">pulsed_env() (in module pysndlib.clm)</a>
 </li>
       <li>
     pysndlib.clm
@@ -529,21 +1004,43 @@ document.write(`
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.radians2hz">radians2hz() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.rand">rand() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.rand_interp">rand_interp() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Spectrum.RAW">RAW (Spectrum attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.readin">readin() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.RECTANGULAR">RECTANGULAR (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.rectangular2magnitudes">rectangular2magnitudes() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.rectangular2polar">rectangular2polar() (in module pysndlib.clm)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_init.html#pysndlib.clm.CLM.reverb">reverb (CLM attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_init.html#pysndlib.clm.CLM.reverb_channels">reverb_channels (CLM attribute)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.reverb_data">reverb_data (CLM attribute)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.reverb_file_name">reverb_file_name (CLM attribute)</a>
 </li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.RIEMANN">RIEMANN (Window attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.ring_modulate">ring_modulate() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.RV2">RV2 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.RV3">RV3 (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.RV4">RV4 (Window attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.rxykcos">rxykcos() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.rxyksin">rxyksin() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -551,19 +1048,37 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.SAMARAKI">SAMARAKI (Window attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.sample2file">sample2file() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.sample_type">sample_type (CLM attribute)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.samples2seconds">samples2seconds() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.sawtooth_wave">sawtooth_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Polynomial.SECOND_KIND">SECOND_KIND (Polynomial attribute)</a>
+</li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.seconds2samples">seconds2samples() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.set_srate">set_srate() (in module pysndlib.clm)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clm_utility_functions.html#pysndlib.clm.set_srate">set_srate() (in module pysndlib.clm)</a>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.SINC">SINC (Window attribute)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Interp.SINUSOIDAL">SINUSOIDAL (Interp attribute)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.spectrum">spectrum() (in module pysndlib.clm)</a>
 </li>
+      <li><a href="clm_generators.html#pysndlib.clm.square_wave">square_wave() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.srate">srate (CLM attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.src">src() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.ssb_am">ssb_am() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.statistics">statistics (CLM attribute)</a>
 </li>
@@ -573,7 +1088,29 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.table_lookup">table_lookup() (in module pysndlib.clm)</a>
+</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.table_size">table_size (CLM attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.tap">tap() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.triangle_wave">triangle_wave() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.TUKEY">TUKEY (Window attribute)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.two_pole">two_pole() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_generators.html#pysndlib.clm.two_zero">two_zero() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.ULTRASPHERICAL">ULTRASPHERICAL (Window attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -582,6 +1119,18 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_init.html#pysndlib.clm.CLM.verbose">verbose (CLM attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_generators.html#pysndlib.clm.wave_train">wave_train() (in module pysndlib.clm)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clm_enums.html#pysndlib.clm.Window.WELCH">WELCH (Window attribute)</a>
 </li>
   </ul></td>
 </tr></table>

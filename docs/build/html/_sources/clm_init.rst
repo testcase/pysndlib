@@ -1,5 +1,14 @@
-CLM Init
+CLM Initialization
 ======================
+
+There are a number of default settings when using the library, particularly when using
+the Sound context manager. These defaults are stored in a simple-namespace called CLM. 
+
+While many of these can also be set in individual calls to with Sound, they can also be set
+globally. For instance, if you want to change the default sample rate to 48kHz put this 
+statement in your code.
+
+`CLM.srate = 48000`
 
 .. module:: 
 	pysndlib.clm

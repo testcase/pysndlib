@@ -1,6 +1,5 @@
-
-mus_any 
-=========
+CLM Generator Properties
+=========================
 
 .. module:: 
 	pysndlib.clm

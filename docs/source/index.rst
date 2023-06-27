@@ -7,19 +7,20 @@ Welcome to pysndlib's documentation!
 ====================================
 
 .. module:: 
-	pysndlib.clm
-	
+    pysndlib.clm
+    
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-   mus_any
-   clm_generators
-   clm_utility_functions
-   file_IO
-   clm_init
-	
+    clm_generators
+    clm_utility_functions
+    file_IO
+    clm_init
+    clm_enums
+    mus_any
+    sndlib_functions
 
 Indices and tables
 ==================

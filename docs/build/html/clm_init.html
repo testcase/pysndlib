@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>CLM Init &#8212; pysndlib 0.0.6 documentation</title>
+    <title>CLM Initialization &#8212; pysndlib 0.0.6 documentation</title>
   
   
   
@@ -43,6 +42,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'clm_init';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CLM Enums" href="clm_enums.html" />
     <link rel="prev" title="File IO" href="file_IO.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -122,14 +122,15 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="mus_any.html">mus_any</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Init</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Initialization</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM generator properties</a></li>
 </ul>
 
     </div>
@@ -266,7 +267,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>CLM Init</h1>
+    <h1>CLM Initialization</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -276,7 +277,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Init</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Initialization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.file_name"><code class="docutils literal notranslate"><span class="pre">CLM.file_name</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.srate"><code class="docutils literal notranslate"><span class="pre">CLM.srate</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.channels"><code class="docutils literal notranslate"><span class="pre">CLM.channels</span></code></a></li>
@@ -311,8 +312,14 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="clm-init">
-<h1>CLM Init<a class="headerlink" href="#clm-init" title="Permalink to this heading">#</a></h1>
+  <section id="clm-initialization">
+<h1>CLM Initialization<a class="headerlink" href="#clm-initialization" title="Permalink to this heading">#</a></h1>
+<p>There are a number of default settings when using the library, particularly when using
+the Sound context manager. These defaults are stored in a simple-namespace called CLM.</p>
+<p>While many of these can also be set in individual calls to with Sound, they can also be set
+globally. For instance, if you want to change the default sample rate to 48kHz put this
+statement in your code.</p>
+<p><cite>CLM.srate = 48000</cite></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.CLM.file_name">
 <span class="sig-prename descclassname"><span class="pre">CLM.</span></span><span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'test.aiff'</span></em><a class="headerlink" href="#pysndlib.clm.CLM.file_name" title="Permalink to this definition">#</a></dt>
@@ -458,6 +465,15 @@ document.write(`
         <p class="prev-next-title">File IO</p>
       </div>
     </a>
+    <a class="right-next"
+       href="clm_enums.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CLM Enums</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -476,7 +492,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Init</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Initialization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.file_name"><code class="docutils literal notranslate"><span class="pre">CLM.file_name</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.srate"><code class="docutils literal notranslate"><span class="pre">CLM.srate</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.CLM.channels"><code class="docutils literal notranslate"><span class="pre">CLM.channels</span></code></a></li>

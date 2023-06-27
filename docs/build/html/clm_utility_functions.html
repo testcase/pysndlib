@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>CLM Utility Functions &#8212; pysndlib 0.0.6 documentation</title>
   
@@ -123,14 +122,15 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="mus_any.html">mus_any</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Utility Functions</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM generator properties</a></li>
 </ul>
 
     </div>
@@ -357,7 +357,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.get_srate">
 <span class="sig-name descname"><span class="pre">get_srate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_srate" title="Permalink to this definition">#</a></dt>
-<dd><p>Return current sample rate</p>
+<dd><p>return current sample rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return samplerate<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
@@ -370,7 +370,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.set_srate">
 <span class="sig-name descname"><span class="pre">set_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.set_srate" title="Permalink to this definition">#</a></dt>
-<dd><p>Set current sample rate</p>
+<dd><p>set current sample rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – </p>
@@ -384,13 +384,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.radians2hz">
 <span class="sig-name descname"><span class="pre">radians2hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2hz" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert radians per sample to frequency:  <cite>hz = rads * srate / (2 * pi)</cite></p>
+<dd><p>convert radians per sample to frequency:  <cite>hz = rads * srate / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – Frequency in radians</p>
+<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – frequency in radians</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Frequency in Hertz</p>
+<dd class="field-even"><p>frequency in hertz</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -401,13 +401,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.hz2radians">
 <span class="sig-name descname"><span class="pre">hz2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.hz2radians" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert frequency in Hz to radians per sample:  <cite>hz * 2 * pi / srate</cite></p>
+<dd><p>convert frequency in hz to radians per sample:  <cite>hz * 2 * pi / srate</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hz</strong> (<em>float</em>) – Frequency in Hertz</p>
+<dd class="field-odd"><p><strong>hz</strong> (<em>float</em>) – frequency in hertz</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Frequency in radians</p>
+<dd class="field-even"><p>frequency in radians</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -418,13 +418,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.degrees2radians">
 <span class="sig-name descname"><span class="pre">degrees2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degrees</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.degrees2radians" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert degrees to radians:  <cite>degrees * 2 * pi / 360</cite></p>
+<dd><p>convert degrees to radians:  <cite>degrees * 2 * pi / 360</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>degrees</strong> (<em>float</em>) – Degree</p>
+<dd class="field-odd"><p><strong>degrees</strong> (<em>float</em>) – angle in degrees</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Radian</p>
+<dd class="field-even"><p>angle in radians</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -435,13 +435,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.radians2degrees">
 <span class="sig-name descname"><span class="pre">radians2degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2degrees" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert radians to degrees: <cite>rads * 360 / (2 * pi)</cite></p>
+<dd><p>convert radians to degrees: <cite>rads * 360 / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – Angle in radians</p>
+<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – angle in radians</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Degree</p>
+<dd class="field-even"><p>degree</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -452,13 +452,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.db2linear">
 <span class="sig-name descname"><span class="pre">db2linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.db2linear" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert decibel value db to linear value: <cite>pow(10, db / 20)</cite></p>
+<dd><p>convert decibel value db to linear value: <cite>pow(10, db / 20)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – Decibel</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – decibel</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Linear amplitude</p>
+<dd class="field-even"><p>linear amplitude</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -469,13 +469,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.linear2db">
 <span class="sig-name descname"><span class="pre">linear2db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.linear2db" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert linear value to decibels 20 * log10(lin)</p>
+<dd><p>convert linear value to decibels 20 * log10(lin).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – Linear amplitude</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – linear amplitude</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Decibel</p>
+<dd class="field-even"><p>decibel</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -486,13 +486,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.seconds2samples">
 <span class="sig-name descname"><span class="pre">seconds2samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.seconds2samples" title="Permalink to this definition">#</a></dt>
-<dd><p>Use mus_srate to convert seconds to samples.</p>
+<dd><p>use mus_srate to convert seconds to samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>secs</strong> (<em>float</em>) – Time in seconds</p>
+<dd class="field-odd"><p><strong>secs</strong> (<em>float</em>) – time in seconds</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Time in samples</p>
+<dd class="field-even"><p>time in samples</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -503,13 +503,13 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.samples2seconds">
 <span class="sig-name descname"><span class="pre">samples2seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.samples2seconds" title="Permalink to this definition">#</a></dt>
-<dd><p>Use mus_srate to convert samples to seconds.</p>
+<dd><p>use mus_srate to convert samples to seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>samples</strong> (<em>int</em>) – Number of samples</p>
+<dd class="field-odd"><p><strong>samples</strong> (<em>int</em>) – number of samples</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Time in seconds</p>
+<dd class="field-even"><p>time in seconds</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -523,7 +523,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.odd_multiple">
 <span class="sig-name descname"><span class="pre">odd_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_multiple" title="Permalink to this definition">#</a></dt>
-<dd><p>Return y times the nearest odd integer to x</p>
+<dd><p>return y times the nearest odd integer to x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -532,7 +532,7 @@ document.write(`
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nearest odd integer as a float</p>
+<dd class="field-even"><p>nearest odd integer as a float</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -543,7 +543,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.even_multiple">
 <span class="sig-name descname"><span class="pre">even_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_multiple" title="Permalink to this definition">#</a></dt>
-<dd><p>Return y times the nearest even integer to x</p>
+<dd><p>return y times the nearest even integer to x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -552,7 +552,7 @@ document.write(`
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nearest even integer as a float</p>
+<dd class="field-even"><p>nearest even integer as a float</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -563,7 +563,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.odd_weight">
 <span class="sig-name descname"><span class="pre">odd_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_weight" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a number between 0.0 (x is even) and 1.0 (x is odd)</p>
+<dd><p>return a number between 0.0 (x is even) and 1.0 (x is odd).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
@@ -579,7 +579,7 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.even_weight">
 <span class="sig-name descname"><span class="pre">even_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_weight" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a number between 0.0 (x is odd) and 1.0 (x is even)</p>
+<dd><p>return a number between 0.0 (x is odd) and 1.0 (x is even).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
@@ -595,16 +595,16 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.ring_modulate">
 <span class="sig-name descname"><span class="pre">ring_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ring_modulate" title="Permalink to this definition">#</a></dt>
-<dd><p>Return s1 * s2 (sample by sample multiply)</p>
+<dd><p>return s1 * s2 (sample by sample multiply).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>s1</strong> (<em>float</em>) – Input 1</p></li>
-<li><p><strong>s2</strong> (<em>float</em>) – Input 2</p></li>
+<li><p><strong>s1</strong> (<em>float</em>) – input 1</p></li>
+<li><p><strong>s2</strong> (<em>float</em>) – input 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -615,17 +615,17 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.amplitude_modulate">
 <span class="sig-name descname"><span class="pre">amplitude_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.amplitude_modulate" title="Permalink to this definition">#</a></dt>
-<dd><p>Carrier in1 in2): in1 * (carrier + in2)</p>
+<dd><p>carrier in1 in2): in1 * (carrier + in2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>s1</strong> (<em>float</em>) – Input 1</p></li>
-<li><p><strong>s2</strong> (<em>float</em>) – Input 2</p></li>
-<li><p><strong>s3</strong> (<em>float</em>) – Input 3</p></li>
+<li><p><strong>s1</strong> (<em>float</em>) – input 1</p></li>
+<li><p><strong>s2</strong> (<em>float</em>) – input 2</p></li>
+<li><p><strong>s3</strong> (<em>float</em>) – input 3</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -636,17 +636,17 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.contrast_enhancement">
 <span class="sig-name descname"><span class="pre">contrast_enhancement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.contrast_enhancement" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns insig (index 1.0)): sin(sig * pi / 2 + fm_index * sin(sig * 2 * pi))
+<dd><p>returns insig (index 1.0)): sin(sig * pi / 2 + fm_index * sin(sig * 2 * pi))
 contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>insig</strong> (<em>float</em>) – Input</p></li>
+<li><p><strong>insig</strong> (<em>float</em>) – input</p></li>
 <li><p><strong>fm_index</strong> (<em>float</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -657,16 +657,16 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.dot_product">
 <span class="sig-name descname"><span class="pre">dot_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.dot_product" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product)</p>
+<dd><p>returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Input 1</p></li>
-<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Input 2</p></li>
+<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input 1</p></li>
+<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -677,16 +677,16 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.polynomial">
 <span class="sig-name descname"><span class="pre">polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polynomial" title="Permalink to this definition">#</a></dt>
-<dd><p>Evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term.</p>
+<dd><p>evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Coefficients where coeffs[0] is the constant term, and so on.</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – Input</p></li>
+<li><p><strong>coeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – coefficients where coeffs[0] is the constant term, and so on.</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -697,16 +697,16 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.array_interp">
 <span class="sig-name descname"><span class="pre">array_interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.array_interp" title="Permalink to this definition">#</a></dt>
-<dd><p>Taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer.</p>
+<dd><p>taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fn</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Input array</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – Interp point</p></li>
+<li><p><strong>fn</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input array</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – interp point</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -717,7 +717,7 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.bessi0">
 <span class="sig-name descname"><span class="pre">bessi0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.bessi0" title="Permalink to this definition">#</a></dt>
-<dd><p>Bessel function of zeroth order</p>
+<dd><p>bessel function of zeroth order</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
@@ -728,18 +728,18 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_interpolate">
 <span class="sig-name descname"><span class="pre">mus_interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_interpolate" title="Permalink to this definition">#</a></dt>
-<dd><p>Interpolate in data (‘table’ is a ndarray) using interpolation ‘type’, such as Interp.LINEAR.</p>
+<dd><p>interpolate in data (‘table’ is a ndarray) using interpolation ‘type’, such as Interp.linear.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>interp_type</strong> (<em>Interp</em>) – Type of interpolation</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – Interpolation value</p></li>
-<li><p><strong>table</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Table to interpolate in</p></li>
+<li><p><strong>interp_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Interp" title="pysndlib.clm.Interp"><em>Interp</em></a>) – type of interpolation</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – interpolation value</p></li>
+<li><p><strong>table</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – table to interpolate in</p></li>
 <li><p><strong>y1</strong> (<em>float</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result</p>
+<dd class="field-even"><p>result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -752,14 +752,15 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.fft">
-<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fftsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition">#</a></dt>
-<dd><p>Return the fft of rl and im which contain the real and imaginary parts of the data; len should be a power of 2, dir = 1 for fft, -1 for inverse-fft</p>
+<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition">#</a></dt>
+<dd><p>return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Real data</p></li>
-<li><p><strong>imaginary</strong> – Imaginary data</p></li>
-<li><p><strong>fftsize</strong> (<em>int</em>) – Must be power of two</p></li>
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
 <li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
 <li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
@@ -776,18 +777,19 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_fft_window">
 <span class="sig-name descname"><span class="pre">make_fft_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_fft_window" title="Permalink to this definition">#</a></dt>
-<dd><p>fft data window (a ndarray). type is one of the sndlib fft window identifiers such as Window.KAISER, beta is the window family parameter, if any.</p>
+<dd><p>fft data window (a ndarray). type is one of the sndlib fft window identifiers such as
+window.kaiser, beta is the window family parameter, if any.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>window_type</strong> (<em>Window</em>) – Type of window</p></li>
-<li><p><strong>size</strong> (<em>int</em>) – Window size</p></li>
-<li><p><strong>beta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Beta parameter if needed</p></li>
-<li><p><strong>alpha</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Alpha parameter if needed</p></li>
+<li><p><strong>window_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Window" title="pysndlib.clm.Window"><em>Window</em></a>) – type of window</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – window size</p></li>
+<li><p><strong>beta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – beta parameter if needed</p></li>
+<li><p><strong>alpha</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – alpha parameter if needed</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Window</p>
+<dd class="field-even"><p>window</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -798,17 +800,18 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.rectangular2polar">
 <span class="sig-name descname"><span class="pre">rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2polar" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a spectrum)</p>
+<dd><p>convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
+spectrum).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Real data</p></li>
-<li><p><strong>imaginary</strong> – Imaginary data</p></li>
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
 <li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Magnitude written into rdat, idat contains phases</p>
+<dd class="field-even"><p>magnitude written into rdat, idat contains phases</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -819,17 +822,18 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.rectangular2magnitudes">
 <span class="sig-name descname"><span class="pre">rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but ignore the phases</p>
+<dd><p>convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Real data</p></li>
-<li><p><strong>imaginary</strong> – Imaginary data</p></li>
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
 <li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Magnitude written into rdat</p>
+<dd class="field-even"><p>magnitude written into rdat</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -840,17 +844,17 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.polar2rectangular">
 <span class="sig-name descname"><span class="pre">polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polar2rectangular" title="Permalink to this definition">#</a></dt>
-<dd><p>Convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)</p>
+<dd><p>convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Magnitude data</p></li>
-<li><p><strong>imaginary</strong> – Phases data</p></li>
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – magnitude data</p></li>
+<li><p><strong>imaginary</strong> – phases data</p></li>
 <li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Real data written into rdat, idat contains imaginary</p>
+<dd class="field-even"><p>real data written into rdat, idat contains imaginary</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -860,18 +864,18 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.convolution">
-<span class="sig-name descname"><span class="pre">convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fftsize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.convolution" title="Permalink to this definition">#</a></dt>
-<dd><p>Convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1</p>
+<span class="sig-name descname"><span class="pre">convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.convolution" title="Permalink to this definition">#</a></dt>
+<dd><p>convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rl1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Input  data 1</p></li>
-<li><p><strong>rl2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Input  data 2</p></li>
-<li><p><strong>fftsize</strong> (<em>int</em>) – FFT size</p></li>
+<li><p><strong>rl1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input data 1</p></li>
+<li><p><strong>rl2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input  data 2</p></li>
+<li><p><strong>fft_size</strong> (<em>int</em>) – fft size</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Convolved output. Also written into rl1</p>
+<dd class="field-even"><p>convolved output. also written into rl1</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -882,28 +886,27 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.spectrum">
 <span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.spectrum" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the fft data window (a ndarray as returned by </dt><dd><dl class="simple">
-<dt>make_fft_window  and type determines how the spectral data is scaled:</dt><dd><p>Spectrum.IN_DB= data in dB,
-Spectrum.NORMALIZED (default) = linear and normalized
-Spectrum.RAW = linear and un-normalized.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dd><p>real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
+fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
+scaled:
+spectrum.in_db= data in db,
+spectrum.normalized (default) = linear and normalized
+spectrum.raw = linear and un-normalized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – Real data
-:param imaginary:  Imaginary data
-:param window: FFT window
-:param norm_type: Normalization type
-:return: spectrum
-:rtype: np.ndarray</p></li>
+<li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – fft window</p></li>
+<li><p><strong>norm_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a>) – normalization type</p></li>
 <li><p><strong>idat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – </p></li>
-<li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – </p></li>
-<li><p><strong>norm_type</strong> (<em>Spectrum</em>) – </p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>spectrum</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -911,13 +914,13 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.autocorrelate">
 <span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.autocorrelate" title="Permalink to this definition">#</a></dt>
-<dd><p>In place autocorrelation of data (a ndarray)</p>
+<dd><p>in place autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Data</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Autocorrelation result</p>
+<dd class="field-even"><p>autocorrelation result</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -928,16 +931,16 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.correlate">
 <span class="sig-name descname"><span class="pre">correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.correlate" title="Permalink to this definition">#</a></dt>
-<dd><p>In place cross-correlation of data1 and data2 (both ndarrays)</p>
+<dd><p>in place cross-correlation of data1 and data2 (both ndarrays).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Data 1</p></li>
-<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Data 2</p></li>
+<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 1</p></li>
+<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Correlation result written into data1</p>
+<dd class="field-even"><p>correlation result written into data1</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -948,13 +951,13 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.cepstrum">
 <span class="sig-name descname"><span class="pre">cepstrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.cepstrum" title="Permalink to this definition">#</a></dt>
-<dd><p>Return cepstrum of signal</p>
+<dd><p>return cepstrum of signal</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Samples to analyze</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – samples to analyze</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Cepstrum. Also written into data</p>
+<dd class="field-even"><p>cepstrum. also written into data</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -968,18 +971,19 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.partials2wave">
 <span class="sig-name descname"><span class="pre">partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2wave" title="Permalink to this definition">#</a></dt>
-<dd><p>Take a list or np.ndarray of partials (harmonic number and associated amplitude) and produce a waveform for use in table_lookup</p>
+<dd><p>take a list or np.ndarray of partials (harmonic number and associated amplitude) and produce a
+waveform for use in table_lookup.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>partials</strong> – List or np.ndarray of partials (harm and amp)</p></li>
-<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – Array to write wave into. If not provided, one will be allocated</p></li>
-<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Size of table</p></li>
-<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – Whether to normalize partials</p></li>
+<li><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p></li>
+<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – array to write wave into. if not provided, one will be allocated</p></li>
+<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – size of table</p></li>
+<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – whether to normalize partials</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Array provided in wave or new array.</p>
+<dd class="field-even"><p>array provided in wave or new array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -990,18 +994,19 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.phase_partials2wave">
 <span class="sig-name descname"><span class="pre">phase_partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.phase_partials2wave" title="Permalink to this definition">#</a></dt>
-<dd><p>Take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use in table_lookup</p>
+<dd><p>take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use
+in table_lookup.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>partials</strong> – List or np.ndarray of partials (harm, amp, phase)</p></li>
-<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – Array to write wave into. If not provided, one will be allocated</p></li>
-<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Size of table</p></li>
-<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – Whether to normalize partials</p></li>
+<li><p><strong>partials</strong> – list or np.ndarray of partials (harm, amp, phase)</p></li>
+<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – array to write wave into. if not provided, one will be allocated</p></li>
+<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – size of table</p></li>
+<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – whether to normalize partials</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Array provided in wave or new array.</p>
+<dd class="field-even"><p>array provided in wave or new array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -1012,16 +1017,17 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.partials2polynomial">
 <span class="sig-name descname"><span class="pre">partials2polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Polynomial.FIRST_KIND</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2polynomial" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns a Chebyshev polynomial suitable for use with the polynomial generator to create (via waveshaping) the harmonic spectrum described by the partials argument.</p>
+<dd><p>returns a chebyshev polynomial suitable for use with the polynomial generator to create (via
+waveshaping) the harmonic spectrum described by the partials argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>partials</strong> – List or np.ndarray of partials (harm and amp)</p></li>
-<li><p><strong>kind</strong> (<em>Optional</em><em>[</em><em>Polynomial</em><em>]</em>) – Polynomial.EITHER_KIND, Polynomial.FIRST_KIND, Polynomial.SECOND_KIND, Polynomial.BOTH_KINDS</p></li>
+<li><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p></li>
+<li><p><strong>kind</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Polynomial" title="pysndlib.clm.Polynomial"><em>Polynomial</em></a><em>]</em>) – Polynomial.EITHER_KIND, Polynomial.FIRST_KIND, Polynomial.SECOND_KIND, Polynomial.BOTH_KINDS</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Chebyshev polynomial</p>
+<dd class="field-even"><p>chebyshev polynomial</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -1032,13 +1038,14 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.normalize_partials">
 <span class="sig-name descname"><span class="pre">normalize_partials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.normalize_partials" title="Permalink to this definition">#</a></dt>
-<dd><p>Scales the partial amplitudes in the list/array or list ‘partials’ by the inverse of their sum (so that they add to 1.0).</p>
+<dd><p>scales the partial amplitudes in the list/array or list ‘partials’ by the inverse of their sum (so
+that they add to 1.0).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>partials</strong> – List or np.ndarray of partials (harm and amp)</p>
+<dd class="field-odd"><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Normalized partials</p>
+<dd class="field-even"><p>normalized partials</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
@@ -1052,18 +1059,17 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_tu_sum">
 <span class="sig-name descname"><span class="pre">chebyshev_tu_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_tu_sum" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the sum of the weighted Chebyshev polynomials Tn and Un, with phase x</p>
+<dd><p>returns the sum of the weighted chebyshev polynomials tn and un, with phase x</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – Input</p></li>
-<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Tn</p></li>
-<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Un</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
+<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – tn</p></li>
+<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – un</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Output
-:rtype: float</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1071,17 +1077,16 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_t_sum">
 <span class="sig-name descname"><span class="pre">chebyshev_t_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_t_sum" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the sum of the weighted Chebyshev polynomials Tn</p>
+<dd><p>returns the sum of the weighted chebyshev polynomials tn</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>float</em>) – nput</p></li>
-<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Tn</p></li>
+<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – tn</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Output
-:rtype: float</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1089,17 +1094,16 @@ Spectrum.RAW = linear and un-normalized.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_u_sum">
 <span class="sig-name descname"><span class="pre">chebyshev_u_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_u_sum" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the sum of the weighted Chebyshev polynomials Un</p>
+<dd><p>returns the sum of the weighted chebyshev polynomials un</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – Input</p></li>
-<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – Un</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
+<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – un</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Output
-:rtype: float</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>

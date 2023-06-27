@@ -17,46 +17,58 @@ cimport numpy as np
 import numpy.typing as npt
 cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
-from pysndlib.sndlib import sample, header
+from pysndlib.sndlib import Sample, Header
 
 np.import_array()
 
 
 # --------------- clm enums ---------------- #
 cpdef enum Interp:
+    """
+    various interpolation types
+    """
     NONE, LINEAR,SINUSOIDAL, ALL_PASS, LAGRANGE, BEZIER, HERMITE
     
 cpdef enum Window:
+    """
+    many useful windows
+    """
     RECTANGULAR, HANN, WELCH, PARZEN, BARTLETT, HAMMING, BLACKMAN2, BLACKMAN3, BLACKMAN4, EXPONENTIAL, RIEMANN, KAISER, CAUCHY, POISSON, GAUSSIAN, TUKEY, DOLPH_CHEBYSHEV, HANN_POISSON, CONNES, SAMARAKI, ULTRASPHERICAL, BARTLETT_HANN, BOHMAN, FLAT_TOP, BLACKMAN5, BLACKMAN6, BLACKMAN7, BLACKMAN8, BLACKMAN9, BLACKMAN10, RV2, RV3, RV4, MLT_SINE, PAPOULIS, DPSS, SINC,
 
 cpdef enum Spectrum:
+    """
+    types of normalizations when using the spectrum function. The results are in dB if IN_DB, or linear and normalized to 1.0 NORMALIZED, or linear unnormalized RAW
+    """
     IN_DB, NORMALIZED, RAW
     
 cpdef enum Polynomial:
+    """
+    used for polynomial based gens 
+    """
     EITHER_KIND, FIRST_KIND, SECOND_KIND, BOTH_KINDS
 
 
 
 # --------------- function types for ctypes ---------------- #
-INPUTCALLBACK = ctypes.cfunctype(ctypes.c_double, ctypes.c_void_p, ctypes.c_int)
-EDITCALLBACK = ctypes.cfunctype(ctypes.c_int, ctypes.c_void_p)
-ANALYZECALLBACK = ctypes.cfunctype(ctypes.c_bool, ctypes.c_void_p, ctypes.cfunctype(ctypes.c_double, ctypes.c_void_p, ctypes.c_int))
-SYNTHESIZECALLBACK = ctypes.cfunctype(ctypes.c_double, ctypes.c_void_p)
-LOCSIGDETOURCALLBACK = ctypes.cfunctype(None, ctypes.c_void_p, ctypes.c_longlong) 
-ENVFUNCTION = ctypes.cfunctype(ctypes.c_double, ctypes.c_double) # for env_any    
+INPUTCALLBACK = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_void_p, ctypes.c_int)
+EDITCALLBACK = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)
+ANALYZECALLBACK = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_void_p, ctypes.c_int))
+SYNTHESIZECALLBACK = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_void_p)
+LOCSIGDETOURCALLBACK = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_longlong) 
+ENVFUNCTION = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_double) # for env_any    
 
 #these may need to be set based on system type etc
 DEFAULT_OUTPUT_SRATE = 44100
 DEFAULT_OUTPUT_CHANS = 1
-DEFAULT_OUTPUT_SAMPLE_TYPE = sample.bfloat
-DEFAULT_OUTPUT_HEADER_TYPE = header.aifc
+DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT
+DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
 
     
     
 
 # --------------- main clm prefs ---------------- #
 
-CLM  = types.simplenamespace(
+CLM  = types.SimpleNamespace(
     file_name = 'test.aiff',
     srate = DEFAULT_OUTPUT_SRATE,
     channels = DEFAULT_OUTPUT_CHANS,
@@ -105,14 +117,20 @@ class SNDLibError(Exception):
         
         
 def check_ndim(arr: npt.NDArray[np.float64], dim=1):
-    if arr.dim == 1:
-        raise TypeError(f'expecting {dim} dimemsions but received {arr.dim}.')
+    if arr.ndim != 1:
+        raise TypeError(f'expecting {dim} dimemsions but received {arr.ndim}.')
         
 def compare_shapes(arr1: npt.NDArray[np.float64], arr2: npt.NDArray[np.float64]):
     if arr1.shape != arr2.shape:
         raise RuntimeError(f'ndarrays of unequal shape {arr1.shape } vs. {arr2.shape }.')
 
 csndlib.mus_error_set_handler(<csndlib.mus_error_handler_t *>clm_error_handler)
+
+
+cdef bint is_simple_filter(gen: mus_any):
+    return cclm.mus_is_one_zero(gen._ptr) or cclm.mus_is_one_pole(gen._ptr) or cclm.mus_is_two_zero(gen._ptr) or cclm.mus_is_two_pole(gen._ptr)
+    
+
     
 # todo add mus_set_xcoeff and mus_set_ycoeff
 
@@ -166,6 +184,7 @@ cdef class mus_any:
         if self._ptr is not NULL and self.ptr_owner is True:
             cclm.mus_free(self._ptr)
             self._ptr = NULL
+    
 
     def __init__(self):
         # prevent accidental instantiation from normal python code
@@ -194,7 +213,6 @@ cdef class mus_any:
             wrapper.set_up_xcoeffs()
         if cclm.mus_ycoeffs_exists(wrapper._ptr):  
             wrapper.set_up_ycoeffs()
-            
         if is_phase_vocoder(wrapper):
             wrapper.set_up_pv_data()
             
@@ -218,31 +236,61 @@ cdef class mus_any:
         """
         :meta private:
         """
+        cdef view.array arr = None
         cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
-        self._data_ptr = cclm.mus_data(self._ptr)
-        cdef view.array arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
-        arr.data = <char*>self._data_ptr
-        self._data = np.asarray(arr)       
-        
+        if size > 0:
+            self._data_ptr = cclm.mus_data(self._ptr)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            arr.data = <char*>self._data_ptr
+            self._data = np.asarray(arr)       
+        else:
+            self._data = None
+                 
     cpdef set_up_xcoeffs(self):
         """
         :meta private:
         """
-        cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
-        self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
-        cdef view.array arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
-        arr.data = <char*>self._xcoeffs_ptr
-        self._xcoeffs = np.asarray(arr)  
+        cdef cclm.mus_long_t size = 0
+        cdef view.array arr = None
+        #if simple filter the size will always be 3 and we do not want to
+        #allocate a buffer
+        # in other cases mus_order will be size and we do want to allocate
+        
+        if is_simple_filter(self):
+            size = 3      
+            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
+            arr.data = <char*>self._xcoeffs_ptr
+            self._xcoeffs = np.asarray(arr)
+        else: 
+            size = cclm.mus_order(self._ptr)   
+            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            arr.data = <char*>self._xcoeffs_ptr
+            self._xcoeffs = np.asarray(arr)
         
     cpdef set_up_ycoeffs(self):
         """
         :meta private:
         """
-        cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
-        self._ycoeffs_ptr = cclm.mus_ycoeffs(self._ptr)
-        cdef view.array arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
-        arr.data = <char*>self._ycoeffs_ptr
-        self._ycoeffs = np.asarray(arr)       
+        cdef cclm.mus_long_t size = 0
+        cdef view.array arr = None
+        #if simple filter the size will always be 3 and we do not want to
+        #allocate a buffer
+        # in other cases mus_order will be size and we do want to allocate
+        
+        if is_simple_filter(self):
+            size = 3      
+            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
+            arr.data = <char*>self._ycoeffs_ptr
+            self._xcoeffs = np.asarray(arr)
+        else: 
+            size = cclm.mus_order(self._ptr)   
+            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            arr.data = <char*>self._ycoeffs_ptr
+            self._xcoeffs = np.asarray(arr)    
         
         
     cpdef set_up_pv_data(self):
@@ -469,8 +517,8 @@ cdef class mus_any:
     @property
     def mus_xcoeffs(self):
         """
-        x (input) coefficient, float
-        not settable
+        x (input) coefficient, np.ndarray
+        not setable
         """
         if not cclm.mus_xcoeffs_exists(self._ptr):   #could do this on all properties but seems best with array 
             raise TypeError(f'mus_xcoeffs can not be called on {cclm.mus_name(self._ptr)}')
@@ -479,8 +527,8 @@ cdef class mus_any:
     @property
     def mus_ycoeffs(self):
         """
-        y (output, feedback) coefficient, float
-        not settable
+        y (output, feedback) coefficient, np.ndarray
+        not setable
         """
         if not cclm.mus_xcoeffs_exists(self._ptr):   #could do this on all properties but seems best with array 
             raise TypeError(f'mus_ycoeffs can not be called on {cclm.mus_name(self._ptr)}')
@@ -665,7 +713,7 @@ class Sound(object):
     def __enter__(self):
                 
         if not self.clipped:
-            if (self.scaled_by or self.scaled_to) and (self.sample_type in [sample.bfloat, sample.lfloat, sample.bdouble, sample.ldouble]):
+            if (self.scaled_by or self.scaled_to) and (self.sample_type in [Sample.BFLOAT, Sample.LFLOAT, Sample.BDOUBLE, Sample.LDOUBLE]):
                 csndlib.mus_set_clipping(False)
             else:
                 csndlib.mus_set_clipping(CLM.clipped)
@@ -840,13 +888,13 @@ cpdef int mus_close(obj: mus_any):
     
 cpdef bint mus_is_output(obj: mus_any):
     """
-    returns true if gen is a type of output
+    returns True if gen is a type of output
     """
     return cclm.mus_is_output(obj._ptr)
     
 cpdef bint mus_is_input(obj: mus_any):
     """
-    returns true if gen is a type of output
+    returns True if gen is a type of output
     """
     return cclm.mus_is_input(obj._ptr)
 
@@ -1202,7 +1250,7 @@ def _(x: np.ndarray):
 # 
 cpdef cython.double radians2hz(radians: cython.double):
     """
-    convert radians per sample to frequency:  `hz = rads * srate / (2 * pi)`
+    convert radians per sample to frequency:  `hz = rads * srate / (2 * pi)`.
     
     :param radians: frequency \in radians
     :return: frequency \in hertz
@@ -1213,7 +1261,7 @@ cpdef cython.double radians2hz(radians: cython.double):
 
 cpdef cython.double hz2radians(hz: cython.double):
     """
-    convert frequency in hz to radians per sample:  `hz * 2 * pi / srate`
+    convert frequency in hz to radians per sample:  `hz * 2 * pi / srate`.
     
     :param hz: frequency \in hertz
     :return: frequency \in radians
@@ -1223,7 +1271,7 @@ cpdef cython.double hz2radians(hz: cython.double):
 
 cpdef cython.double degrees2radians(degrees: cython.double):
     """
-    convert degrees to radians:  `degrees * 2 * pi / 360`
+    convert degrees to radians:  `degrees * 2 * pi / 360`.
     
     :param degrees: angle in degrees
     :return: angle in radians
@@ -1234,7 +1282,7 @@ cpdef cython.double degrees2radians(degrees: cython.double):
     
 cpdef cython.double radians2degrees(radians: cython.double):
     """
-    convert radians to degrees: `rads * 360 / (2 * pi)`
+    convert radians to degrees: `rads * 360 / (2 * pi)`.
     
     :param radians: angle in radians
     :return: degree
@@ -1246,7 +1294,7 @@ cpdef cython.double radians2degrees(radians: cython.double):
     
 cpdef cython.double db2linear(x: cython.double):
     """
-    convert decibel value db to linear value: `pow(10, db / 20)`
+    convert decibel value db to linear value: `pow(10, db / 20)`.
 
     :param x: decibel
     :return: linear amplitude
@@ -1258,7 +1306,7 @@ cpdef cython.double db2linear(x: cython.double):
     
 cpdef cython.double linear2db(x: cython.double):
     """
-    convert linear value to decibels 20 * log10(lin)
+    convert linear value to decibels 20 * log10(lin).
 
     :param x: linear amplitude
     :return: decibel
@@ -1270,7 +1318,7 @@ cpdef cython.double linear2db(x: cython.double):
     
 cpdef cython.double odd_multiple(x: cython.double , y: cython.double ):
     """
-    return y times the nearest odd integer to x
+    return y times the nearest odd integer to x.
     
     :param x:
     :param y:
@@ -1283,7 +1331,7 @@ cpdef cython.double odd_multiple(x: cython.double , y: cython.double ):
     
 cpdef cython.double even_multiple(x: cython.double , y: cython.double ):
     """
-    return y times the nearest even integer to x
+    return y times the nearest even integer to x.
     
     :param x:
     :param y:
@@ -1295,7 +1343,7 @@ cpdef cython.double even_multiple(x: cython.double , y: cython.double ):
     
 cpdef cython.double odd_weight(x: cython.double):
     """
-    return a number between 0.0 (x is even) and 1.0 (x is odd)
+    return a number between 0.0 (x is even) and 1.0 (x is odd).
     
     :param x:
     :return weight:
@@ -1307,7 +1355,7 @@ cpdef cython.double odd_weight(x: cython.double):
     
 cpdef cython.double even_weight(x: cython.double ):
     """
-    return a number between 0.0 (x is odd) and 1.0 (x is even)
+    return a number between 0.0 (x is odd) and 1.0 (x is even).
     
     :param x:
     :return weight:
@@ -1318,7 +1366,7 @@ cpdef cython.double even_weight(x: cython.double ):
     
 cpdef cython.double get_srate():
     """
-    return current sample rate
+    return current sample rate.
     
     :return samplerate:
     :rtype: float
@@ -1328,7 +1376,7 @@ cpdef cython.double get_srate():
     
 cpdef cython.double set_srate(r: cython.double ):
     """
-    set current sample rate
+    set current sample rate.
     """
     return cclm.mus_set_srate(r)
     
@@ -1355,7 +1403,7 @@ cpdef cython.double samples2seconds(samples: mus_long_t):
     
 cpdef cython.double ring_modulate(s1: cython.double, s2: cython.double ):
     """
-    return s1 * s2 (sample by sample multiply)
+    return s1 * s2 (sample by sample multiply).
     
     :param s1: input 1
     :param s2: input 2
@@ -1368,7 +1416,7 @@ cpdef cython.double ring_modulate(s1: cython.double, s2: cython.double ):
     
 cpdef cython.double amplitude_modulate(s1: cython.double, s2: cython.double , s3: cython.double):
     """
-    carrier in1 in2): in1 * (carrier + in2)
+    carrier in1 in2): in1 * (carrier + in2).
         
     :param s1: input 1
     :param s2: input 2
@@ -1395,7 +1443,7 @@ cpdef cython.double contrast_enhancement(insig: cython.double, fm_index: cython.
 
 cpdef cython.double dot_product(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
     """
-    returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product)
+    returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product).
     
     :param data1: input 1
     :param data2: input 2
@@ -1462,7 +1510,8 @@ cpdef cython.double mus_interpolate(interp_type: Interp, x: cython.double, table
    
 cpdef np.ndarray fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
     """
-    return the fft of rl and im which contain the real and imaginary parts of the data; len should be a power of 2, dir = 1 for fft, -1 for inverse-fft
+    return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+    power of 2, dir = 1 for fft, -1 for inverse-fft.
     
     :param rdat: real data
     :param imaginary: imaginary data
@@ -1483,7 +1532,8 @@ cpdef np.ndarray fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64
 
 cpdef np.ndarray make_fft_window(window_type: Window, size: int, beta: Optional[float]=0.0, alpha: Optional[float]=0.0):
     """
-    fft data window (a ndarray). type is one of the sndlib fft window identifiers such as window.kaiser, beta is the window family parameter, if any.
+    fft data window (a ndarray). type is one of the sndlib fft window identifiers such as
+    window.kaiser, beta is the window family parameter, if any.
     
     :param window_type: type of window
     :param size: window size
@@ -1502,7 +1552,8 @@ cpdef np.ndarray make_fft_window(window_type: Window, size: int, beta: Optional[
 
 cpdef np.ndarray rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """
-    convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a spectrum)
+    convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
+    spectrum).
     
     :param rdat: real data
     :param imaginary:  imaginary data
@@ -1523,7 +1574,8 @@ cpdef np.ndarray rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDAr
 
 cpdef np.ndarray rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """
-    convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but ignore the phases
+    convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+    ignore the phases.
     
     :param rdat: real data
     :param imaginary:  imaginary data
@@ -1541,7 +1593,7 @@ cpdef np.ndarray rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt
 
 cpdef np.ndarray polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """
-    convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft)
+    convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).
     
     :param rdat: magnitude data
     :param imaginary: phases data
@@ -1557,12 +1609,14 @@ cpdef np.ndarray polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDAr
     cclm.mus_polar_to_rectangular(&rdat_view[0], &idat_view[0], size)
     return rdat
 
-cpdef np.ndarray spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.cython.double64], norm_type: spectrum):
-    """real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the fft data window (a ndarray as returned by 
-        make_fft_window  and type determines how the spectral data is scaled:
-              spectrum.in_db= data in db,
-              spectrum.normalized (default) = linear and normalized
-              spectrum.raw = linear and un-normalized.
+cpdef np.ndarray spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.cython.double64], norm_type: Spectrum):
+    """
+    real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
+    fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
+    scaled:
+    spectrum.in_db= data in db,
+    spectrum.normalized (default) = linear and normalized
+    spectrum.raw = linear and un-normalized.
     
     :param rdat: real data
     :param imaginary: imaginary data
@@ -1589,7 +1643,7 @@ cpdef np.ndarray spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.fl
 
 cpdef np.ndarray convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64], fft_size: int):
     """
-    convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1
+    convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
 
     :param rl1: input data 1
     :param rl2: input  data 2
@@ -1610,7 +1664,7 @@ cpdef np.ndarray convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.f
 
 cpdef np.ndarray autocorrelate(data: npt.NDArray[np.float64]):
     """
-    in place autocorrelation of data (a ndarray)
+    in place autocorrelation of data (a ndarray).
 
     :param data: data
     :return: autocorrelation result
@@ -1626,7 +1680,7 @@ cpdef np.ndarray autocorrelate(data: npt.NDArray[np.float64]):
     
 cpdef np.ndarray correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
     """
-    in place cross-correlation of data1 and data2 (both ndarrays)
+    in place cross-correlation of data1 and data2 (both ndarrays).
     
     :param data1: data 1
     :param data2: data 2
@@ -1662,7 +1716,8 @@ cpdef np.ndarray cepstrum(data: npt.NDArray[np.float64]):
     
 cpdef np.ndarray partials2wave(partials, wave: npt.NDArray[np.float64]=None, table_size: Optional[int]=None, norm: Optional[bool]=True ):
     """
-    take a list or np.ndarray of partials (harmonic number and associated amplitude) and produce a waveform for use in table_lookup
+    take a list or np.ndarray of partials (harmonic number and associated amplitude) and produce a
+    waveform for use in table_lookup.
     
     :param partials: list or np.ndarray of partials (harm and amp)
     :param wave: array to write wave into. if not provided, one will be allocated
@@ -1698,7 +1753,8 @@ cpdef np.ndarray partials2wave(partials, wave: npt.NDArray[np.float64]=None, tab
     
 cpdef np.ndarray phase_partials2wave(partials, wave: npt.NDArray[np.float64], table_size: Optional[int]=None, norm: Optional[bool]=True ):
     """
-    take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use in table_lookup
+    take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use
+    in table_lookup.
     
     :param partials: list or np.ndarray of partials (harm, amp, phase)
     :param wave: array to write wave into. if not provided, one will be allocated
@@ -1729,12 +1785,13 @@ cpdef np.ndarray phase_partials2wave(partials, wave: npt.NDArray[np.float64], ta
     cclm.mus_partials_to_wave(&partials_view[0], len(partials) // 3, &wave_view[0], table_size, norm)
     return wave
     
-cpdef np.ndarray partials2polynomial(partials, kind: Optional[polynomial]=polynomial.first_kind):
+cpdef np.ndarray partials2polynomial(partials, kind: Optional[Polynomial]=Polynomial.FIRST_KIND):
     """
-    returns a chebyshev polynomial suitable for use with the polynomial generator to create (via waveshaping) the harmonic spectrum described by the partials argument.
+    returns a chebyshev polynomial suitable for use with the polynomial generator to create (via
+    waveshaping) the harmonic spectrum described by the partials argument.
     
     :param partials: list or np.ndarray of partials (harm and amp)
-    :param kind: polynomial.either_kind, polynomial.first_kind, polynomial.second_kind, polynomial.both_kinds
+    :param kind: Polynomial.EITHER_KIND, Polynomial.FIRST_KIND, Polynomial.SECOND_KIND, Polynomial.BOTH_KINDS
     :return: chebyshev polynomial
     :rtype: np.ndarray
     
@@ -1753,7 +1810,8 @@ cpdef np.ndarray partials2polynomial(partials, kind: Optional[polynomial]=polyno
 
 cpdef np.ndarray normalize_partials(partials):
     """
-    scales the partial amplitudes in the list/array or list 'partials' by the inverse of their sum (so that they add to 1.0).
+    scales the partial amplitudes in the list/array or list 'partials' by the inverse of their sum (so
+    that they add to 1.0).
 
     :param partials: list or np.ndarray of partials (harm and amp)
     :return: normalized partials
@@ -1778,7 +1836,6 @@ cpdef cython.double chebyshev_tu_sum(x: cython.double, tcoeffs: npt.NDArray[np.f
     :param x: input
     :param tcoeffs: tn
     :param ucoeffs: un
-    :return: output
     :rtype: float
     
     """
@@ -1798,7 +1855,6 @@ cpdef cython.double chebyshev_t_sum(x: cython.double, tcoeffs: npt.NDArray[np.fl
     
     :param x: nput
     :param tcoeffs: tn
-    :return: output
     :rtype: float
     
     """
@@ -1814,7 +1870,6 @@ cpdef cython.double chebyshev_u_sum(x: cython.double, ucoeffs: npt.NDArray[np.fl
     
     :param x: input
     :param ucoeffs: un
-    :return: output
     :rtype: float
     
     """
@@ -1835,7 +1890,6 @@ cpdef mus_any make_oscil(frequency: Optional[float]=0., initial_phase: Optional[
     :param frequency: frequency in hz
     :param initial_phase: initial phase in radians
     :return: oscil gen
-    
     """
     return mus_any.from_ptr(cclm.mus_make_oscil(frequency, initial_phase))
     
@@ -1846,7 +1900,6 @@ cpdef cython.double oscil(gen: mus_any, fm: Optional[float]=None, pm: Optional[f
     :param gen: oscil gen
     :param fm: fm input
     :param pm: pm input
-    :return: output
     :rtype: float
     
     """    
@@ -1859,10 +1912,9 @@ cpdef cython.double oscil(gen: mus_any, fm: Optional[float]=None, pm: Optional[f
                
 cpdef bint is_oscil(gen: mus_any):
     """
-    returns true if gen is an oscil
+    returns True if gen is an oscil
     
     :param gen: oscil gen
-    :return: result
     :rtype: bool
     
     """
@@ -1902,9 +1954,10 @@ cpdef mus_any make_oscil_bank(freqs, phases, amps=None, stable: Optional[bool]=F
             amps = np.array(amps, dtype=np.double)    
         check_ndim(amps)
         amps_view = amps
-        
-
-    gen = mus_any.from_ptr(cclm.mus_make_oscil_bank(len(freqs), &freqs_view[0], &phases_view[0], &amps_view[0], stable))
+        gen = mus_any.from_ptr(cclm.mus_make_oscil_bank(len(freqs), &freqs_view[0], &phases_view[0], &amps_view[0], stable))
+    else:
+        gen = mus_any.from_ptr(cclm.mus_make_oscil_bank(len(freqs), &freqs_view[0], &phases_view[0], NULL, stable))
+    
     gen.cache_extend([freqs, phases, amps])
     return gen
 
@@ -1913,35 +1966,36 @@ cpdef cython.double oscil_bank(gen: mus_any):
     sum an array of oscils
     
     :param gen: oscil_bank gen
-    :return: output
     :rtype: float
-    
     """
     return cclm.mus_oscil_bank(gen._ptr)
     
 cpdef bint is_oscil_bank(gen: mus_any):
     """
-    returns true if gen is an oscil_bank
+    returns True if gen is an oscil_bank
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_oscil_bank(gen._ptr)
 
 
+
+# TODO: nned to check if envelope is valid otherwise it may segfault
 # ---------------- env ---------------- #
 cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional[float]=1.0, offset: Optional[float]=0.0, base: Optional[float]=1.0, length: Optional[int]=0):
     """
-    return a new envelope generator.  'envelope' is a list/array of break-point pairs. to create the envelope, these points are offset by 'offset', scaled by 'scaler', and mapped over the time interval defined by
-    either 'duration' (seconds) or 'length' (samples).  if 'base' is 1.0, the connecting segments 
+    return a new envelope generator.  'envelope' is a list/array of break-point pairs. to create the
+    envelope, these points are offset by 'offset', scaled by 'scaler', and mapped over the time interval
+    defined by either 'duration' (seconds) or 'length' (samples).  if 'base' is 1.0, the connecting segments
     are linear, if 0.0 you get a step function, and anything else produces an exponential connecting segment.
-
+    
     :param envelope: list or np.ndarry of breakpoint pairs
     :param scaler: scaler on every y value (before offset is added)
-    :param duration: duration in seconds
+    :param duration: duration \in seconds
     :param offset: value added to every y value
     :param base: type of connecting line between break-points
-    :param length:  duration in samples
+    :param length:  duration \in samples
     :result: env gen
     :rtype: mus_any
 
@@ -1962,45 +2016,39 @@ cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional
 
 cpdef cython.double env(gen: mus_any):
     """
-    next sample from envelope generator
-
+    next sample from envelope generator.
+    
     :param gen: env gen
-    :return: env output
     :rtype: float
-
     """
     return cclm.mus_env(gen._ptr)
 
 cpdef bint is_env(gen: mus_any):
     """
-    returns true if gen is an env
+    returns True if gen is an env.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_env(gen._ptr)
 
 cpdef cython.double env_interp(x: cython.double, env: mus_any):
     """
-    value of envelope env at x
-
-    :param x: location in envelope
+    value of envelope env at x.
+    
+    :param x: location \in envelope
     :param env: env gen
-    :return: env output
     :rtype: float
-
     """
     return cclm.mus_env_interp(x, env._ptr)
 
 cpdef cython.double envelope_interp(x: cython.double, env: mus_any):
     """
-    value of envelope env at x
-
-    :param x: location in envelope
+    value of envelope env at x.
+    
+    :param x: location \in envelope
     :param env: env gen
-    :return: env output
     :rtype: float
-
     """
     return cclm.mus_env_interp(x, env._ptr)
 
@@ -2009,13 +2057,11 @@ cpdef cython.double envelope_interp(x: cython.double, env: mus_any):
 cpdef cython.double env_any(gen: mus_any, connection_function):
     """
     generate env output using conncection_func to 'connect the dots'.
+    
     the env-any connecting function takes one argument, the current envelope value treated as going between 0.0 and 1.0 between each two points. 
-
     :param env: env gen
     :param connection_function: function used to connect points
-    :return: env output
     :rtype: float
-
     """
 
     f = ENVFUNCTION(connection_function)
@@ -2027,9 +2073,10 @@ cpdef cython.double env_any(gen: mus_any, connection_function):
 cpdef mus_any make_pulsed_env(envelope, duration: cython.double, frequency: cython.double):
     """
     produces a repeating envelope. env sticks at its last value, but pulsed-env repeats it over and over. 
+    
     :param env: env gen
     :param duration: duration of envelope
-    :param frequency: repetition rate in hz
+    :param frequency: repetition rate \in hz
     :return: env output
     :rtype: float
     """
@@ -2047,26 +2094,24 @@ cpdef mus_any make_pulsed_env(envelope, duration: cython.double, frequency: cyth
     gen.cache_extend([pl, ge, envelope])
     return gen
     
-cpdef cython.double pulsed_env(gen: mus_any, fm: Optional[cython.double]=None):
+cpdef cython.double pulsed_env(gen: mus_any, fm: Optional[float]=None):
     """
-    next sample from envelope generator
+    next sample from envelope generator.
     
     :param gen: env gen
     :param fm: change frequency of repetition
-    :return: env output
     :rtype: float
-    
     """
     if(fm):
         return cclm.mus_pulsed_env(gen._ptr, fm)
     else:
         return cclm.mus_pulsed_env_unmodulated(gen._ptr)
         
-cpdef bint is_pulsedenv(gen: mus_any):
+cpdef bint is_pulsed_env(gen: mus_any):
     """
-    returns true if gen is a pulsed_env
+    returns True if gen is a pulsed_env.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_pulsed_env(gen._ptr)
@@ -2074,16 +2119,17 @@ cpdef bint is_pulsedenv(gen: mus_any):
 # todo envelope-interp different than env-interp
 
 # ---------------- table-lookup ---------------- #
-cpdef mus_any make_table_lookup(frequency: Optional[cython.double]=0.0, 
-                        initial_phase: Optional[cython.double]=0.0, 
+cpdef mus_any make_table_lookup(frequency: Optional[float]=0.0, 
+                        initial_phase: Optional[float]=0.0, 
                         wave=None, 
-                        size: Optional[int]=512, 
+                        size: Optional[int]=CLM.table_size, 
                         interp_type: Optional[int]=Interp.LINEAR):        
     """
-    return a new table_lookup generator. the default table size is 512; use size to set some other size, or pass your own list/array as the 'wave'.
-
-    :param frequency: frequency of gen in hz
-    :param initial_phase: initial phase of gen in radians
+    return a new table_lookup generator. the default table size is 512; use size to set some other
+    size, or pass your own list/array as the 'wave'.
+    
+    :param frequency: frequency of gen \in hz
+    :param initial_phase: initial phase of gen \in radians
     :param wave: np.ndarray if provided is waveform
     :param size: if no wave provided, this will allocate a table of size 
     :param interp_type: type of interpolation used
@@ -2107,13 +2153,11 @@ cpdef mus_any make_table_lookup(frequency: Optional[cython.double]=0.0,
     
 cpdef cython.double table_lookup(gen: mus_any, fm: Optional[float]=None):
     """
-    return next sample from table_lookup generator
-        
+    return next sample from table_lookup generator.
+    
     :param gen: table_lookup gen
     :param fm: fm input
-    :return: table_lookup output
     :rtype: float
-    
     """
     if fm:
         return cclm.mus_table_lookup(gen._ptr, fm)
@@ -2122,25 +2166,52 @@ cpdef cython.double table_lookup(gen: mus_any, fm: Optional[float]=None):
         
 cpdef bint is_table_lookup(gen: mus_any):
     """
-    returns true if gen is a table_lookup
+    returns True if gen is a table_lookup.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_table_lookup(gen._ptr)
 
-# todo make-table-lookup-with-env
 
-
+cpdef mus_any make_table_lookup_with_env(frequency: cython.double, envelope, size=None):
+    """
+    return a new table_lookup generator with the envelope loaded \in with size.
+    
+    :param frequency: frequency of gen \in hz
+    :param env: envelope shape to load into generator
+    :param size: size of table derived from envelope
+    :return: table_lookup gen
+    :rtype: mus_any
+    
+    """
+    size = size or CLM.table_size
+    table = np.zeros(size)  
+    e = make_env(envelope, length=size)
+    for i in range(size):
+        table[i] = env(e)
+    cdef double [:] table_view = table
+    
+    gen =  mus_any.from_ptr(cclm.mus_make_table_lookup(frequency, 0, &table_view[0], size, <cclm.mus_interp_t>Interp.LINEAR))
+    gen.cache_append(table)
+    return gen
          
 # ---------------- polywave ---------------- #
-cpdef mus_any make_polywave(frequency: cython.double, 
-                    partials = [0.,1.], 
+cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.], 
                     kind: Optional[int]=Polynomial.FIRST_KIND, 
                     xcoeffs = None, 
                     ycoeffs = None):
     """
-    return a new polynomial-based waveshaping generator. make_polywave(440.0, partials=[1.0,1.0]) is the same in effect as make_oscil
+    return a new polynomial-based waveshaping generator. make_polywave(440.0, partials=[1.0,1.0]) is
+    the same \in effect as make_oscil.
+    
+    :param frequency: polywave frequency
+    :param partials: a list of harmonic numbers and their associated amplitudes
+    :param kind: Chebyshev polynomial choice
+    :param xcoeffs: tn for tu-sum case
+    :param ycoeffs: un for tu-sum case
+    :return: polywave gen
+    :rtype: mus_any
     """
     cdef double [:] xcoeffs_view = None
     cdef double [:] ycoeffs_view = None
@@ -2173,7 +2244,11 @@ cpdef mus_any make_polywave(frequency: cython.double,
     
 cpdef cython.double polywave(gen: mus_any, fm: Optional[float]=None):
     """
-    next sample of polywave waveshaper
+    next sample of polywave waveshaper.
+    
+    :param gen: polywave gen
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
         return cclm.mus_polywave(gen._ptr, fm)
@@ -2182,9 +2257,9 @@ cpdef cython.double polywave(gen: mus_any, fm: Optional[float]=None):
         
 cpdef bint is_polywave(gen: mus_any):
     """
-    returns true if gen is a polywave
+    returns True if gen is a polywave.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_polywave(gen._ptr)
@@ -2193,14 +2268,22 @@ cpdef bint is_polywave(gen: mus_any):
 
 # ---------------- polyshape ---------------- #
 
-cpdef mus_any make_polyshape(frequency: cython.double,
-                    initial_phase: Optional[cython.double]=0.0,
+cpdef mus_any make_polyshape(frequency: float,
+                    initial_phase: Optional[float]=0.0,
                     coeffs=None,
                     partials= [1.,1.], 
                     kind: Optional[int]=Polynomial.FIRST_KIND):
                     
     """
     return a new polynomial-based waveshaping generator.
+    
+    :param frequency: frequency of gen \in hz
+    :param initial_phase: initial phase of gen \in radians
+    :param coeff: coefficients can be passed to polyshape
+    :param partials: a list of harmonic numbers and their associated amplitudes
+    :param kind: Chebyshev polynomial choice
+    :return: polyshape gen
+    :rtype: mus_any
     """
     
     
@@ -2223,7 +2306,12 @@ cpdef mus_any make_polyshape(frequency: cython.double,
     
 cpdef cython.double polyshape(gen: mus_any, index: Optional[float]=1.0, fm: Optional[float]=None):
     """
-    next sample of polynomial-based waveshaper
+    next sample of polynomial-based waveshaper.
+    
+    :param gen: polyshape gen
+    :param index: fm index
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
         return cclm.mus_polyshape(gen._ptr, index, fm)
@@ -2232,24 +2320,35 @@ cpdef cython.double polyshape(gen: mus_any, index: Optional[float]=1.0, fm: Opti
         
 cpdef bint is_polyshape(gen: mus_any):
     """
-    returns true if gen is a polyshape
+    returns True if gen is a polyshape.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_polyshape(gen._ptr)
 
 
 # ---------------- triangle-wave ---------------- #    
-cpdef mus_any make_triangle_wave(frequency: cython.double, amplitude: Optional[cython.double]=1.0, phase: Optional[cython.double]=0.0):
+cpdef mus_any make_triangle_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
     """
     return a new triangle_wave generator.
+    
+    :param frequency: frequency of generator
+    :param amplitude: amplitude of generator
+    :param phase: initial phase
+    :return: triangle_wave gen
+    :rtype: mus_any
+    
     """
     return mus_any.from_ptr(cclm.mus_make_triangle_wave(frequency, amplitude, phase))
     
-cpdef cython.double triangle_wave(gen: mus_any, fm: Optional[cython.double]=None):
+cpdef cython.double triangle_wave(gen: mus_any, fm: Optional[float]=None):
     """
-    next triangle wave sample from generator
+    next triangle wave sample from generator  .
+    
+    :param gen: polyshape gen
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
         return cclm.mus_triangle_wave(gen._ptr, fm)
@@ -2258,68 +2357,98 @@ cpdef cython.double triangle_wave(gen: mus_any, fm: Optional[cython.double]=None
     
 cpdef bint is_triangle_wave(gen: mus_any):
     """
-    returns true if gen is a triangle_wave
+    returns True if gen is a triangle_wave.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_triangle_wave(gen._ptr)
 
 # ---------------- square-wave ---------------- #    
-cpdef mus_any make_square_wave(frequency: cython.double, amplitude: Optional[cython.double]=1.0, phase: Optional[cython.double]=0.0):
+cpdef mus_any make_square_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
     """
     return a new square_wave generator.
+    
+    :param frequency: frequency of generator
+    :param amplitude: amplitude of generator
+    :param phase: initial phase
+    :return: square_wave gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_square_wave(frequency, amplitude, phase))
     
 cpdef cython.double square_wave(gen: mus_any, fm: cython.double=0.0):
     """
-    next square wave sample from generator
+    next square wave sample from generator.
+    
+    :param gen: polyshape gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_square_wave(gen._ptr, fm)
     
 cpdef bint is_square_wave(gen: mus_any):
     """
-    returns true if gen is a square_wave
+    returns True if gen is a square_wave.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_square_wave(gen._ptr)
     
 # ---------------- sawtooth-wave ---------------- #    
-cpdef mus_any make_sawtooth_wave(frequency: cython.double, amplitude: Optional[cython.double]=1.0, phase: Optional[cython.double]=0.0):
+cpdef mus_any make_sawtooth_wave(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
     """
     return a new sawtooth_wave generator.
+    
+    :param frequency: frequency of generator
+    :param amplitude: amplitude of generator
+    :param phase: initial phase
+    :return: sawtooth_wave gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_sawtooth_wave(frequency, amplitude, phase))
     
 cpdef cython.double sawtooth_wave(gen: mus_any, fm: cython.double=0.0):
     """
-    next sawtooth wave sample from generator
+    next sawtooth wave sample from generator.
+    
+    :param gen: polyshape gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_sawtooth_wave(gen._ptr, fm)
 
     
 cpdef bint is_sawtooth_wave(gen: mus_any):
     """
-    returns true if gen is a sawtooth_wave
+    returns True if gen is a sawtooth_wave.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_sawtooth_wave(gen._ptr)
 
 # ---------------- pulse-train ---------------- #        
-cpdef mus_any make_pulse_train(frequency: cython.double, amplitude: Optional[cython.double]=1.0, phase: Optional[cython.double]=0.0):
+cpdef mus_any make_pulse_train(frequency: float, amplitude: Optional[float]=1.0, phase: Optional[float]=0.0):
     """
     return a new pulse_train generator. this produces a sequence of impulses.
+    
+    :param frequency: frequency of generator
+    :param amplitude: amplitude of generator
+    :param phase: initial phase
+    :return: pulse_train gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_pulse_train(frequency, amplitude, phase))
     
-cpdef cython.double pulse_train(gen: mus_any, fm: Optional[cython.double]=None):
+cpdef cython.double pulse_train(gen: mus_any, fm: Optional[float]=None):
     """
-    next pulse train sample from generator
+    next pulse train sample from generator.
+    
+    :param gen: pulse_train gen
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
         return cclm.mus_pulse_train(gen._ptr, fm)
@@ -2328,158 +2457,227 @@ cpdef cython.double pulse_train(gen: mus_any, fm: Optional[cython.double]=None):
      
 cpdef bint is_pulse_train(gen: mus_any):
     """
-    returns true if gen is a pulse_train
+    returns True if gen is a pulse_train.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_pulse_train(gen._ptr)
     
 # ---------------- ncos ---------------- #
 
-cpdef mus_any make_ncos(frequency: cython.double, n: Optional[int]=1):
+cpdef mus_any make_ncos(frequency: float, n: Optional[int]=1):
     """
     return a new ncos generator, producing a sum of 'n' equal amplitude cosines.
+    
+    :param frequency: frequency of generator
+    :param n: number of cosines
+    :return: ncos gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_ncos(frequency, n))
     
-cpdef cython.double ncos(gen: mus_any, fm: Optional[cython.double]=0.0):
+cpdef cython.double ncos(gen: mus_any, fm: Optional[float]=0.0):
     """
-    get the next sample from 'gen', an ncos generator
+    get the next sample from 'gen', an ncos generator.
+    
+    :param gen: ncos gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_ncos(gen._ptr, fm)
 
 cpdef bint is_ncos(gen: mus_any):
     """
-    returns true if gen is a ncos
+    returns True if gen is a ncos.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_ncos(gen._ptr)
     
     
 # ---------------- nsin ---------------- #
-cpdef mus_any make_nsin(frequency: cython.double, n: Optional[int]=1):
+cpdef mus_any make_nsin(frequency: float, n: Optional[int]=1):
     """
-    return a new nsin generator, producing a sum of 'n' equal amplitude sines
+    return a new nsin generator, producing a sum of 'n' equal amplitude sines.
+    
+    :param frequency: frequency of generator
+    :param n: number of sines
+    :return: nsin gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_nsin(frequency, n))
     
-cpdef cython.double nsin(gen: mus_any, fm: Optional[cython.double]=0.0):
+cpdef cython.double nsin(gen: mus_any, fm: Optional[float]=0.0):
     """
-    get the next sample from 'gen', an nsin generator
+    get the next sample from 'gen', an nsin generator.
+    
+    :param gen: ncos gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_nsin(gen._ptr, fm)
     
 cpdef bint is_nsin(gen: mus_any):
     """
-    returns true if gen is a nsin
+    returns True if gen is a nsin.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_nsin(gen._ptr)
     
 # ---------------- nrxysin and nrxycos ---------------- #
 
-cpdef mus_any make_nrxysin(frequency: cython.double, ratio: Optional[float]=1., n: Optional[int]=1, r: Optional[float]=.5):
+cpdef mus_any make_nrxysin(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1, r: Optional[float]=.5):
     """
     return a new nrxysin generator.
+    
+    :param frequency: frequency of generator
+    :param ratio: ratio between frequency and the spacing between successive sidebands
+    :param n: number of sidebands
+    :param r: amplitude ratio between successive sidebands (-1.0 < r < 1.0)
+    :return: nrxysin gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_nrxysin(frequency, ratio, n, r))
     
-cpdef cython.double nrxysin(gen: mus_any, fm: Optional[cython.double]=0.):
+cpdef cython.double nrxysin(gen: mus_any, fm: Optional[float]=0.):
     """
-    next sample of nrxysin generator
+    next sample of nrxysin generator.
+    
+    :param gen: ncos gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_nrxysin(gen._ptr, fm)
     
 cpdef bint is_nrxysin(gen: mus_any):
     """
-    returns true if gen is a nrxysin
+    returns True if gen is a nrxysin.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_nrxysin(gen._ptr)
     
     
-cpdef mus_any make_nrxycos(frequency: cython.double, ratio: Optional[cython.double]=1., n: Optional[int]=1, r: Optional[cython.double]=.5):
+cpdef mus_any make_nrxycos(frequency: float, ratio: Optional[float]=1., n: Optional[int]=1, r: Optional[float]=.5):
     """
     return a new nrxycos generator.
+    
+    :param frequency: frequency of generator
+    :param ratio: ratio between frequency and the spacing between successive sidebands
+    :param n: number of sidebands
+    :param r: amplitude ratio between successive sidebands (-1.0 < r < 1.0)
+    :return: nrxycos gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_nrxycos(frequency, ratio, n, r))
     
-cpdef cython.double nrxycos(gen: mus_any, fm: Optional[cython.double]=0.):
+cpdef cython.double nrxycos(gen: mus_any, fm: Optional[float]=0.):
     """
-    next sample of nrxycos generator
+    next sample of nrxycos generator.
+    
+    :param gen: ncos gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_nrxycos(gen._ptr, fm)
     
 cpdef bint is_nrxycos(gen: mus_any):
     """
-    returns true if gen is a nrxycos
+    returns True if gen is a nrxycos.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_nrxycos(gen._ptr)
     
     
 # ---------------- rxykcos and rxyksin ---------------- #    
-cpdef mus_any make_rxykcos(frequency: cython.double, phase: cython.double, r: Optional[cython.double]=.5, ratio: Optional[cython.double]=1.):
+cpdef mus_any make_rxykcos(frequency: float, phase: Optional[float]=0.0, r: Optional[float]=.5, ratio: Optional[float]=1.):
     """
     return a new rxykcos generator.
+    
+    :param frequency: frequency of generator
+    :param ratio: ratio between frequency and the spacing between successive sidebands
+    :param r: amplitude ratio between successive sidebands (-1.0 < r < 1.0)
+    :return: rxykcos gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_rxykcos(frequency, phase, r, ratio))
     
 cpdef cython.double rxykcos(gen: mus_any, fm: Optional[float]=0.):
     """
-    next sample of rxykcos generator
+    next sample of rxykcos generator.
+    
+    :param gen: rxykcos gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_rxykcos(gen._ptr, fm)
     
 cpdef bint is_rxykcos(gen: mus_any):
     """
-    returns true if gen is a rxykcos
+    returns True if gen is a rxykcos.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_rxykcos(gen._ptr)
 
-cpdef mus_any make_rxyksin(frequency: cython.double, phase: cython.double, r: Optional[cython.double]=.5, ratio: Optional[cython.double]=1.):
+cpdef mus_any make_rxyksin(frequency: float, phase: cython.double, r: Optional[float]=.5, ratio: Optional[float]=1.):
     """
     return a new rxyksin generator.
+    
+    :param frequency: frequency of generator
+    :param ratio: ratio between frequency and the spacing between successive sidebands
+    :param r: amplitude ratio between successive sidebands (-1.0 < r < 1.0)
+    :return: rxyksin gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_rxyksin(frequency, phase, r, ratio))
 
-cpdef cython.double rxyksin(gen:  mus_any, fm: Optional[cython.double]=0.):
+cpdef cython.double rxyksin(gen:  mus_any, fm: Optional[float]=0.):
     """
-    next sample of rxyksin generator
+    next sample of rxyksin generator.
+    
+    :param gen: rxyksin gen
+    :param fm: fm input
+    :rtype: float
     """
     return cclm.mus_rxyksin(gen._ptr, fm)
     
 cpdef bint  is_rxyksin(gen: mus_any):
     """
-    returns true if gen is a rxyksin
+    returns True if gen is a rxyksin.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """    
     return cclm.mus_is_rxyksin(gen._ptr)
         
 # ---------------- ssb-am ---------------- #    
-cpdef mus_any make_ssb_am(frequency: cython.double, n: Optional[int]=40):
+cpdef mus_any make_ssb_am(frequency: float, order: Optional[int]=40):
     """
     return a new ssb_am generator.
-    """
-    return mus_any.from_ptr(cclm.mus_make_ssb_am(frequency, n))
     
-cpdef cython.double ssb_am(gen: mus_any, insig: cython.double, fm: Optional[cython.double]=None):
+    :param frequency: frequency of generator
+    :param order: embedded delay line size
+    :return: ssb_am gen
+    :rtype: mus_any
     """
-    get the next sample from ssb_am generator
+    return mus_any.from_ptr(cclm.mus_make_ssb_am(frequency, order))
+    
+cpdef cython.double ssb_am(gen: mus_any, insig: float, fm: Optional[float]=None):
+    """
+    get the next sample from ssb_am generator.
+    
+    :param gen: ssb_am gen
+    :param fm: fm input
+    :rtype: float
     """
     if(fm):
         return cclm.mus_ssb_am(gen._ptr, insig, fm)
@@ -2488,9 +2686,9 @@ cpdef cython.double ssb_am(gen: mus_any, insig: cython.double, fm: Optional[cyth
         
 cpdef bint is_ssb_am(gen: mus_any):
     """
-    returns true if gen is a ssb_am
+    returns True if gen is a ssb_am.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_ssb_am(gen._ptr)
@@ -2498,19 +2696,31 @@ cpdef bint is_ssb_am(gen: mus_any):
 
 
 # ---------------- wave-train ----------------#
-cpdef mus_any make_wave_train(frequency: cython.double, wave: npt.NDArray[np.float64], phase: Optional[cython.double]=0., interp_type=Interp.LINEAR):
+cpdef mus_any make_wave_train(frequency: float, wave: npt.NDArray[np.float64], initial_phase: Optional[float]=0., interp_type=Interp.LINEAR):
     """
-    return a new wave-train generator (an extension of pulse-train). frequency is the repetition rate of the wave found in wave. successive waves can overlap.
+    return a new wave-train generator (an extension of pulse-train). frequency is the repetition rate
+    of the wave found \in wave. successive waves can overlap.
+    
+    :param frequency: frequency of gen \in hz
+    :param wave: np.ndarray if provided is waveform
+    :param initial_phase: initial phase of gen \in radians
+    :param interp_type: type of interpolation used
+    :return: wave_train gen
+    :rtype: mus_any
     """
     check_ndim(wave)
     cdef double [:] wave_view = wave
-    gen = mus_any.from_ptr(cclm.mus_make_wave_train(frequency, phase, &wave_view[0], len(wave), interp_type))
+    gen = mus_any.from_ptr(cclm.mus_make_wave_train(frequency, initial_phase, &wave_view[0], len(wave), interp_type))
     gen.cache_append(wave)
     return gen
     
 cpdef cython.double wave_train(gen: mus_any, fm: Optional[float]=None):
     """
-    next sample of wave_train
+    next sample of wave_train.
+    
+    :param gen: wave_train gen
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
         return cclm.mus_wave_train(gen._ptr, fm)
@@ -2519,18 +2729,28 @@ cpdef cython.double wave_train(gen: mus_any, fm: Optional[float]=None):
     
 cpdef bint is_wave_train(gen: mus_any):
     """
-    returns true if gen is a wave_train
+    returns True if gen is a wave_train.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """    
     return cclm.mus_is_wave_train(gen._ptr)
 
 
-cpdef mus_any make_wave_train_with_env(frequency: cython.double, pulse_env, size=None):
+cpdef mus_any make_wave_train_with_env(frequency: float, envelope, size=None):
+    """
+    return a new wave-train generator with the envelope loaded \in with size.
+    
+    :param frequency: frequency of gen \in hz
+    :param env: envelope shape to load into generator
+    :param size: size of wave derived from envelope
+    :return: wave_train gen
+    :rtype: mus_any
+    
+    """
     size = size or CLM.table_size
     wave = np.zeros(size)  
-    e = make_env(pulse_env, length=size)
+    e = make_env(envelope, length=size)
     for i in range(size):
         wave[i] = env(e)
     cdef double [:] wave_view = wave
@@ -2539,9 +2759,16 @@ cpdef mus_any make_wave_train_with_env(frequency: cython.double, pulse_env, size
     return gen
 
 # ---------------- rand, rand_interp ---------------- #
-cpdef mus_any make_rand(frequency: cython.double, amplitude: Optional[cython.double]=1.0, distribution=None):
+cpdef mus_any make_rand(frequency: float, amplitude: Optional[float]=1.0, distribution=None):
     """
-    return a new rand generator, producing a sequence of random numbers (a step  function). frequency is the rate at which new numbers are chosen.
+    return a new rand generator, producing a sequence of random numbers (a step  function). frequency
+    is the rate at which new numbers are chosen.
+    
+    :param frequency: frequency at which new random numbers occur
+    :param amplitude: numbers are between -amplitude and amplitude
+    :param distribution: distribution envelope
+    :return: rand gen
+    :rtype: mus_any
     """
     cdef double [:] distribution_view = None
     
@@ -2554,9 +2781,14 @@ cpdef mus_any make_rand(frequency: cython.double, amplitude: Optional[cython.dou
     else:
         return mus_any.from_ptr(cclm.mus_make_rand(frequency, amplitude))
 
-cpdef cython.double rand(gen: mus_any, sweep: Optional[cython.double]=None):
+cpdef cython.double rand(gen: mus_any, sweep: Optional[float]=None):
     """
-    gen's current random number. fm modulates the rate at which the current number is changed.
+    gen's current random number. sweep modulates the rate at which the current number is changed.
+    
+    :param gen: rand gen
+    :param sweep: fm
+    :rtype: float
+    
     """
     if(sweep):
         return cclm.mus_rand(gen._ptr, sweep)
@@ -2565,16 +2797,23 @@ cpdef cython.double rand(gen: mus_any, sweep: Optional[cython.double]=None):
     
 cpdef bint is_rand(gen: mus_any):
     """
-    returns true if gen is a rand
+    returns True if gen is a rand.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_rand(gen._ptr)
 
-cpdef mus_any make_rand_interp(frequency: cython.double, amplitude: cython.double, distribution=None):
+cpdef mus_any make_rand_interp(frequency: float, amplitude: float, distribution=None):
     """
-    return a new rand_interp generator, producing linearly interpolated random numbers. frequency is the rate at which new end-points are chosen.
+    return a new rand_interp generator, producing linearly interpolated random numbers. frequency is
+    the rate at which new end-points are chosen.
+    
+    :param frequency: frequency at which new random numbers occur
+    :param amplitude: numbers are between -amplitude and amplitude
+    :param distribution: distribution envelope
+    :return: rand_interp gen
+    :rtype: mus_any
     """
     
     cdef double [:] distribution_view = None
@@ -2588,9 +2827,14 @@ cpdef mus_any make_rand_interp(frequency: cython.double, amplitude: cython.doubl
     else:
         return mus_any.from_ptr(cclm.mus_make_rand_interp(frequency, amplitude))
     
-cpdef rand_interp(gen: mus_any, sweep: Optional[cython.double]=0.):
+cpdef rand_interp(gen: mus_any, sweep: Optional[float]=0.):
     """
-    gen's current (interpolating) random number. fm modulates the rate at which new segment end-points are chosen.
+    gen's current (interpolating) random number. fm modulates the rate at which new segment end-points
+    are chosen.
+    
+    :param gen: rand_interp gen
+    :param sweep: fm 
+    :rtype: float
     """
     if(sweep):
         return cclm.mus_rand_interp(gen._ptr, sweep)
@@ -2599,9 +2843,8 @@ cpdef rand_interp(gen: mus_any, sweep: Optional[cython.double]=0.):
     
 cpdef bint is_rand_interp(gen: mus_any):
     """
-    returns true if gen is a rand_interp
+    returns True if gen is a rand_interp.
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_rand_interp(gen._ptr)    
@@ -2610,134 +2853,184 @@ cpdef bint is_rand_interp(gen: mus_any):
 # ---------------- simple filters ---------------- #
 cpdef mus_any make_one_pole(a0: cython.double, b1: cython.double):
     """
-    return a new one_pole filter; a0*x(n) - b1*y(n-1)
-    """
-    return mus_any.from_ptr(cclm.mus_make_one_pole(a0, b1))
+    return a new one_pole filter: y(n) = a0 x(n) - b1 y(n-1)
+    b1 < 0.0 gives lowpass, b1 > 0.0 gives highpass.
     
-cpdef cython.double one_pole(gen: mus_any, insig: cython.double):
+    :param a0: coefficient
+    :param b1: coefficient
+    :return: one_pole gen
+    :rtype: mus_any
+    """
+    
+    return mus_any.from_ptr(cclm.mus_make_one_pole(a0, b1))
+
+    
+    
+cpdef cython.double one_pole(gen: mus_any, insig: float):
     """
     one pole filter of input.
+    
+    :param gen: one_pole gen
+    :param insig: input 
+    :rtype: float
     """
+    
     return cclm.mus_one_pole(gen._ptr, insig)
     
 cpdef bint is_one_pole(gen: mus_any):
     """
-    returns true if gen is a one_pole
+    returns True if gen is a one_pole.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_one_pole(gen._ptr)
-    
-cpdef mus_any make_one_zero(a0: cython.double, a1: cython.double):
+
+
+cpdef mus_any make_one_zero(a0: float, a1: float):
     """
-    return a new one_zero filter; a0*x(n) + a1*x(n-1)
+    return a new one_zero filter: y(n) = a0 x(n) + a1 x(n-1)
+    a1 > 0.0 gives weak lowpass, a1 < 0.0 highpass.
+    
+    :param a0: coefficient
+    :param a1: coefficient
+    :return: one_pole gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_one_zero(a0, a1))
     
-cpdef cython.double one_zero(gen: mus_any, insig: cython.double):
+cpdef cython.double one_zero(gen: mus_any, insig: float):
     """
     one zero filter of input.
+    
+    :param gen: one_zero gen
+    :param insig: input 
+    :rtype: float
     """
     return cclm.mus_one_zero(gen._ptr, insig)
     
 cpdef bint is_one_zero(gen: mus_any):
     """
-    returns true if gen is a one_zero
+    returns True if gen is a one_zero.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_one_zero(gen._ptr)    
 
 # make def for *args. are there other ways
-def make_two_pole(*args):
+def make_two_pole(frequency: [Optional]=None, radius: [Optional]=None, **kwargs):
     """
-    return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)
+    return a new two_pole filter: y(n) = a0 x(n) - b1 y(n-1) - b2 y(n-2).
+    
+    :param frequency: Center frequency \in Hz
+    :param radius: Radius of filter. Refers to the unit circle, so it should be between 0.0 and (less than) 1.0. 
+    :param kwargs: If frequency and radius not provided, these should be keyword arguments 'a0', 'b1', 'b2'
+    :return: two_pole gen
+    :rtype: mus_any
     """
-    if(len(args) == 2):
-        return mus_any.from_ptr(cclm.mus_make_two_pole_from_frequency_and_radius(args[0], args[1]))
-    elif(len(args) == 3):
-        return mus_any.from_ptr(cclm.mus_make_two_pole(args[0], args[1], args[2]))
+    
+    if kwargs:
+        if 'a0' in kwargs and 'b1' in kwargs and 'b2' in kwargs:
+            return mus_any.from_ptr(cclm.mus_make_two_pole(kwargs.get('a0'), kwargs.get('b1'), kwargs.get('b2')))
+        else:
+            raise KeyError(f'Filter needs values for a0, b1, b2')
+        
     else:
-        raise RuntimeError("requires either 2 or 3 args but received {len(args)}.")
+        if frequency is not None and radius is not None:
+            return mus_any.from_ptr(cclm.mus_make_two_pole_from_frequency_and_radius(frequency, radius))
+        else:
+            raise RuntimeError("If not specifying coeffs, must provide frequency and radius.")
        
-cpdef cython.double two_pole(gen: mus_any, insig: cython.double):
+cpdef cython.double two_pole(gen: mus_any, insig: float):
     """
-    return a new two_pole filter; a0*x(n) - b1*y(n-1) - b2*y(n-2)
+    two pole filter of input.
+    
+    :param gen: two_pole gen
+    :param insig: input 
+    :rtype: float  
+    
     """
     return cclm.mus_two_pole(gen._ptr, insig)
     
 cpdef bint is_two_pole(gen: mus_any):
     """
-    returns true if gen is a two_pole
+    returns True if gen is a two_pole.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_two_pole(gen._ptr)
 
 # make def for *args. are there other ways
-def make_two_zero(*args):
+def make_two_zero(frequency: [Optional]=None, radius: [Optional]=None, **kwargs):
     """
-    return a new two_zero filter; a0*x(n) + a1*x(n-1) + a2*x(n-2)
+    return a new two_zero filter: y(n) = a0 x(n) + a1 x(n-1) + a2 x(n-2).
+    
+    :param frequency: Center frequency \in Hz
+    :param radius: Radius of filter. Refers to the unit circle, so it should be between 0.0 and (less than) 1.0. 
+    :param kwargs: If frequency and radius not provided, these should be keyword arguments 'a0', 'a1', 'a2'
+    :return: two_zero gen
+    :rtype: mus_any
     """
-    if(len(args) == 2):
-        return mus_any.from_ptr(cclm.mus_make_two_zero_from_frequency_and_radius(args[0], args[1]))
-    elif(len(args) == 3):
-        return mus_any.from_ptr(cclm.mus_make_two_zero(args[0], args[1], args[2]))
+    
+    if kwargs:
+        if 'a0' in kwargs and 'a1' in kwargs and 'a1' in kwargs:
+            return mus_any.from_ptr(cclm.mus_make_two_zero(kwargs.get('a0'), kwargs.get('a1'), kwargs.get('a2')))
+        else:
+            raise KeyError(f'Filter needs values for a0, a1, a2')
+        
     else:
-        raise RuntimeError("requires either 2 or 3 args but received {len(args)}.")
+        if frequency is not None and radius is not None:
+            return mus_any.from_ptr(cclm.mus_make_two_zero_from_frequency_and_radius(frequency, radius))
+        else:
+            raise RuntimeError("If not specifying coeffs, must provide frequency and radius.")
 
-cpdef cython.double two_zero(gen: mus_any, input: float):
+cpdef cython.double two_zero(gen: mus_any, insig: float):
     """
-    two zero filter of input.
+    two zero filter of input. 
+    
+    :param gen: two_zero gen
+    :param insig: input 
+    :rtype: float  
     """
-    return cclm.mus_two_zero(gen._ptr, input)
+    return cclm.mus_two_zero(gen._ptr, insig)
     
 cpdef bint is_two_zero(gen: mus_any):
     """
-    returns true if gen is a two_zero
+    returns True if gen is a two_zero.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_two_zero(gen._ptr)
     
-    
-# ---------------- one_pole_all_pass ---------------- #
-cpdef mus_any make_one_pole_all_pass(size: int, coeff: float):
-    """
-    return a new one_pole all_pass filter size, coeff
-    
-    """
-    return mus_any.from_ptr(cclm.mus_make_one_pole_all_pass(size, coeff))
-    
-cpdef cython.double one_pole_all_pass(gen: mus_any, insig: cython.double):
-    """
-    one pole all pass filter of input.
-    """
-    return cclm.mus_one_pole_all_pass(gen._ptr, insig)
-    
-cpdef bint is_one_pole_all_pass(gen: mus_any):
-    """
-    returns true if gen is a one_pole_all_pass
-    :param gen: gen
-    :return: result
-    :rtype: bool
-    """
-    return cclm.mus_is_one_pole_all_pass(gen._ptr)
+
 
 
 # ---------------- formant ---------------- #
-cpdef mus_any make_formant(frequency: cython.double, radius: cython.double):
-    """return a new formant generator (a resonator). radius sets the pole radius (in terms of the 'unit circle').
-        frequency sets the resonance center frequency (hz)."""
+cpdef mus_any make_formant(frequency: float, radius: float):
+    """
+    return a new formant generator (a resonator). radius sets the pole radius (in terms of the 'unit circle').
+    frequency sets the resonance center frequency (hz).
+    
+    :param frequency: resonance center frequency \in Hz
+    :param radius: resonance width, refers to the unit circle, so it should be between 0.0 and (less than) 1.0. 
+    :return: formant gen
+    :rtype: mus_any
+    """
+        
     return mus_any.from_ptr(cclm.mus_make_formant(frequency, radius))
 
-cpdef cython.double formant(gen: mus_any, insig: cython.double, radians: Optional[float]=None):
+cpdef cython.double formant(gen: mus_any, insig: float, radians: Optional[float]=None):
     """
-    next sample from resonator generator.
+    next sample from formant generator.
+    
+    :param gen: formant gen
+    :param insig: input value
+    :param radians: frequency \in radians
+    :rtype: float
+    
     """
     if radians:
         return cclm.mus_formant_with_frequency(gen._ptr, insig, radians)
@@ -2746,9 +3039,9 @@ cpdef cython.double formant(gen: mus_any, insig: cython.double, radians: Optiona
     
 cpdef bint is_formant(gen: mus_any):
     """
-    returns true if gen is a formant
+    returns True if gen is a formant.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_formant(gen._ptr)
@@ -2757,6 +3050,11 @@ cpdef bint is_formant(gen: mus_any):
 cpdef mus_any make_formant_bank(filters: list, amps=None):
     """
     return a new formant-bank generator.
+    
+    :param filters: list of filter gens
+    :param amps: list of amps to apply to filters
+    :return: formant_bank gen
+    :rtype: mus_any
     """
     
     p = list(map(is_formant, filters))
@@ -2781,7 +3079,12 @@ cpdef mus_any make_formant_bank(filters: list, amps=None):
 
 cpdef cython.double formant_bank(gen: mus_any, inputs):
     """
-    sum a bank of formant generators
+    sum a bank of formant generators.
+    
+    :param gen: formant_bank gen
+    :param inputs: can be a list/array of inputs or a single input
+    :rtype: float
+    
     """
     
     cdef double [:] inputs_view = None
@@ -2796,22 +3099,35 @@ cpdef cython.double formant_bank(gen: mus_any, inputs):
      
 cpdef bint is_formant_bank(gen: mus_any):
     """
-    returns true if gen is a formant_bank
+    returns True if gen is a formant_bank.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_formant_bank(gen._ptr)
 
 # ---------------- firmant ---------------- #
-cpdef mus_any make_firmant(frequency: cython.double, radius: cython.double):
-    """return a new firmant generator (a resonator).  radius sets the pole radius (in terms of the 'unit circle').
-        frequency sets the resonance center frequency (hz)."""
+cpdef mus_any make_firmant(frequency: float, radius: float):
+    """
+    return a new firmant generator (a resonator).  radius sets the pole radius (in terms of the 'unit
+    circle'). frequency sets the resonance center frequency (hz).
+    
+    :param frequency: resonance center frequency \in Hz
+    :param radius: resonance width, refers to the unit circle, so it should be between 0.0 and (less than) 1.0. 
+    :return: formant gen
+    :rtype: mus_any       
+    """
     return mus_any.from_ptr(cclm.mus_make_firmant(frequency, radius))
 
-cpdef firmant(gen: mus_any, insig: cython.double, radians: Optional[cython.double]=None ):
+cpdef firmant(gen: mus_any, insig: float, radians: Optional[float]=None ):
     """
     next sample from resonator generator.
+    
+    next sample from firmant generator.
+    :param gen: firmant gen
+    :param insig: input value
+    :param radians: frequency \in radians
+    :rtype: float
     """
     if radians:
         return cclm.mus_firmant_with_frequency(gen._ptr, insig, radians)
@@ -2820,9 +3136,9 @@ cpdef firmant(gen: mus_any, insig: cython.double, radians: Optional[cython.doubl
             
 cpdef is_firmant(gen: mus_any):
     """
-    returns true if gen is a firmant
+    returns True if gen is a firmant.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_firmant(gen._ptr)
@@ -2830,7 +3146,13 @@ cpdef is_firmant(gen: mus_any):
 # ---------------- filter ---------------- #
 cpdef mus_any make_filter(order: int, xcoeffs, ycoeffs):   
     """
-    return a new direct form fir/iir filter, coeff args are list/ndarray
+    return a new direct form fir/iir filter, coeff args are list/ndarray.
+    
+    :param order: filter order
+    :param xcoeffs: x coeffs
+    :param ycoeffs: y coeffs
+    :return: filter gen
+    :rtype: mus_any
     """
     cdef double [:] xcoeffs_view = None
     cdef double [:] ycoeffs_view = None
@@ -2849,17 +3171,21 @@ cpdef mus_any make_filter(order: int, xcoeffs, ycoeffs):
     gen.cache_extend([xcoeffs, ycoeffs])
     return gen
     
-cpdef cython.double filter(gen: mus_any, insig: cython.double): # todo : conflicts with buitl in function
+cpdef cython.double filter(gen: mus_any, insig: float): # todo : conflicts with buitl in function
     """
-    next sample from filter
+    next sample from filter.
+    
+    :param gen: filter gen
+    :param insig: input value
+    :rtype: float
     """
     return cclm.mus_filter(gen._ptr, insig)
     
 cpdef bint is_filter(gen: mus_any):
     """
-    returns true if gen is a filter
+    returns True if gen is a filter.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_filter(gen._ptr)
@@ -2867,7 +3193,12 @@ cpdef bint is_filter(gen: mus_any):
 # ---------------- fir-filter ---------------- #
 cpdef mus_any make_fir_filter(order: int, xcoeffs):
     """
-    return a new fir filter, xcoeffs a list/ndarray
+    return a new fir filter, xcoeffs a list/ndarray.
+    
+    :param order: filter order
+    :param xcoeffs: x coeffs
+    :return: fir_filter gen
+    :rtype: mus_any
     """
     cdef double [:] xcoeffs_view = None
 
@@ -2877,21 +3208,25 @@ cpdef mus_any make_fir_filter(order: int, xcoeffs):
     xcoeffs_view = xcoeffs   
 
     gen =  mus_any.from_ptr(cclm.mus_make_fir_filter(order, &xcoeffs_view[0], NULL))
-    gen.cache_append([xcoeffs])
+    gen.cache_append(xcoeffs)
     
     return gen
     
-cpdef cython.double fir_filter(gen: mus_any, insig: cython.double):
+cpdef cython.double fir_filter(gen: mus_any, insig: float):
     """
-    next sample from fir filter
+    next sample from fir filter.
+    
+    :param gen: fir_filter gen
+    :param insig: input value
+    :rtype: float
     """
     return cclm.mus_fir_filter(gen._ptr, insig)
     
 cpdef bint is_fir_filter(gen: mus_any):
     """
-    returns true if gen is a fir_filter
+    returns True if gen is a fir_filter.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_fir_filter(gen._ptr)
@@ -2900,7 +3235,12 @@ cpdef bint is_fir_filter(gen: mus_any):
 # ---------------- iir-filter ---------------- #
 cpdef mus_any make_iir_filter(order: int, ycoeffs):
     """
-    return a new iir filter, ycoeffs a list/ndarray
+    return a new iir filter, ycoeffs a list/ndarray.
+    
+    :param order: filter order
+    :param ycoeffs: y coeffs
+    :return: iir_filter gen
+    :rtype: mus_any
     """
     cdef double [:] ycoeffs_view = None
 
@@ -2911,29 +3251,41 @@ cpdef mus_any make_iir_filter(order: int, ycoeffs):
     
         
     gen = mus_any.from_ptr(cclm.mus_make_iir_filter(order, &ycoeffs_view[0], NULL))
-    gen.cache_append([ycoeffs])
+    gen.cache_append(ycoeffs)
     return gen
     
-cpdef cython.double iir_filter(gen: mus_any, insig: cython.double ):
+cpdef cython.double iir_filter(gen: mus_any, insig: float ):
     """
-    next sample from iir filter
+    next sample from iir filter.
+    
+    :param gen: iir_filter gen
+    :param insig: input value
+    :rtype: float
     """
     return cclm.mus_iir_filter(gen._ptr, insig)
     
 cpdef bint is_iir_filter(gen: mus_any):
     """
-    returns true if gen is a iir_filter
+    returns True if gen is a iir_filter
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_iir_filter(gen._ptr)
 
 cpdef np.ndarray make_fir_coeffs(order: int, envelope):
+    """
+    translates a frequency response envelope (actually, evenly spaced points \in a float-vector) into
+    the corresponding FIR filter coefficients. The order of the filter determines how close you get to the
+    envelope.
+    
+    :param order: order of the filter
+    :param envelope: response envelope
+    """
     cdef double [:] envelope_view = None
         
     if isinstance(envelope, list):
         envelope = np.ndarray(envelope)
+
     check_ndim(envelope)
     
     envelope_view = envelope
@@ -2949,11 +3301,20 @@ cpdef np.ndarray make_fir_coeffs(order: int, envelope):
 # ---------------- delay ---------------- #
 cpdef mus_any make_delay(size: int, 
                 initial_contents=None, 
-                initial_element: Optional[cython.double]=None, 
+                initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
                 interp_type=Interp.NONE):
     """
-    return a new delay line of size elements. if the delay length will be changing at run-time, max-size sets its maximum length
+    return a new delay line of size elements. if the delay length will be changing at run-time,
+    max-size sets its maximum length.
+    
+    :param size: delay length \in samples
+    :param initial_contents: delay line's initial values
+    :param initial_element: delay line's initial element
+    :param max_size: maximum delay size \in case the delay changes
+    :param type: interpolation type
+    :return: delay gen
+    :rtype: mus_any
     """
     
     cdef double [:] initial_contents_view = None
@@ -2981,13 +3342,20 @@ cpdef mus_any make_delay(size: int,
     else:   
         gen = mus_any.from_ptr(cclm.mus_make_delay(size, NULL, max_size, interp_type))
     
-    gen.cache_extend(initial_contents)
+    gen.cache_append(initial_contents)
     return gen
     
-cpdef cython.double delay(gen: mus_any, insig: cython.double, pm: Optional[cython.double]=None):
+cpdef cython.double delay(gen: mus_any, insig: float, pm: Optional[float]=None):
     """
     delay val according to the delay line's length and pm ('phase-modulation').
-    if pm is greater than 0.0, the max-size argument used to create gen should have accommodated its maximum value. 
+    if pm is greater than 0.0, the max-size argument used to create gen should have accommodated 
+    its maximum value. 
+    
+    :param gen: delay gen
+    :param insig: input value
+    :param pm: change \in delay length size. can be + or -
+    :rtype: float
+
     """
     if pm:
         return cclm.mus_delay(gen._ptr, insig, pm)
@@ -2996,16 +3364,21 @@ cpdef cython.double delay(gen: mus_any, insig: cython.double, pm: Optional[cytho
         
 cpdef bint is_delay(gen: mus_any):
     """
-    returns true if gen is a delay
+    returns True if gen is a delay.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_delay(gen._ptr)
 
-cpdef cython.double tap(gen: mus_any, offset: Optional[cython.double ]=None):
+cpdef cython.double tap(gen: mus_any, offset: Optional[float]=None):
     """
     tap the delay mus_any offset by pm
+    
+    :param gen: delay gen
+    :param offset: offset in samples from output point
+    :rtype: float
+    
     """
     if offset:
         return cclm.mus_tap(gen._ptr, offset)
@@ -3014,31 +3387,44 @@ cpdef cython.double tap(gen: mus_any, offset: Optional[cython.double ]=None):
     
 cpdef bint is_tap(gen: mus_any):
     """
-    returns true if gen is a tap
+    returns True if gen is a tap.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_tap(gen._ptr)
     
-cpdef cython.double delay_tick(gen: mus_any, insig: cython.double ):
+cpdef cython.double delay_tick(gen: mus_any, insig: float ):
     """
     delay val according to the delay line's length. this merely 'ticks' the delay line forward.
-    the argument 'val' is returned.
+    the argument 'insi' is returned.
+    
+    :param gen: delay gen
+    :rtype: float
     """
     return cclm.mus_delay_tick(gen._ptr, insig)
 
 
 # ---------------- comb ---------------- #
-cpdef mus_any make_comb(scaler: Optional[cython.double]=1.0,
+cpdef mus_any make_comb(feedback: Optional[float]=1.0,
                 size: Optional[int]=None, 
                 initial_contents=None, 
-                initial_element: Optional[cython.double]=None, 
+                initial_element: Optional[float]=None, 
                 max_size:Optional[int]=None,
                 interp_type=Interp.NONE):
     """
-    return a new comb filter (a delay line with a scaler on the feedback) of size elements. 
-        if the comb length will be changing at run-time, max-size sets its maximum length.
+    return a new comb filter (a delay line with a scaler on the feedback) of size elements. if the comb
+    length will be changing at run-time, max-size sets its maximum length.       
+    
+    :param feedback: scaler on feedback
+    :param size: delay length \in samples
+    :param initial_contents: delay line's initial values
+    :param initial_element: delay line's initial element
+    :param max_size: maximum delay size \in case the delay changes
+    :param type: interpolation type
+    :return: comb gen
+    :rtype: mus_any
+        
     """                
                 
     cdef double [:] initial_contents_view = None
@@ -3062,15 +3448,20 @@ cpdef mus_any make_comb(scaler: Optional[cython.double]=1.0,
         initial_contents_view = initial_contents
         
     if initial_contents_view is not None:
-        gen = mus_any.from_ptr(cclm.mus_make_comb(scaler, size, &initial_contents_view[0], max_size, interp_type))
+        gen = mus_any.from_ptr(cclm.mus_make_comb(feedback, size, &initial_contents_view[0], max_size, interp_type))
     else:
-        gen = mus_any.from_ptr(cclm.mus_make_comb(scaler, size, NULL, max_size, interp_type))
+        gen = mus_any.from_ptr(cclm.mus_make_comb(feedback, size, NULL, max_size, interp_type))
     gen.cache_append(initial_contents)
     return gen    
            
-cpdef cython.double comb(gen: mus_any, insig: cython.double, pm: Optional[cython.double]=None):
+cpdef cython.double comb(gen: mus_any, insig: float, pm: Optional[float]=None):
     """
     comb filter val, pm changes the delay length.
+    
+    :param gen: comb gen
+    :param insig: input value
+    :param pm: change \in delay length size. can be + or -
+    :rtype: float
     """
     if pm:
         return cclm.mus_comb(gen._ptr, insig, pm)
@@ -3079,9 +3470,9 @@ cpdef cython.double comb(gen: mus_any, insig: cython.double, pm: Optional[cython
     
 cpdef bint is_comb(gen: mus_any):
     """
-    returns true if gen is a comb
+    returns True if gen is a comb.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_comb(gen._ptr)    
@@ -3090,6 +3481,11 @@ cpdef bint is_comb(gen: mus_any):
 cpdef mus_any make_comb_bank(combs: list):
     """
     return a new comb-bank generator.
+    
+    :param combs: list of comb gens
+    :return: comb_bank gen
+    :rtype: mus_any
+    
     """
     
     p = list(map(is_comb, combs))
@@ -3102,24 +3498,28 @@ cpdef mus_any make_comb_bank(combs: list):
     gen.cache_extend([comb_array, combs])
     return gen
 
-cpdef cython.double comb_bank(gen: mus_any, insig: cython.double):
+cpdef cython.double comb_bank(gen: mus_any, insig: float):
     """
     sum an array of comb filters.
+    
+    :param gen: comb_bank gen
+    :param inputs: can be a list/array of inputs or a single input
+    :rtype: float
     """
     return cclm.mus_comb_bank(gen._ptr, insig)
     
 cpdef bint is_comb_bank(gen: mus_any):
     """
-    returns true if gen is a comb_bank
+    returns True if gen is a comb_bank
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_comb_bank(gen._ptr)
 
 
 # ---------------- filtered-comb ---------------- #
-cpdef mus_any make_filtered_comb(scaler:  cython.double,
+cpdef mus_any make_filtered_comb(feedback:  float,
                 size: int, 
                 filter: mus_any, 
                 initial_contents=None, 
@@ -3128,8 +3528,18 @@ cpdef mus_any make_filtered_comb(scaler:  cython.double,
                 interp_type=Interp.NONE):
                 
     """
-    return a new filtered comb filter (a delay line with a scaler and a filter on the feedback) of size elements.
-    if the comb length will be changing at run-time, max-size sets its maximum length.
+    return a new filtered comb filter (a delay line with a scaler and a filter on the feedback) of size
+    elements. if the comb length will be changing at run-time, max-size sets its maximum length.     
+    
+    :param feedback: scaler on feedback
+    :param size: delay length \in samples
+    :param filter: filter to apply 
+    :param initial_contents: delay line's initial values
+    :param initial_element: delay line's initial element
+    :param max_size: maximum delay size \in case the delay changes
+    :param type: interpolation type
+    :return: filtered_comb gen
+    :rtype: mus_any
     """
 
     cdef double [:] initial_contents_view = None
@@ -3152,15 +3562,20 @@ cpdef mus_any make_filtered_comb(scaler:  cython.double,
         initial_contents_view = initial_contents
     
     if initial_contents_view is not None:
-        gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(scaler, int(size), &initial_contents_view[0], int(max_size), interp_type, filter._ptr))
+        gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(feedback, int(size), &initial_contents_view[0], int(max_size), interp_type, filter._ptr))
     else:
-        gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(scaler, int(size), NULL, int(max_size), interp_type, filter._ptr))
+        gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(feedback, int(size), NULL, int(max_size), interp_type, filter._ptr))
     gen.cache_append(initial_contents)
     return gen    
         
-cpdef cython.double filtered_comb(gen: mus_any, insig: cython.double, pm: Optional[ cython.double]=None):
+cpdef cython.double filtered_comb(gen: mus_any, insig: float, pm: Optional[float]=None):
     """
     filtered comb filter val, pm changes the delay length.
+    
+    :param gen: filtered_comb gen
+    :param insig: input value
+    :param pm: change \in delay length size. can be + or -
+    :rtype: float
     """
     if pm:
         return cclm.mus_filtered_comb(gen._ptr, insig, pm)
@@ -3169,9 +3584,9 @@ cpdef cython.double filtered_comb(gen: mus_any, insig: cython.double, pm: Option
         
 cpdef bint is_filtered_comb(gen: mus_any):
     """
-    returns true if gen is a filtered_comb
+    returns True if gen is a filtered_comb.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_filtered_comb(gen._ptr)
@@ -3180,6 +3595,10 @@ cpdef bint is_filtered_comb(gen: mus_any):
 cpdef mus_any make_filtered_comb_bank(fcombs: list):
     """
     return a new filtered_comb-bank generator.
+    
+    :param fcombs: list of filtered_comb gens
+    :return: filtered_comb_bank gen
+    :rtype: mus_any
     """
     p = list(map(is_formant, fcombs))
     if not all(p):
@@ -3194,29 +3613,42 @@ cpdef mus_any make_filtered_comb_bank(fcombs: list):
 cpdef cython.double filtered_comb_bank(gen: mus_any):
     """
     sum an array of filtered_comb filters.
+    
+    :param gen: filtered_comb gen
+    :param inputs: can be a list/array of inputs or a single input
+    :rtype: float
     """
     return cclm.mus_filtered_comb_bank(gen._ptr, input)
     
 cpdef bint is_filtered_comb_bank(gen: mus_any):
     """
-    returns true if gen is a filtered_comb_bank
+    returns True if gen is a filtered_comb_bank.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_filtered_comb_bank(gen._ptr)
 
 # ---------------- notch ---------------- #
-cpdef mus_any make_notch(scaler: Optional[cython.double]=1.0,
+cpdef mus_any make_notch(feedforward: Optional[float]=1.0,
                 size: Optional[int]=None, 
                 initial_contents=None, 
-                initial_element: Optional[cython.double]=0.0, 
+                initial_element: Optional[float]=0.0, 
                 max_size:Optional[int]=None,
                 interp_type=Interp.NONE):
 
     """
     return a new notch filter (a delay line with a scaler on the feedforward) of size elements.
-    if the notch length will be changing at run-time, max-size sets its maximum length
+    if the notch length will be changing at run-time, max-size sets its maximum length.
+    
+    :param feedforward: scaler on input
+    :param size: delay length \in samples
+    :param initial_contents: delay line's initial values
+    :param initial_element: delay line's initial element
+    :param max_size: maximum delay size \in case the delay changes
+    :param type: interpolation type
+    :return: comb gen
+    :rtype: mus_any
     """
     
     cdef double [:] initial_contents_view = None
@@ -3241,15 +3673,20 @@ cpdef mus_any make_notch(scaler: Optional[cython.double]=1.0,
         initial_contents_view = initial_contents
     
     if initial_contents_view is not None:
-        gen = mus_any.from_ptr(cclm.mus_make_notch(scaler, size, &initial_contents_view[0], max_size, interp_type))
+        gen = mus_any.from_ptr(cclm.mus_make_notch(feedforward, size, &initial_contents_view[0], max_size, interp_type))
     else:
-        gen = mus_any.from_ptr(cclm.mus_make_notch(scaler, size, NULL, max_size, interp_type))
+        gen = mus_any.from_ptr(cclm.mus_make_notch(feedforward, size, NULL, max_size, interp_type))
     gen.cache_append(initial_contents)
     return gen    
 
-cpdef cython.double notch(gen: mus_any, insig: cython.double, pm: Optional[cython.double]=None):
+cpdef cython.double notch(gen: mus_any, insig: float, pm: Optional[float]=None):
     """
     notch filter val, pm changes the delay length.
+        
+    :param gen: notch gen
+    :param insig: input value
+    :param pm: change \in delay length size. can be + or -
+    :rtype: float
     """
     if pm:
         return cclm.mus_notch(gen._ptr, input, pm)
@@ -3258,9 +3695,9 @@ cpdef cython.double notch(gen: mus_any, insig: cython.double, pm: Optional[cytho
     
 cpdef bint is_notch(gen: mus_any):
     """
-    returns true if gen is a notch
+    returns True if gen is a notch.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_notch(gen._ptr)
@@ -3270,24 +3707,17 @@ cpdef bint is_notch(gen: mus_any):
 cpdef mus_any make_all_pass(feedback: float, feedforward: float, size: int, initial_contents: Optional[np.ndarray] = None, initial_element: Optional[float] = 0.0,  max_size:Optional[int] = None, interp_type: Optional[Interp] = Interp.NONE):
 
     """
-    return a new allpass filter (a delay line with a scalers on both the feedback and the feedforward). if length will be changing at run-time, max-size sets its maximum length.
+    return a new allpass filter (a delay line with a scalers on both the feedback and the feedforward).
+    if length will be changing at run-time, max-size sets its maximum length.
     
     :param feedback: scaler on feedback
-
     :param feedforward: scaler on input
-
     :param size: length \in samples of the delay line
-
-    :param initial_contents: delay line's initial values, defaults to None
-
-    :param initial_element: delay line's initial element, defaults to 0.0
-
-    :param max_size: maximum delay size in case the delay changes, defaults to None
-
-    :param interp_type: interpolation type, defaults to nterp.None
-    
+    :param initial_contents: delay line's initial values
+    :param initial_element: delay line's initial element
+    :param max_size: maximum delay size \in case the delay changes
+    :param interp_type: interpolation type
     :return: a new allpass filter
-    
     :rtype: mus_any
      
     """
@@ -3323,6 +3753,11 @@ cpdef mus_any make_all_pass(feedback: float, feedforward: float, size: int, init
 cpdef cython.double all_pass(gen: mus_any, insig: float, pm: Optional[float]=None):
     """
     all-pass filter insig value, pm changes the delay length.
+    
+    :param gen: all_pass gen
+    :param insig: input value
+    :param pm: change \in delay length size. can be + or -
+    :rtype: float
     """
     if pm:
         return cclm.mus_all_pass(gen._ptr, insig, pm)
@@ -3331,9 +3766,9 @@ cpdef cython.double all_pass(gen: mus_any, insig: float, pm: Optional[float]=Non
     
 cpdef is_all_pass(gen: mus_any):
     """
-    returns true if gen is a all_pass
+    returns True if gen is a all_pass.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_all_pass(gen._ptr)
@@ -3343,6 +3778,10 @@ cpdef is_all_pass(gen: mus_any):
 cpdef mus_any make_all_pass_bank(all_passes: list):
     """
     return a new all_pass-bank generator.
+    
+    :param all_passes: list of all_pass gens
+    :return: all_pass_bank gen
+    :rtype: mus_any
     """
     p = list(map(is_all_pass, all_passes))
     if not all(p):
@@ -3353,25 +3792,69 @@ cpdef mus_any make_all_pass_bank(all_passes: list):
     gen.cache_extend([all_passes_array, all_passes])
     return gen
 
-cpdef cython.double all_pass_bank(gen: mus_any, insig: cython.double):
+cpdef cython.double all_pass_bank(gen: mus_any, insig: float):
     """
     sum an array of all_pass filters.
+    
+    :param gen: all_pass_bank gen
+    :param inputs: can be a list/array of inputs or a single input
+    :rtype: float
     """
     return cclm.mus_all_pass_bank(gen._ptr, insig)
     
 cpdef bint is_all_pass_bank(gen: mus_any):
     """
-    returns true if gen is a all_pass_bank
+    returns True if gen is a all_pass_bank.
+    
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_all_pass_bank(gen._ptr)
+    
+    
+# ---------------- one_pole_all_pass ---------------- #
+cpdef mus_any make_one_pole_all_pass(size: int, coeff: float):
+    """
+    return a new one_pole all_pass filter size, coeff.
+    
+    
+    :param size: length \in samples of the delay line
+    :param coeff: coeff of one pole filter
+    :return: one_pole_all_pass gen
+    :rtype: mus_any
+    """
+    return mus_any.from_ptr(cclm.mus_make_one_pole_all_pass(size, coeff))
+    
+cpdef cython.double one_pole_all_pass(gen: mus_any, insig: float):
+    """
+    one pole all pass filter of input.
+    
+    :param gen: one_pole_all_pass gen
+    :param insig: input value
+    :rtype: float
+    """
+    return cclm.mus_one_pole_all_pass(gen._ptr, insig)
+    
+cpdef bint is_one_pole_all_pass(gen: mus_any):
+    """
+    returns True if gen is a one_pole_all_pass.
+    
+    :param gen: gen
+    :rtype: bool
+    """
+    return cclm.mus_is_one_pole_all_pass(gen._ptr)
         
 # ---------------- moving-average ---------------- #
-cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_element: Optional[cython.double]=0.0):
+cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_element: Optional[float]=0.0):
     """
     return a new moving_average generator. 
+    
+    :param size: averaging length \in samples
+    :param initial_contents: initial values
+    :param initial_element: initial element
+    :return: moving_average gen
+    :rtype: mus_any
     """
 
     
@@ -3395,17 +3878,21 @@ cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_elem
     return gen
         
         
-cpdef cython.double moving_average(gen: mus_any, input: cython.double):
+cpdef cython.double moving_average(gen: mus_any, insig: float):
     """
     moving window average.
+    
+    :param gen: moving_average gen
+    :param insig: input value
+    :rtype: float
     """
-    return cclm.mus_moving_average(gen._ptr, input)
+    return cclm.mus_moving_average(gen._ptr, insig)
     
 cpdef bint is_moving_average(gen: mus_any):
     """
-    returns true if gen is a moving_average
+    returns True if gen is a moving_average.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_moving_average(gen._ptr)
@@ -3413,10 +3900,16 @@ cpdef bint is_moving_average(gen: mus_any):
 # ---------------- moving-max ---------------- #
 cpdef mus_any make_moving_max(size: int, 
                 initial_contents=None, 
-                initial_element: Optional[cython.double]=0.0):
+                initial_element: Optional[float]=0.0):
                 
     """
     return a new moving-max generator.
+    
+    :param size: max window length \in samples
+    :param initial_contents: initial values
+    :param initial_element: initial element
+    :return: moving_max gen
+    :rtype: mus_any
     """                
     
     cdef double [:] initial_contents_view = None
@@ -3442,14 +3935,18 @@ cpdef mus_any make_moving_max(size: int,
 cpdef cython.double moving_max(gen: mus_any, insig: float):
     """
     moving window max.
+    
+    :param gen: moving_max gen
+    :param insig: input value
+    :rtype: float
     """
     return cclm.mus_moving_max(gen._ptr, insig)
     
 cpdef bint is_moving_max(gen: mus_any):
     """
-    returns true if gen is a moving_max
+    returns True if gen is a moving_max.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_moving_max(gen._ptr)
@@ -3458,6 +3955,12 @@ cpdef bint is_moving_max(gen: mus_any):
 cpdef mus_any make_moving_norm(size: int, initial_contents=None, scaler: Optional[float]=1.):
     """
     return a new moving-norm generator.
+    
+    :param size: averaging length \in samples
+    :param initial_contents: initial values
+    :param scaler: normalzing value
+    :return: moving_norm gen
+    :rtype: mus_any
     """
     cdef double [:] initial_contents_view = None
     
@@ -3476,43 +3979,59 @@ cpdef mus_any make_moving_norm(size: int, initial_contents=None, scaler: Optiona
     
     return gen
     
-cpdef cython.double moving_norm(gen: mus_any, insig: cython.double):
+cpdef cython.double moving_norm(gen: mus_any, insig: float):
     """
     moving window norm.
+    
+    :param gen: moving_norm gen
+    :param insig: input value
+    :rtype: float
     """
     return cclm.mus_moving_norm(gen._ptr, insig)
     
 cpdef is_moving_norm(gen: mus_any):
     """
-    returns true if gen is a moving_norm
+    returns True if gen is a moving_norm.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_moving_norm(gen._ptr)
     
     
 # ---------------- asymmetric-fm ---------------- #
-cpdef mus_any make_asymmetric_fm(frequency: cython.double, initial_phase: Optional[cython.double]=0.0, r: Optional[cython.double]=1.0, ratio: Optional[cython.double]=1.):
+cpdef mus_any make_asymmetric_fm(frequency: float, initial_phase: Optional[float]=0.0, r: Optional[float]=1.0, ratio: Optional[float]=1.):
     """
     return a new asymmetric_fm generator.
+    
+    :param frequency: frequency of gen
+    :param initial_phase: starting phase of gen, \in radians
+    :param r: amplitude ratio between successive sidebands
+    :param ratio: ratio between carrier and sideband spacing
+    :return: asymmetric_fm gen
+    :rtype: mus_any
     """
     return mus_any.from_ptr(cclm.mus_make_asymmetric_fm(frequency, initial_phase, r, ratio))
     
-cpdef cython.double asymmetric_fm(gen: mus_any, insig: cython.double, fm: Optional[cython.double]=None):
+cpdef cython.double asymmetric_fm(gen: mus_any, index: float, fm: Optional[float]=None):
     """
-    next sample from asymmetric fm generator.
+    next sample from asymmetric fm generator.  
+       
+    :param gen: asymmetric_fm gen
+    :param index: fm index
+    :param fm: fm input
+    :rtype: float
     """
     if fm:
-        return cclm.mus_asymmetric_fm(gen._ptr, insig, fm)
+        return cclm.mus_asymmetric_fm(gen._ptr, index, fm)
     else:
-        return cclm.mus_asymmetric_fm_unmodulated(gen._ptr, insig)
+        return cclm.mus_asymmetric_fm_unmodulated(gen._ptr, index)
     
 cpdef bint is_asymmetric_fm(gen: mus_any):
     """
-    returns true if gen is a asymmetric_fm
+    returns True if gen is a asymmetric_fm.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_asymmetric_fm(gen._ptr)
@@ -3520,30 +4039,50 @@ cpdef bint is_asymmetric_fm(gen: mus_any):
 # ---------------- file-to-sample ---------------- #
 cpdef mus_any make_file2sample(filename, buffer_size: Optional[int]=None):
     """
-    return an input generator reading 'filename' (a sound file)
+    return an input generator reading 'filename' (a sound file).
+    
+    :param filename: name of file to read
+    :param buffer_size: io buffer size
+    :return: file2sample gen
+    :rtype: mus_any
     """
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_file_to_sample_with_buffer_size(filename, buffer_size))
     
 cpdef cython.double file2sample(gen: mus_any, loc: int, chan: Optional[int]=0):
     """
-    sample value in sound file read by 'obj' in channel chan at frample
+    sample value \in sound file read by 'obj' \in channel chan at sample.
+    
+    :param gen: file2sample gen
+    :param loc: location \in file to read
+    :param chan: channel to read
+    :rtype: float
     """
     return cclm.mus_file_to_sample(gen._ptr, loc, chan)
     
 cpdef bint is_file2sample(gen: mus_any):
     """
-    returns true if gen is a file2sample
+    returns True if gen is a file2sample.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_file_to_sample(gen._ptr)
     
 # ---------------- sample-to-file ---------------- #
-cpdef mus_any make_sample2file(filename, chans: Optional[int]=1, sample_type: Optional[sample]=None, header_type: Optional[header]=None, comment: Optional[str]=None):
-    """return an output generator writing the sound file 'filename' which is set up to have chans' channels of 'sample_type' 
-        samples with a header of 'header_type'.  the latter should be sndlib identifiers:"""
+cpdef mus_any make_sample2file(filename, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
+    """
+    return an output generator writing the sound file 'filename' which is set up to have chans'
+    channels of 'sample_type' samples with a header of 'header_type'.  the latter should be sndlib
+    identifiers.
+    
+    :param filename: name of file to write
+    :param chans: number of channels
+    :param sample_type: sample type of file
+    :param header_type: header type of file
+    :return: sample2file gen
+    :rtype: mus_any
+    """
     sample_type = sample_type or CLM.sample_type
     header_type = header_type or CLM.header_type
     if comment is None:
@@ -3553,34 +4092,56 @@ cpdef mus_any make_sample2file(filename, chans: Optional[int]=1, sample_type: Op
 
 cpdef cython.double sample2file(gen: mus_any, samp: int, chan:int , val: cython.double):
     """
-    add val to the output stream handled by the output generator 'obj', in channel 'chan' at frample 'samp'
+    add val to the output stream handled by the output generator 'obj', \in channel 'chan' at frample 'samp'.
+    
+    :param gen: sample2file gem
+    :param samp: location \in file to write
+    :param chan: channel to write
+    :param val: sample value to write
+    :rtype: float
     """
     return cclm.mus_sample_to_file(gen._ptr, samp, chan, val)
     
 cpdef bint is_sample2file(gen: mus_any):
     """
-    returns true if gen is a sample2file
+    returns True if gen is a sample2file.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_sample_to_file(gen._ptr)
     
 cpdef mus_any continue_sample2file(name: str):
+    """
+    reopen an existing file to continue adding sound data to it.
+    
+    :param filename: name of file to write
+    :return: file2sample gen
+    :rtype: mus_any
+    """
     return mus_any.from_ptr(cclm.mus_continue_sample_to_file(name))
     
     
 # ---------------- file-to-frample ---------------- #
 cpdef mus_any make_file2frample(filename, buffer_size: Optional[int]=None):
     """
-    return an input generator reading 'filename' (a sound file)
+    return an input generator reading all channels of 'filename' (a sound file).
+    
+    :param filename: name of file to read
+    :param buffer_size: io buffer size
+    :return: file2frample gen
+    :rtype: mus_any
     """
     buffer_size = buffer_size or CLM.buffer_size
     return  mus_any.from_ptr(cclm.mus_make_file_to_frample_with_buffer_size(filename, buffer_size))
     
 cpdef file2frample(gen: mus_any, loc: int):
     """
-    frample of samples at frample 'samp' in sound file read by 'obj'
+    frample of samples at frample 'samp' \in sound file read by 'obj'.
+    
+    :param gen: file2frample gen
+    :param loc: location \in file to read
+    :rtype: np.ndarray
     """
     outf = np.zeros(cclm.mus_channels(gen._ptr), dtype=np.double)
     cdef double [:] outf_view = outf
@@ -3589,9 +4150,9 @@ cpdef file2frample(gen: mus_any, loc: int):
     
 cpdef is_file2frample(gen: mus_any):
     """
-    returns true if gen is a file2frample
+    returns True if gen is a file2frample.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_file_to_frample(gen._ptr)
@@ -3599,8 +4160,18 @@ cpdef is_file2frample(gen: mus_any):
     
 # ---------------- frample-to-file ---------------- #
 cpdef mus_any make_frample2file(filename, chans: Optional[int]=1, sample_type: Optional[sample]=None, header_type: Optional[header]=None, comment: Optional[str]=None):
-    """return an output generator writing the sound file 'filename' which is set up to have 'chans' channels of 'sample_type' 
-        samples with a header of 'header_type'.  the latter should be sndlib identifiers."""
+    """
+    return an output generator writing the sound file 'filename' which is set up to have 'chans'
+    channels of 'sample_type' samples with a header of 'header_type'.  the latter should be sndlib
+    identifiers.    
+    
+    :param filename: name of file to write
+    :param chans: number of channels
+    :param frample2file: sample type of file
+    :param header_type: header type of file
+    :return: sample2file gen
+    :rtype: mus_any    
+    """
     sample_type = sample_type or CLM.sample_type
     header_type = header_type or CLM.header_type
     if comment:
@@ -3608,63 +4179,95 @@ cpdef mus_any make_frample2file(filename, chans: Optional[int]=1, sample_type: O
     else:
         return mus_any.from_ptr(cclm.mus_make_frample_to_file_with_comment(filename, chans, sample_type, header_type, NULL))
 
-cpdef cython.double frample2file(gen: mus_any, samp: int, chan:int, val):
+cpdef cython.double frample2file(gen: mus_any, samp: int, vals):
     """
-    add frample 'val' to the output stream handled by the output generator 'obj' at frample 'samp'
+    add frample 'val' to the output stream handled by the output generator 'obj' at frample 'samp'.
+    
+    :param gen: frample2file gem
+    :param samp: location \in file to write
+    :param vals: sample value to write. list or np.ndarray
+    :rtype: float
     """
     cdef double [:] val_view = None
     
-    if isinstance(val, list):
-        val = np.srray(val)
+    if isinstance(vals, list):
+        vals = np.array(vals)
         
-    val_view = val
+    val_view = vals
     
     frample = val_view
     cclm.mus_frample_to_file(gen._ptr, samp, &frample[0])
-    return val
+    return vals
     
 cpdef bint is_frample2file(gen: mus_any):
     """
-    returns true if gen is a frample2file
+    returns True if gen is a frample2file.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_frample_to_file(gen._ptr)
     
 
 cpdef mus_any continue_frample2file(name: str):
+    """
+    reopen an existing file to continue adding sound data to it.
+    
+    :param filename: name of file to write
+    :return: frample2file gen
+    :rtype: mus_any
+    """
     return mus_any.from_ptr(cclm.mus_continue_frample_to_file(name))
 
 
 # ---------------- readin ---------------- #
 cpdef mus_any make_readin(filename: str, chan: int=0, start: int=0, direction: Optional[int]=1, buffer_size: Optional[int]=None):
     """
-    return a new readin (file input) generator reading the sound file 'file' starting at frample 'start' in channel 'channel' and reading forward if 'direction' is not -1
+    return a new readin (file input) generator reading the sound file 'file' starting at frample
+    'start' \in channel 'channel' and reading forward if 'direction' is not -1.
+    
+    :param filename: name of file to read
+    :param chan: channel to read (0 based)
+    :param start: location \in samples to start at
+    :param direction: forward (1) or backward (-1)
+    :param buffer_size: io buffer size
+    
     """
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_readin_with_buffer_size(filename, chan, start, direction, buffer_size))
     
 cpdef cython.double readin(gen: mus_any):
     """
-    next sample from readin generator (a sound file reader)
+    next sample from readin generator (a sound file reader).
+    
+    :param gen: readin gen
+    :rtype: float
     """
     return cclm.mus_readin(gen._ptr)
     
 cpdef is_readin(gen: mus_any):
     """
-    returns true if gen is a readin
+    returns True if gen is a readin.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_readin(gen._ptr)
       
           
 # ---------------- src ---------------- #
-def make_src(inp , srate: Optional[cython.double]=1.0, width: Optional[int]=10):
-    """return a new sampling-rate conversion generator (using 'warped sinc interpolation'). 'srate' is the ratio between the new rate and the old. 'width' is the sine 
-        width (effectively the steepness of the low-pass filter), normally between 10 and 100. 'input' if given is an open file stream."""
+def make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
+    """
+    return a new sampling-rate conversion generator (using 'warped sinc interpolation'). 'srate' is the
+    ratio between the new rate and the old. 'width' is the sine width (effectively the steepness of the
+    low-pass filter), normally between 10 and 100. 'input' if given is an open file stream.
+    
+    :param inp: gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value
+    :param srate: ratio between the old sampling rate and the new
+    :param width: how many samples to convolve with sinc function
+    :return: src gen
+    :rtype: mus_any
+    """
         
     cdef cclm.input_cb cy_inp_f_ptr 
     
@@ -3687,10 +4290,17 @@ def make_src(inp , srate: Optional[cython.double]=1.0, width: Optional[int]=10):
     
     return res
   
-cpdef cython.double src(gen: mus_any, sr_change: Optional[cython.double]=0.0):
-    """next sampling rate conversion sample. 'pm' can be used to change the sampling rate on a sample-by-sample basis.  
-        'input-function' is a function of one argument (the current input direction, normally ignored) that is called internally 
-        whenever a new sample of input data is needed.  if the associated make_src included an 'input' argument, input-function is ignored."""
+cpdef cython.double src(gen: mus_any, sr_change: Optional[float]=0.0):
+    """
+    next sampling rate conversion sample. 'pm' can be used to change the sampling rate on a
+    sample-by-sample basis. 'input-function' is a function of one argument (the current input direction,
+    normally ignored) that is called internally whenever a new sample of input data is needed.  if the
+    associated make_src included an 'input' argument, input-function is ignored.
+    
+    :param gen: src gen
+    :param sr_change: change \in ratio
+    :rtype: float  
+    """
     if gen._inputcallback:
         return cclm.mus_src(gen._ptr, sr_change, <cclm.input_cb>gen._inputcallback)
     else:
@@ -3698,9 +4308,9 @@ cpdef cython.double src(gen: mus_any, sr_change: Optional[cython.double]=0.0):
     
 cpdef bint is_src(gen: mus_any):
     """
-    returns true if gen is a src
+    returns True if gen is a src.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_src(gen._ptr)
@@ -3711,6 +4321,13 @@ cpdef bint is_src(gen: mus_any):
 def make_convolve(inp, filt, fft_size: Optional[int]=512, filter_size: Optional[int]=None ):
     """
     return a new convolution generator which convolves its input with the impulse response 'filter'.
+    
+    :param inp: gen or function to read from
+    :param filt: np.array of filter 
+    :param fft_size: fft size used \in the convolution
+    :param filter_size: how much of filter to use. if None use whole filter
+    :return: convolve gen
+    :rtype: mus_any
     """
     
     cdef cclm.input_cb cy_input_f_ptr 
@@ -3718,7 +4335,7 @@ def make_convolve(inp, filt, fft_size: Optional[int]=512, filter_size: Optional[
     cdef double [:] filt_view
     
 
-    if not filter_size:
+    if filter_size is None:
         filter_size = clm_length(filt)
      
     fft_len = 0
@@ -3768,15 +4385,18 @@ def make_convolve(inp, filt, fft_size: Optional[int]=512, filter_size: Optional[
     
 cpdef cython.double convolve(gen: mus_any):
     """
-    next sample from convolution generator
+    next sample from convolution generator.
+    
+    :param gen: convolve gen
+    :rtype: float
     """
     return cclm.mus_convolve(gen._ptr, gen._inputcallback)  
     
 cpdef bint is_convolve(gen: mus_any):
     """
-    returns true if gen is a convolve
+    returns True if gen is a convolve.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_convolve(gen._ptr)
@@ -3784,25 +4404,36 @@ cpdef bint is_convolve(gen: mus_any):
 
 # --------------- granulate ---------------- 
 def make_granulate(inp, 
-                    expansion: Optional[cython.double]=1.0, 
-                    length: Optional[cython.double]=.15,
-                    scaler: Optional[cython.double]=.6,
-                    hop: Optional[cython.double]=.05,
-                    ramp: Optional[cython.double]=.4,
-                    jitter: Optional[cython.double]=0.0,
+                    expansion: Optional[float]=1.0, 
+                    length: Optional[float]=.15,
+                    scaler: Optional[float]=.6,
+                    hop: Optional[float]=.05,
+                    ramp: Optional[float]=.4,
+                    jitter: Optional[float]=0.0,
                     max_size: Optional[int]=0,
                     edit=None):
                     
-    """return a new granular synthesis generator.  'length' is the grain length (seconds), 'expansion' is the ratio in timing
-         between the new and old (expansion > 1.0 slows things down), 'scaler' scales the grains
-        to avoid overflows, 'hop' is the spacing (seconds) between successive grains upon output.
-        'jitter' controls the randomness in that spacing, 'input' can be a file pointer. 'edit' can
-        be a function of one arg, the current granulate generator.  it is called just before
-        a grain is added into the output buffer. the current grain is accessible via mus_data.
-        the edit function, if any, should return the length in samples of the grain, or 0.
     """
+    return a new granular synthesis generator.  'length' is the grain length (seconds), 'expansion' is the
+    ratio \in timing between the new and old (expansion > 1.0 slows things down), 'scaler' scales the grains
+    to avoid overflows, 'hop' is the spacing (seconds) between successive grains upon output. 'jitter'
+    controls the randomness \in that spacing, 'input' can be a file pointer. 'edit' can be a function of one
+    arg, the current granulate generator.  it is called just before a grain is added into the output
+    buffer. the current grain is accessible via mus_data. the edit function, if any, should return the
+    length \in samples of the grain, or 0.
     
-    
+    :param inp: gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value
+    :param expansion: how much to lengthen or compress the file
+    :param length: length of file slices that are overlapped
+    :param scaler: amplitude scaler on slices (to avoid overflows)
+    :param hop: speed at which slices are repeated \in output
+    :param ramp: amount of slice-time spent ramping up/down
+    :param jitter: affects spacing of successive grains
+    :param max_size: internal buffer size
+    :param edit: grain editing function. the function should take one argument, the granulate mus_any and return length of grain or 0
+
+    """
+
     cdef cclm.input_cb cy_input_f_ptr
     cdef cclm.edit_cb cy_edit_f_ptr 
 
@@ -3841,7 +4472,11 @@ def make_granulate(inp,
 #todo: mus_granulate_grain_max_length
 cpdef cython.double granulate(gen: mus_any):
     """
-    next sample from granular synthesis generator
+    next sample from granular synthesis generator.
+    
+    :param gen: granulate gen
+    :rtype: float
+    
     """
     if gen._editcallback is not NULL:
         return cclm.mus_granulate_with_editor(gen._ptr, <cclm.input_cb>gen._inputcallback, <cclm.edit_cb>gen._editcallback)
@@ -3851,30 +4486,43 @@ cpdef cython.double granulate(gen: mus_any):
 
 cpdef bint is_granulate(e: mus_any):
     """
-    returns true if gen is a granulate
+    returns True if gen is a granulate.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_granulate(e._ptr)
 
 #--------------- phase-vocoder ----------------#
 def make_phase_vocoder(inp, 
-                        fft_size: oOptionalptional[int]=512, 
+                        fft_size: Optional[int]=512, 
                         overlap: Optional[int]=4, 
                         interp: Optional[int]=128, 
-                        pitch: Optional[cython.double]=1.0, 
+                        pitch: Optional[float]=1.0, 
                         analyze=None, 
                         edit=None, 
                         synthesize=None):
                         
-    """return a new phase-vocoder generator; input is the input function (it can be set at run-time), analyze, edit,
-        and synthesize are either None or functions that replace the default innards of the generator, fft_size, overlap
-        and interp set the fft_size, the amount of overlap between ffts, and the time between new analysis calls.
-        'analyze', if given, takes 2 args, the generator and the input function; if it returns true, the default analysis 
-        code is also called.  'edit', if given, takes 1 arg, the generator; if it returns true, the default edit code 
-        is run.  'synthesize' is a function of 1 arg, the generator; it is called to get the current vocoder 
-        output."""
+    """
+    return a new phase-vocoder generator; input is the input function (it can be set at run-time),
+    analyze, edit, and synthesize are either None or functions that replace the default innards of the
+    generator, fft_size, overlap and interp set the fft_size, the amount of overlap between ffts, and the
+    time between new analysis calls. 'analyze', if given, takes 2 args, the generator and the input
+    function; if it returns True, the default analysis code is also called.  'edit', if given, takes 1 arg,
+    the generator; if it returns True, the default edit code is run.  'synthesize' is a function of 1 arg,
+    the generator; it is called to get the current vocoder output.
+    
+    :param inp: gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value
+    :param fft_size: fft size used
+    :param overlap: how many analysis stages overlap
+    :param interp: samples between fft
+    :param pitch: pitch scaling ratio
+    :param analyze: if used, overrides default. should be a function of two arguments, the generator and the input function. 
+    :param edit: if used, overrides default. functions of one argument, the phase_vocoder mus_any. change amplitudes and phases
+    :param synthesize: if used, overrides default. unctions of one argument, the phase_vocoder mus_any.
+    :return: phase_vocoder gen
+    
+    """
 
     cdef cclm.input_cb cy_inp_f_ptr
     cdef cclm.edit_cb cy_edit_f_ptr 
@@ -3935,7 +4583,10 @@ def make_phase_vocoder(inp,
 
 cpdef cython.double phase_vocoder(gen: mus_any):
     """
-    next phase vocoder value
+    next phase vocoder value.
+    
+    :param gen: phase_vocoder gen
+    :rtype: float
     """
     if gen._analyzecallback or gen._synthesizecallback or gen._editcallback :
         return cclm.mus_phase_vocoder_with_editors(gen._ptr, gen._inputcallback, gen._analyzecallback, gen._editcallback, gen._synthesizecallback)
@@ -3944,9 +4595,9 @@ cpdef cython.double phase_vocoder(gen: mus_any):
     
 cpdef bint is_phase_vocoder(gen: mus_any):
     """
-    returns true if gen is a phase_vocoder
+    returns True if gen is a phase_vocoder.
+    
     :param gen: gen
-    :return: result
     :rtype: bool
     """
     return cclm.mus_is_phase_vocoder(gen._ptr)
@@ -3954,80 +4605,149 @@ cpdef bint is_phase_vocoder(gen: mus_any):
 
 cpdef np.ndarray phase_vocoder_amp_increments(gen: mus_any):
     """
-    returns a ndarray containing the current output sinusoid amplitude increments per sample
+    returns a ndarray containing the current output sinusoid amplitude increments per sample.
     """    
     return gen._pv_amp_increments
     
 cpdef np.ndarray phase_vocoder_amps(gen: mus_any):
     """
-    returns a ndarray containing the current output sinusoid amplitudes
+    returns a ndarray containing the current output sinusoid amplitudes.
     """
     return gen._pv_amps
     
 cpdef  np.ndarray phase_vocoder_freqs(gen: mus_any):
     """
-    returns a ndarray containing the current output sinusoid frequencies
+    returns a ndarray containing the current output sinusoid frequencies.
     """
     return gen._pv_freqs
     
 cpdef  np.ndarray phase_vocoder_phases(gen: mus_any):
     """
-    returns a ndarray containing the current output sinusoid phases
+    returns a ndarray containing the current output sinusoid phases.
     """
     return gen._pv_phases
     
 cpdef  np.ndarray phase_vocoder_phase_increments(gen: mus_any):
     """
-    returns a ndarray containing the current output sinusoid phase increments
+    returns a ndarray containing the current output sinusoid phase increments.
     """
     return gen._pv_phase_increments
     
 # --------------- out-any ---------------- #
 cpdef out_any(loc: int, data: float, channel, output):
-        if isinstance(output, np.ndarray): 
-            output[channel][loc] += data
-        else:            
-            out = <mus_any>output
-            cclm.mus_out_any(loc, data, channel, out._ptr)
-        
+    """
+    add data to output.
+    
+    :param loc: location to write to \in samples
+    :param data: sample value
+    :param channel: channel to write to 
+    :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
+    :return: data
+    :rtype: float
+    """
+    if isinstance(output, np.ndarray): 
+        output[channel][loc] += data
+    else:            
+        out = <mus_any>output
+        cclm.mus_out_any(loc, data, channel, out._ptr)
+    return data        
 # --------------- outa ---------------- #
 cpdef outa(loc: int, data: float, output=None):
+    """
+    add data to output \in channel 0.
+    
+    :param loc: location to write to \in samples
+    :param data: sample value
+    :param channel: channel to write to 
+    :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
+    :return: data
+    :rtype: float
+    """
     if output is not None:
         out_any(loc, data, 0, output)        
     else:
-        out_any(loc, data, 0, CLM.output)    
+        out_any(loc, data, 0, CLM.output)
+    return data
 # --------------- outb ---------------- #    
 cpdef outb(loc: int, data: float, output=None):
+    """
+    add data to output \in channel 1.
+    
+    :param loc: location to write to \in samples
+    :param data: sample value
+    :param channel: channel to write to 
+    :param output: output to write to. can be an appropriately shaped np.ndarray or sample2fil
+    :return: data
+    :rtype: float
+    """
     if output is not None:
         out_any(loc, data, 1, output)        
     else:
         out_any(loc, data, 1, CLM.output)
+    return data
 # --------------- outc ---------------- #    
 cpdef outc(loc: int, data: float, output=None):
+    """
+    add data to output \in channel 2.
+    
+    :param loc: location to write to \in samples
+    :param data: sample value
+    :param channel: channel to write to 
+    :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
+    :return: data
+    :rtype: float
+    """
     if output is not None:
         out_any(loc, data, 2, output)        
     else:
-        out_any(loc, data, 2, CLM.output)        
+        out_any(loc, data, 2, CLM.output) 
+    return data       
 # --------------- outd ---------------- #    
 cpdef outd(loc: int, data: float, output=None):
+    """
+    add data to output \in channel 3.
+    
+    :param loc: location to write to \in samples
+    :param data: sample value
+    :param channel: channel to write to 
+    :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
+    :return: data
+    :rtype: float
+    """
     if output is not None:
         out_any(loc, data, 3, output)        
     else:
-        out_any(loc, data, 3, CLM.output)    
+        out_any(loc, data, 3, CLM.output)   
+    return data
+         
 # --------------- out-bank ---------------- #    
-cpdef out_bank(gens, loc, inp):
-    for i in range(len(gens)):
-        out_any(loc, cclm.mus_apply(<cclm.mus_any_ptr>gens[i]._ptr, inp, 0.), i, CLM.output)    
+cpdef out_bank(gens, loc: int, val: float):
+    """
+    calls each generator \in the gens list, passing it the argument val, then sends that output to the output channels \in the list order (the first generator writes to outa, the second to outb, etc)."
 
+    :param gens: gens to call
+    :param loca: location in samples to write to
+    :return: data
+    :rtype: float
+    """
+    for i in range(len(gens)):
+        out_any(loc, cclm.mus_apply(<cclm.mus_any_ptr>gens[i]._ptr, val, 0.), i, CLM.output)    
+    return val
 
 #--------------- in-any ----------------#
 cpdef in_any(loc: int, channel: int, inp):
     """
-    input stream sample at frample in channel chan
+    input stream sample at loc \in channel chan.
+    
+    :param loc: location to read from
+    :param channel: channel to read from 
+    :param inp: input to read from. can be an appropriately shaped np.ndarray or file2sample
+    :return: data
+    :rtype: float
     """
     if is_list_or_ndarray(input):
         return inp[channel][loc]
-    elif isinstance(inp, types.generatortype):
+    elif isinstance(inp, types.GeneratorType):
         return next(inp)
     elif callable(inp):
         return inp(loc, channel)
@@ -4037,18 +4757,35 @@ cpdef in_any(loc: int, channel: int, inp):
 
 #--------------- ina ----------------#
 cpdef ina(loc: int, inp):
+    """
+    input stream sample at loc \in channel 0.
+    
+    :param loc: location to read from
+    :param inp: input to read from. can be an appropriately shaped np.ndarray or file2sample
+    :return: data
+    :rtype: float
+    """
     return in_any(loc, 0, inp)
 
 #--------------- inb ----------------#    
 cpdef inb(loc: int, inp):
+    """
+    input stream sample at loc \in channel 1.
+    
+    :param loc: location to read from
+    :param channel: channel to read from 
+    :param inp: input to read from. can be an appropriately shaped np.ndarray or file2sample
+    :return: data
+    :rtype: float
+    """
     return in_any(loc, 1, inp)
 
 
 
 # --------------- locsig ---------------- #
 cpdef mus_any make_locsig(degree: Optional[float]=0.0, 
-    distance: Optional[cython.double]=1., 
-    reverb: Optional[cython.double]=0.0, 
+    distance: Optional[float]=1., 
+    reverb: Optional[float]=0.0, 
     output: Optional[mus_any]=None, 
     revout: Optional[mus_any]=None, 
     channels: Optional[int]=None, 
@@ -4056,7 +4793,16 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
     interp_type: Optional[Interp]=Interp.LINEAR):
     
     """
-    return a new generator for signal placement in n channels.  channel 0 corresponds to 0 degrees.
+    return a new generator for signal placement \in n channels.  channel 0 corresponds to 0 degrees.
+    
+    :param degree: degree to place sound
+    :param distance: distance, 1.0 or greater
+    :param reverb: reverb amount
+    :param output: output to write 'dry' signal to. can be an appropriately shaped np.ndarray or sample2file
+    :param revout: output to write 'wet' signal to. can be an appropriately shaped np.ndarray or sample2file
+    :param channels: number of main channels
+    :param reverb_channels: number of channels for reverb
+    :param interp_type: interpolation of position. can be Interp.LINEAR, Interp.SINUSOIDAL
     """
     
     cdef cclm.detour_cb cy_detour_f_ptr
@@ -4093,15 +4839,22 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
     else:
         raise TypeError(f"output needs to be a clm gen or np.array not a {type(output)}")  
         
-cpdef void locsig(gen: mus_any, loc: int, val: cython.double):
+cpdef cython.double locsig(gen: mus_any, loc: int, val: cython.double):
     """
-    locsig 'gen' channel 'chan' scaler
+    locsig 'gen' channel 'chan' scaler.
+    
+    :param gen: locsig gen
+    :param loc: location to write to \in samples
+    :param val: sample value
+    :return: data
+    :rtype: float
     """
     cclm.mus_locsig(gen._ptr, loc, val)
     
-cpdef is_locsig(gen: mus_any):
+cpdef bint is_locsig(gen: mus_any):
     """
-    returns true if gen is a locsig
+    returns True if gen is a locsig.
+    
     :param gen: gen
     :return: result
     :rtype: bool
@@ -4110,38 +4863,77 @@ cpdef is_locsig(gen: mus_any):
     
 cpdef cython.double locsig_ref(gen: mus_any, chan: int):
     """
-    locsig 'gen' channel 'chan' scaler
+    get locsig 'gen' channel 'chan' scaler for main output.
+    
+    :param gen: locsig gen
+    :param chan: channel to get
+    :return: scaler of chan
+    :rtype: float
     """
     return cclm.mus_locsig_ref(gen._ptr, chan)
     
-cpdef cython.double locsig_set(gen: mus_any, chan: int, val:cython.double):
+cpdef cython.double locsig_set(gen: mus_any, chan: int, val: cython.double):
     """
-    set the locsig generator's channel 'chan' scaler to 'val'
+    set the locsig generator's channel 'chan' scaler to 'val'  for main output.
+    
+    :param gen: locsig gen
+    :param chan: channel to set
+    :param val: value to set to
+    :return: scaler of chan
+    :rtype: float
     """
     return cclm.mus_locsig_set(gen._ptr, chan, val)
     
 cpdef cython.double locsig_reverb_ref(gen: mus_any, chan: int):
     """
-     locsig reverb channel 'chan' scaler
+    get locsig reverb channel 'chan' scaler.
+    
+    :param gen: locsig gen
+    :param chan: channel to get
+    :return: scaler of chan
+    :rtype: float
+    
     """
     return cclm.mus_locsig_reverb_ref(gen._ptr, chan)
 
 cpdef cython.double locsig_reverb_set(gen: mus_any, chan: int, val: cython.double):
     """
-    set the locsig reverb channel 'chan' scaler to 'val
+    set the locsig reverb channel 'chan' scaler to 'val'.
+    
+    :param gen: locsig gen
+    :param chan: channel to set
+    :param val: value to set to
+    :return: scaler of chan
+    :rtype: float
     """
     return cclm.mus_locsig_reverb_set(gen._ptr, chan, val)
     
 cpdef void move_locsig(gen: mus_any, degree: cython.double, distance: cython.double):
     """
-    move locsig gen to reflect degree and distance
+    move locsig gen to reflect degree and distance.
+    
+    :param gen: locsig gen
+    :param degree: new degree
+    :param distance: new distance
     """
     cclm.mus_move_locsig(gen._ptr, degree, distance)
     
      
 # added some options . todo: what about sample rate conversion    
-cpdef convolve_files(file1: str, file2: str, maxamp: Optional[cython.double]=1., outputfile='test.aif', sample_type=CLM.sample_type, header_type=CLM.header_type):
-    if header_type == header.next:
+cpdef convolve_files(file1: str, file2: str, maxamp: Optional[float]=1., outputfile='test.aif', sample_type=CLM.sample_type, header_type=CLM.header_type):
+    """
+    convolve-files handles a very common special case: convolve two files, then normalize the result to some maxamp.
+    
+    :param file1: first file
+    :param file2: second file
+    :param maxamp: amp to scale to
+    :param outputfile: output file
+    :param sample_type: type of sample type to use. defaults to clm.sample_type
+    :param header_type: header of sample type to use. defaults to clm.header_type
+    :return: output file 
+    :rtype: str
+    """
+    if header_type == Header.NEXT:
         cclm.mus_convolve_files(file1, file2, maxamp,outputfile)
     else:
         temp_file = tempfile.gettempdir() + '/' + 'temp-' + outputfile
@@ -4300,3 +5092,9 @@ def array_reader(arr, chan, loop=0):
     
 def sndplay(file):
     subprocess.run([CLM.player,file])
+    
+    
+cpdef test_data():
+    op = cclm.mus_make_one_pole(.1, .2)
+    print(cclm.mus_data_exists(op))
+
