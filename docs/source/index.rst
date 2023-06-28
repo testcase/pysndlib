@@ -15,7 +15,8 @@ Welcome to pysndlib's documentation!
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
-
+    
+    readme
     with_sound
     clm_generators
     clm_utility_functions
