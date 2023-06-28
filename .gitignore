@@ -49,7 +49,7 @@ venv/
 __pycache__/
 .ipynb_checkpoints/Untitled-checkpoint.ipynb
 tmp/
-pysndlib/__pycache__/
+src/pysndlib/__pycache__/
 examples/
 src/pysndlib.egg-info/
 docs/build/
