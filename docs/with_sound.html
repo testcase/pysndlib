@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Sound Context Manager &#8212; pysndlib 0.0.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'with_sound';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CLM Generators" href="clm_generators.html" />
+    <link rel="prev" title="Welcome to pysndlib’s documentation!" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysndlib 0.0.6 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Sound Context Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/with_sound.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Sound Context Manager</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Sound"><code class="docutils literal notranslate"><span class="pre">Sound</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="sound-context-manager">
+<h1>Sound Context Manager<a class="headerlink" href="#sound-context-manager" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysndlib.clm.Sound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverb_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverb_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_old_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">play</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Sound" title="Permalink to this definition">#</a></dt>
+<dd><p>context manager which handles creating output and other options</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – Can be a filename string or np.ndarray</p></li>
+<li><p><strong>channels</strong> – number of channels in main output</p></li>
+<li><p><strong>srate</strong> – output sampling rate</p></li>
+<li><p><strong>sample_type</strong> – output sample data type</p></li>
+<li><p><strong>header_type</strong> – output header type</p></li>
+<li><p><strong>comment</strong> – any comment to store in the header</p></li>
+<li><p><strong>verbose</strong> – if True, print out some info (doesn’t do anything now)</p></li>
+<li><p><strong>reverb</strong> – reverb instrument</p></li>
+<li><p><strong>reverb_data</strong> – arguments passed to the reverb (dictionary)</p></li>
+<li><p><strong>reverb_channels</strong> – chans in the reverb intermediate file</p></li>
+<li><p><strong>revfile</strong> – reverb intermediate output file name</p></li>
+<li><p><strong>continue_old_file</strong> – if True, continue a previous computation</p></li>
+<li><p><strong>statistics</strong> – if True, print info at end of with-sound (compile time, maxamps)</p></li>
+<li><p><strong>scaled_to</strong> – if a number, scale the output to peak at that amp</p></li>
+<li><p><strong>scaled_by</strong> – is a number, scale output by that amp</p></li>
+<li><p><strong>play</strong> – if True, play the sound automatically</p></li>
+<li><p><strong>finalize</strong> – a function to call on exit from the context. should be a function that takes one argument, the name of the sound file or the ndarray 
+used as output</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>the following will generate a sound file with two sine waves
+if will play after rendering using CLM.player
+clipped is False which means it does not clip the signal at -1 to 1
+scaled_to with normalize amplitude to .5
+if clipped was True (the default) the signal would be clipped first and then scaled
+which gives a very different output in this example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled_to</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">clipped</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">osc1</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">330</span><span class="p">)</span>
+    <span class="n">osc2</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc1</span><span class="p">)</span> <span class="o">+</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here is an example showing writing the same thing to a numpy array
+and using finalize to call a function to plot the signal</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="k">def</span> <span class="nf">plot_mono_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="n">outarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">44100</span><span class="p">))</span>
+
+
+<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">outarr</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled_to</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">clipped</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">plot_mono_arr</span><span class="p">):</span>
+    <span class="n">osc1</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">330</span><span class="p">)</span>
+    <span class="n">osc2</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc1</span><span class="p">)</span> <span class="o">+</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This is an example of defining a reverb function that is applied after the initial output is
+rendered. using locsig makes this even easier.</p>
+<p>Note ClM.reverb gets defined within the with Sound context.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bad_mono_rev1</span><span class="p">(</span><span class="n">volume</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="n">ap1</span> <span class="o">=</span> <span class="n">allpass1</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1051</span><span class="p">)</span>
+    <span class="n">ap2</span> <span class="o">=</span> <span class="n">allpass2</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1207</span><span class="p">)</span>
+    <span class="n">ap3</span> <span class="o">=</span> <span class="n">allpass3</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">dly</span> <span class="o">=</span> <span class="n">make_delay</span><span class="p">(</span><span class="n">seconds2samples</span><span class="p">(</span><span class="mf">.011</span><span class="p">))</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">clm_length</span><span class="p">(</span><span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
+
+    <span class="n">apb</span> <span class="o">=</span> <span class="n">make_all_pass_bank</span><span class="p">([</span><span class="n">ap1</span><span class="p">,</span> <span class="n">ap2</span><span class="p">,</span> <span class="n">ap3</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">delay</span><span class="p">(</span><span class="n">dly</span><span class="p">,</span> <span class="n">volume</span> <span class="o">*</span> <span class="n">all_pass_bank</span><span class="p">(</span><span class="n">apb</span><span class="p">,</span> <span class="n">ina</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">))))</span>
+
+<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="s1">&#39;ex2.aiff&#39;</span><span class="p">,</span> <span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverb</span><span class="o">=</span><span class="n">bad_mono_rev1</span><span class="p">):</span><span class="c1">#, reverb_data={&#39;volume&#39; : .5}):</span>
+    <span class="n">osc</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mi">22050</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">*</span><span class="n">oscil</span><span class="p">(</span><span class="n">osc</span><span class="p">)</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.6</span><span class="p">)</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.4</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lastly and example that demonstrates defining functions that can be called in Sound context
+that uses finalize to plot the output file after the reverb has been applied</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="k">def</span> <span class="nf">plot_mono_soundfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">file2ndarray</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+
+<span class="k">def</span> <span class="nf">bad_mono_rev1</span><span class="p">(</span><span class="n">volume</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="n">ap1</span> <span class="o">=</span> <span class="n">allpass1</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1051</span><span class="p">)</span>
+    <span class="n">ap2</span> <span class="o">=</span> <span class="n">allpass2</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1207</span><span class="p">)</span>
+    <span class="n">ap3</span> <span class="o">=</span> <span class="n">allpass3</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">dly</span> <span class="o">=</span> <span class="n">make_delay</span><span class="p">(</span><span class="n">seconds2samples</span><span class="p">(</span><span class="mf">.011</span><span class="p">))</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">clm_length</span><span class="p">(</span><span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
+
+    <span class="n">apb</span> <span class="o">=</span> <span class="n">make_all_pass_bank</span><span class="p">([</span><span class="n">ap1</span><span class="p">,</span> <span class="n">ap2</span><span class="p">,</span> <span class="n">ap3</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">delay</span><span class="p">(</span><span class="n">dly</span><span class="p">,</span> <span class="n">volume</span> <span class="o">*</span> <span class="n">all_pass_bank</span><span class="p">(</span><span class="n">apb</span><span class="p">,</span> <span class="n">ina</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">))))</span>
+
+
+<span class="k">def</span> <span class="nf">blip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
+    <span class="n">osc</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+    <span class="n">beg</span> <span class="o">=</span> <span class="n">seconds2samples</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">beg</span> <span class="o">+</span> <span class="n">seconds2samples</span><span class="p">(</span><span class="n">dur</span><span class="p">)</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">duration</span><span class="o">=</span><span class="n">dur</span><span class="o">*</span><span class="mf">.5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc</span><span class="p">)</span> <span class="o">*</span> <span class="n">env</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.6</span><span class="p">)</span>
+        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.4</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
+
+
+<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="s1">&#39;ex2.aiff&#39;</span><span class="p">,</span> <span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverb</span><span class="o">=</span><span class="n">bad_mono_rev1</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">plot_mono_soundfile</span><span class="p">):</span>
+    <span class="n">blip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+    <span class="n">blip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+    <span class="n">blip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+    <span class="n">blip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">.333333</span><span class="p">):</span>
+        <span class="n">blip</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to pysndlib’s documentation!</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="clm_generators.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CLM Generators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Sound"><code class="docutils literal notranslate"><span class="pre">Sound</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Todd Ingalls
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023, Todd Ingalls.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
