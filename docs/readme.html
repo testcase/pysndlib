@@ -285,6 +285,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-dependencies">Python dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
 </ul>
             </nav>
@@ -351,8 +352,23 @@ extension but I have changed this to make sure I can keep different versions str
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
 </pre></div>
 </div>
+</section>
+<section id="python-dependencies">
+<h2>Python dependencies<a class="headerlink" href="#python-dependencies" title="Permalink to this heading">#</a></h2>
+<p>I do the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
+
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span><span class="o">==</span><span class="mf">3.0.0</span><span class="n">b3</span>
+</pre></div>
+</div>
 <p>After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
-of the pysndlib clone run:</p>
+of the pysndlib clone:</p>
+<blockquote>
+<div><p>** Make sure LIB_PATH is setup to look at /usr/local/lib **</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">-</span><span class="n">i</span>
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
@@ -446,6 +462,7 @@ existing examples. This may mean some aspects may not be pythonic.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-dependencies">Python dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
 </ul>
   </nav></div>

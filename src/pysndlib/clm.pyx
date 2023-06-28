@@ -19,7 +19,11 @@ cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 from pysndlib.sndlib import Sample, Header
 
+
+ 
+ 
 np.import_array()
+
 
 
 # --------------- clm enums ---------------- #

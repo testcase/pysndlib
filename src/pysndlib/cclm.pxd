@@ -1,5 +1,6 @@
 cimport pysndlib.csndlib as csndlib
 
+
 cdef extern from "/usr/local/include/clm.h":
     """
     typedef mus_float_t (*connect_points_cb)(mus_float_t val);
@@ -13,7 +14,6 @@ cdef extern from "/usr/local/include/clm.h":
     typedef mus_any** mus_any_ptr_ptr;
     typedef long long mus_long_t;
     """
-    
     
     
     
@@ -320,6 +320,7 @@ cdef extern from "/usr/local/include/clm.h":
     mus_any *mus_make_rand(mus_float_t freq, mus_float_t base)
     bint mus_is_rand(mus_any *ptr)
     mus_any *mus_make_rand_with_distribution(mus_float_t freq, mus_float_t base, mus_float_t *distribution, int distribution_size)
+
 
     mus_float_t mus_rand_interp(mus_any *gen, mus_float_t fm)
     mus_any *mus_make_rand_interp(mus_float_t freq, mus_float_t base)

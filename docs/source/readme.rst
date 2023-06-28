@@ -72,9 +72,30 @@ changed install and uninstall targets to following:
     sudo make install
     
 
+Python dependencies
+---------------------
 
+I do the following
+::
+
+    pip install numpy
+    
+    pip install Cython==3.0.0b3
+    
+    
 After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
-of the pysndlib clone run:
+of the pysndlib clone:
+
+
+   ** Make sure LIB_PATH is setup to look at /usr/local/lib **
+    
+
+
+::
+
+    python setup.py build_ext -i
+
+
 
 :: 
     

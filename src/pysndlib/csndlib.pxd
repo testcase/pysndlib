@@ -35,6 +35,7 @@ cdef extern from "/usr/local/include/sndlib.h":
     mus_header_t mus_sound_header_type(const char *arg)
     mus_sample_t mus_sound_sample_type(const char *arg)
     int mus_sound_original_sample_type(const char *arg)
+   
     mus_long_t mus_sound_comment_start(const char *arg)
     mus_long_t mus_sound_comment_end(const char *arg)
     mus_long_t mus_sound_length(const char *arg)

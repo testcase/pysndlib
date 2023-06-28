@@ -5,6 +5,7 @@ import math
 import os
 from random import uniform
 import numpy as np
+from pysndlib.sndlib import *
 from pysndlib.clm import *
 from pysndlib.jcrev import jc_reverb
 
@@ -1179,18 +1180,18 @@ def blip(start, dur, freq):
 #                 outb(i, delay(gen2, val))
 
 
-# from pysndlib.jcrev import jc_reverb
+from pysndlib.jcrev import jc_reverb
 # 
 # # #.21090058 seconds
 # # #0.15929429 
 # # 
-# # with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
-# #     blip(0, 1, 400)
-# #     blip(1, 1, 500)
-# #     blip(2, 1, 600)
-# #     blip(3, 1, 900)
-# #     for i in np.arange(4, 6, .333333):
-# #         blip(i, .5, 800)
+with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
+    blip(0, 1, 400)
+    blip(1, 1, 500)
+    blip(2, 1, 600)
+    blip(3, 1, 900)
+    for i in np.arange(4, 6, .333333):
+        blip(i, .5, 800)
 # # 
 # # 
 # # with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
