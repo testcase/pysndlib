@@ -1,10 +1,12 @@
 CLM Enums
 =========================
 
+
 .. module:: 
 	pysndlib.clm
 	:noindex:
 
+**in pysndlib.clm**
 
 .. autoenum:: Interp
 	:members:

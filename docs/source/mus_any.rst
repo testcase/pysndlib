@@ -1,9 +1,12 @@
 CLM Generator Properties
 =========================
 
+
 .. module:: 
 	pysndlib.clm
 	:noindex:
+	
+**in pysndlib.clm**
 
 .. autoclass:: mus_any
 	:members:

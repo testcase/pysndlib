@@ -1,12 +1,16 @@
 CLM Generators
 ================
 
-oscil
--------
-
 .. module:: 
     pysndlib.clm
     :noindex:
+
+**in pysndlib.clm**
+
+
+
+oscil
+-------
 
 .. autofunction:: make_oscil
 .. autofunction:: oscil

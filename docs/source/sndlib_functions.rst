@@ -4,7 +4,12 @@ Sndlib Functions
 .. module:: 
 	pysndlib.sndlib
 	:noindex:
+	
 
+**in pysndlib.sndlib**
+
+Sound files have built-in descriptors known as headers. The following functions return the information
+in the header. In each case the argument to the function is the full file name of the sound file.
 
 
 .. autofunction:: mus_sound_samples

@@ -5,6 +5,10 @@ CLM Utility Functions
 	pysndlib.clm
 	:noindex:
 
+**in pysndlib.clm**
+
+the following are in the pysndlib.clm module
+
 
 Sampling rate		
 --------------
