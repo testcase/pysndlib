@@ -282,6 +282,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
@@ -307,6 +308,9 @@ Sources for sndlib can be found here &lt;<a class="reference external" href="htt
 link against a dylib built with -dynamiclib flag. Technically I believe it would still work with .so
 extension but I have changed this to make sure I can keep different versions straight.</p>
 <p>Hope to get this all sorted so can be installed using pip in the future</p>
+<section id="building-sndlib">
+<h2>Building sndlib<a class="headerlink" href="#building-sndlib" title="Permalink to this heading">#</a></h2>
+</section>
 <section id="run-configure">
 <h2>run configure<a class="headerlink" href="#run-configure" title="Permalink to this heading">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">without</span><span class="o">-</span><span class="n">s7</span>
@@ -331,6 +335,7 @@ extension but I have changed this to make sure I can keep different versions str
     $(SO_INSTALL) libsndlib.dylib $(libdir)/libsndlib.dylib
     $(A_INSTALL) libsndlib.a $(libdir)/libsndlib.a
     $(INSTALL) sndlib.h $(includedir)/sndlib.h
+    $(INSTALL) clm.h $(includedir)/clm.h
     $(INSTALL) sndlib-config $(bindir)/sndlib-config
     $(INSTALL) sndlib.pc $(pkgconfigdir)/sndlib.pc
 </pre></div>
@@ -338,6 +343,12 @@ extension but I have changed this to make sure I can keep different versions str
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>uninstall:
     rm -f $(libdir)/libsndlib.dylib
     rm -f $(libdir)/libsndlib.a
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
@@ -432,6 +443,7 @@ existing examples. This may mean some aspects may not be pythonic.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>

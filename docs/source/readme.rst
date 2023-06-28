@@ -17,6 +17,9 @@ extension but I have changed this to make sure I can keep different versions str
 Hope to get this all sorted so can be installed using pip in the future 
 
 
+Building sndlib
+----------------
+
 run configure
 ---------------
 
@@ -50,6 +53,7 @@ changed install and uninstall targets to following:
         $(SO_INSTALL) libsndlib.dylib $(libdir)/libsndlib.dylib
         $(A_INSTALL) libsndlib.a $(libdir)/libsndlib.a
         $(INSTALL) sndlib.h $(includedir)/sndlib.h
+        $(INSTALL) clm.h $(includedir)/clm.h
         $(INSTALL) sndlib-config $(bindir)/sndlib-config
         $(INSTALL) sndlib.pc $(pkgconfigdir)/sndlib.pc
 
@@ -58,6 +62,15 @@ changed install and uninstall targets to following:
     uninstall:
         rm -f $(libdir)/libsndlib.dylib
         rm -f $(libdir)/libsndlib.a
+
+::
+
+    make
+    
+:: 
+    
+    sudo make install
+    
 
 
 After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
