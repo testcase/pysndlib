@@ -52,3 +52,4 @@ tmp/
 pysndlib/__pycache__/
 examples/
 src/pysndlib.egg-info/
+docs/build/
