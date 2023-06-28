@@ -4842,9 +4842,12 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
     
     if not reverb_channels:
         reverb_channels = clm_channels(revout)
-    
+    #<void*>(<mus_any>inp)._ptr
     if isinstance(output, mus_any):
-        res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, <cclm.mus_any*>(output._ptr), reverb_channels, <cclm.mus_any*>(revout._ptr),  interp_type))
+     
+        out = <mus_any>output
+        rout = <mus_any>revout
+        res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, rout._ptr,  interp_type))
         return res
         
     # todo: what if revout is not an iterable? while possible not going to deal with it right now :)   

@@ -1090,30 +1090,30 @@ from pysndlib.jcrev import jc_reverb
 
 # 
 
-from matplotlib import pyplot as plt
-
-def plot_mono_soundfile(filename):
-    y, _ = file2ndarray(filename)
-    plt.figure(figsize=(6,6))
-    plt.plot(y[0], color='gray')
-    plt.tight_layout()
-    plt.show()
-
-
-
-def bad_mono_rev1(volume=1.):
-    ap1 = allpass1 = make_all_pass(-.9, .9, 1051)
-    ap2 = allpass2 = make_all_pass(-.9, .9, 1207)
-    ap3 = allpass3 = make_all_pass(-.9, .9, 1000)
-    dly = make_delay(seconds2samples(.011))
-    length = clm_length(CLM.reverb)
-    
-    apb = make_all_pass_bank([ap1, ap2, ap3])
-    
-    for i in range(length):
-        outa(i, delay(dly, volume * all_pass_bank(apb, ina(i, CLM.reverb))))
-        
-        
+# from matplotlib import pyplot as plt
+# 
+# def plot_mono_soundfile(filename):
+#     y, _ = file2ndarray(filename)
+#     plt.figure(figsize=(6,6))
+#     plt.plot(y[0], color='gray')
+#     plt.tight_layout()
+#     plt.show()
+# 
+# 
+# 
+# def bad_mono_rev1(volume=1.):
+#     ap1 = allpass1 = make_all_pass(-.9, .9, 1051)
+#     ap2 = allpass2 = make_all_pass(-.9, .9, 1207)
+#     ap3 = allpass3 = make_all_pass(-.9, .9, 1000)
+#     dly = make_delay(seconds2samples(.011))
+#     length = clm_length(CLM.reverb)
+#     
+#     apb = make_all_pass_bank([ap1, ap2, ap3])
+#     
+#     for i in range(length):
+#         outa(i, delay(dly, volume * all_pass_bank(apb, ina(i, CLM.reverb))))
+#         
+#         
 def blip(start, dur, freq):
     osc = make_oscil(freq)
     beg = seconds2samples(start)
@@ -1123,15 +1123,15 @@ def blip(start, dur, freq):
         val = oscil(osc) * env(e)
         outa(i, val*.6)
         outa(i, val*.4, CLM.reverb)
-
-
-with Sound('ex2.aiff', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
-    blip(0, 1, 400)
-    blip(1, 1, 500)
-    blip(2, 1, 600)
-    blip(3, 1, 900)
-    for i in np.arange(4, 6, .333333):
-        blip(i, .5, 800)
+# 
+# 
+# with Sound('ex2.aiff', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
+#     blip(0, 1, 400)
+#     blip(1, 1, 500)
+#     blip(2, 1, 600)
+#     blip(3, 1, 900)
+#     for i in np.arange(4, 6, .333333):
+#         blip(i, .5, 800)
 
 
 
@@ -1179,8 +1179,38 @@ with Sound('ex2.aiff', play=True, statistics=True, reverb=bad_mono_rev1, finaliz
 #                 outb(i, delay(gen2, val))
 
 
-
-
+# from pysndlib.jcrev import jc_reverb
+# 
+# # #.21090058 seconds
+# # #0.15929429 
+# # 
+# # with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
+# #     blip(0, 1, 400)
+# #     blip(1, 1, 500)
+# #     blip(2, 1, 600)
+# #     blip(3, 1, 900)
+# #     for i in np.arange(4, 6, .333333):
+# #         blip(i, .5, 800)
+# # 
+# # 
+# # with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
+# #     blip(0, 1, 400)
+# #     blip(1, 1, 500)
+# #     blip(2, 1, 600)
+# #     blip(3, 1, 900)
+# #     for i in np.arange(4, 6, .333333):
+# #         blip(i, .5, 800)
+# 
+# 
+# from pysndlib.v import fm_violin
+# #0.47044871
+# # compiled 0.35418596
+# with Sound(output='ex3.aiff', play=True, statistics=True, reverb=jc_reverb):
+#     fm_violin(0, 3, 330, .4, 1.2)
+#     fm_violin(3, 3, 660, .4, 2.2)
+#     fm_violin(6, 4, 540, .4, 3.2)
+#     fm_violin(10, 4, 220, .4, .8)
+#     
 
 
 

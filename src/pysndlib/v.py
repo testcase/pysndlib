@@ -1,5 +1,5 @@
 import math
-from pysndlib import *
+from pysndlib.clm import *
 
 # does not include easy case or other optimizations
 
