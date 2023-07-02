@@ -980,7 +980,7 @@ fir_filter
 .. autofunction:: make_fir_filter
 .. autofunction:: fir_filter
 .. autofunction:: is_fir_filter
-
+.. autofunction:: make_fir_coeffs
 
 .. table:: fir_filter properties
     :align: left

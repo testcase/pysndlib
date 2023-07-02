@@ -465,6 +465,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fir_filter"><code class="docutils literal notranslate"><span class="pre">make_fir_filter()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fir_filter"><code class="docutils literal notranslate"><span class="pre">fir_filter()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_fir_filter"><code class="docutils literal notranslate"><span class="pre">is_fir_filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fir_coeffs"><code class="docutils literal notranslate"><span class="pre">make_fir_coeffs()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iir-filter">iir_filter</a><ul class="nav section-nav flex-column">
@@ -3409,6 +3410,22 @@ circle’). frequency sets the resonance center frequency (hz).</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.make_fir_coeffs">
+<span class="sig-name descname"><span class="pre">make_fir_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_fir_coeffs" title="Permalink to this definition">#</a></dt>
+<dd><p>translates a frequency response envelope (actually, evenly spaced points in a float-vector) into
+the corresponding FIR filter coefficients. The order of the filter determines how close you get to the
+envelope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> (<em>int</em>) – order of the filter</p></li>
+<li><p><strong>envelope</strong> – response envelope</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <table class="table table-left" id="id29" style="width: 60%">
 <caption><span class="caption-text">fir_filter properties</span><a class="headerlink" href="#id29" title="Permalink to this table">#</a></caption>
 <thead>
@@ -5999,6 +6016,7 @@ identifiers.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fir_filter"><code class="docutils literal notranslate"><span class="pre">make_fir_filter()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fir_filter"><code class="docutils literal notranslate"><span class="pre">fir_filter()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.is_fir_filter"><code class="docutils literal notranslate"><span class="pre">is_fir_filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fir_coeffs"><code class="docutils literal notranslate"><span class="pre">make_fir_coeffs()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iir-filter">iir_filter</a><ul class="nav section-nav flex-column">

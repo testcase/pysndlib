@@ -13,8 +13,6 @@ in the header. In each case the argument to the function is the full file name o
 
 
 .. autofunction:: mus_sound_samples
-.. autofunction:: mus_set_clipping
-.. autofunction:: mus_sound_duration
 .. autofunction:: mus_sound_framples
 .. autofunction:: mus_sound_datum_size
 .. autofunction:: mus_sound_data_location
@@ -42,10 +40,17 @@ in the header. In each case the argument to the function is the full file name o
 .. autofunction:: mus_sample_type_to_string
 .. autofunction:: mus_sample_type_short_name
 .. autofunction:: mus_sound_comment
-
-
-
-
+.. autofunction:: mus_bytes_per_sample
+.. autofunction:: mus_sound_duration
+.. autofunction:: mus_sound_override_header
+.. autofunction:: mus_sound_loop_info
+.. autofunction:: mus_sound_set_loop_info
+.. autofunction:: mus_sound_open_input
+.. autofunction:: mus_sound_open_output
+.. autofunction:: mus_sound_reopen_output
+.. autofunction:: mus_sound_close_input
+.. autofunction:: mus_sound_close_output
+.. autofunction:: mus_set_clipping
 
 
 

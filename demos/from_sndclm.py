@@ -3,11 +3,17 @@
 # showing basic examples of built-in generators
 import math
 import os
+
 from random import uniform
 import numpy as np
 from pysndlib.sndlib import *
 from pysndlib.clm import *
 from pysndlib.jcrev import jc_reverb
+from pysndlib.musx import *
+import functools
+
+
+
 
 # with Sound(play=True):
 #     gen = make_oscil(440.0)
@@ -996,222 +1002,6 @@ from pysndlib.jcrev import jc_reverb
 #       
 
 
-#print([hz2radians(i) for i in [400,430,490]])
-
-# with Sound(play=True):
-#     ob = make_oscil_bank([hz2radians(i) for i in [400,430,490]], [.5, .2, math.pi+.1], [.5, .3, .2])
-#     for i in range(44100*2):
-#         outa(i, oscil_bank(ob))
-
-
-
-# with Sound(play=True):
-#     gen = make_square_wave(261.0)
-#     e = make_env([0.0, .5, .5, .1, 1.0, .8], length=44100*2)
-#     for i in range(44100*2):
-#         gen.mus_width = env(e)
-#         outa(i, .5 * square_wave(gen))   
-
-
-
-
-# with Sound(play=True):
-#     gen = make_sawtooth_wave(261.0)
-#     lfo = make_oscil(.5)
-#     for i in range(44100*3):
-#         outa(i, .5 * sawtooth_wave(gen, oscil(lfo) * hz2radians(20)))    
-
-
-# with Sound(play=True):
-#     gen = make_pulse_train(100.0)
-#     e = make_env([0.0, 0.0, .5, 1.0, 1.0, 0.0], scaler=400, length=44100*3)
-#     for i in range(44100*3):
-#         outa(i, pulse_train(gen, hz2radians(env(e))))
-
-
-# with Sound(play=True):
-#     gen = make_rxykcos(440.0, r=.5, ratio=1.2)
-#     e = make_env([0.0, .5, 1.0, .0], length=44100*3, base=32)
-#     for i in range(44100*3):
-#         gen.mus_scaler = env(e)
-#         outa(i, .5 * rxykcos(gen))
-
-# with Sound(play=True):
-#     gen = make_rxykcos(440.0, r=.5, ratio=.1)
-#     e = make_env([0.0, 1.2, 1.0, .1], length=44100*3)
-#     for i in range(44100*3):
-#         gen.mus_scaler = env(e)
-#         outa(i, .5 * rxykcos(gen))
-
-
-# with Sound(play=True):
-#     r = make_rand(44100)
-#     op = make_one_zero(.2, .3)
-#     for i in range(44100):
-#         #outa(i, one_pole(op, 0.0))
-#         outa(i, one_zero(op, rand(r)))
-# 
-# 
-# with Sound(play=True):
-#     r = make_rand(44100)
-#     #op = make_two_pole(700, .1)
-#     op = make_one_pole(.1, -.3)
-#     for i in range(44100):
-#         outa(i, one_pole(op, rand(r)))
-#         #outa(i, two_pole(op, rand(r)))
-#     print(op)
-# 
-# with Sound(play=True):
-#     gen = make_sawtooth_wave(261.0)
-#     lfo = make_oscil(.5)
-#     for i in range(44100*3):
-#         outa(i, .5 * sawtooth_wave(gen, oscil(lfo) * hz2radians(20)))   
-
-#     
-
-
-# # this will generate a sound file with two sine waves
-# # if will play after rendering using CLM.player
-# # clipped is False which means it does not clip the signal at -1 to 1
-# # scaled_to with normalize amplitude to .5
-# # if clipped was True (the default) the signal would be clipped first and then scaled
-# # which gives a very different output in this example
-# with Sound(play=True, statistics=True, scaled_to=.5, clipped=False):
-#     osc1 = make_oscil(330)
-#     osc2 = make_oscil(500)
-#     for i in range(44100):
-#         outa(i, oscil(osc1) + oscil(osc2))
-
-
-
-# this example shows writing to an nd.nparray. 
-
-
-
-
-# 
-
-# from matplotlib import pyplot as plt
-# 
-# def plot_mono_soundfile(filename):
-#     y, _ = file2ndarray(filename)
-#     plt.figure(figsize=(6,6))
-#     plt.plot(y[0], color='gray')
-#     plt.tight_layout()
-#     plt.show()
-# 
-# 
-# 
-# def bad_mono_rev1(volume=1.):
-#     ap1 = allpass1 = make_all_pass(-.9, .9, 1051)
-#     ap2 = allpass2 = make_all_pass(-.9, .9, 1207)
-#     ap3 = allpass3 = make_all_pass(-.9, .9, 1000)
-#     dly = make_delay(seconds2samples(.011))
-#     length = clm_length(CLM.reverb)
-#     
-#     apb = make_all_pass_bank([ap1, ap2, ap3])
-#     
-#     for i in range(length):
-#         outa(i, delay(dly, volume * all_pass_bank(apb, ina(i, CLM.reverb))))
-#         
-#         
-def blip(start, dur, freq):
-    osc = make_oscil(freq)
-    beg = seconds2samples(start)
-    end = beg + seconds2samples(dur)
-    e = make_env([0.,0.0, .05, .8, .4, 0.0, 1.0, 0.0], duration=dur*.5)
-    for i in range(beg, end):
-        val = oscil(osc) * env(e)
-        outa(i, val*.6)
-        outa(i, val*.4, CLM.reverb)
-# 
-# 
-# with Sound('ex2.aiff', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
-#     blip(0, 1, 400)
-#     blip(1, 1, 500)
-#     blip(2, 1, 600)
-#     blip(3, 1, 900)
-#     for i in np.arange(4, 6, .333333):
-#         blip(i, .5, 800)
-
-
-
-
-# 
-# 
-# def jc_reverb(lowpass=False, volume=1., amp_env = None):
-#    
-#     allpass1 = make_all_pass(-.7, .7, 1051)
-#     allpass2 = make_all_pass(-.7, .7, 337)
-#     allpass3 = make_all_pass(-.7, .7, 113)
-#     comb1 = make_comb(.742, 4799)
-#     comb2 = make_comb(.733, 4999)
-#     comb3 = make_comb(.715, 5399)
-#     comb4 = make_comb(.697, 5801)
-#     chans = clm_channels(CLM.output)
-#     
-#     length = clm_length(CLM.reverb)
-#     filts = [make_delay(seconds2samples(.013))] if chans == 1 else [make_delay(seconds2samples(.013)),make_delay(seconds2samples(.011)) ]
-#     combs = make_comb_bank([comb1, comb2, comb3, comb4])
-#     allpasses = make_all_pass_bank([allpass1,allpass2,allpass3])
-#     
-#     if lowpass or amp_env:
-#         flt = make_fir_filter(3, [.25, .5, .25]) if lowpass else None
-#         envA = make_env(amp_env, scaler=volume, duration = length / CLM.srate)
-#         
-#         if lowpass:
-#             for i in range(length):
-#                 out_bank(filts, i, (env(envA) * fir_filter(flt, comb_bank(combs, all_pass(allpasses, ina(i, CLM.reverb))))))
-#         else:
-#             for i in range(length):
-#                 out_bank(filts, i, (env(envA) * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb)))))
-#     else:
-#         if chans == 1:
-#             
-#             gen = filts[0]
-#             for i in range(length):
-#                 outa(i, delay(gen, volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb)))))
-#         else:    
-#             gen1 = filts[0]
-#             gen2 = filts[1]
-#             for i in range(length):
-#                 val = volume * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb))) 
-#                 outa(i, delay(gen1, val))
-#                 outb(i, delay(gen2, val))
-
-
-from pysndlib.jcrev import jc_reverb
-# 
-# # #.21090058 seconds
-# # #0.15929429 
-# # 
-with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
-    blip(0, 1, 400)
-    blip(1, 1, 500)
-    blip(2, 1, 600)
-    blip(3, 1, 900)
-    for i in np.arange(4, 6, .333333):
-        blip(i, .5, 800)
-# # 
-# # 
-# # with Sound('ex2.aiff', play=True, statistics=True, reverb=jc_reverb):
-# #     blip(0, 1, 400)
-# #     blip(1, 1, 500)
-# #     blip(2, 1, 600)
-# #     blip(3, 1, 900)
-# #     for i in np.arange(4, 6, .333333):
-# #         blip(i, .5, 800)
-# 
-# 
-# from pysndlib.v import fm_violin
-# #0.47044871
-# # compiled 0.35418596
-# with Sound(output='ex3.aiff', play=True, statistics=True, reverb=jc_reverb):
-#     fm_violin(0, 3, 330, .4, 1.2)
-#     fm_violin(3, 3, 660, .4, 2.2)
-#     fm_violin(6, 4, 540, .4, 3.2)
-#     fm_violin(10, 4, 220, .4, .8)
-#     
 
 
 

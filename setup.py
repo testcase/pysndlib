@@ -9,7 +9,7 @@ import numpy
 
 extensions = [
     Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 
-        libraries=["sndlib"], 
+        libraries=["sndlib"], include_dirs=[numpy.get_include()], 
         extra_compile_args=['-Wno-parentheses-equality'],
         define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
     Extension("pysndlib.clm", ["src/pysndlib/clm.pyx"], 

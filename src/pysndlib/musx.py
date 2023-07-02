@@ -1,12 +1,12 @@
 import musx
 import functools
-from pysndlib import Sound
+from pysndlib.clm import Sound
 
 # musx integration
 # TODO move to another file
 
 #returns 
-def clm_instrument(func):
+def CLM_instrument(func):
     @functools.wraps(func)
     def call(time, *args, **kwargs):
         obj = functools.partial(func,time, *args, **kwargs)
@@ -23,7 +23,7 @@ def render_clm(seq: musx.seq, filename, **kwargs):
 # what should the clm score file be? 
 # TODO make this something useful that could be read.  i am assuming some type of dictionary
 # with header for info and then entries in seq
-def write_clm(seq):
+def print_clm(seq):
     s = seq.events.copy()
     for v in s:
         funcname = v.func.__name__
