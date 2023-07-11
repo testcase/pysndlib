@@ -6,7 +6,7 @@ from pysndlib.clm import Sound
 # TODO move to another file
 
 #returns 
-def CLM_instrument(func):
+def CLM_Instrument(func):
     @functools.wraps(func)
     def call(time, *args, **kwargs):
         obj = functools.partial(func,time, *args, **kwargs)

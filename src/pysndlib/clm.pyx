@@ -121,8 +121,19 @@ class SNDLibError(Exception):
         
         
 def check_ndim(arr: npt.NDArray[np.float64], dim=1):
-    if arr.ndim != 1:
+    if arr.ndim != dim:
         raise TypeError(f'expecting {dim} dimemsions but received {arr.ndim}.')
+        
+def check_range(arg: str, x, low=None, high=None):
+    if x is None:
+        return
+    if low is not None:
+        if x < low:
+            raise ValueError(f'{arg} is out of range. {x} < {low}')
+    if high is not None:
+        if x > high:
+            raise ValueError(f'{arg} is out of range. {x} > {high}')
+    
         
 def compare_shapes(arr1: npt.NDArray[np.float64], arr2: npt.NDArray[np.float64]):
     if arr1.shape != arr2.shape:
@@ -1054,221 +1065,7 @@ def clm_random(*args):
  
 # --------------- just some extra utils ---------------- #    
 
-# --------------- clamp ---------------- #
-@singledispatch
-def clamp(x, lo, hi):
-    pass
-    
-@clamp.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clamp.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-    
-@clamp.register
-def _(x:  np.ndarray, lo, hi):
-    return np.clip(x, lo, hi)
 
-
-@clamp.register
-def _(x:  list, lo, hi):    
-    return list(map(lambda z : clamp(z,lo,hi), x))
-    
-# --------------- clip ---------------- #
-    
-@singledispatch
-def clip(x, lo, hi):
-    pass
-
-# same as clamp
-@clip.register
-def _(x: float, lo, hi):
-    return float(max(min(x, hi),lo))
-    
-@clip.register
-def _(x: int, lo, hi):
-    return int(max(min(x, hi),lo))
-    
-@clip.register
-def _(x:  np.ndarray, lo, hi):
-    return np.clip(x, lo, hi)
-
-
-@clip.register
-def _(x:  list, lo, hi):    
-    return list(map(lambda z : clip(z,lo,hi), x))
-
-# --------------- fold ---------------- #
-# todo: fix as not working for negative numbers
-@singledispatch
-def fold(x, lo, hi):
-    pass
-    
-@fold.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo
-    
-@fold.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    v = (x-lo)/r
-    return int(r * (1.0 - math.fabs(math.fmod(v,2.0) - 1.0)) + lo)
-    
-
-_vfold = np.vectorize(fold)
-    
-@fold.register
-def _(x:  np.ndarray, lo, hi):
-    return _vfold(x, lo, hi)
-
-@fold.register
-def _(x:  list, lo, hi):    
-    return list(map(lambda z : fold(z,lo,hi), x))
-
-
-# --------------- wrap ---------------- #
-
-# todo fix for negative nuymbers
-
-@singledispatch
-def wrap(x, lo, hi):
-    pass
-
-@wrap.register
-def _(x: float, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return hi + (math.fmod((x-lo), r))
-    if x > hi:
-        return lo + (math.fmod((x-hi), r))
- 
-@wrap.register
-def _(x: int, lo, hi):
-    r = hi-lo
-    if x >= lo and x <= hi:
-        return x
-    if x < lo:
-        return int(hi + (math.fmod((x-lo), r)))
-    if x > hi:
-        return int(lo + (math.fmod((x-hi), r)))
-        
-        
-_vwrap = np.vectorize(wrap)
-
-@wrap.register
-def _(x:  np.ndarray, lo, hi):
-    return _vwrap(x, lo, hi)
-
-
-@wrap.register
-def _(x:  list, lo, hi):    
-    return list(map(lambda z : wrap(z,lo,hi), x))
-
-
-
-# --------------- smoothstep ---------------- #
-@singledispatch
-def smoothstep(x, edge0, edge1):
-    pass
-
-@smoothstep.register
-def _(x: float, edge0: float, edge1:float):
-    t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0)
-    return t * t * (3.0 - 2.0 * t)
-
-_vsmoothstep = np.vectorize(smoothstep)
-
-@smoothstep.register
-def _(x:  np.ndarray, edge0: float, edge1: float):
-    return _vsmoothstep(x, edge0, edge1)
-    
-@smoothstep.register
-def _(x: list, edge0: float, edge1:float):
-    return list(map(lambda z : smoothstep(z, edge0, edge1)))
-
-
-# --------------- step ---------------- #
-@singledispatch
-def step(x, edge):
-    pass
-
-@step.register
-def _(x: float, edge:float):
-    return 0.0 if x < edge else 1.0
-    
-_vstep = np.vectorize(step)
-
-@step.register
-def _(x: np.ndarray, edge:float):
-    return _vstep(x, edge)
-    
-@step.register
-def _(x: list, edge:float):
-    return list(map(lambda z : step(z, edge), x))
-
-
-# --------------- mix ---------------- #
-
-@singledispatch
-def mix(x, y , a):
-    pass
-    
-@mix.register
-def _(x: float, y: float , a: float):
-    return x * (1 - a) + y * a
-    
-@mix.register
-def _(x: np.ndarray, y: np.ndarray , a: float):
-    res = np.zeros_like(x)
-    for i in range(len(x)):
-        res[i] = mix(x[i], y[i], a)
-    return res
-        
-@mix.register
-def _(x: list, y: list , a: float):
-    res = [None] * len(x)
-    for i in range(len(x)):
-        res[i] = mix(x[i], y[i], a)
-    return res
-
-# --------------- sign ---------------- #
-
-@singledispatch
-def sign(x):
-    pass
-
-@sign.register
-def _(x: int ):
-    if x == 0:
-        return 0
-    if x < 0:
-        return -1
-    else: 
-        return 1
-
-@sign.register
-def _(x: float ):
-    if x == 0:
-        return 0.0
-    if x < 0:
-        return -1.0
-    else: 
-        return 1.0
- 
-@sign.register
-def _(x: list):
-    return list(map(sign, x))
-
-@sign.register
-def _(x: np.ndarray):
-    return np.sign(x)
-    
 
 
 # # --------------- clm utility functions ---------------- #
@@ -1916,6 +1713,9 @@ cpdef mus_any make_oscil(frequency: Optional[float]=0., initial_phase: Optional[
     :param initial_phase: initial phase in radians
     :return: oscil gen
     """
+    check_range('frequency', frequency, 0., get_srate() / 2)
+    
+    
     return mus_any.from_ptr(cclm.mus_make_oscil(frequency, initial_phase))
     
 cpdef cython.double oscil(gen: mus_any, fm: Optional[float]=None, pm: Optional[float]=None):
@@ -2025,6 +1825,9 @@ cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional
     :rtype: mus_any
 
     """
+    
+    check_range('duration', duration, 0.0, None)
+    
     if length > 0:
         duration = samples2seconds(length)
     
@@ -2105,6 +1908,7 @@ cpdef mus_any make_pulsed_env(envelope, duration: cython.double, frequency: cyth
     :return: env output
     :rtype: float
     """
+    
     if isinstance(envelope, list):
         envelope = np.array(envelope, dtype=np.double)        
 
@@ -2162,6 +1966,8 @@ cpdef mus_any make_table_lookup(frequency: Optional[float]=0.0,
     :rtype: mus_any
     """                                               
     
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     if wave is None:
         wave = np.zeros(size)
     
@@ -2210,6 +2016,9 @@ cpdef mus_any make_table_lookup_with_env(frequency: cython.double, envelope, siz
     :rtype: mus_any
     
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     size = size or CLM.table_size
     table = np.zeros(size)  
     e = make_env(envelope, length=size)
@@ -2238,6 +2047,9 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
     :return: polywave gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     cdef double [:] xcoeffs_view = None
     cdef double [:] ycoeffs_view = None
     cdef double [:] prtls_view = None
@@ -2311,6 +2123,7 @@ cpdef mus_any make_polyshape(frequency: float,
     :rtype: mus_any
     """
     
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
     
     if coeffs:
         if isinstance(coeffs, list):
@@ -2365,6 +2178,8 @@ cpdef mus_any make_triangle_wave(frequency: float, amplitude: Optional[float]=1.
     :rtype: mus_any
     
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_triangle_wave(frequency, amplitude, phase))
     
 cpdef cython.double triangle_wave(gen: mus_any, fm: Optional[float]=None):
@@ -2400,6 +2215,8 @@ cpdef mus_any make_square_wave(frequency: float, amplitude: Optional[float]=1.0,
     :return: square_wave gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_square_wave(frequency, amplitude, phase))
     
 cpdef cython.double square_wave(gen: mus_any, fm: cython.double=0.0):
@@ -2432,6 +2249,9 @@ cpdef mus_any make_sawtooth_wave(frequency: float, amplitude: Optional[float]=1.
     :return: sawtooth_wave gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_sawtooth_wave(frequency, amplitude, phase))
     
 cpdef cython.double sawtooth_wave(gen: mus_any, fm: cython.double=0.0):
@@ -2465,6 +2285,9 @@ cpdef mus_any make_pulse_train(frequency: float, amplitude: Optional[float]=1.0,
     :return: pulse_train gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_pulse_train(frequency, amplitude, phase))
     
 cpdef cython.double pulse_train(gen: mus_any, fm: Optional[float]=None):
@@ -2500,6 +2323,11 @@ cpdef mus_any make_ncos(frequency: float, n: Optional[int]=1):
     :return: ncos gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('n', n, 0, None)
+    
+    
     return mus_any.from_ptr(cclm.mus_make_ncos(frequency, n))
     
 cpdef cython.double ncos(gen: mus_any, fm: Optional[float]=0.0):
@@ -2532,6 +2360,10 @@ cpdef mus_any make_nsin(frequency: float, n: Optional[int]=1):
     :return: nsin gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('n', n, 0, None)
+    
     return mus_any.from_ptr(cclm.mus_make_nsin(frequency, n))
     
 cpdef cython.double nsin(gen: mus_any, fm: Optional[float]=0.0):
@@ -2566,6 +2398,10 @@ cpdef mus_any make_nrxysin(frequency: float, ratio: Optional[float]=1., n: Optio
     :return: nrxysin gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('r', r, -1.0, 1.0)
+    check_range('n', n, 0, None) 
+    
     return mus_any.from_ptr(cclm.mus_make_nrxysin(frequency, ratio, n, r))
     
 cpdef cython.double nrxysin(gen: mus_any, fm: Optional[float]=0.):
@@ -2599,6 +2435,11 @@ cpdef mus_any make_nrxycos(frequency: float, ratio: Optional[float]=1., n: Optio
     :return: nrxycos gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('r', r, -1.0, 1.0)
+    check_range('n', n, 0, None)   
+    
     return mus_any.from_ptr(cclm.mus_make_nrxycos(frequency, ratio, n, r))
     
 cpdef cython.double nrxycos(gen: mus_any, fm: Optional[float]=0.):
@@ -2632,6 +2473,9 @@ cpdef mus_any make_rxykcos(frequency: float, phase: Optional[float]=0.0, r: Opti
     :return: rxykcos gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('r', r, -1.0, 1.0)
+    
     return mus_any.from_ptr(cclm.mus_make_rxykcos(frequency, phase, r, ratio))
     
 cpdef cython.double rxykcos(gen: mus_any, fm: Optional[float]=0.):
@@ -2663,6 +2507,9 @@ cpdef mus_any make_rxyksin(frequency: float, phase: cython.double, r: Optional[f
     :return: rxyksin gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    check_range('r', r, -1.0, 1.0)
+    
     return mus_any.from_ptr(cclm.mus_make_rxyksin(frequency, phase, r, ratio))
 
 cpdef cython.double rxyksin(gen:  mus_any, fm: Optional[float]=0.):
@@ -2694,6 +2541,8 @@ cpdef mus_any make_ssb_am(frequency: float, order: Optional[int]=40):
     :return: ssb_am gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_ssb_am(frequency, order))
     
 cpdef cython.double ssb_am(gen: mus_any, insig: float, fm: Optional[float]=None):
@@ -2734,6 +2583,8 @@ cpdef mus_any make_wave_train(frequency: float, wave: npt.NDArray[np.float64], i
     :rtype: mus_any
     """
     check_ndim(wave)
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     cdef double [:] wave_view = wave
     gen = mus_any.from_ptr(cclm.mus_make_wave_train(frequency, initial_phase, &wave_view[0], len(wave), interp_type))
     gen.cache_append(wave)
@@ -2773,6 +2624,8 @@ cpdef mus_any make_wave_train_with_env(frequency: float, envelope, size=None):
     :rtype: mus_any
     
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     size = size or CLM.table_size
     wave = np.zeros(size)  
     e = make_env(envelope, length=size)
@@ -2795,6 +2648,7 @@ cpdef mus_any make_rand(frequency: float, amplitude: Optional[float]=1.0, distri
     :return: rand gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate())
     cdef double [:] distribution_view = None
     
     if distribution:
@@ -2840,7 +2694,7 @@ cpdef mus_any make_rand_interp(frequency: float, amplitude: float, distribution=
     :return: rand_interp gen
     :rtype: mus_any
     """
-    
+    check_range('frequency', frequency, 0.0, get_srate())
     cdef double [:] distribution_view = None
     
     if distribution:
@@ -3044,6 +2898,7 @@ cpdef mus_any make_formant(frequency: float, radius: float):
     :return: formant gen
     :rtype: mus_any
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
         
     return mus_any.from_ptr(cclm.mus_make_formant(frequency, radius))
 
@@ -3142,6 +2997,8 @@ cpdef mus_any make_firmant(frequency: float, radius: float):
     :return: formant gen
     :rtype: mus_any       
     """
+    check_range('frequency', frequency, 0.0, get_srate() / 2)
+    
     return mus_any.from_ptr(cclm.mus_make_firmant(frequency, radius))
 
 cpdef firmant(gen: mus_any, insig: float, radians: Optional[float]=None ):
@@ -3342,6 +3199,8 @@ cpdef mus_any make_delay(size: int,
     :rtype: mus_any
     """
     
+    check_range('size', size, 0, None)
+
     cdef double [:] initial_contents_view = None
     
     if not max_size:
@@ -3451,7 +3310,9 @@ cpdef mus_any make_comb(feedback: Optional[float]=1.0,
     :rtype: mus_any
         
     """                
-                
+    
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
     if not max_size:
@@ -3566,7 +3427,8 @@ cpdef mus_any make_filtered_comb(feedback:  float,
     :return: filtered_comb gen
     :rtype: mus_any
     """
-
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
     if not max_size:
@@ -3676,6 +3538,8 @@ cpdef mus_any make_notch(feedforward: Optional[float]=1.0,
     :rtype: mus_any
     """
     
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
     if not max_size:
@@ -3747,6 +3611,8 @@ cpdef mus_any make_all_pass(feedback: float, feedforward: float, size: int, init
      
     """
 
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
     if not max_size:
@@ -3881,7 +3747,8 @@ cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_elem
     :return: moving_average gen
     :rtype: mus_any
     """
-
+    
+    check_range('size', size, 0.0, None)
     
     cdef double [:] initial_contents_view = None
     
@@ -3937,6 +3804,8 @@ cpdef mus_any make_moving_max(size: int,
     :rtype: mus_any
     """                
     
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
     if initial_contents is not None:
@@ -3987,6 +3856,9 @@ cpdef mus_any make_moving_norm(size: int, initial_contents=None, scaler: Optiona
     :return: moving_norm gen
     :rtype: mus_any
     """
+    
+    check_range('size', size, 0.0, None)
+    
     cdef double [:] initial_contents_view = None
     
         
@@ -4036,6 +3908,9 @@ cpdef mus_any make_asymmetric_fm(frequency: float, initial_phase: Optional[float
     :return: asymmetric_fm gen
     :rtype: mus_any
     """
+    
+    check_range('frequency', frequency, 0.0, None)
+    
     return mus_any.from_ptr(cclm.mus_make_asymmetric_fm(frequency, initial_phase, r, ratio))
     
 cpdef cython.double asymmetric_fm(gen: mus_any, index: float, fm: Optional[float]=None):
@@ -4258,6 +4133,10 @@ cpdef mus_any make_readin(filename: str, chan: int=0, start: int=0, direction: O
     :param buffer_size: io buffer size
     
     """
+    check_range('chan', chan, 0, None)
+    check_range('start', start, 0, None)
+    check_range('buffer_size', buffer_size, 0, None)
+    
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_readin_with_buffer_size(filename, chan, start, direction, buffer_size))
     
@@ -4293,6 +4172,9 @@ def make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
     :return: src gen
     :rtype: mus_any
     """
+        
+    check_range('srate', srate, 0, None)
+    check_range('width', width, 0, None)       
         
     cdef cclm.input_cb cy_inp_f_ptr 
     
@@ -5073,6 +4955,70 @@ cpdef convolve_files(file1: str, file2: str, maxamp: Optional[float]=1., outputf
 #     gen.frequency = hz2radians(gen.frequency)
 #     return gen
 # 
+
+cdef class array_readin_gen:
+    cdef np.ndarray _arr
+    cdef int _chan
+    cdef cython.longlong _start
+    cdef int _direction
+    cdef cython.longlong _location
+    cdef cython.longlong _length
+    cdef float _val
+
+    def __init__(self, arr: npt.NDArray[np.float64], chan: Optional[int]=0, start: Optional[int]=0, direction: Optional[int]=1):
+        check_ndim(arr, 2)
+        self._arr = arr
+        self._chan = chan
+        self._start = start
+        self._direction = direction
+        self._location = self._start
+        self._length = np.shape(arr)[1]
+    
+    @property
+    def mus_channel(self):
+        return self._chan
+        
+    @property
+    def mus_location(self):
+        return self._location
+        
+    @mus_location.setter
+    def mus_location(self, v: int):
+       self._location = v
+       
+    @property
+    def mus_increment(self):
+        return self._direction
+    
+    @mus_increment.setter
+    def mus_increment(self, v: int):
+        self._direction = v
+        
+    @property
+    def mus_length(self):
+        return self._length
+        
+    def __call__(self):
+        self._location = max(0, min(self._location, self._length-1))
+        self._val = self._arr[self._chan][self._location]
+        self._location += self._direction
+        return self._val
+        
+cpdef array_readin_gen make_array_readin(arr: npt.NDArray[np.float64], chan: Optional[int]=0, start: Optional[int]=0, direction: Optional[int]=1):
+    return array_readin_gen(arr, chan, start, direction)
+
+cpdef array_readin(gen: array_readin_gen):
+    return gen()
+    
+cpdef is_array_readin(gen):
+    return isinstance(gen, array_readin_gen)
+
+
+
+
+
+
+
 # # todo: maybe add an exception that have to use keyword args
 def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
     class mus_gen():
@@ -5096,6 +5042,20 @@ def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
     return g, is_a
 
 
+
+def _clip(x, lo, hi):
+    return max(min(x, hi),lo)
+    
+
+def _wrap(x, lo, hi):
+    r = hi-lo
+    if x >= lo and x <= hi:
+        return x
+    if x < lo:
+        return hi + (math.fmod((x-lo), r))
+    if x > hi:
+        return lo + (math.fmod((x-hi), r))
+
 def array_reader(arr, chan, loop=0):
     ind = 0
     if chan > (clm_channels(arr)):
@@ -5106,7 +5066,7 @@ def array_reader(arr, chan, loop=0):
             nonlocal ind
             v = arr[chan][ind]
             ind += direction
-            ind = wrap(ind, 0, length-1)
+            ind = _wrap(ind, 0, length-1)
             return v
             
     else: 
@@ -5114,7 +5074,7 @@ def array_reader(arr, chan, loop=0):
             nonlocal ind
             v = arr[chan][ind]
             ind += direction
-            ind = clip(ind, 0, length-1)
+            ind = _clip(ind, 0, length-1)
             return v
     return reader    
     
