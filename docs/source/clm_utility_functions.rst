@@ -48,7 +48,7 @@ Even/Odd multiples and weighting
 FFT and Convolution		
 ----------------------
 
-.. autofunction:: fft
+.. autofunction:: mus_fft
 .. autofunction:: make_fft_window
 .. autofunction:: rectangular2polar
 .. autofunction:: rectangular2magnitudes

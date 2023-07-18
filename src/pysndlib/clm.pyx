@@ -81,7 +81,7 @@ CLM  = types.SimpleNamespace(
     verbose = False,
     play = False,
     statistics = False,
-    reverb = False,
+    reverb = None,
     reverb_channels = 1,
     reverb_data = None,
     reverb_file_name = 'test.rev',
@@ -1330,7 +1330,7 @@ cpdef cython.double mus_interpolate(interp_type: Interp, x: cython.double, table
     cdef double [:] table_view = table
     return cclm.mus_interpolate(<cclm.mus_interp_t>interp_type, x, &table_view[0], len(table), y1)
    
-cpdef np.ndarray fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
+cpdef np.ndarray mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
     """
     return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
     power of 2, dir = 1 for fft, -1 for inverse-fft.
@@ -4714,31 +4714,37 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
     
     cdef cclm.detour_cb cy_detour_f_ptr
     
-    if not output:
+    if output is None:
         output = CLM.output  #todo : check if this exists
     
-    if not revout:
+    if revout is None:
         if CLM.reverb is not None:
             revout = CLM.reverb
         else: 
             revout = None #this generates and error but still works
 
-    if not channels:
+    if channels is None:
         channels = clm_channels(output)
     
-    if not reverb_channels:
-        reverb_channels = clm_channels(revout)
-    #<void*>(<mus_any>inp)._ptr
+    if reverb_channels is None:
+        if revout is None:
+            reverb_channels = 0
+        else:
+            reverb_channels = clm_channels(revout)
+
     if isinstance(output, mus_any):
      
         out = <mus_any>output
         rout = <mus_any>revout
-        res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, rout._ptr,  interp_type))
+        if revout is not None:
+            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, rout._ptr,  interp_type))
+        else:
+            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, NULL ,  interp_type))
         return res
         
     # todo: what if revout is not an iterable? while possible not going to deal with it right now :)   
     elif is_list_or_ndarray(output):
-        if not reverb_channels:
+        if reverb_channels is None:
             reverb_channels = 0
             
         res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, NULL, reverb_channels, NULL, interp_type))
@@ -4951,9 +4957,9 @@ cpdef convolve_files(file1: str, file2: str, maxamp: Optional[float]=1., outputf
 #     nd = seconds2samples(start+dur)
 #     return st, nd
 # 
-# def convert_frequency(gen):
-#     gen.frequency = hz2radians(gen.frequency)
-#     return gen
+def convert_frequency(gen):
+    gen.frequency = hz2radians(gen.frequency)
+    return gen
 # 
 
 cdef class array_readin_gen:
@@ -5045,7 +5051,9 @@ def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
 
 def _clip(x, lo, hi):
     return max(min(x, hi),lo)
-    
+  
+def clamp(x, lo, hi):
+    return max(min(x, hi),lo)  
 
 def _wrap(x, lo, hi):
     r = hi-lo

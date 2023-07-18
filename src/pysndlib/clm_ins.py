@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from pysndlib import *
+from pysndlib.clm import *
 from .env import stretch_envelope
 from .env import interleave
 
@@ -235,7 +235,10 @@ def fm_trumpet(startime, dur, frq1=250, frq2=1500, amp1=.5, amp2=.1,
                             
         locsig(loc, i, env(car1_f) * oscil(car1, frq_change * (frq1 + env(mod1_f) * oscil(mod1, modfrq1 * frq_change))) +
                         env(car2_f) * oscil(car2, frq_change * (frq2 + env(mod2_f) * oscil(mod2, modfrq2 * frq_change))))
-#     
+# 
+# with Sound(play=True, statistics=True, reverb=nrev, channels=2):
+#     fm_trumpet(0, 3, 250, 1500, .5, .1, degree=45)
+#     fm_trumpet(2.9, 3, 350, 1500, .5, .1, degree=45)    
 
 # --------------- stereo_flute ---------------- #
 
@@ -288,8 +291,7 @@ def stereo_flute(start,dur,freq,flow,flow_envelope = [0,1,100,1], decay=.01, noi
                     
                     
                     
-                    
-                    
+
 
 # --------------- fm_bell ---------------- #
 
@@ -692,7 +694,7 @@ def next_prime(n):
 def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
     srscale = get_srate() / 25641
     dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19]
-    chans = Sound.output.mus_channels
+    chans = CLM.output.mus_channels
     chan2 = chans > 1
     chan4 = chans == 4
     
@@ -702,7 +704,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
             val += 1
         dly_len[i] = next_prime(val)
         
-    length = math.floor(get_srate()) + Sound.reverb.mus_length
+    length = math.floor(get_srate()) + CLM.reverb.mus_length
     comb1 = make_comb(.822 * reverb_factor, dly_len[0])
     comb2 = make_comb(.802 * reverb_factor, dly_len[1])
     comb3 = make_comb(.733 * reverb_factor, dly_len[2])
@@ -731,7 +733,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
     combs = make_comb_bank([comb1, comb2, comb3, comb4, comb5, comb6])
     allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
     for i in range(length):
-        out_bank(filts, i, all_pass(allpass4, one_pole(low, all_pass_bank(allpasses, comb_bank(combs, volume * ina(i, Sound.reverb))))))
+        out_bank(filts, i, all_pass(allpass4, one_pole(low, all_pass_bank(allpasses, comb_bank(combs, volume * ina(i, CLM.reverb))))))
     
     
 

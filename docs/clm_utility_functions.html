@@ -315,7 +315,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
@@ -758,8 +758,8 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <section id="fft-and-convolution">
 <h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.fft">
-<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_fft">
+<span class="sig-name descname"><span class="pre">mus_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_fft" title="Permalink to this definition">#</a></dt>
 <dd><p>return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
 power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
@@ -1207,7 +1207,7 @@ that they add to 1.0).</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>

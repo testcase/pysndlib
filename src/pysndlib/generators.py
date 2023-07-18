@@ -1,7 +1,6 @@
 import math
 import random
-from pysndlib import *
-from .internals.clm import clamp
+from pysndlib.clm import *
 NEARLY_ZERO = 1.0e-10
 TWO_PI = math.pi * 2
 
@@ -1017,17 +1016,16 @@ def tanhsin(gen, fm=0.0):
 
 
 
-# TODO: --------------- moving-fft ---------------- # 
+# --------------- moving-fft ---------------- # 
 
 def moving_fft_wrapper(g):
-    g.rl = np.zeros(g.n, dtype=np.double)
-    g.im = np.zeros(g.n, dtype=np.double)
-    g.data = np.zeros(g.n, dtype=np.double)
+    g.rl = np.zeros(g.n)
+    g.im = np.zeros(g.n)
+    g.data = np.zeros(g.n)
     g.window = make_fft_window(g.window, g.n)
     s = np.sum(g.window)
-   # g.window = g.window * (2./s)
+    g.window = g.window * (2./s)
     g.outctr = g.n+1
-   # print(g.window)
     return g
     
 moving_fft_methods = {'mus_data' : [lambda g : g.data, None],
@@ -1044,29 +1042,134 @@ make_moving_fft, is_moving_fft = make_generator('moving_fft',
                 methods=moving_fft_methods,
                 docstring="""returns a moving-fft generator.""")
 
+
 def moving_fft(gen):
     new_data = False
     if gen.outctr >= gen.hop:
         if gen.outctr > gen.n:
             for i in range(gen.n):
                 gen.data[i] = readin(gen.input)
+        else:
             mid = gen.n - gen.hop
-            np.roll(gen.data, gen.hop)
+            gen.data = np.roll(gen.data, gen.hop)
             for i in range(mid,gen.n):
-                gen.data[i] =readin(gen.input)   
+                gen.data[i] = readin(gen.input)
+        
         gen.outctr = 0
         new_data = True
         gen.im.fill(0.0)
-        np.copyto(gen.rl, gen.data)
-        np.multiply(gen.rl,gen.window, gen.rl)
-
-        fft(gen.rl,gen.im, gen.n,1)
-        rectangular2polar(gen.rl,gen.im)
+        np.copyto(gen.rl, gen.data)        
+        gen.rl *= gen.window
+        mus_fft(gen.rl,gen.im, gen.n,1)
+        gen.rl = rectangular2polar(gen.rl,gen.im)
     gen.outctr += 1
     return new_data
 
 
-# TODO: --------------- moving-spectrum ---------------- # 
+# --------------- moving-spectrum ---------------- # 
+# TODO: I am not convinced this is working properly
+
+def phasewrap(x):
+    return x - 2.0 * np.pi * np.round(x / (2.0 * np.pi))
+
+
+def moving_spectrum_wrapper(g):
+    g.amps = np.zeros(g.n)
+    g.phases = np.zeros(g.n)
+    g.amp_incs = np.zeros(g.n)
+    g.freqs = np.zeros(g.n)
+    g.freq_incs = np.zeros(g.n)
+    g.new_freq_incs = np.zeros(g.n)
+    g.data = np.zeros(g.n)
+    g.dataloc = 0
+    g.window = make_fft_window(g.window, g.n)
+    s = np.sum(g.window)
+    g.window = g.window * (2./s)
+    g.outctr = g.n+1
+    return g
+    
+moving_spectrum_methods = {'mus_xcoeffs' : [lambda g : g.phases, None],
+                        'mus_ycoeffs' : [lambda g : g.amps, None],
+                        'mus_run' : [lambda g,arg1,arg2 : moving_spectrum(g), None]}
+
+make_moving_spectrum, is_moving_spectrum = make_generator('moving_spectrum', 
+                {'input' : False, 
+                'n' : 512, 
+                'hop' : 128, 
+                'window' : Window.HAMMING},
+                wrapper=moving_spectrum_wrapper, 
+                methods=moving_spectrum_methods,
+                docstring="""returns a moving-spectrum generator.""")    
+
+
+
+def moving_spectrum(gen):
+    if gen.outctr >= gen.hop:
+        # first time through fill data array with n samples
+        if gen.outctr > gen.n:
+            for i in range(gen.n):
+                gen.data[i] = readin(gen.input)
+        #
+        else:
+            mid = gen.n - gen.hop
+            gen.data = np.roll(gen.data, gen.hop)
+            for i in range(mid,gen.n):
+                gen.data[i] = readin(gen.input)
+        
+        gen.outctr = 0
+        gen.dataloc = gen.dataloc % gen.n
+
+        gen.new_freq_incs.fill(0.0)
+       
+        data_start = 0
+        data_end = gen.n - gen.dataloc
+        
+
+        gen.amp_incs[gen.dataloc:gen.n] = gen.window[data_start:data_end] * gen.data[data_start:data_end]
+
+        if gen.dataloc > 0:
+            data_start = gen.n - gen.dataloc
+            data_end = data_start + gen.dataloc
+            gen.amp_incs[0:gen.dataloc] = gen.window[data_start:data_end] * gen.data[data_start:data_end]  
+        
+        gen.dataloc += gen.hop
+        
+        mus_fft(gen.amp_incs, gen.new_freq_incs, gen.n, 1)
+
+        gen.amp_incs = rectangular2polar(gen.amp_incs, gen.new_freq_incs)
+                
+        scl = 1.0 / gen.hop
+        kscl = (np.pi*2) / gen.n
+        gen.amp_incs -= gen.amps
+
+        gen.amp_incs *= scl
+
+        
+        
+        n2 = gen.n // 2
+        ks = 0.0
+        for i in range(n2):
+            diff = (gen.new_freq_incs[i] - gen.freq_incs[i]) #% (np.pi*2)
+            gen.freq_incs[i] = gen.new_freq_incs[i]
+           # diff = phasewrap(diff)
+            if diff > np.pi:
+                diff = diff - (2*np.pi)
+            if diff < -np.pi:
+                diff = diff + (2*np.pi)
+            gen.new_freq_incs[i] = diff*scl + ks
+            ks += kscl
+        gen.new_freq_incs -= gen.freqs
+        gen.new_freq_incs *= scl
+
+        
+
+    gen.outctr += 1
+    
+    gen.amps += gen.amp_incs
+    gen.freqs += gen.new_freq_incs
+    gen.phases += gen.freqs
+
+ 
 
 # TODO: --------------- moving-scentroid ---------------- # 
 
