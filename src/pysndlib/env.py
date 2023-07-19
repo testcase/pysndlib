@@ -43,37 +43,59 @@ def _(e: list, scl, offset=0.):
 @scale_and_offset.register
 def _(e: np.ndarray, scl, offset=0.):
     return e * scl + offset
-    
+
+# --------------- window_envelopes ---------------- #    
 
 # --------------- map_envelopes ---------------- #
 
-def map_envelopes(op, e1, e2):
-    return mapper(e1,e2,op)
+def map_envelopes(func, e1, e2):
+    """
+    maps func over the breakpoints in env1 and env2 returning a new envelope
+    map_envelopes(func, env1, env2) 
+    """
+    return mapper(e1,e2,func)
 
 # --------------- multiply_envelopes ---------------- #
 
 def multiply_envelopes(e1,e2):
-    return map_envelopes(operator.mul, e1,e2)
+    """
+    multiplies break-points of env1 and env2 returning a new 
+    envelope: multiply_envelopes([0,0,2,.5], [0,0,1,2,2,1]) -> [0,0,0.5,0.5,1.0,0.5]
+    """
+    return map_envelopes(operator.mul, e1, e2)
     
 # --------------- add_envelopes ---------------- #
 
 def add_envelopes(e1,e2):
-    return map_envelopes(operator.add, e1,e2)
+    """
+    adds break-points of env1 and env2 returning a new envelope"
+    """
+
+    return map_envelopes(operator.add, e1, e2)
 
 # --------------- max-envelope ---------------- #
 
 def max_envelope(e):
+    """
+    max_envelope(e) -> max y value in env
+    """
     return max(e[1::1])
   
 # --------------- min-envelope ---------------- #  
 
 def min_envelope(e):
+    """
+    min_envelope(e) -> min y value in env
+    """
     return min(e[1::1])
     
  
 # --------------- integrate-envelope  ---------------- #    
 # 
 def integrate_envelope(e):
+    """
+    integrate_envelope(e) -> area under env
+    """
     sum = 0.0
     for i in range(0,len(e)-2,2):
         sum += (e[i+1] + e[i+3]) * .5 * (e[i+2] - e[i])
@@ -82,25 +104,33 @@ def integrate_envelope(e):
 # --------------- envelope_last_x  ---------------- #  
 
 def envelope_last_x(e):
+    """
+    envelope_last_x(env) -> max x axis break point position
+    """
     return e[-2]
 
 
 # ---------------  stretch_envelope   ---------------- #  
 
-
-#TODO: need to make sure envelop is valid on return - that each x greater than previ
 def stretch_envelope(fn, old_att, new_att, old_dec, new_dec):
-    #test args
-   # print(old_att, new_att, old_dec, new_dec)
+    """
+    takes 'env' and returns a new envelope based on it but with the attack and optionally decay portions stretched 
+    or squeezed; 'old_att' is the original x axis attack end point, 'new_att' is where that 
+    section should end in the new envelope.  Similarly for 'old_dec' and 'new_dec'.  This mimics 
+    divseg in early versions of CLM and its antecedents in Sambox and Mus10 (linen).
+    stretch_envelope([0,0,1,1], .1, .2) -> [0,0,0.2,0.1,1.0,1] 
+    stretch_envelope([0,0,1,1,2,0], .1, .2, 1.5, 1.6) -> [0,0,0.2,0.1,1.1,1,1.6,0.5,2.0,0]
+    """
+
     if not new_att and old_att:
-        print("error") # TODO raise exception
+        raise RuntimeError("new_att and old_att must be specified")
         
     else:
         if not new_att:
             return fn
         else:
             if old_dec and not new_dec:
-                print('error') # TODO raise exception
+                raise RuntimeError("old_dec and new_dec must be specified")# TODO raise exception
             
             else:
                 new_x = x0 = fn[0]
@@ -139,24 +169,53 @@ def stretch_envelope(fn, old_att, new_att, old_dec, new_dec):
                     new_fn.extend((new_x,y1))
                     x0 = x1
                     y0 = y1
-                #print(new_fn)
                 return new_fn
 
 # --------------- scale_envelope  ---------------- # 
 
-def scale_envelope(e, scl, offset=0.0):
-    ys = scale_and_offset(e[1::2], scl, offset)
+def scale_envelope(e, scaler, offset=0.0):
+    """
+    scales y axis values by 'scaler' and optionally adds 'offset'
+    """
+    ys = scale_and_offset(e[1::2], scaler, offset)
     xs = e[0::2]
     return interleave(xs,ys)
     
 # --------------- reverse_envelope  ---------------- # 
 
 def reverse_envelope(e):
+    """
+    reverses the breakpoints in env
+    """
     xs = e[0::2]
     ys = e[:0:-2]
     return interleave(xs, ys)
 
-# TODO: --------------- concatenate_envelope  ---------------- # 
+# --------------- concatenate_envelopes  ---------------- # 
+
+
+def concatenate_envelopes(*args, epsilon=.01):
+    """
+    concatenates its arguments into a new envelope
+    """
+    # get list of last_x of each env
+    # also verify each envelope
+    res = None
+    
+    for e in args:
+        validate_envelope(e)
+        
+        if res is None:
+            res = np.array(e)
+        else:    
+            tmp = np.array(e)
+            tmp[0::2] += res[-2]
+            if tmp[0] == res[-2]:
+                tmp[0] += epsilon
+            res = np.append(res, tmp)
+            
+    return list(res)  
+    
 
 
 # --------------- normalize_envelope  ---------------- # 

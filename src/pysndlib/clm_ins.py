@@ -354,6 +354,19 @@ def fm_insect(startime, dur, frequency,
         garble_in = (env(modfrqf) * oscil(fm1_osc, env(modfrqf)))
         locsig(loc, i, (env(ampf) * oscil(carrier, (fm2_amp * oscil(fm2_osc, garble_in)) + garble_in)))
         
+# LOCUST = [0,0,40,1,95,1,100,.5]
+# BUG_HI = [0,1,25,.7,75,.78,100,1]
+# AMP = [0,0,25,1,75,.7,100,0]
+# 
+# with Sound(play=True, statistics=True, channels=1):
+#     fm_insect(0,1.699,4142.627,.015,AMP,60,-16.707,LOCUST,500.866,BUG_HI,.346,.500)
+#     fm_insect(0.195,.233,4126.284,.030,AMP,60,-12.142,LOCUST,649.490,BUG_HI,.407,.500)
+#     fm_insect(0.217,2.057,3930.258,.045,AMP,60,-3.011,LOCUST,562.087,BUG_HI,.591,.500)
+#     fm_insect(2.100,1.500,900.627,.06,AMP,40,-16.707,LOCUST,300.866,BUG_HI,.346,.500)
+#     fm_insect(3.000,1.500,900.627,.06,AMP,40,-16.707,LOCUST,300.866,BUG_HI,.046,.500)
+#     fm_insect(3.450,1.500,900.627,.09,AMP,40,-16.707,LOCUST,300.866,BUG_HI,.006,.500)
+#     fm_insect(3.950,1.500,900.627,.12,AMP,40,-10.707,LOCUST,300.866,BUG_HI,.346,.500)
+#     fm_insect(4.300,1.500,900.627,.09,AMP,40,-20.707,LOCUST,300.866,BUG_HI,.246,.500)
         
 # --------------- fm_drum ---------------- #
 
@@ -391,12 +404,12 @@ def fm_drum(start_time, duration, frequency, amplitude, index, high=True, degree
         locsig(loc, i, (env(ampf) * oscil(carrier, (gls + (env(indxf) * 
                                         oscil(fmosc, ((gls*fmrat)+(env(mindxf)*
                                             oscil(cascade, ((gls*casrat)+(env(devf)*rand(rn))))))))))))
-    
-    
+ # 
+# with Sound(play=True, statistics=True):
+#     fm_drum(0, 1.5, 55, .3, 5, False)
+#     fm_drum(2, 1.5, 66, .3, 5, True)
 
-
-
-# --------------- fm_gong ---------------- #
+# --------------- gong ---------------- #
 
 def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, reverb_amount=.005):
     mfq1 = frequency * 1.16
@@ -428,6 +441,9 @@ def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, r
     
     for i in range(beg, end):
         locsig(loc, i, env(ampfun) * oscil(carrier, (env(indxfun1) * oscil(mod1)) + (env(indxfun2) * oscil(mod2)) + (env(indxfun3) * oscil(mod3))))
+        
+# with Sound(play=True, statistics=True):
+#     gong(0, 3, 261.61, .6)
     
 # TODO: --------------- attract ---------------- #
 

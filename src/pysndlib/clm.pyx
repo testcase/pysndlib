@@ -1065,6 +1065,17 @@ def clm_random(*args):
  
 # --------------- just some extra utils ---------------- #    
 
+def validate_envelope(e):
+    # is env even number length
+    if len(e) < 2:
+        raise RuntimeError("a valid envelope needs at least 2 elements") 
+    if len(e) % 2 != 0:
+        raise RuntimeError("a valid envelope needs even number of elements. This has {len(e)}")
+    if isinstance(e, list):
+        if all([isinstance(i, int | float) for i in e]):
+            raise RuntimeError("a valid envelope can only contain numbers.")
+    if not all(i < j for i, j in zip(e[: : 2], e[2: : 2])):
+        raise RuntimeError("x values of envelope must be increasing")
 
 
 
@@ -1806,7 +1817,7 @@ cpdef bint is_oscil_bank(gen: mus_any):
 
 
 
-# TODO: nned to check if envelope is valid otherwise it may segfault
+
 # ---------------- env ---------------- #
 cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional[float]=1.0, offset: Optional[float]=0.0, base: Optional[float]=1.0, length: Optional[int]=0):
     """
@@ -1825,7 +1836,7 @@ cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional
     :rtype: mus_any
 
     """
-    
+    validate_envelope(envelope)
     check_range('duration', duration, 0.0, None)
     
     if length > 0:
