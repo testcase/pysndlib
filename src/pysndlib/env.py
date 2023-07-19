@@ -44,7 +44,7 @@ def _(e: list, scl, offset=0.):
 def _(e: np.ndarray, scl, offset=0.):
     return e * scl + offset
 
-# --------------- window_envelopes ---------------- #    
+# TODO: --------------- window_envelopes ---------------- #    
 
 # --------------- map_envelopes ---------------- #
 
@@ -216,8 +216,6 @@ def concatenate_envelopes(*args, epsilon=.01):
             
     return list(res)  
     
-
-
 # --------------- normalize_envelope  ---------------- # 
 
 def normalize_envelope(e, new_max=1.0):

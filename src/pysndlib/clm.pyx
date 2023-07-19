@@ -1077,7 +1077,11 @@ def validate_envelope(e):
     if not all(i < j for i, j in zip(e[: : 2], e[2: : 2])):
         raise RuntimeError("x values of envelope must be increasing")
 
-
+def is_zero(x):
+    return x == 0
+    
+def is_number(n):
+    return type(n) == int or type(n) == float
 
 # # --------------- clm utility functions ---------------- #
 # 
@@ -1568,9 +1572,10 @@ cpdef np.ndarray partials2wave(partials, wave: npt.NDArray[np.float64]=None, tab
         wave = np.array(wave, dtype=np.double)
                         
     if not wave:
-        if table_size:
+        if table_size is not None:
             wave = np.zeros(table_size)
         else:
+            table_size = CLM.table_size
             wave = np.zeros(CLM.table_size)
     else:
         table_size = len(wave)
@@ -2593,6 +2598,9 @@ cpdef mus_any make_wave_train(frequency: float, wave: npt.NDArray[np.float64], i
     :return: wave_train gen
     :rtype: mus_any
     """
+    if isinstance(wave, list):
+        wave = np.array(wave)
+    
     check_ndim(wave)
     check_range('frequency', frequency, 0.0, get_srate() / 2)
     
@@ -3589,7 +3597,7 @@ cpdef cython.double notch(gen: mus_any, insig: float, pm: Optional[float]=None):
     :rtype: float
     """
     if pm:
-        return cclm.mus_notch(gen._ptr, input, pm)
+        return cclm.mus_notch(gen._ptr, insig, pm)
     else:
         return cclm.mus_notch_unmodulated(gen._ptr, insig)
     

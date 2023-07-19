@@ -173,6 +173,20 @@ def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ae=[0, 0, 25, 1, 75,
         outa(i, env(ampf) * wave_train(wt0, (env(vibf) * oscil(vibr))))
 
 
+
+# with Sound(play=True):
+#     fofins(0, 1, 270, .2, .001, 730, .6, 1090, .3, 2440, .1) # "Ahh"
+#
+# 
+# with Sound( play = True ): #one of JC's favorite demos
+#     fofins(0,4,270,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+#             [0,0,.5,1,3,.5,10,.2,20,.1,50,.1,60,.2,85,1,100,0])
+#     fofins(0,4,(6/5 * 540),.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+#             [0,0,.5,.5,3,.25,6,.1,10,.1,50,.1,60,.2,85,1,100,0])
+#     fofins(0,4,135,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
+#             [0,0,1,3,3,1,6,.2,10,.1,50,.1,60,.2,85,1,100,0])
+        #    
+
 # --------------- fm_trumpet ---------------- #
 
 def fm_trumpet(startime, dur, frq1=250, frq2=1500, amp1=.5, amp2=.1, 
@@ -242,8 +256,21 @@ def fm_trumpet(startime, dur, frq1=250, frq2=1500, amp1=.5, amp2=.1,
 
 # --------------- stereo_flute ---------------- #
 
-def stereo_flute(start,dur,freq,flow,flow_envelope = [0,1,100,1], decay=.01, noise=0.0356, embouchure_size=0.5, fbk_scl1=.5, fbk_scl2=.55, offset_pos=0.764264,
-                    out_scl=1.0, a0=.7, b1=-.3, vib_rate=5, vib_amount=.03, ran_rate=5, ran_amount=0.3):
+def stereo_flute(start,dur,freq,flow,
+                flow_envelope = [0,1,100,1], 
+                decay=.01, 
+                noise=0.0356, 
+                embouchure_size=0.5,
+                fbk_scl1=.5, 
+                fbk_scl2=.55, 
+                offset_pos=0.764264,
+                out_scl=1.0, 
+                a0=.7, 
+                b1=-.3, 
+                vib_rate=5, 
+                vib_amount=.03, 
+                ran_rate=5, 
+                ran_amount=0.03):
                     
     period_samples = math.floor(CLM.srate / freq)
     embouchure_samples = math.floor(embouchure_size * period_samples)
@@ -290,7 +317,12 @@ def stereo_flute(start,dur,freq,flow,flow_envelope = [0,1,100,1], decay=.01, noi
         previous_dc_blocked_b = dc_blocked_b       
                     
                     
-                    
+   
+# with Sound( play = True, statistics=True, channels=2 ):
+#     stereo_flute(0,3,220,.55, flow_envelope=[0,0,25,1,75,1,100,0], ran_amount=.03)
+# 
+# with Sound( play = True, statistics=True, channels=2 ):
+#     stereo_flute(0,3,220,.55, flow_envelope=[0,0,25,1,75,1,100,0], offset_pos=.5)                 
 
 
 # --------------- fm_bell ---------------- #
@@ -320,7 +352,19 @@ def fm_bell(startime, dur, frequency, amplitude,
                              (.15 * oscil(car2, fm=(fmenv * ( (fmInd2 * oscil(mod2)) + (fmInd3 * oscil(mod3)) )))) +
                              (.15 * oscil(car3, fm=(fmenv * fmInd4 * oscil(mod4)))) ))
                              
-
+# with Sound( play = True, statistics=True, channels=1 ):
+#     fbell = [0,1,2,1.1,25,.75,75,.5,100,.2]
+#     abell = [0,0,.1,1,10,.6,25,.3,50,.15,90,.1,100,0]
+#     fm_bell( 0,5.000,233.046,.028,abell,fbell,.750)
+#     fm_bell( 5.912,2.000,205.641,.019,abell,fbell,.650)
+#     fm_bell( 6.085,5.000,207.152,.017,abell,fbell,.750)
+#     fm_bell( 6.785,7.000,205.641,.010,abell,fbell,.650)
+#     fm_bell( 15.000,.500,880,.060,abell,fbell,.500)
+#     fm_bell( 15.006,6.500,293.66,.1,abell,fbell,0.500)
+#     fm_bell( 15.007,7.000,146.5,.1,abell,fbell,1.000)
+#     fm_bell( 15.008,6.000,110,.1,abell,fbell,1.000)
+#     fm_bell( 15.010,10.00,73.415,.028,abell,fbell,0.500)
+#     fm_bell( 15.014,4.000,698.46,.068,abell,fbell,0.500)
         
         
 # --------------- fm_insect ---------------- #
@@ -445,27 +489,30 @@ def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, r
 # with Sound(play=True, statistics=True):
 #     gong(0, 3, 261.61, .6)
     
-# TODO: --------------- attract ---------------- #
+# --------------- attract ---------------- #
 
-# below not working
-def attract(beg, dur, amp, c_1):
+
+def attract(beg, dur, amp, c):
     st = seconds2samples(beg)
     nd = seconds2samples(beg + dur)
-    c = c_1
     a = .2
     b = .2
     dt = .04
-    scale = (.5 * amp) / c_1
+    scale = (.5 * amp) / c
     x = -1.0
     y = 0.0
     z = 0.0
+    x1 = 0.0
     
     for i in range(st,nd):
         x1 = x - (dt * (y + z))
-        y  = y + (dt * (x + (a * y)))
-        z  = z + (dt * ((b + (x * z)) - (c * z)))
+        y  += (dt * (x + (a * y)))
+        z  += (dt * ((b + (x * z)) - (c * z)))
         x = x1
         outa(i, scale * x)
+
+# with Sound(play=True, statistics=True):
+#     attract(0, 2, .5, 4)
     
 # --------------- pqw ---------------- #
 
@@ -503,7 +550,8 @@ def pqw(start, dur, spacing_freq, carrier_freq, amplitude,
             ((oscil(carrier_sin, (vib * r)) * oscil(spacing_sin, vib) * polynomial(sin_coeffs, ax)) -
                 (oscil(carrier_cos, (vib * r)) * polynomial(cos_coeffs, ax))))
 
-
+# with Sound( play = True, statistics=True):
+#     pqw(0, .5, 200, 1000, .2, [0,0,25,1,100,0], [0, 1, 100, 0], [2, .1, 3, .3, 6, .5])
 
 
 
@@ -526,7 +574,11 @@ def tubebell(beg, dur, freq, amp, base=32.0):
                 ((env(ampenv1) * oscil(osc0, (.203 * oscil(osc1)))) +
                  (env(ampenv2) * oscil(osc2, (.144 * oscil(osc3))))))
     
-    
+# import random
+# with Sound( play = True, statistics=True):
+#     freqs = [1174.659, 1318.510, 1396.913, 1567.982, 2093.005]
+#     for t in np.arange(0, 10, .4):
+#         tubebell(t, 1, random.choice(freqs), .5)    
 
 # --------------- wurley ---------------- #
 
@@ -869,7 +921,9 @@ def cellon(beg, dur, pitch0, amp, ampfun, betafun, beta0, beta1, betaat, betadc,
             vib = (env(pvibenv)*triangle_wave(pvib)) + (env(rvibenv)*rand_interp(rvib)) + env(glisenv)
             fm = one_zero(low, env(betaenv) * oscil(fmosc, (fm+vib)))
             locsig(loc, i, env(amplenv)*oscil(carrier,fm+vib))
-    
+
+# with Sound( play = True, statistics=True):
+#     cellon(0,1,220,.1,[0,0,25,1,75,1,100,0],[0,0,25,1,75,1,100,0],.75,1.0,0,0,0,0,1,0,0,220,[0,0,25,1,75,1,100,0],0,0,0,0,[0,0,100,0],0,0,0,0,[0,0,100,0])  
     
 # --------------- jl_reverb ---------------- #
 
@@ -904,6 +958,9 @@ def gran_synth(startime, duration, audio_freq, grain_dur, grain_interval, amp):
     for i in range(beg, end):
         outa(i, amp * wave_train(grains))
 
+# with Sound( play = True, statistics=True):
+#     gran_synth(0, 2, 100, .0189, .02, .4)
+
 # --------------- touch_tone ---------------- #
 
 def touch_tone(start, telephone_number):
@@ -924,6 +981,9 @@ def touch_tone(start, telephone_number):
         
         for j in range(beg, end):
             outa(j, (.1 * (oscil(frq1) + oscil(frq2))))
+            
+# with Sound( play = True, statistics=True):
+#     touch_tone(0, [7,2,3,4,9,7,1])
         
 # --------------- spectra ---------------- #
 
@@ -942,7 +1002,8 @@ def spectra(startime, duration, frequency, amplitude, partials=[1,1,2,0.5], amp_
     for i in range(beg, end):
         locsig(loc, i, env(amp_env) * table_lookup(s, triangle_wave(per_vib) + rand_interp(ran_vib)))
 
-
+# with Sound( play = True, statistics=True):
+#     spectra(0, 4, 440.0, .1, [1.0,.4,2.0,.2,3.0,.2,4.0,.1,6.0,.1], [0.0,0.0,1.0,1.0,5.0,0.9,12.0,0.5,25.0,0.25,100.0,0.0])
 
 # --------------- two_tab ---------------- #
 
@@ -968,8 +1029,7 @@ def two_tab(startime, duration, frequency, amplitude, partial_1=[1.0,1.0,2.0,0.5
         vib = triangle_wave(per_vib) + rand_interp(ran_vib)
         locsig(loc, i, env(amp_env) * ((env(interp_env)*table_lookup(s_1, vib)) + (env(interp_env_1)*table_lookup(s_2, vib))))
     
-     
-                        
+
 
 # TODO: --------------- lbj_piano ---------------- #
 
@@ -1123,10 +1183,10 @@ def resflt(start, dur, driver, ranfreq, noiamp, noifun, cosamp, cosfreq1, cosfre
         cn = make_ncos(cosfreq0, cosnum)
         ampf = make_env(ampcosfun, scaler=cosamp, duration=dur)
         
-    f1.set_xcoeff(0, g1) # TODO: document this difference 
-    f2.set_xcoeff(0, g2)
-    f3.set_xcoeff(0, g3)
-  
+    f1.mus_xcoeffs[0] = g1
+    f2.mus_xcoeffs[0] = g2
+    f3.mus_xcoeffs[0] = g3
+    
     if with_noise:
         for i in range(beg, end):   
             input1 = env(ampf) * rand(rn)
@@ -1135,9 +1195,9 @@ def resflt(start, dur, driver, ranfreq, noiamp, noifun, cosamp, cosfreq1, cosfre
         for i in range(beg, end):   
             input1 = env(ampf) * ncos(cn, env(frqf))
             locsig(loc, i, two_pole(f1, input1) + two_pole(f2, input1) + two_pole(f3, input1))
-        
-    
-    
+         
+# with Sound( play = True, statistics=True):
+#     resflt(0,1.0,0,0,0,False,.1,200,230,10,[0,0,50,1,100,0],[0,0,100,1],500,.995,.1,1000,.995,.1,2000,.995,.1)  
 
 # --------------- scratch ---------------- #
 
@@ -1193,7 +1253,8 @@ def scratch(start, file, src_ratio, turnaroundlist):
         outa(i, val)
         i += 1
         
-    
+# with Sound( play = True, statistics=True):
+#     scratch(0.0, 'yeah.aiff', 1., [0.0, .5, .25, 1.0, .5, 5.0])    
 
 # TODO: --------------- pins ---------------- #
 
@@ -1214,8 +1275,11 @@ def zc(time, dur, freq, amp, length1, length2, feedback):
     zenv = make_env([0,0,1,1], scaler=(length2-length1), duration=dur)
     for i in range(beg, end):
         outa(i, comb(d0, pulse_train(s), env(zenv)))
-    
 
+# with Sound( play = True, statistics=True):
+#     zc(0,3,100,.5,20,100,.95) 
+#     zc(3., 3, 100, .5, 100, 20, .95)
+#     
 # --------------- zn ---------------- #
 
 def zn(time, dur, freq, amp, length1, length2, feedforward):
@@ -1227,6 +1291,10 @@ def zn(time, dur, freq, amp, length1, length2, feedforward):
     for i in range(beg, end):
         outa(i, notch(d0, pulse_train(s), env(zenv)))
 
+# with Sound(play=True,statistics=True):
+#     zn(0,1,100,.5,20,100,.995) 
+#     zn(1.5, 1, 100, .5, 100, 20, .995)
+    
 # TODO: --------------- za ---------------- #
 
 def za(time, dur, freq, amp, length1, length2, feedback, feedforward):
