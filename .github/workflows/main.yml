@@ -20,6 +20,7 @@ jobs:
 
     steps:
     - name: setup GH
+      run: |
       env:
         GH_TOKEN: ${{ github.token }}
     - name: List Releases
