@@ -41,8 +41,6 @@ jobs:
       run: ls
     - name: unzip
       run: unzip sndlib.zip
-    - name: list again
-      run: ls 
     - name: where am i
       run: pwd 
       
