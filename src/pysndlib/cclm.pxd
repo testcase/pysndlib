@@ -1,7 +1,7 @@
 cimport pysndlib.csndlib as csndlib
 
 
-cdef extern from "./sndlib/clm.h":
+cdef extern from "clm.h":
     """
     typedef mus_float_t (*connect_points_cb)(mus_float_t val);
     typedef mus_float_t (*input_cb)(void *arg, int direction);
