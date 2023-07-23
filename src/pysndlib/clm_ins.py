@@ -1,9 +1,7 @@
 import math
 import numpy as np
 from pysndlib.clm import *
-from .env import stretch_envelope
-from .env import interleave
-
+from .env import stretch_envelope, interleave, max_envelope, min_envelope
 
 
 
@@ -1306,11 +1304,15 @@ def za(time, dur, freq, amp, length1, length2, feedback, feedforward):
     for i in range(beg, end):
         outa(i, all_pass(d0, pulse_train(s), env(zenv)))
 
+# with Sound(play=True,statistics=True):
+#     za(0,1,100,.5, 20, 100, .95, .95)
+#     za(1.5, 1, 100, .5, 100, 20, .95, .95)
+
 # --------------- clm_expsrc ---------------- #
 
-def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev, start_in_file=False):
+def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev=False, start_in_file=False):
     stf = math.floor((start_in_file or 0)*clm_srate(input_file))
-    two_chans = clm_channels(input_file) == 2 and clm_channels(Sound.output) == 2
+    two_chans = clm_channels(input_file) == 2 and clm_channels(CLM.output) == 2
     revit = CLM.reverb and rev
     st = seconds2samples(beg)
     exA = make_granulate(make_readin(input_file, chan=0, start=stf), expansion=exp_ratio)
@@ -1339,13 +1341,13 @@ def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev, start_in_fi
                 valB = amp * src(srcB)
                 outa(i, valA)
                 outb(i, valB)
-                outa(i, rev_amp * (valA + valB), Sound.reverb)
+                outa(i, rev_amp * (valA + valB), CLM.reverb)
         else:
             
             for i in range(st, nd):
                 valA = amp * src(srcA)
                 outa(i, valA)
-                outb(i, rev_amp * valA, Sound.reverb)
+                outb(i, rev_amp * valA, CLM.reverb)
     else:
         if two_chans:
             for i in range(st, nd):
@@ -1354,9 +1356,74 @@ def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp, rev, start_in_fi
         else:
             for i in range(st, nd):
                 outa(i, amp * src(srcA))
-    
 
-# TODO: --------------- exp_snd ---------------- #
+# with Sound(play=True,statistics=True):
+#     clm_expsrc(0, 2.5, 'oboe.snd', 2.0, 1.0, 1.0)
+
+# --------------- exp_snd ---------------- #
+# moved file arg from 1st arg
+
+def exp_snd(beg, dur, file, amp, exp_amt=1.0, ramp=.4, seglen=.15, sr=1.0, hop=.05, ampenv=[0,0,.5,1,1,0]):
+    def is_pair(x): #seems only useful in this instrument
+        return isinstance(x, list)
+    max_seg_len = max_envelope(seglin) if is_pair(seglen) else seglen
+    initial_seg_len = seglin[1] if is_pair(seglen) else seglen
+    rampdata = ramp if is_pair(ramp) else [0, ramp, 1, ramp]
+    max_out_hop = max_envelope(hop) if is_pair(hop) else hop
+    initial_out_hop = hop[1] if is_pair(hop) else hop
+    min_exp_amt = min_envelope(exp_amt) if is_pair(exp_amt) else exp_amt
+    initial_exp_amt = exp_amt[1] if is_pair(exp_amt) else exp_amt
+
+    if (min_envelope(rampdata) <= 0.0) or (max_envelope(rampdata) >= .5):
+        raise RuntimeError(f'ramp argument to exp_snd must always be between 0.0 and .5: {ramp}.')
+
+    st = seconds2samples(beg)
+    nd = seconds2samples(beg + dur)
+    f0 = make_readin(file)
+
+    expenv = make_env( exp_amt if is_pair(exp_amt) else [0, exp_amt, 1, exp_amt], duration=dur)
+    lenenv = make_env( seglen if is_pair(seglen) else [0, seglen, 1, seglen], scaler=CLM.srate, duration=dur)
+    scaler_amp = ((.6 * .15) / max_seg_len) if max_seg_len > .15 else .6
+    srenv = make_env(sr if is_pair(sr) else [0, sr, 1, sr], duration=dur)
+    rampenv = make_env(rampdata, duration=dur)
+    initial_ramp_time = ramp[1] if is_pair(ramp) else ramp
+    max_in_hop = max_out_hop / min_exp_amt
+    max_len = seconds2samples(max(max_out_hop, max_in_hop) + max_seg_len)
+    hopenv = make_env( hop if is_pair(hop) else [0, hop, 1, hop], duration=dur)
+    ampe = make_env(ampenv, scaler= amp, duration=dur)
+    exA = make_granulate(f0, expansion=initial_exp_amt, max_size=max_len, ramp=initial_ramp_time, hop=initial_out_hop, length=initial_seg_len, scaler=scaler_amp)
+    vol = env(ampe)
+    
+    valA0 = vol * granulate(exA)
+    valA1 = vol * granulate(exA)
+    ex_samp = 0.0
+    next_samp = 0.0
+    
+    for i in range(st, nd):
+        sl = env(lenenv)
+        vol = env(ampe)
+        exA.mus_length = round(sl)
+        exA.mus_ramp = math.floor(sl * env(rampenv))
+        exA.mus_frequency = env(hopenv)
+        exA.mus_increment = env(expenv)
+        next_samp += env(srenv)
+        
+        if next_samp > (ex_samp + 1):
+            samps = math.floor(next_samp - ex_samp)
+            if samps > 2:
+                for k in range(samps-2):
+                    granulate(exA)
+            valA0 = (vol * granulate(exA)) if samps >= 2 else valA1
+            valA1 = vol * granulate(exA)
+            ex_samp += samps
+            
+            outa(i, valA0 if next_samp == ex_samp else (valA0 + ((next_samp - ex_samp) * (valA1 - valA0)))) 
+
+# with Sound(play=True,statistics=True):
+#     exp_snd(0, 3, 'fyow.snd', 1, [0,1,1,3],   .4, .15, [0,2,1,.5], .05)
+# 
+# with Sound(play=True,statistics=True):
+#     exp_snd(0, 3, 'oboe.snd', 1, [0,1,1,3],   .4, .15, [0,2,1,.5], .2)    
 
 # TODO: --------------- grm ---------------- #
 

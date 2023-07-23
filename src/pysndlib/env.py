@@ -79,7 +79,7 @@ def max_envelope(e):
     """
     max_envelope(e) -> max y value in env
     """
-    return max(e[1::1])
+    return max(e[1::2])
   
 # --------------- min-envelope ---------------- #  
 
@@ -87,7 +87,7 @@ def min_envelope(e):
     """
     min_envelope(e) -> min y value in env
     """
-    return min(e[1::1])
+    return min(e[1::2])
     
  
 # --------------- integrate-envelope  ---------------- #    

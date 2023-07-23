@@ -792,9 +792,191 @@ def fmssb(gen, fm=0.):
     
     return (math.cos(cx) * (math.sin(gen.index * math.cos(mx)))) - (math.sin(cx) * (math.sin(gen.index * math.sin(mx))))
 
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=1000., ratio=1, index=8.0)
+#     for i in range(0, 10000):
+#         outa(i, .3 * fmssb(gen))
+        
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=1000., ratio=.1, index=8.0)
+#     ampf = make_env([0,0,1,1,100,0], base=32, scaler=.3, length=30000)
+#     indf = make_env([0,1,1,0], length=30000, scaler=8)
+#     for i in range(0, 30000):
+#         gen.index = env(indf)
+#         outa(i, env(ampf) * fmssb(gen))
 
 
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=1000., ratio=.05, index=1.0)
+#     ampf = make_env([0,0,1,1,100,0], base=32, scaler=.3, length=30000)
+#     indf = make_env([0,1,1,0], length=30000, scaler=10)
+#     for i in range(0, 30000):
+#         gen.index = env(indf)
+#         outa(i, env(ampf) * fmssb(gen))
+
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=100., ratio=5.4, index=1.0)
+#     ampf = make_env([0,0,1,1,100,0], base=32, scaler=.3, length=30000)
+#     indf = make_env([0,1,1,0], length=30000, scaler=10)
+#     for i in range(0, 30000):
+#         gen.index = env(indf)
+#         outa(i, env(ampf) * fmssb(gen))
+
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=100., ratio=5.4, index=1.0)
+#     ampf = make_env([0,0,1,1,100,0], base=32, scaler=.3, length=30000)
+#     #ampf = make_env([0,0,1,1,3,1,100,0], base=32, scaler=.3, length=30000)
+#     #ampf = make_env([0,0,1,.75,2,1,3,.95,4,.5,10,0], base=32, scaler=.3, length=30000) #bowed
+#     #ampf = make_env([0,0,1,.75,2,1,3,.1,4,.7,5,1,6,.8,100,0], base=32, scaler=.3, length=30000) #bowed
+# 
+#     indf = make_env([0,1,1,0], length=30000, scaler=10)
+#     for i in range(0, 30000):
+#         gen.index = env(indf)
+#         outa(i, env(ampf) * fmssb(gen))
+
+# nice
+# with Sound(play=True,statistics=True):
+#     gen = make_fmssb(frequency=10., ratio=2.0, index=1.0)
+#     ampf = make_env([0,0,1,1,3,1,100,0], base=32, scaler=.3, length=30000)
+#     indf = make_env([0,1,1,0], length=30000, scaler=10)
+#     for i in range(0, 30000):
+#         gen.index = env(indf)
+#         outa(i, env(ampf) * fmssb(gen))
+
+# with Sound(play=True,statistics=True):
+#     gen1 = make_fmssb(frequency=500, ratio=1)
+#     gen2 = make_fmssb(frequency=1000, ratio=.2)
+#     ampf = make_env([0,0,1,1,100,0], base=32, scaler=.3, length=30000)
+#     indf = make_env([0,1,1,1,10,0], length=30000, scaler=10)
+#     for i in range(0, 30000):
+#         ind = env(indf)
+#         gen1.index = ind
+#         gen2.index = ind
+#         outa(i, env(ampf) * (fmssb(gen1) + fmssb(gen2)))
+
+
+# with Sound(play=True,statistics=True):
+#     for i in np.arange(0.0, 2.0, .5):        
+#         machine1(i, .3, 100, 540, 0.5, 3.0, 0.0)
+#         machine1(i,.1,100,1200,.5,10.0,200.0)
+#         machine1(i,.3,100,50,.75,10.0,0.0)
+#         machine1(i + .1, .1,100,1200,.5,20.0,1200.0)
+#         machine1(i + .3, .1,100,1200,.5,20.0,1200.0)
+#         machine1(i + .3, .1,100,200,.5,10.0,200.0)
+#         machine1(i + .36, .1,100,200,.5,10.0,200.0)
+#         machine1(i + .4, .1,400,300,.5,10.0,-900.0)
+#         machine1(i + .4, .21,100,50,.75,10.0,1000.0)
+
+# with Sound(play=True,statistics=True):
+#     for i in np.arange(0, 2, .2):
+#         machine1(i, .3, 100, 540, .5, 4.0, 0.)
+#         machine1(i+.1, .3, 200, 540, .5, 3.0, 0.0)
+# 
+#     for i in np.arange(0., 2., .6):
+#         machine1(i, .3, 1000, 540, .5, 6., 0.)
+#         machine1(i+.1, .1, 2000, 540, .5, 1.0, 0)
+
+# with Sound(play=True,statistics=True):
+#     gen = make_rkoddssb(frequency=1000.0, ratio=2.0, r=.875)
+#     noi = make_rand(1500, .04)
+#     gen1 = make_rkoddssb(frequency=100.0, ratio=.1, r=.9)
+#     ampf = make_env([0, 0, 1, 1, 11, 1, 12, 0],duration=11.0,scaler=.5)
+#     frqf = make_env([0, 0, 1, 1, 2, 0, 10, 0, 11, 1, 12, 0, 20, 0], duration=11.0, scaler=hz2radians(1.0))
+#     for i in range(0, 12*44100):
+#         outa(i, .4 * env(ampf) * (rkoddssb(gen1, env(frqf)) + (2.0 * math.sin(rkoddssb(gen, rand(noi))))))
+#         
+#     for i in range(0, 10, 6):
+#         machine1(i, 3, 1000, 540, .5, 6., 0.)
+#         machine1(i+1, 1, 2000, 540, .5, 1., 0.)
+
+# with Sound(play=True,statistics=True):
+#     for i in np.arange(0, 2, .2):
+#         machine1(i, .3, 1200, 540, .5, 40.0, 0.)
+#         machine1(i + .1, .3, 2400, 540, .5, 3.0, 0.0)
+# 
+#     for i in np.arange(0., 2., .6):
+#         machine1(i, .3, 1000, 540, .5, 6., 0.)
+#         machine1(i+.1, .1, 2000, 540, .5, 10.0, 100)
+# octave higher than above        
+# with Sound(play=True,statistics=True):
+#     for i in np.arange(0, 2, .2):
+#         machine1(i, .3, 2400, 1000, .25, 40.0, 0.)
+#         machine1(i + .05, .2, 4800, 1080, .5, 3.0, 0.0)
+# 
+#     for i in np.arange(0., 2., .6):
+#         machine1(i, .3, 2000, 1080, .5, 6., 0.)
+#         machine1(i+.05, .1, 4000, 1080, .5, 10.0, 100)     
+
+# --------------- fpmc ---------------- #
+
+    
+def fpmc(beg, dur, freq, amp, mc_ratio, fm_index, interp):
+    start = seconds2samples(beg)
+    end = start + seconds2samples(dur)
+    cr = 0.0
+    cr_frequency = hz2radians(freq)
+    md_frequency = hz2radians(freq*mc_ratio)
+    md = 0.0
+    
+    for i in range(start, end):
+        val = complex(math.sin(cr + (fm_index * math.sin(md))), math.sin(cr + (fm_index * math.sin(md))))
+        outa(i, amp * (((1.0 - interp) * val.real) + (interp * val.imag)))
+        cr += cr_frequency
+        md += md_frequency
+        
+# with Sound(play=True,statistics=True):
+#     fpmc(0, 4, 300, .8, 1.2, 1., .1)
+
+        
+# --------------- fm_cancellation  ---------------- # 
+def fm_cancellation(beg, dur, frequency, ratio, amp, index):
+    start = seconds2samples(beg)
+    cx = 0.0
+    mx = 0.0
+    car_frequency = hz2radians(frequency)
+    mod_frequency = hz2radians(ratio)
+    stop = start + seconds2samples(dur)
+    
+    for i in range(start, stop):
+        outa(i, amp * ((math.cos(cx) * math.sin(index * math.cos(mx))) - (math.sin(cx) * math.sin(index * math.sin(mx)))))
+        cx += car_frequency
+        mx += mod_frequency
+        
+# with Sound(play=True,statistics=True):
+#     fm_cancellation(0, 1, 1000.0, 100.0, 0.3, 9.0)
+
+
+        
 # TODO: --------------- k3sin  ---------------- # 
+
+
+def k3sin_wrapper(g):
+    convert_frequency(g)
+    g.coeffs = np.array([0.0, (np.pi*np.pi) / 6.0, np.pi / -4.0, .08333])
+    g.angle = 0.0
+    return g
+    
+def k3sin_reset(g):
+    g.frequency = 0.0
+    g.amgle = 0.0
+
+make_k3sin, is_k3sin = make_generator('k3sin', {'frequency' : 0.0}, wrapper=k3sin_wrapper,
+                        methods={'mus_reset' : [None, k3sin_reset]}, docstring="""creates a k3sin generator.""" )
+                        
+                        
+#returns a sum of sines scaled by k^3                        
+def k3sin(gen, fm=0.0):
+    x = gen.angle
+    if not 0.0 <= x <= np.pi*2:
+        x = x % np.pi*2
+    gen.angle = x + fm + gen.frequency
+    return polynomial(gen.coeffs, x)
+
+# with Sound(play=True,statistics=True):
+#     gen = make_k3sin(frequency=340)
+#     for i in range(0, 10000):
+#         outa(i, .3 * k3sin(gen))
+
 
 # TODO: --------------- izcos  ---------------- # 
 

@@ -1993,7 +1993,8 @@ cpdef mus_any make_table_lookup(frequency: Optional[float]=0.0,
     check_ndim(wave)
     
     cdef double [:] wave_view = wave
-    
+
+    #print(frequency, initial_phase, wave, size, interp_type)
     gen =  mus_any.from_ptr(cclm.mus_make_table_lookup(frequency, initial_phase, &wave_view[0], size, interp_type))
     gen.cache_append(wave)
     return gen
@@ -5061,7 +5062,7 @@ def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
     def is_a(gen):
         return isinstance(gen, mus_gen) and gen.name == name
     g =  partial(make_generator, **slots)
-    if docstring:
+    if docstring is not None:
         g.__doc__ = docstring
     
     return g, is_a

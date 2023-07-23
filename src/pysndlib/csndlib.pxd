@@ -1,4 +1,4 @@
-cdef extern from "/usr/local/include/sndlib.h":
+cdef extern from "./sndlib/sndlib.h":
 
     ctypedef long long mus_long_t
     ctypedef int mus_header_t
