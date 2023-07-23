@@ -19,7 +19,6 @@ on:
         # The data type of the input
         type: string
 
-
 jobs:
   build:
     runs-on: macos-latest
@@ -42,7 +41,11 @@ jobs:
       run: ls
     - name: unzip
       run: unzip sndlib.zip
-    
+    - name: list again
+      run: ls 
+    - name: where am i
+      run: pwd 
+      
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -51,7 +54,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-#        python -m pip install flake8 pytest
+        python -m pip install flake8 pytest
         python -m pip install cython
         python -m pip install numpy
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -62,11 +65,7 @@ jobs:
 #         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
        
-    - name: list again
-      run: ls
-      
-    - name: where am i
-      run: pwd
+
       
     - name: compile
       run: |
