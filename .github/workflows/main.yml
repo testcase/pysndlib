@@ -3,15 +3,25 @@
 
 name: Python package
 
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'making pysndlib'
+        # Default value if no value is explicitly provided
+        default: 'make'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
+
 
 jobs:
   build:
-
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -22,12 +32,12 @@ jobs:
     - name: List Releases
       run: gh release list --repo testcase/sndlib
       env:
-        GITHUB_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
         
     - name: Fetch asset
       run: gh release download --repo testcase/sndlib 0.0.1
       env:
-        GITHUB_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
     - name: See what we downloaded
       run: ls
 #     - uses: actions/checkout@v3
