@@ -28,22 +28,7 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
 
     steps:
-    - name: List Releases
-      run: gh release list --repo testcase/sndlib
-      env:
-        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
-        
-    - name: Fetch asset
-      run: gh release download  --clobber  --repo testcase/sndlib v0.0.1 --pattern sndlib.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
-    - name: See what we downloaded
-      run: ls
-    - name: unzip
-      run: unzip sndlib.zip
-    - name: where am i
-      run: pwd 
-      
+   
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -63,10 +48,21 @@ jobs:
 #         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
        
-    - name: what is here
+    - name: List Releases
+      run: gh release list --repo testcase/sndlib
+      env:
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}        
+    - name: Fetch asset
+      run: gh release download  --clobber  --repo testcase/sndlib v0.0.1 --pattern sndlib.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+    - name: See what we downloaded
       run: ls
-    - name: where am i again
-      run: pwd   
+    - name: unzip
+      run: unzip sndlib.zip
+    - name: where am i
+      run: pwd 
+      
     - name: compile
       run: |
         python setup.py build_ext -i
