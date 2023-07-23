@@ -35,7 +35,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
         
     - name: Fetch asset
-      run: gh release download  --clobber  --repo testcase/sndlib v0.0.1
+      run: gh release download  --clobber  --repo testcase/sndlib v0.0.1 --pattern sndlib.zip
       env:
         GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
     - name: See what we downloaded
