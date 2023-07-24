@@ -33,6 +33,7 @@ import os
 if sys.platform.startswith("darwin"):
     os.environ['LDFLAGS'] = '-framework CoreAudio -framework CoreFoundation -framework CoreMIDI'
     os.environ['CFLAGS'] = '-arch x86_64 -arch arm64'
+    
 
     extensions = [
         Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 

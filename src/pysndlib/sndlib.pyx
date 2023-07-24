@@ -145,6 +145,7 @@ cpdef Header mus_sound_set_header_type(file: str, mus_header: csndlib.mus_header
     """
     return <Header>csndlib.mus_sound_set_header_type(file, mus_header) 
 
+
 cpdef Sample mus_sound_set_sample_type(file: str, mus_sample: csndlib.mus_sample_t):
     """
     set sample type of file

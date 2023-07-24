@@ -23,6 +23,7 @@ import sys
 
  
  
+ 
 np.import_array()
 
 
@@ -72,19 +73,22 @@ DEFAULT_FILE_PLAYER = None
 
 if sys.platform.startswith("darwin"):
     DEFAULT_FILE_PLAYER = 'afplay'
+    DEFAULT_FILE_NAME = 'test.aiff'
 
 if sys.platform.startswith("linux"):
     DEFAULT_FILE_PLAYER = 'aplay'
+    DEFAULT_FILE_NAME = 'test.wav'
     
 
 # --------------- main clm prefs ---------------- #
 
 CLM  = types.SimpleNamespace(
-    file_name = DEFAULT_FILE_PLAYER,
+    file_name = DEFAULT_FILE_NAME,
     srate = DEFAULT_OUTPUT_SRATE,
     channels = DEFAULT_OUTPUT_CHANS,
     sample_type = DEFAULT_OUTPUT_SAMPLE_TYPE,
     header_type = DEFAULT_OUTPUT_HEADER_TYPE,
+    player = DEFAULT_FILE_PLAYER
     verbose = False,
     play = False,
     statistics = False,
@@ -5116,7 +5120,5 @@ def sndplay(file):
     subprocess.run([CLM.player,file])
     
     
-cpdef test_data():
-    op = cclm.mus_make_one_pole(.1, .2)
-    print(cclm.mus_data_exists(op))
+
 
