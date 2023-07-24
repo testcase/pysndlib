@@ -1,4 +1,4 @@
-name: Python build Wheels
+name: Python build Wheels and SDist
 
 on:
   workflow_dispatch:
@@ -56,7 +56,7 @@ jobs:
       - name: See what we downloaded
         run: ls
       - name: unzip
-        run: unzip libsndlib_macos.zip
+        run: unzip libsndlib_macos_universal2.zip
       - name: compile
         run: |
           python3 setup.py build_ext -i
