@@ -48,7 +48,7 @@ if sys.platform.startswith("darwin"):
 
 
 if sys.platform.startswith("linux"):
-    os.environ['LDFLAGS'] = '-lm -ldl -lasound'
+    os.environ['LDFLAGS'] = '-lm -ldl'
 
     extensions = [
         Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 
