@@ -56,7 +56,9 @@ jobs:
         run: unzip libsndlib_macos.zip
       - name: compile
         run: |
+          echo `lipo -archs libsndlib.a`
           echo $PATH
+          export PATH="/usr/bin/:$PATH"
           echo `which -a ranlib`
           echo `which -a ar`
           echo `arch`
