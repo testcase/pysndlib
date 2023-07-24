@@ -57,6 +57,6 @@ jobs:
           CIBW_TEST_SKIP: "*-macosx_arm64"
 
       - uses: actions/upload-artifact@v3
-          with:
-            path: ./wheelhouse/*.whl
+        with:
+          path: ./wheelhouse/*.whl
  
