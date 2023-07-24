@@ -29,7 +29,7 @@ jobs:
       matrix:
         os: [macos-latest]
         cibw_python: ["cp310-*", "cp311-*", cp312-*]
-        cibw_arch: ["universal2"]
+        cibw_archs: ["universal2"]
         
     steps:
       - uses: actions/checkout@v3
