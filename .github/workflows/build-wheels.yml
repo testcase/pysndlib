@@ -19,6 +19,7 @@ env:
 #   CIBW_TEST_REQUIRES: "-r requirements/default.txt -r requirements/test.txt"
 #   CIBW_TEST_COMMAND: pytest --pyargs skimage
   CIBW_ENVIRONMENT: PIP_PREFER_BINARY=1
+  CIBW_TEST_SKIP: "*-macosx_arm64 *-macosx_universal2:arm64 *-macosx_universal2:x86_64"
   
 jobs:
   build_macos_wheels:
