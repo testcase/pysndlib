@@ -59,11 +59,12 @@ jobs:
     - name: compile
       run: |
         python setup.py build_ext -i
+        
     - name: make wheel
       run: |
         python setup.py bdist_wheel
         
-     - uses: actions/upload-artifact@v3
-        with:
-          name: wheels
-          path: ./dist/*.whl
+    - uses: actions/upload-artifact@v3
+      with:
+        name: wheels
+        path: ./dist/*.whl
