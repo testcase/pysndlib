@@ -3,33 +3,31 @@
 
 name: Python package
 
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'making pysndlib'
+        # Default value if no value is explicitly provided
+        default: 'make'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
 
 jobs:
   build:
-
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-    - name: List Releases
-      run: gh release list --repo testcase/sndlib
-      env:
-        GITHUB_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-        
-    - name: Fetch asset
-      run: gh release download --repo testcase/sndlib 0.0.1 --pattern libsndlib_macos.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-    - name: See what we downloaded
-        run: ls
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -42,15 +40,22 @@ jobs:
         python -m pip install cython
         python -m pip install numpy
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-       # flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-       # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+       
+    - name: List Releases
+      run: gh release list --repo testcase/sndlib
+      env:
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}        
+    - name: Fetch asset
+      run: gh release download  --clobber  --repo testcase/sndlib v0.0.1 --pattern sndlib.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+    - name: See what we downloaded
+      run: ls
+    - name: unzip
+      run: unzip sndlib.zip
+    - name: where am i
+      run: pwd 
+
     - name: compile
       run: |
         python setup.py build_ext -i
-    - name: Test with pytest
-      run: |
-        pytest
