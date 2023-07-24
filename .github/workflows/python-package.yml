@@ -40,6 +40,7 @@ jobs:
         python -m pip install flake8 pytest
         python -m pip install cython
         python -m pip install numpy
+        python -m pip install wheel
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
        
     - name: List Releases
@@ -58,3 +59,11 @@ jobs:
     - name: compile
       run: |
         python setup.py build_ext -i
+    - name: make wheel
+      run: |
+        python setup.py bdist_wheel
+        
+     - uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: ./dist/*.whl
