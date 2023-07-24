@@ -54,3 +54,4 @@ examples/
 src/pysndlib.egg-info/
 docs/build/
 sndlib/
+dist/

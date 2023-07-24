@@ -18,6 +18,7 @@ import numpy.typing as npt
 cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 from pysndlib.sndlib import Sample, Header
+import sys
 
 
  
@@ -67,13 +68,19 @@ DEFAULT_OUTPUT_CHANS = 1
 DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT
 DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
 
-    
+DEFAULT_FILE_PLAYER = None
+
+if sys.platform.startswith("darwin"):
+    DEFAULT_FILE_PLAYER = 'afplay'
+
+if sys.platform.startswith("linux"):
+    DEFAULT_FILE_PLAYER = 'aplay'
     
 
 # --------------- main clm prefs ---------------- #
 
 CLM  = types.SimpleNamespace(
-    file_name = 'test.aiff',
+    file_name = DEFAULT_FILE_PLAYER,
     srate = DEFAULT_OUTPUT_SRATE,
     channels = DEFAULT_OUTPUT_CHANS,
     sample_type = DEFAULT_OUTPUT_SAMPLE_TYPE,
@@ -95,7 +102,6 @@ CLM  = types.SimpleNamespace(
 )
 
 
-CLM.player = 'afplay'
 
 
 # --------------- initializations ---------------- #
