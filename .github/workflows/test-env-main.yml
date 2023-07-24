@@ -1,0 +1,64 @@
+name: test build env
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'making pysndlib'
+        # Default value if no value is explicitly provided
+        default: 'make'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
+        
+env:
+  CIBW_BUILD_VERBOSITY: 2
+  CIBW_TEST_REQUIRES: "-r requirements/default.txt -r requirements/test.txt"
+  CIBW_TEST_COMMAND: pytest --pyargs skimage
+  CIBW_ENVIRONMENT: PIP_PREFER_BINARY=1
+  
+jobs:
+  build_macos_wheels:
+    name: Build python ${{ matrix.cibw_python }} ${{ matrix.cibw_arch }} wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
+        cibw_python: ["cp310-*"]
+       # cibw_python: ["cp310-*", "cp311-*", "cp312-*"]
+        #cibw_arch: ["universal2"]
+        cibw_arch: ["universal2"]
+        
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install cython
+          python3 -m pip install numpy
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v0.0.1 --pattern libsndlib_macos.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+      - name: See what we downloaded
+        run: ls
+      - name: unzip
+        run: unzip libsndlib_macos.zip
+      - name: compile
+        run: |
+          echo $PATH
+          echo `which -a ranlib`
+          echo `which -a ar`
+          echo `arch`
+
+   
