@@ -28,8 +28,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest]
-        cibw_python: ["cp310-*", "cp311-*", cp312-*]
-        cibw_arch: ["x86_64", "arm64"]
+        cibw_python: ["cp310-*", "cp311-*", "cp312-*"]
+        cibw_arch: ["universal2"]
         
     steps:
       - uses: actions/checkout@v3
