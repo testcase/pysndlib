@@ -31,7 +31,7 @@ jobs:
         cibw_python: ["cp310-*"]
        # cibw_python: ["cp310-*", "cp311-*", "cp312-*"]
         #cibw_arch: ["universal2"]
-        cibw_arch: ["x86_64", "arm64"]
+        cibw_arch: ["universal2"]
         
     steps:
       - uses: actions/checkout@v3
