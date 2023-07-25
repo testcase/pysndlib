@@ -56,3 +56,7 @@ docs/build/
 sndlib/
 dist/
 build/
+sndlib.tar.gz
+\#*
+\.#*
+pysndlib/pysndlib.egg-info/
