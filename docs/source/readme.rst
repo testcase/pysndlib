@@ -2,75 +2,36 @@ README for pysndlib
 ======================= 
 
 This package provides a python wrapper around sndlib, by Bill Schottstaedt (bil@ccrma.stanford.edu)
-Sources for sndlib can be found here <https://ccrma.stanford.edu/software/snd/sndlib/>_
+Sources for sndlib can be found here <https://ccrma.stanford.edu/software/snd/sndlib/>
 
 cython is used to generate bindings and is required
 
 This also requires numpy.
 
-IMPORTANT At least on macos, this needs to be linked against sndlib built in specific way
-
-sndlib is normally build as an .so as a loadable bundle with the -bundle flag to ld. On macOS Cython needs to
-link against a dylib built with -dynamiclib flag. Technically I believe it would still work with .so
-extension but I have changed this to make sure I can keep different versions straight.
-
-Hope to get this all sorted so can be installed using pip in the future 
-
-
 Building sndlib
-----------------
+---------------------
 
-run configure
----------------
+Update recommended build steps
 
-::
+Check out psyndlib from github
 
-    ./configure --without-s7
+grab sndlib from ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz
 
-edit the makefile
---------------------
+copy sndlib directory to top level of pysndlib
 
-LDSO_FLAGS line should look like this:
+cd sndlib
 
-::
-    
-    LDSO_FLAGS = -dynamic -dynamiclib -undefined suppress -flat_namespace
+./configure --without-s7
 
-Change SO_NAME line to this:
 
-::
+make
 
-    SO_NAME = libsndlib.dylib
 
-changed install and uninstall targets to following:
+leave libsndlib.a in sndlib directory
 
-::
+this avoids writing over installed versions which might be built with other options and
+potential linking issues
 
-    install: sndlib
-        $(mkinstalldirs) $(bindir)
-        $(mkinstalldirs) $(libdir)
-        $(mkinstalldirs) $(includedir)
-        $(SO_INSTALL) libsndlib.dylib $(libdir)/libsndlib.dylib
-        $(A_INSTALL) libsndlib.a $(libdir)/libsndlib.a
-        $(INSTALL) sndlib.h $(includedir)/sndlib.h
-        $(INSTALL) clm.h $(includedir)/clm.h
-        $(INSTALL) sndlib-config $(bindir)/sndlib-config
-        $(INSTALL) sndlib.pc $(pkgconfigdir)/sndlib.pc
-
-:: 
-
-    uninstall:
-        rm -f $(libdir)/libsndlib.dylib
-        rm -f $(libdir)/libsndlib.a
-
-::
-
-    make
-    
-:: 
-    
-    sudo make install
-    
 
 Python dependencies
 ---------------------
@@ -80,18 +41,12 @@ I do the following
 
     pip install numpy
     
-    pip install Cython==3.0.0b3
+    pip install Cython==3.0.0
     
     
 After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
 of the pysndlib clone:
 
-
-   ** Make sure LIB_PATH is setup to look at /usr/local/lib **
-    
-
-
-::
 
     python setup.py build_ext -i
 
