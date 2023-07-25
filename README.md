@@ -1,5 +1,4 @@
 # pysndlib
-****This is updated to use cython but many things are not working as of yet.****
 
 This package provides a python wrapper around sndlib, by Bill Schottstaedt (bil@ccrma.stanford.edu)
 Sources for sndlib can be found [here](https://ccrma.stanford.edu/software/snd/sndlib/)
