@@ -283,8 +283,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-dependencies">Python dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
 </ul>
@@ -301,74 +299,35 @@ document.write(`
   <section id="readme-for-pysndlib">
 <h1>README for pysndlib<a class="headerlink" href="#readme-for-pysndlib" title="Permalink to this heading">#</a></h1>
 <p>This package provides a python wrapper around sndlib, by Bill Schottstaedt (<a class="reference external" href="mailto:bil&#37;&#52;&#48;ccrma&#46;stanford&#46;edu">bil<span>&#64;</span>ccrma<span>&#46;</span>stanford<span>&#46;</span>edu</a>)
-Sources for sndlib can be found here &lt;<a class="reference external" href="https://ccrma.stanford.edu/software/snd/sndlib/">https://ccrma.stanford.edu/software/snd/sndlib/</a>&gt;_</p>
+Sources for sndlib can be found here &lt;<a class="reference external" href="https://ccrma.stanford.edu/software/snd/sndlib/">https://ccrma.stanford.edu/software/snd/sndlib/</a>&gt;</p>
 <p>cython is used to generate bindings and is required</p>
 <p>This also requires numpy.</p>
-<p>IMPORTANT At least on macos, this needs to be linked against sndlib built in specific way</p>
-<p>sndlib is normally build as an .so as a loadable bundle with the -bundle flag to ld. On macOS Cython needs to
-link against a dylib built with -dynamiclib flag. Technically I believe it would still work with .so
-extension but I have changed this to make sure I can keep different versions straight.</p>
-<p>Hope to get this all sorted so can be installed using pip in the future</p>
 <section id="building-sndlib">
 <h2>Building sndlib<a class="headerlink" href="#building-sndlib" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="run-configure">
-<h2>run configure<a class="headerlink" href="#run-configure" title="Permalink to this heading">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">without</span><span class="o">-</span><span class="n">s7</span>
-</pre></div>
-</div>
-</section>
-<section id="edit-the-makefile">
-<h2>edit the makefile<a class="headerlink" href="#edit-the-makefile" title="Permalink to this heading">#</a></h2>
-<p>LDSO_FLAGS line should look like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LDSO_FLAGS</span> <span class="o">=</span> <span class="o">-</span><span class="n">dynamic</span> <span class="o">-</span><span class="n">dynamiclib</span> <span class="o">-</span><span class="n">undefined</span> <span class="n">suppress</span> <span class="o">-</span><span class="n">flat_namespace</span>
-</pre></div>
-</div>
-<p>Change SO_NAME line to this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SO_NAME</span> <span class="o">=</span> <span class="n">libsndlib</span><span class="o">.</span><span class="n">dylib</span>
-</pre></div>
-</div>
-<p>changed install and uninstall targets to following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>install: sndlib
-    $(mkinstalldirs) $(bindir)
-    $(mkinstalldirs) $(libdir)
-    $(mkinstalldirs) $(includedir)
-    $(SO_INSTALL) libsndlib.dylib $(libdir)/libsndlib.dylib
-    $(A_INSTALL) libsndlib.a $(libdir)/libsndlib.a
-    $(INSTALL) sndlib.h $(includedir)/sndlib.h
-    $(INSTALL) clm.h $(includedir)/clm.h
-    $(INSTALL) sndlib-config $(bindir)/sndlib-config
-    $(INSTALL) sndlib.pc $(pkgconfigdir)/sndlib.pc
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>uninstall:
-    rm -f $(libdir)/libsndlib.dylib
-    rm -f $(libdir)/libsndlib.a
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
-</pre></div>
-</div>
+<p>Update recommended build steps</p>
+<p>Check out psyndlib from github</p>
+<p>grab sndlib from <a class="reference external" href="ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz">ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz</a></p>
+<p>copy sndlib directory to top level of pysndlib</p>
+<p>cd sndlib</p>
+<p>./configure –without-s7</p>
+<p>make</p>
+<p>leave libsndlib.a in sndlib directory</p>
+<p>this avoids writing over installed versions which might be built with other options and
+potential linking issues</p>
 </section>
 <section id="python-dependencies">
 <h2>Python dependencies<a class="headerlink" href="#python-dependencies" title="Permalink to this heading">#</a></h2>
 <p>I do the following</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
 
-<span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span><span class="o">==</span><span class="mf">3.0.0</span><span class="n">b3</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span><span class="o">==</span><span class="mf">3.0.0</span>
 </pre></div>
 </div>
 <p>After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
 of the pysndlib clone:</p>
 <blockquote>
-<div><p>** Make sure LIB_PATH is setup to look at /usr/local/lib **</p>
+<div><p>python setup.py build_ext -i</p>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">-</span><span class="n">i</span>
-</pre></div>
-</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
@@ -460,8 +419,6 @@ existing examples. This may mean some aspects may not be pythonic.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-sndlib">Building sndlib</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-configure">run configure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edit-the-makefile">edit the makefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-dependencies">Python dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
 </ul>
