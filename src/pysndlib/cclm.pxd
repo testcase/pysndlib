@@ -13,13 +13,11 @@ cdef extern from "clm.h":
     typedef mus_any** mus_any_ptr_ptr;
     """
     
-    
-    
     ctypedef signed long int64_t
-    ctypedef int mus_sample_t
     ctypedef double mus_float_t
     ctypedef unsigned long uint64_t
     ctypedef int64_t mus_long_t 
+    
     ctypedef struct mus_any_class:
         pass
         
@@ -39,6 +37,9 @@ cdef extern from "clm.h":
         pass
          
     ctypedef enum mus_polynomial_t:
+        pass
+        
+    ctypedef enum mus_sample_t:
         pass
         
 #     ctypedef enum mus_header_t:
