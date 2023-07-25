@@ -36,13 +36,6 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-#       - name: Install dependencies
-#         run: |
-#           python3 -m pip install --upgrade pip
-#           python3 -m pip install cython
-#           python3 -m pip install numpy
-#           python3 -m pip install cibuildwheel
-#           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
@@ -53,9 +46,6 @@ jobs:
         run: ls
       - name: unzip
         run: unzip libsndlib_macos_universal2.zip
-#       - name: compile
-#         run: |
-#           python3 setup.py build_ext -i
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.14.1
