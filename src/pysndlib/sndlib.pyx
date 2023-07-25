@@ -32,8 +32,6 @@ cpdef enum Error:
 
 
 
-
-
 # -------- sound.c -------- 
 
 cpdef csndlib.mus_long_t mus_sound_samples(file):

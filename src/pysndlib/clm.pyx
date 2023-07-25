@@ -21,9 +21,8 @@ from pysndlib.sndlib import Sample, Header
 import sys
 
 
- 
- 
- 
+
+
 np.import_array()
 
 
@@ -2002,6 +2001,7 @@ cpdef mus_any make_table_lookup(frequency: Optional[float]=0.0,
     check_ndim(wave)
     
     cdef double [:] wave_view = wave
+
 
     #print(frequency, initial_phase, wave, size, interp_type)
     gen =  mus_any.from_ptr(cclm.mus_make_table_lookup(frequency, initial_phase, &wave_view[0], size, interp_type))
@@ -4586,7 +4586,7 @@ cpdef out_any(loc: int, data: float, channel, output):
     else:            
         out = <mus_any>output
         cclm.mus_out_any(loc, data, channel, out._ptr)
-    return data        
+
 # --------------- outa ---------------- #
 cpdef outa(loc: int, data: float, output=None):
     """
@@ -4603,7 +4603,7 @@ cpdef outa(loc: int, data: float, output=None):
         out_any(loc, data, 0, output)        
     else:
         out_any(loc, data, 0, CLM.output)
-    return data
+
 # --------------- outb ---------------- #    
 cpdef outb(loc: int, data: float, output=None):
     """
@@ -4620,7 +4620,7 @@ cpdef outb(loc: int, data: float, output=None):
         out_any(loc, data, 1, output)        
     else:
         out_any(loc, data, 1, CLM.output)
-    return data
+
 # --------------- outc ---------------- #    
 cpdef outc(loc: int, data: float, output=None):
     """
@@ -4637,7 +4637,7 @@ cpdef outc(loc: int, data: float, output=None):
         out_any(loc, data, 2, output)        
     else:
         out_any(loc, data, 2, CLM.output) 
-    return data       
+
 # --------------- outd ---------------- #    
 cpdef outd(loc: int, data: float, output=None):
     """
@@ -4654,8 +4654,8 @@ cpdef outd(loc: int, data: float, output=None):
         out_any(loc, data, 3, output)        
     else:
         out_any(loc, data, 3, CLM.output)   
-    return data
-         
+
+   #      
 # --------------- out-bank ---------------- #    
 cpdef out_bank(gens, loc: int, val: float):
     """
@@ -4668,7 +4668,7 @@ cpdef out_bank(gens, loc: int, val: float):
     """
     for i in range(len(gens)):
         out_any(loc, cclm.mus_apply(<cclm.mus_any_ptr>gens[i]._ptr, val, 0.), i, CLM.output)    
-    return val
+
 
 #--------------- in-any ----------------#
 cpdef in_any(loc: int, channel: int, inp):
