@@ -65,20 +65,22 @@ ENVFUNCTION = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_double) # for env_any
 #these may need to be set based on system type etc
 DEFAULT_OUTPUT_SRATE = 44100
 DEFAULT_OUTPUT_CHANS = 1
-DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT
-DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
+
+
 
 DEFAULT_FILE_PLAYER = None
 
 if sys.platform.startswith("darwin"):
     DEFAULT_FILE_PLAYER = 'afplay'
     DEFAULT_FILE_NAME = 'test.aiff'
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT    
 
 if sys.platform.startswith("linux"):
     DEFAULT_FILE_PLAYER = 'aplay'
     DEFAULT_FILE_NAME = 'test.wav'
-    
-
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
 # --------------- main clm prefs ---------------- #
 
 CLM  = types.SimpleNamespace(
