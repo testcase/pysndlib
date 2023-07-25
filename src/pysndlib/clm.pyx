@@ -4578,8 +4578,7 @@ cpdef out_any(loc: int, data: float, channel, output):
     :param data: sample value
     :param channel: channel to write to 
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
-    :return: data
-    :rtype: float
+
     """
     if isinstance(output, np.ndarray): 
         output[channel][loc] += data
@@ -4596,8 +4595,7 @@ cpdef outa(loc: int, data: float, output=None):
     :param data: sample value
     :param channel: channel to write to 
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
-    :return: data
-    :rtype: float
+
     """
     if output is not None:
         out_any(loc, data, 0, output)        
@@ -4613,8 +4611,7 @@ cpdef outb(loc: int, data: float, output=None):
     :param data: sample value
     :param channel: channel to write to 
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2fil
-    :return: data
-    :rtype: float
+
     """
     if output is not None:
         out_any(loc, data, 1, output)        
@@ -4630,8 +4627,7 @@ cpdef outc(loc: int, data: float, output=None):
     :param data: sample value
     :param channel: channel to write to 
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
-    :return: data
-    :rtype: float
+
     """
     if output is not None:
         out_any(loc, data, 2, output)        
@@ -4647,8 +4643,7 @@ cpdef outd(loc: int, data: float, output=None):
     :param data: sample value
     :param channel: channel to write to 
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
-    :return: data
-    :rtype: float
+
     """
     if output is not None:
         out_any(loc, data, 3, output)        
