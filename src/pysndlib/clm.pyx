@@ -100,7 +100,6 @@ CLM  = types.SimpleNamespace(
     buffer_size = 65536,
     locsig_type = Interp.LINEAR,
     clipped = True,
-    player = False,
     output = False,
     delete_reverb = False
 )
