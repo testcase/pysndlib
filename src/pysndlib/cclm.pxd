@@ -11,15 +11,15 @@ cdef extern from "clm.h":
 
     typedef mus_any* mus_any_ptr;
     typedef mus_any** mus_any_ptr_ptr;
-    typedef long long mus_long_t;
     """
     
     
     
-    ctypedef long long mus_long_t
+    ctypedef signed long int64_t
     ctypedef int mus_sample_t
     ctypedef double mus_float_t
-    ctypedef unsigned long long uint64_t
+    ctypedef unsigned long uint64_t
+    ctypedef int64_t mus_long_t 
     ctypedef struct mus_any_class:
         pass
         

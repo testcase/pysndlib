@@ -1236,7 +1236,7 @@ cpdef cclm.mus_long_t seconds2samples(secs: cython.double ):
     """
     return cclm.mus_seconds_to_samples(secs)
 
-cpdef cython.double samples2seconds(samples: mus_long_t):
+cpdef cython.double samples2seconds(samples: cclm.mus_long_t):
     """
     use mus_srate to convert samples to seconds.
     

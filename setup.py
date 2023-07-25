@@ -56,12 +56,10 @@ if sys.platform.startswith("linux"):
         Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 
             extra_objects=["./sndlib/libsndlib.a"], 
             include_dirs=[numpy.get_include(), './sndlib'],
-            extra_compile_args=['-Wno-parentheses-equality'],
             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
         Extension("pysndlib.clm", ["src/pysndlib/clm.pyx"], 
             extra_objects=["./sndlib/libsndlib.a"], 
             include_dirs=[numpy.get_include(), './sndlib'], 
-            extra_compile_args=['-Wno-parentheses-equality'],
             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")])
     ]
 

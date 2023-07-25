@@ -594,8 +594,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <pre class="cython line score-0">&#xA0;<span class="">036</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">037</span>: <span class="c"># -------- sound.c -------- </span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">038</span>: </pre>
-<pre class="cython line score-51" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">039</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_samples</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span></pre>
-<pre class='cython code score-51 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_1mus_sound_samples(PyObject *__pyx_self, 
+<pre class="cython line score-49" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">039</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_samples</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span></pre>
+<pre class='cython code score-49 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_1mus_sound_samples(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -694,7 +694,7 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_mus_sound_samples(CYTHON_UNUSED PyOb
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("mus_sound_samples", 0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   __pyx_t_1 = __pyx_f_8pysndlib_6sndlib_mus_sound_samples(__pyx_v_file, 0); if (unlikely(__pyx_t_1 == ((mus_long_t)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 39, __pyx_L1_error)</span>
-  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_From_mus_long_t</span>(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 39, __pyx_L1_error)</span>
+  __pyx_t_2 = __Pyx_PyInt_From_int64_t(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 39, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -728,8 +728,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_mus_sound_samples(CYTHON_UNUSED PyOb
   __pyx_r = mus_sound_samples(__pyx_t_1);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">044</span>: </pre>
-<pre class="cython line score-58" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">045</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_framples</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span></pre>
-<pre class='cython code score-58 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_3mus_sound_framples(PyObject *__pyx_self, 
+<pre class="cython line score-56" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">045</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_framples</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span></pre>
+<pre class='cython code score-56 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_3mus_sound_framples(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -833,7 +833,7 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_2mus_sound_framples(CYTHON_UNUSED Py
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("mus_sound_framples", 0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   __pyx_t_1 = __pyx_f_8pysndlib_6sndlib_mus_sound_framples(__pyx_v_file, 0); if (unlikely(__pyx_t_1 == ((mus_long_t)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 45, __pyx_L1_error)</span>
-  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_From_mus_long_t</span>(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 45, __pyx_L1_error)</span>
+  __pyx_t_2 = __Pyx_PyInt_From_int64_t(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 45, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -1010,8 +1010,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_4mus_sound_datum_size(CYTHON_UNUSED 
   __pyx_r = mus_sound_datum_size(__pyx_t_1);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">056</span>: </pre>
-<pre class="cython line score-58" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">057</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_data_location</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span></pre>
-<pre class='cython code score-58 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_7mus_sound_data_location(PyObject *__pyx_self, 
+<pre class="cython line score-56" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">057</span>: <span class="k">cpdef</span> <span class="kt">csndlib</span>.<span class="kt">mus_long_t</span> <span class="nf">mus_sound_data_location</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span></pre>
+<pre class='cython code score-56 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_7mus_sound_data_location(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -1115,7 +1115,7 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_6mus_sound_data_location(CYTHON_UNUS
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("mus_sound_data_location", 0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   __pyx_t_1 = __pyx_f_8pysndlib_6sndlib_mus_sound_data_location(__pyx_v_file, 0); if (unlikely(__pyx_t_1 == ((mus_long_t)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 57, __pyx_L1_error)</span>
-  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_From_mus_long_t</span>(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 57, __pyx_L1_error)</span>
+  __pyx_t_2 = __Pyx_PyInt_From_int64_t(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 57, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -3150,8 +3150,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_34mus_sound_set_srate(CYTHON_UNUSED 
   __pyx_r = mus_sound_set_srate(__pyx_t_1, __pyx_t_2);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">141</span>: </pre>
-<pre class="cython line score-83" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">142</span>: <span class="k">cpdef</span> <span class="kt">Header</span> <span class="nf">mus_sound_set_header_type</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mus_header</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="p">):</span></pre>
-<pre class='cython code score-83 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_37mus_sound_set_header_type(PyObject *__pyx_self, 
+<pre class="cython line score-78" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">142</span>: <span class="k">cpdef</span> <span class="kt">Header</span> <span class="nf">mus_sound_set_header_type</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mus_header</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="p">):</span></pre>
+<pre class='cython code score-78 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_37mus_sound_set_header_type(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3236,7 +3236,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 1);
     }
     __pyx_v_file = ((PyObject*)values[0]);
-    __pyx_v_mus_header = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_header_t</span>(values[1]); if (unlikely((__pyx_v_mus_header == ((mus_header_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 142, __pyx_L3_error)</span>
+    __pyx_v_mus_header = ((mus_header_t)<span class='pyx_c_api'>__Pyx_PyInt_As_mus_header_t</span>(values[1]));<span class='error_goto'> if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 142, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -3308,8 +3308,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_36mus_sound_set_header_type(CYTHON_U
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">147</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">148</span>: </pre>
-<pre class="cython line score-86" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">149</span>: <span class="k">cpdef</span> <span class="kt">Sample</span> <span class="nf">mus_sound_set_sample_type</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mus_sample</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="p">):</span></pre>
-<pre class='cython code score-86 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_39mus_sound_set_sample_type(PyObject *__pyx_self, 
+<pre class="cython line score-78" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">149</span>: <span class="k">cpdef</span> <span class="kt">Sample</span> <span class="nf">mus_sound_set_sample_type</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mus_sample</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="p">):</span></pre>
+<pre class='cython code score-78 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_39mus_sound_set_sample_type(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3394,7 +3394,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 1);
     }
     __pyx_v_file = ((PyObject*)values[0]);
-    __pyx_v_mus_sample = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[1]); if (unlikely((__pyx_v_mus_sample == ((mus_sample_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 149, __pyx_L3_error)</span>
+    __pyx_v_mus_sample = ((mus_sample_t)<span class='pyx_c_api'>__Pyx_PyInt_As_mus_sample_t</span>(values[1]));<span class='error_goto'> if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 149, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -3465,8 +3465,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_38mus_sound_set_sample_type(CYTHON_U
   __pyx_r = ((enum __pyx_t_8pysndlib_6sndlib_Sample)mus_sound_set_sample_type(__pyx_t_1, __pyx_v_mus_sample));
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">154</span>: </pre>
-<pre class="cython line score-83" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">155</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_set_data_location</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
-<pre class='cython code score-83 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_41mus_sound_set_data_location(PyObject *__pyx_self, 
+<pre class="cython line score-81" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">155</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_set_data_location</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
+<pre class='cython code score-81 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_41mus_sound_set_data_location(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3551,7 +3551,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 1);
     }
     __pyx_v_file = ((PyObject*)values[0]);
-    __pyx_v_val = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(values[1]); if (unlikely((__pyx_v_val == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 155, __pyx_L3_error)</span>
+    __pyx_v_val = __Pyx_PyInt_As_int64_t(values[1]); if (unlikely((__pyx_v_val == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 155, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -3619,8 +3619,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_40mus_sound_set_data_location(CYTHON
   __pyx_r = mus_sound_set_data_location(__pyx_t_1, __pyx_v_val);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">160</span>: </pre>
-<pre class="cython line score-83" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">161</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_set_samples</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
-<pre class='cython code score-83 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_43mus_sound_set_samples(PyObject *__pyx_self, 
+<pre class="cython line score-81" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">161</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_set_samples</span><span class="p">(</span><span class="nb">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
+<pre class='cython code score-81 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_43mus_sound_set_samples(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3705,7 +3705,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 1);
     }
     __pyx_v_file = ((PyObject*)values[0]);
-    __pyx_v_val = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(values[1]); if (unlikely((__pyx_v_val == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 161, __pyx_L3_error)</span>
+    __pyx_v_val = __Pyx_PyInt_As_int64_t(values[1]); if (unlikely((__pyx_v_val == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 161, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -3774,8 +3774,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_42mus_sound_set_samples(CYTHON_UNUSE
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">166</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">167</span>: </pre>
-<pre class="cython line score-62" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">168</span>: <span class="k">cpdef</span> <span class="kt">str</span> <span class="nf">mus_header_type_name</span><span class="p">(</span><span class="n">header_type</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="p">):</span></pre>
-<pre class='cython code score-62 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_45mus_header_type_name(PyObject *__pyx_self, 
+<pre class="cython line score-57" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">168</span>: <span class="k">cpdef</span> <span class="kt">str</span> <span class="nf">mus_header_type_name</span><span class="p">(</span><span class="n">header_type</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="p">):</span></pre>
+<pre class='cython code score-57 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_45mus_header_type_name(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -3850,7 +3850,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     } else {
       values[0] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 0);
     }
-    __pyx_v_header_type = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_header_t</span>(values[0]); if (unlikely((__pyx_v_header_type == ((mus_header_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 168, __pyx_L3_error)</span>
+    __pyx_v_header_type = ((mus_header_t)<span class='pyx_c_api'>__Pyx_PyInt_As_mus_header_t</span>(values[0]));<span class='error_goto'> if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 168, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -4057,8 +4057,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_46mus_header_type_to_string(CYTHON_U
   __pyx_t_1 = 0;
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">179</span>: </pre>
-<pre class="cython line score-65" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">180</span>: <span class="k">cpdef</span> <span class="kt">str</span>  <span class="nf">mus_sample_type_name</span><span class="p">(</span><span class="n">samp_type</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="p">):</span></pre>
-<pre class='cython code score-65 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_49mus_sample_type_name(PyObject *__pyx_self, 
+<pre class="cython line score-57" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">180</span>: <span class="k">cpdef</span> <span class="kt">str</span>  <span class="nf">mus_sample_type_name</span><span class="p">(</span><span class="n">samp_type</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="p">):</span></pre>
+<pre class='cython code score-57 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_49mus_sample_type_name(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -4133,7 +4133,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     } else {
       values[0] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 0);
     }
-    __pyx_v_samp_type = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[0]); if (unlikely((__pyx_v_samp_type == ((mus_sample_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 180, __pyx_L3_error)</span>
+    __pyx_v_samp_type = ((mus_sample_t)<span class='pyx_c_api'>__Pyx_PyInt_As_mus_sample_t</span>(values[0]));<span class='error_goto'> if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 180, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -5183,12 +5183,12 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_62mus_sound_override_header(CYTHON_U
 </pre><pre class="cython line score-0">&#xA0;<span class="">223</span>: <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">224</span>: <span class="sd">    override the header information</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">225</span>: <span class="sd">    &quot;&quot;&quot;</span></pre>
-<pre class="cython line score-35" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">226</span>:     <span class="k">return</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sound_override_header</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">srate</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="o">&gt;</span><span class="n">sample_type</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="o">&gt;</span><span class="n">header_type</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></pre>
-<pre class='cython code score-35 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_AsString</span>(((PyObject *)(&amp;PyString_Type))); if (unlikely((!__pyx_t_1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
+<pre class="cython line score-31" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">226</span>:     <span class="k">return</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sound_override_header</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">srate</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="o">&gt;</span><span class="n">sample_type</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="o">&gt;</span><span class="n">header_type</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></pre>
+<pre class='cython code score-31 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_AsString</span>(((PyObject *)(&amp;PyString_Type))); if (unlikely((!__pyx_t_1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
   __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_srate); if (unlikely((__pyx_t_2 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
   __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_chans); if (unlikely((__pyx_t_3 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
-  __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(__pyx_v_location); if (unlikely((__pyx_t_4 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
-  __pyx_t_5 = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(__pyx_v_size); if (unlikely((__pyx_t_5 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
+  __pyx_t_4 = __Pyx_PyInt_As_int64_t(__pyx_v_location); if (unlikely((__pyx_t_4 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
+  __pyx_t_5 = __Pyx_PyInt_As_int64_t(__pyx_v_size); if (unlikely((__pyx_t_5 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 226, __pyx_L1_error)</span>
   __pyx_r = mus_sound_override_header(__pyx_t_1, __pyx_t_2, __pyx_t_3, ((mus_sample_t)__pyx_v_sample_type), ((mus_header_t)__pyx_v_header_type), __pyx_t_4, __pyx_t_5);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">227</span>: </pre>
@@ -6145,10 +6145,10 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_72mus_sound_reopen_output(CYTHON_UNU
 </pre><pre class="cython line score-0">&#xA0;<span class="">265</span>: <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">266</span>: <span class="sd">    reopen a file for further input</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">267</span>: <span class="sd">    &quot;&quot;&quot;</span></pre>
-<pre class="cython line score-21" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">268</span>:     <span class="k">return</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sound_reopen_output</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="o">&gt;</span><span class="n">sample_type</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="o">&gt;</span><span class="n">header_type</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span></pre>
-<pre class='cython code score-21 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_AsString</span>(__pyx_v_file); if (unlikely((!__pyx_t_1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 268, __pyx_L1_error)</span>
+<pre class="cython line score-19" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">268</span>:     <span class="k">return</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sound_reopen_output</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_sample_t</span><span class="o">&gt;</span><span class="n">sample_type</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">csndlib</span><span class="o">.</span><span class="n">mus_header_t</span><span class="o">&gt;</span><span class="n">header_type</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span></pre>
+<pre class='cython code score-19 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_AsString</span>(__pyx_v_file); if (unlikely((!__pyx_t_1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 268, __pyx_L1_error)</span>
   __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_chans); if (unlikely((__pyx_t_2 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 268, __pyx_L1_error)</span>
-  __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(__pyx_v_location); if (unlikely((__pyx_t_3 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 268, __pyx_L1_error)</span>
+  __pyx_t_3 = __Pyx_PyInt_As_int64_t(__pyx_v_location); if (unlikely((__pyx_t_3 == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 268, __pyx_L1_error)</span>
   __pyx_r = mus_sound_reopen_output(__pyx_t_1, __pyx_t_2, ((mus_sample_t)__pyx_v_sample_type), ((mus_header_t)__pyx_v_header_type), __pyx_t_3);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">269</span>: </pre>
@@ -6296,8 +6296,8 @@ static PyObject *__pyx_pf_8pysndlib_6sndlib_74mus_sound_close_input(CYTHON_UNUSE
   __pyx_r = mus_sound_close_input(__pyx_t_1);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">275</span>: </pre>
-<pre class="cython line score-88" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">276</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_close_output</span><span class="p">(</span><span class="n">fd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bytes_of_data</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
-<pre class='cython code score-88 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_77mus_sound_close_output(PyObject *__pyx_self, 
+<pre class="cython line score-86" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">276</span>: <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">mus_sound_close_output</span><span class="p">(</span><span class="n">fd</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bytes_of_data</span><span class="p">:</span> <span class="n">csndlib</span><span class="o">.</span><span class="n">mus_long_t</span><span class="p">):</span></pre>
+<pre class='cython code score-86 '>static PyObject *__pyx_pw_8pysndlib_6sndlib_77mus_sound_close_output(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -6382,7 +6382,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = <span class='pyx_c_api'>__Pyx_Arg_FASTCALL</span>(__pyx_args, 1);
     }
     __pyx_v_fd = ((PyObject*)values[0]);
-    __pyx_v_bytes_of_data = <span class='pyx_c_api'>__Pyx_PyInt_As_mus_long_t</span>(values[1]); if (unlikely((__pyx_v_bytes_of_data == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 276, __pyx_L3_error)</span>
+    __pyx_v_bytes_of_data = __Pyx_PyInt_As_int64_t(values[1]); if (unlikely((__pyx_v_bytes_of_data == ((mus_long_t)-1)) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(1, 276, __pyx_L3_error)</span>
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
