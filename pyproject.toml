@@ -1,6 +1,6 @@
 [project]
 name = "pysndlib"
-version = "0.0.6"
+version = "0.5.0"
 authors = [
   { name="Todd Ingalls", email="testcase@asu.edu" },
 ]
