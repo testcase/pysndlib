@@ -19,6 +19,7 @@ cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 from pysndlib.sndlib import Sample, Header
 import sys
+import os
 
 
 
@@ -79,8 +80,10 @@ if sys.platform.startswith("darwin"):
 if sys.platform.startswith("linux"):
     DEFAULT_FILE_PLAYER = 'aplay'
     DEFAULT_FILE_NAME = 'test.wav'
-    DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
-    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
+#     DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
+#     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT    
 # --------------- main clm prefs ---------------- #
 
 CLM  = types.SimpleNamespace(
@@ -106,7 +109,8 @@ CLM  = types.SimpleNamespace(
 )
 
 
-
+if os.path.exists(os.path.expanduser('~/.pysndlib')):
+    exec(open(os.path.expanduser('~/.pysndlib')).read())
 
 # --------------- initializations ---------------- #
 
