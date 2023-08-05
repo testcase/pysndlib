@@ -116,7 +116,7 @@ if os.path.exists(os.path.expanduser('~/.pysndlib')):
 
 cclm.mus_initialize()
 cclm.mus_set_rand_seed(int(time.time()))
-
+csndlib.mus_sound_initialize()
 
 cdef void clm_error_handler(int error_type, char* msg):
     message =  msg + ". "  +  csndlib.mus_error_type_to_string(error_type)

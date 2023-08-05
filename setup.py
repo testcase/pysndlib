@@ -10,11 +10,11 @@ import os
 
 # extensions = [
 #     Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 
-#         libraries=["sndlib"], include_dirs=[numpy.get_include()], 
+#         libraries=["sndlib"], include_dirs=[numpy.get_include(),  './sndlib'], 
 #         extra_compile_args=['-Wno-parentheses-equality', '-arch arm64'],
 #         define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
 #     Extension("pysndlib.clm", ["src/pysndlib/clm.pyx"], 
-#         libraries=["sndlib"], include_dirs=[numpy.get_include()], 
+#         libraries=["sndlib"], include_dirs=[numpy.get_include(),  './sndlib'], 
 #         extra_compile_args=['-Wno-parentheses-equality'],
 #         define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")])
 # ]
@@ -27,7 +27,7 @@ import os
 #     )
 
 
-
+# 
 # linking to static lib
 # 
 if sys.platform.startswith("darwin"):
