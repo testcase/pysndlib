@@ -73,17 +73,19 @@ DEFAULT_FILE_PLAYER = None
 
 if sys.platform.startswith("darwin"):
     DEFAULT_FILE_PLAYER = 'afplay'
-    DEFAULT_FILE_NAME = 'test.aiff'
-    DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
-    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT    
+    DEFAULT_FILE_NAME = 'test.wav'
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT 
+    
+#     DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
+#     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT    
 
 if sys.platform.startswith("linux"):
     DEFAULT_FILE_PLAYER = 'aplay'
     DEFAULT_FILE_NAME = 'test.wav'
-#     DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
-#     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
-    DEFAULT_OUTPUT_HEADER_TYPE = Header.AIFC
-    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.BFLOAT    
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
+
 # --------------- main clm prefs ---------------- #
 
 CLM  = types.SimpleNamespace(
@@ -637,6 +639,9 @@ cpdef file2ndarray(filename: str, channel: Optional[int]=None, beg: Optional[int
     :rtype: tuple
     
     """
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(f'file2ndarray: {filename} does not exist.')
+    
     length = dur or csndlib.mus_sound_framples(filename)
     chans = csndlib.mus_sound_chans(filename)
     srate = csndlib.mus_sound_srate(filename)
@@ -3981,6 +3986,9 @@ cpdef mus_any make_file2sample(filename, buffer_size: Optional[int]=None):
     :return: file2sample gen
     :rtype: mus_any
     """
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(f'file2sample: {filename} does not exist.')
+        
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_file_to_sample_with_buffer_size(filename, buffer_size))
     
@@ -4068,6 +4076,8 @@ cpdef mus_any make_file2frample(filename, buffer_size: Optional[int]=None):
     :rtype: mus_any
     """
     buffer_size = buffer_size or CLM.buffer_size
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(f'file2frample: {filename} does not exist.')
     return  mus_any.from_ptr(cclm.mus_make_file_to_frample_with_buffer_size(filename, buffer_size))
     
 cpdef file2frample(gen: mus_any, loc: int):
@@ -4171,6 +4181,9 @@ cpdef mus_any make_readin(filename: str, chan: int=0, start: int=0, direction: O
     check_range('chan', chan, 0, None)
     check_range('start', start, 0, None)
     check_range('buffer_size', buffer_size, 0, None)
+
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(f'readin: {filename} does not exist.')
     
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_readin_with_buffer_size(filename, chan, start, direction, buffer_size))
