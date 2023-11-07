@@ -914,15 +914,16 @@ cpdef next_power_of_2(x):
     return 2**int(1 + (float(math.log(x + 1)) / math.log(2.0)))
     
     
-
+# TODO: could be simplified now
 cpdef np.ndarray to_partials(harms):
     if isinstance(harms, list):
         p = harms[::2]
         maxpartial = max(p)
-        partials = [0.0] * int(maxpartial+1)
+        partials = np.zeros(int(maxpartial)+1, dtype=np.double)
         check_ndim(partials)
         for i in range(0, len(harms),2):
             partials[int(harms[i])] = harms[i+1]
+        #print('to_partials', partials)
         return partials
     elif isinstance(harms[0], np.double): 
         p = harms[::2]
@@ -931,6 +932,7 @@ cpdef np.ndarray to_partials(harms):
         check_ndim(partials)
         for i in range(0, len(harms),2):
             partials[int(harms[i])] = harms[i+1]
+        #print('to_partials', partials)
         return partials
     else: 
         raise TypeError(f'{type(harms)} cannot be converted to a mus_float_array')
@@ -960,6 +962,9 @@ cpdef bint mus_is_input(obj: mus_any):
 @singledispatch
 def clm_length(x):
     pass
+    
+    
+# TODO: Should thisbe framples?    
     
 @clm_length.register
 def _(x: str):# assume file
@@ -2089,7 +2094,7 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
     
     cdef double [:] xcoeffs_view = None
     cdef double [:] ycoeffs_view = None
-    cdef double [:] prtls_view = None
+
     
     if(isinstance(xcoeffs, np.ndarray | list) ) and (isinstance(ycoeffs, np.ndarray | list)): # should check they are same length
         xcoeffs = np.array(xcoeffs, dtype=np.double)        
@@ -2104,15 +2109,23 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
         gen.cache_extend([xcoeffs, ycoeffs])
         return gen
     else:
-        prtls = to_partials(partials)
+
+        partials = np.array(partials, dtype=np.double)
         
-        prtls = np.array(prtls, dtype=np.double)        
-        prtls_view = prtls
+        p = partials[::2]
+        maxpartial = max(p)
+        
+        prtls = np.zeros(int(maxpartial)+1, dtype=np.double)
         
         check_ndim(prtls)
         
-        gen = mus_any.from_ptr(cclm.mus_make_polywave(frequency, &prtls_view[0], len(prtls), kind))
-        gen.cache_extend([prtls, xcoeffs, ycoeffs])
+        for i in range(0, len(partials),2):
+            prtls[int(partials[i])] = partials[i+1]
+        
+        xcoeffs_view = prtls
+        
+        gen = mus_any.from_ptr(cclm.mus_make_polywave(frequency, &xcoeffs_view[0], len(prtls), kind))
+        gen.cache_append(xcoeffs_view)
         return gen
     
     
