@@ -162,6 +162,8 @@ cdef bint is_simple_filter(gen: mus_any):
     return cclm.mus_is_one_zero(gen._ptr) or cclm.mus_is_one_pole(gen._ptr) or cclm.mus_is_two_zero(gen._ptr) or cclm.mus_is_two_pole(gen._ptr)
     
 
+# cdef bint is_poly(gen: mus_any):
+#     return cclm.mus_is_polywave(gen._ptr) or cclm.mus_is_polyshape(gen._ptr) 
     
 # todo add mus_set_xcoeff and mus_set_ycoeff
 
@@ -238,12 +240,16 @@ cdef class mus_any:
         cdef mus_any wrapper = mus_any.__new__(mus_any)
         wrapper._ptr = _ptr
         wrapper.ptr_owner = owner
-        if cclm.mus_data_exists(wrapper._ptr):  
+        if cclm.mus_data_exists(wrapper._ptr):
             wrapper.set_up_data()
         if cclm.mus_xcoeffs_exists(wrapper._ptr):  
-            wrapper.set_up_xcoeffs()
+            # do not setup this for polywave or polyshape
+            if not (cclm.mus_is_polywave(wrapper._ptr) or cclm.mus_is_polyshape(wrapper._ptr)):
+                wrapper.set_up_xcoeffs()
         if cclm.mus_ycoeffs_exists(wrapper._ptr):  
-            wrapper.set_up_ycoeffs()
+            # do not setup this for polywave or polyshape
+           if not (cclm.mus_is_polywave(wrapper._ptr) or cclm.mus_is_polyshape(wrapper._ptr)):
+                wrapper.set_up_ycoeffs()
         if is_phase_vocoder(wrapper):
             wrapper.set_up_pv_data()
             
@@ -1669,27 +1675,36 @@ cpdef np.ndarray partials2polynomial(partials, kind: Optional[Polynomial]=Polyno
     
     cclm.mus_partials_to_polynomial(len(p), &p_view[0], kind)
     return p
-
+    
+    
 cpdef np.ndarray normalize_partials(partials):
     """
     scales the partial amplitudes in the list/array or list 'partials' by the inverse of their sum (so
-    that they add to 1.0).
+    that they add to 1.0). creates new array
 
     :param partials: list or np.ndarray of partials (harm and amp)
     :return: normalized partials
     :rtype: np.ndarray      
     
     """
-    if isinstance(partials, list):
-        partials = np.array(partials, dtype=np.double)
+    # forgoing use of clm function as having some memory issues 
+    # also c function is meant for in place operation
+    #allocate new array. 
+    partials_arr = np.array(partials, dtype=np.double)
     
-    check_ndim(partials)     
+    check_ndim(partials_arr)
+
+    p = partials_arr[::2]
+
+    v = partials_arr[1::2]
+
+    v_normalized = v / v.sum()
+    result = np.empty((p.size + v.size), dtype=np.double)
+    result[0::2] = p
+    result[1::2] = v_normalized
+
     
-    cdef double [:] partials_view = partials
-        
-    cclm.mus_normalize_partials(len(partials), &partials_view[0])
-    
-    return partials
+    return result
 
 cpdef cython.double chebyshev_tu_sum(x: cython.double, tcoeffs: npt.NDArray[np.float64], ucoeffs: npt.NDArray[np.float64]):
     """
@@ -2096,36 +2111,45 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
     cdef double [:] ycoeffs_view = None
 
     
-    if(isinstance(xcoeffs, np.ndarray | list) ) and (isinstance(ycoeffs, np.ndarray | list)): # should check they are same length
-        xcoeffs = np.array(xcoeffs, dtype=np.double)        
-        xcoeffs_view = xcoeffs
-        ycoeffs = np.array(ycoeffs, dtype=np.double)        
-        ycoeffs_view = ycoeffs
-        check_ndim(xcoeffs)
-        check_ndim(ycoeffs)
-        compare_shapes(xcoeffs, ycoeffs)
-    
-        gen = mus_any.from_ptr(cclm.mus_make_polywave_tu(frequency,&xcoeffs_view[0],&ycoeffs_view[0], len(xcoeffs)))
-        gen.cache_extend([xcoeffs, ycoeffs])
+    if(isinstance(xcoeffs, np.ndarray | list) ) and (isinstance(ycoeffs, np.ndarray | list)): 
+        xcoeffs_arr = np.array(xcoeffs, dtype=np.double)        
+        xcoeffs_view = xcoeffs_arr
+        ycoeffs_arr = np.array(ycoeffs, dtype=np.double)        
+        ycoeffs_view = ycoeffs_arr
+        check_ndim(xcoeffs_arr)
+        check_ndim(ycoeffs_arr)
+        compare_shapes(xcoeffs_arr, ycoeffs_arr)
+        
+        gen = mus_any.from_ptr(cclm.mus_make_polywave_tu(frequency,&xcoeffs_view[0],&ycoeffs_view[0], len(xcoeffs_arr)))
+        gen.cache_extend([xcoeffs_arr, ycoeffs_arr])
         return gen
     else:
-
-        partials = np.array(partials, dtype=np.double)
+        partials_arr = None
+        print("in partials ", partials)
         
-        p = partials[::2]
+        if isinstance(partials, np.ndarray):
+            partials_arr = partials
+        if isinstance(partials, list):
+            partials_arr = np.array(partials, dtype=np.double)     
+        
+
+        
+        p = partials_arr[::2]
         maxpartial = max(p)
         
         prtls = np.zeros(int(maxpartial)+1, dtype=np.double)
         
         check_ndim(prtls)
         
-        for i in range(0, len(partials),2):
-            prtls[int(partials[i])] = partials[i+1]
+        for i in range(0, len(partials_arr),2):
+            curpartial = partials_arr[i]
+            prtls[int(curpartial)] = partials_arr[i+1]
         
         xcoeffs_view = prtls
         
         gen = mus_any.from_ptr(cclm.mus_make_polywave(frequency, &xcoeffs_view[0], len(prtls), kind))
-        gen.cache_append(xcoeffs_view)
+        print("out partials ", partials)
+        gen.cache_extend([prtls])
         return gen
     
     
