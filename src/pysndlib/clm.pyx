@@ -2125,14 +2125,11 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
         return gen
     else:
         partials_arr = None
-        print("in partials ", partials)
         
         if isinstance(partials, np.ndarray):
             partials_arr = partials
         if isinstance(partials, list):
             partials_arr = np.array(partials, dtype=np.double)     
-        
-
         
         p = partials_arr[::2]
         maxpartial = max(p)
@@ -2148,7 +2145,7 @@ cpdef mus_any make_polywave(frequency: float,  partials = [0.,1.],
         xcoeffs_view = prtls
         
         gen = mus_any.from_ptr(cclm.mus_make_polywave(frequency, &xcoeffs_view[0], len(prtls), kind))
-        print("out partials ", partials)
+
         gen.cache_extend([prtls])
         return gen
     
