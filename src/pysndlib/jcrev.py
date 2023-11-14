@@ -1,7 +1,7 @@
 from pysndlib.clm import *
 
 
-def jc_reverb(lowpass=False, volume=1., amp_env = None):
+def jc_reverb(lowpass=False, volume=1., amp_env = None, decay_time=1.0):
    
     allpass1 = make_all_pass(-.7, .7, 1051)
     allpass2 = make_all_pass(-.7, .7, 337)
@@ -12,7 +12,7 @@ def jc_reverb(lowpass=False, volume=1., amp_env = None):
     comb4 = make_comb(.697, 5801)
     chans = clm_channels(CLM.output)
     
-    length = clm_length(CLM.reverb)
+    length = clm_length(CLM.reverb) + (get_srate()*decay_time)
     filts = [make_delay(seconds2samples(.013))] if chans == 1 else [make_delay(seconds2samples(.013)),make_delay(seconds2samples(.011)) ]
     combs = make_comb_bank([comb1, comb2, comb3, comb4])
     allpasses = make_all_pass_bank([allpass1,allpass2,allpass3])

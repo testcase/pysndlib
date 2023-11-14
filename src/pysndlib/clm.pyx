@@ -812,8 +812,10 @@ class Sound(object):
         cdef cclm.mus_float_t [:] vals_view = None
         cdef cclm.mus_long_t [:] times_view = None
         if self.reverb: 
+            
             if self.reverb_to_file:
                 mus_close(CLM.reverb)
+  
                 CLM.reverb = make_file2sample(self.revfile)
                 
                 if self.reverb_data:
@@ -4715,7 +4717,10 @@ cpdef out_bank(gens, loc: int, val: float):
     :rtype: float
     """
     for i in range(len(gens)):
-        out_any(loc, cclm.mus_apply(<cclm.mus_any_ptr>gens[i]._ptr, val, 0.), i, CLM.output)    
+        gen = gens[i]
+        out_any(loc, gen(val, 0.), i, CLM.output)   
+        # the below stopped working for some reason  
+       # out_any(loc, cclm.mus_apply((<cclm.mus_any_ptr>gens[i])._ptr, val, 0.), i, CLM.output)    
 
 
 #--------------- in-any ----------------#

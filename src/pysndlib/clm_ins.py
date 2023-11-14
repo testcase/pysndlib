@@ -757,7 +757,7 @@ def next_prime(n):
             isprime.append(j)
     return min(isprime)
     
-def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
+def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0, decay_time=1.):
     srscale = get_srate() / 25641
     dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19]
     chans = CLM.output.mus_channels
@@ -770,7 +770,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
             val += 1
         dly_len[i] = next_prime(val)
         
-    length = math.floor(get_srate()) + CLM.reverb.mus_length
+    length = math.floor(CLM.reverb.mus_length + (get_srate()*decay_time))
     comb1 = make_comb(.822 * reverb_factor, dly_len[0])
     comb2 = make_comb(.802 * reverb_factor, dly_len[1])
     comb3 = make_comb(.733 * reverb_factor, dly_len[2])
@@ -788,14 +788,15 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0):
     allpass8 = make_all_pass(-.7000, .700, dly_len[14]) if chan4 else None
     
     filts = []
-    
+
     if not chan2:
         filts.append(allpass5)
+    else:
         if not chan4:
             filts.extend([allpass5, allpass6])
         else:
             filts.extend([allpass5, allpass6, allpass7, allpass8])
-    
+
     combs = make_comb_bank([comb1, comb2, comb3, comb4, comb5, comb6])
     allpasses = make_all_pass_bank([allpass1, allpass2, allpass3])
     for i in range(length):
