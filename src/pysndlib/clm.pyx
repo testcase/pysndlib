@@ -653,14 +653,14 @@ cpdef file2ndarray(filename: str, channel: Optional[int]=None, beg: Optional[int
     srate = csndlib.mus_sound_srate(filename)
     bg = beg or 0
     out = np.zeros((1 if (channel != None) else chans, length), dtype=np.double)
-    
+
     cdef double [: , :] arr_view = out
-    
-    if not channel:
-        for i in range(chans):
-            csndlib.mus_file_to_array(filename, i, bg, length, &arr_view[0][i])
+
+    if channel is None:
+        for i in range(chans):  
+            csndlib.mus_file_to_array(filename, i, bg, length, &arr_view[i][0])
     else:
-        csndlib.mus_file_to_array(filename,0, bg, length, &arr_view[0][0])
+        csndlib.mus_file_to_array(filename,channel, bg, length, &arr_view[0][0])
     return out, srate
     
 cpdef ndarray2file(filename: str, arr: npt.NDArray[np.float64], length=None, sr=None, sample_type: Optional[sndlib.sample]=CLM.sample_type, header_type: Optional[sndlib.header]=CLM.header_type, comment=None ):
@@ -1108,6 +1108,9 @@ def validate_envelope(e):
             raise RuntimeError("a valid envelope can only contain numbers.")
     if not all(i < j for i, j in zip(e[: : 2], e[2: : 2])):
         raise RuntimeError("x values of envelope must be increasing")
+        
+        
+
 
 def is_zero(x):
     return x == 0
