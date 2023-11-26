@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; pysndlib 0.5.5 documentation</title>
+    <title>Index &#8212; pysndlib 0.6.1 documentation</title>
   
   
   
@@ -112,7 +112,7 @@
   
   
   
-    <p class="title logo__title">pysndlib 0.5.5 documentation</p>
+    <p class="title logo__title">pysndlib 0.6.1 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -413,8 +413,6 @@ document.write(`
 </li>
       <li><a href="clm_enums.html#pysndlib.clm.Window.CAUCHY">CAUCHY (Window attribute)</a>
 </li>
-      <li><a href="clm_utility_functions.html#pysndlib.clm.cepstrum">cepstrum() (in module pysndlib.clm)</a>
-</li>
       <li><a href="clm_init.html#pysndlib.clm.CLM.channels">channels (CLM attribute)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.chebyshev_t_sum">chebyshev_t_sum() (in module pysndlib.clm)</a>
@@ -440,8 +438,6 @@ document.write(`
       <li><a href="clm_generators.html#pysndlib.clm.continue_sample2file">continue_sample2file() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_utility_functions.html#pysndlib.clm.contrast_enhancement">contrast_enhancement() (in module pysndlib.clm)</a>
-</li>
-      <li><a href="clm_utility_functions.html#pysndlib.clm.convolution">convolution() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.convolve">convolve() (in module pysndlib.clm)</a>
 </li>
@@ -514,6 +510,8 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sndlib_enums.html#pysndlib.sndlib.Header.FARANDOLE">FARANDOLE (Header attribute)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.fft">fft() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.file2frample">file2frample() (in module pysndlib.clm)</a>
 </li>
@@ -936,14 +934,14 @@ document.write(`
         <li><a href="index.html#module-pysndlib.sndlib">pysndlib.sndlib</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_generators.html#pysndlib.clm.move_locsig">move_locsig() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.moving_average">moving_average() (in module pysndlib.clm)</a>
 </li>
       <li><a href="clm_generators.html#pysndlib.clm.moving_max">moving_max() (in module pysndlib.clm)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clm_generators.html#pysndlib.clm.moving_norm">moving_norm() (in module pysndlib.clm)</a>
 </li>
       <li><a href="sndlib_enums.html#pysndlib.sndlib.Header.MPEG">MPEG (Header attribute)</a>
@@ -954,11 +952,19 @@ document.write(`
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any">mus_any (class in pysndlib.clm)</a>
 </li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_autocorrelate">mus_autocorrelate() (in module pysndlib.clm)</a>
+</li>
       <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_bytes_per_sample">mus_bytes_per_sample() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_cepstrum">mus_cepstrum() (in module pysndlib.clm)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_channel">mus_channel (mus_any attribute)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_channels">mus_channels (mus_any attribute)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_convolution">mus_convolution() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_correlate">mus_correlate() (in module pysndlib.clm)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_data">mus_data (mus_any attribute)</a>
 </li>
@@ -990,7 +996,13 @@ document.write(`
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_phase">mus_phase (mus_any attribute)</a>
 </li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_polar2rectangular">mus_polar2rectangular() (in module pysndlib.clm)</a>
+</li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_ramp">mus_ramp (mus_any attribute)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_rectangular2magnitudes">mus_rectangular2magnitudes() (in module pysndlib.clm)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_rectangular2polar">mus_rectangular2polar() (in module pysndlib.clm)</a>
 </li>
       <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sample_type_name">mus_sample_type_name() (in module pysndlib.sndlib)</a>
 </li>
@@ -1065,6 +1077,8 @@ document.write(`
       <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_srate">mus_sound_srate() (in module pysndlib.sndlib)</a>
 </li>
       <li><a href="sndlib_functions.html#pysndlib.sndlib.mus_sound_type_specifier">mus_sound_type_specifier() (in module pysndlib.sndlib)</a>
+</li>
+      <li><a href="clm_utility_functions.html#pysndlib.clm.mus_spectrum">mus_spectrum() (in module pysndlib.clm)</a>
 </li>
       <li><a href="mus_any.html#pysndlib.clm.mus_any.mus_width">mus_width (mus_any attribute)</a>
 </li>

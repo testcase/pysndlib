@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>CLM Utility Functions &#8212; pysndlib 0.5.5 documentation</title>
+    <title>CLM Utility Functions &#8212; pysndlib 0.6.1 documentation</title>
   
   
   
@@ -115,7 +115,7 @@
   
   
   
-    <p class="title logo__title">pysndlib 0.5.5 documentation</p>
+    <p class="title logo__title">pysndlib 0.6.1 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -315,16 +315,23 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polar2rectangular"><code class="docutils literal notranslate"><span class="pre">polar2rectangular()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.convolution"><code class="docutils literal notranslate"><span class="pre">convolution()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.autocorrelate"><code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.cepstrum"><code class="docutils literal notranslate"><span class="pre">cepstrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2polar"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_polar2rectangular"><code class="docutils literal notranslate"><span class="pre">mus_polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_convolution"><code class="docutils literal notranslate"><span class="pre">mus_convolution()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_spectrum"><code class="docutils literal notranslate"><span class="pre">mus_spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_autocorrelate"><code class="docutils literal notranslate"><span class="pre">mus_autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_correlate"><code class="docutils literal notranslate"><span class="pre">mus_correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_cepstrum"><code class="docutils literal notranslate"><span class="pre">mus_cepstrum()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partials">Partials</a><ul class="nav section-nav flex-column">
@@ -357,8 +364,6 @@ document.write(`
                   
   <section id="clm-utility-functions">
 <h1>CLM Utility Functions<a class="headerlink" href="#clm-utility-functions" title="Permalink to this heading">#</a></h1>
-<p><strong>in pysndlib.clm</strong></p>
-<p>the following are in the pysndlib.clm module</p>
 <section id="sampling-rate">
 <h2>Sampling rate<a class="headerlink" href="#sampling-rate" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
@@ -758,30 +763,6 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <section id="fft-and-convolution">
 <h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.mus_fft">
-<span class="sig-name descname"><span class="pre">mus_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_fft" title="Permalink to this definition">#</a></dt>
-<dd><p>return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
-power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
-<li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
-<li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>result written into rdat</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_fft_window">
 <span class="sig-name descname"><span class="pre">make_fft_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_fft_window" title="Permalink to this definition">#</a></dt>
 <dd><p>fft data window (a ndarray). type is one of the sndlib fft window identifiers such as
@@ -805,9 +786,187 @@ window.kaiser, beta is the window family parameter, if any.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.fft">
+<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition">#</a></dt>
+<dd><p>return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
+<li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
+<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of copy of rdat and idat</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.rectangular2polar">
 <span class="sig-name descname"><span class="pre">rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2polar" title="Permalink to this definition">#</a></dt>
-<dd><p>convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
+<dd><p>convert real/imaginary data in rdat and idat from rectangular form (fft output) to polar form (a
+spectrum).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return::return<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of magnitude and phases</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.rectangular2magnitudes">
+<span class="sig-name descname"><span class="pre">rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
+<dd><p>convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+ignore the phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>magnitude</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.polar2rectangular">
+<span class="sig-name descname"><span class="pre">polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polar2rectangular" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – magnitude data</p></li>
+<li><p><strong>imaginary</strong> – phases data</p></li>
+<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>real and imaginary</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.spectrum">
+<span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
+fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
+scaled:
+spectrum.in_db= data in db,
+spectrum.normalized (default) = linear and normalized
+spectrum.raw = linear and un-normalized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – fft window</p></li>
+<li><p><strong>norm_type</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a><em>]</em>) – normalization type</p></li>
+<li><p><strong>idat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>spectrum</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.autocorrelate">
+<span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.autocorrelate" title="Permalink to this definition">#</a></dt>
+<dd><p>autocorrelation of data (a ndarray).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>autocorrelation result</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.correlate">
+<span class="sig-name descname"><span class="pre">correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.correlate" title="Permalink to this definition">#</a></dt>
+<dd><p>cross-correlation of data1 and data2 (both ndarrays).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 1</p></li>
+<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 2</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>correlation result</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.mus_fft">
+<span class="sig-name descname"><span class="pre">mus_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_fft" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>imaginary</strong> – imaginary data</p></li>
+<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
+<li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
+<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>result written into rdat</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.mus_rectangular2polar">
+<span class="sig-name descname"><span class="pre">mus_rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2polar" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
 spectrum).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -827,9 +986,9 @@ spectrum).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.rectangular2magnitudes">
-<span class="sig-name descname"><span class="pre">rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
-<dd><p>convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+<dt class="sig sig-object py" id="pysndlib.clm.mus_rectangular2magnitudes">
+<span class="sig-name descname"><span class="pre">mus_rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
 ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -849,9 +1008,9 @@ ignore the phases.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.polar2rectangular">
-<span class="sig-name descname"><span class="pre">polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polar2rectangular" title="Permalink to this definition">#</a></dt>
-<dd><p>convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_polar2rectangular">
+<span class="sig-name descname"><span class="pre">mus_polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_polar2rectangular" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -870,9 +1029,9 @@ ignore the phases.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.convolution">
-<span class="sig-name descname"><span class="pre">convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.convolution" title="Permalink to this definition">#</a></dt>
-<dd><p>convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_convolution">
+<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -891,9 +1050,9 @@ ignore the phases.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.spectrum">
-<span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.spectrum" title="Permalink to this definition">#</a></dt>
-<dd><p>real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
+<dt class="sig sig-object py" id="pysndlib.clm.mus_spectrum">
+<span class="sig-name descname"><span class="pre">mus_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>in-place operation. real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
 fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
 scaled:
 spectrum.in_db= data in db,
@@ -905,7 +1064,7 @@ spectrum.raw = linear and un-normalized.</p>
 <li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
 <li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – fft window</p></li>
-<li><p><strong>norm_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a>) – normalization type</p></li>
+<li><p><strong>norm_type</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a><em>]</em>) – normalization type</p></li>
 <li><p><strong>idat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -919,8 +1078,8 @@ spectrum.raw = linear and un-normalized.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.autocorrelate">
-<span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.autocorrelate" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_autocorrelate">
+<span class="sig-name descname"><span class="pre">mus_autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_autocorrelate" title="Permalink to this definition">#</a></dt>
 <dd><p>in place autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -936,8 +1095,8 @@ spectrum.raw = linear and un-normalized.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.correlate">
-<span class="sig-name descname"><span class="pre">correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.correlate" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_correlate">
+<span class="sig-name descname"><span class="pre">mus_correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_correlate" title="Permalink to this definition">#</a></dt>
 <dd><p>in place cross-correlation of data1 and data2 (both ndarrays).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -956,8 +1115,8 @@ spectrum.raw = linear and un-normalized.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.cepstrum">
-<span class="sig-name descname"><span class="pre">cepstrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.cepstrum" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pysndlib.clm.mus_cepstrum">
+<span class="sig-name descname"><span class="pre">mus_cepstrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_cepstrum" title="Permalink to this definition">#</a></dt>
 <dd><p>return cepstrum of signal</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1046,7 +1205,7 @@ waveshaping) the harmonic spectrum described by the partials argument.</p>
 <dt class="sig sig-object py" id="pysndlib.clm.normalize_partials">
 <span class="sig-name descname"><span class="pre">normalize_partials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.normalize_partials" title="Permalink to this definition">#</a></dt>
 <dd><p>scales the partial amplitudes in the list/array or list ‘partials’ by the inverse of their sum (so
-that they add to 1.0).</p>
+that they add to 1.0). creates new array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p>
@@ -1207,16 +1366,23 @@ that they add to 1.0).</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polar2rectangular"><code class="docutils literal notranslate"><span class="pre">polar2rectangular()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.convolution"><code class="docutils literal notranslate"><span class="pre">convolution()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.autocorrelate"><code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.cepstrum"><code class="docutils literal notranslate"><span class="pre">cepstrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2polar"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_polar2rectangular"><code class="docutils literal notranslate"><span class="pre">mus_polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_convolution"><code class="docutils literal notranslate"><span class="pre">mus_convolution()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_spectrum"><code class="docutils literal notranslate"><span class="pre">mus_spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_autocorrelate"><code class="docutils literal notranslate"><span class="pre">mus_autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_correlate"><code class="docutils literal notranslate"><span class="pre">mus_correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_cepstrum"><code class="docutils literal notranslate"><span class="pre">mus_cepstrum()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partials">Partials</a><ul class="nav section-nav flex-column">

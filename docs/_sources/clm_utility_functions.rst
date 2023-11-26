@@ -28,10 +28,6 @@ Even/Odd multiples and weighting
 .. autofunction:: even_multiple
 .. autofunction:: odd_weight
 .. autofunction:: even_weight
-
-
-
-
 .. autofunction:: ring_modulate
 .. autofunction:: amplitude_modulate
 .. autofunction:: contrast_enhancement
@@ -43,19 +39,23 @@ Even/Odd multiples and weighting
 
 FFT and Convolution		
 ----------------------
-
-.. autofunction:: fft
 .. autofunction:: make_fft_window
+.. autofunction:: fft
 .. autofunction:: rectangular2polar
 .. autofunction:: rectangular2magnitudes
 .. autofunction:: polar2rectangular
-.. autofunction:: convolution
-
 .. autofunction:: spectrum
-
 .. autofunction:: autocorrelate
 .. autofunction:: correlate
-.. autofunction:: cepstrum
+.. autofunction:: mus_fft
+.. autofunction:: mus_rectangular2polar
+.. autofunction:: mus_rectangular2magnitudes
+.. autofunction:: mus_polar2rectangular
+.. autofunction:: mus_convolution
+.. autofunction:: mus_spectrum
+.. autofunction:: mus_autocorrelate
+.. autofunction:: mus_correlate
+.. autofunction:: mus_cepstrum
 
 Partials	
 ----------

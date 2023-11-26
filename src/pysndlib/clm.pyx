@@ -105,7 +105,7 @@ CLM  = types.SimpleNamespace(
     table_size = 512,
     buffer_size = 65536,
     locsig_type = Interp.LINEAR,
-    clipped = True,
+    clipped = False,
     output = False,
     delete_reverb = False
 )
@@ -225,7 +225,7 @@ cdef class mus_any:
         raise TypeError("this class cannot be instantiated directly.")
 
     @staticmethod
-    cdef mus_any from_ptr(cclm.mus_any *_ptr, bint owner=True):
+    cdef mus_any from_ptr(cclm.mus_any *_ptr, bint owner=True, int length=0): #adding brkpoints as want to know number of brkpoints in envelope. kind of hacky 
         """
         factory function to create mus_any objects from
         given mus_any pointer.
@@ -241,7 +241,7 @@ cdef class mus_any:
         wrapper._ptr = _ptr
         wrapper.ptr_owner = owner
         if cclm.mus_data_exists(wrapper._ptr):
-            wrapper.set_up_data()
+            wrapper.set_up_data(length=length)
         if cclm.mus_xcoeffs_exists(wrapper._ptr):  
             # do not setup this for polywave or polyshape
             if not (cclm.mus_is_polywave(wrapper._ptr) or cclm.mus_is_polyshape(wrapper._ptr)):
@@ -269,12 +269,17 @@ cdef class mus_any:
         
     # this stuff with view.array is to work around an apparent bug when automatic string handling is turned on
     # https://github.com/cython/cython/issues/4521        
-    cpdef set_up_data(self):
+    cpdef set_up_data(self , int length=0):
         """
         :meta private:
         """
         cdef view.array arr = None
         cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
+        
+        if cclm.mus_is_env(self._ptr):
+            size = length
+        
+        
         if size > 0:
             self._data_ptr = cclm.mus_data(self._ptr)
             arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
@@ -1312,7 +1317,7 @@ cpdef cython.double contrast_enhancement(insig: cython.double, fm_index: cython.
     """
     return cclm.mus_contrast_enhancement(insig, fm_index)
     
-
+# changed 11-26-23 to not modify inplace
 cpdef cython.double dot_product(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
     """
     returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product).
@@ -1380,28 +1385,6 @@ cpdef cython.double mus_interpolate(interp_type: Interp, x: cython.double, table
     cdef double [:] table_view = table
     return cclm.mus_interpolate(<cclm.mus_interp_t>interp_type, x, &table_view[0], len(table), y1)
    
-cpdef np.ndarray mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
-    """
-    return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
-    power of 2, dir = 1 for fft, -1 for inverse-fft.
-    
-    :param rdat: real data
-    :param imaginary: imaginary data
-    :param fft_size: must be power of two
-    :param sign: 1 for fft, -1 for inverse-fft
-    :return: result written into rdat
-    :rtype: np.ndarray
-    
-    """
-    check_ndim(rdat)
-    check_ndim(idat)
-    compare_shapes(rdat, idat)
-    
-    cdef double [:] rdat_view = rdat
-    cdef double [:] idat_view = idat
-    res = cclm.mus_fft(&rdat_view[0], &idat_view[0], fft_size, sign)
-    return rdat
-
 cpdef np.ndarray make_fft_window(window_type: Window, size: int, beta: Optional[float]=0.0, alpha: Optional[float]=0.0):
     """
     fft data window (a ndarray). type is one of the sndlib fft window identifiers such as
@@ -1421,10 +1404,60 @@ cpdef np.ndarray make_fft_window(window_type: Window, size: int, beta: Optional[
     cdef double [:] win_view = win
     cclm.mus_make_fft_window_with_window(<cclm.mus_fft_window_t>window_type, size, beta, alpha, &win_view[0])
     return win
-
-cpdef np.ndarray rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    
+cpdef np.ndarray mus_fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
     """
-    convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
+    in-place operation. return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+    power of 2, dir = 1 for fft, -1 for inverse-fft.
+    
+    :param rdat: real data
+    :param imaginary: imaginary data
+    :param fft_size: must be power of two
+    :param sign: 1 for fft, -1 for inverse-fft
+    :return: result written into rdat
+    :rtype: np.ndarray
+    
+    """
+    check_ndim(rdat)
+    check_ndim(idat)
+    compare_shapes(rdat, idat)
+    
+    cdef double [:] rdat_view = rdat
+    cdef double [:] idat_view = idat
+    res = cclm.mus_fft(&rdat_view[0], &idat_view[0], fft_size, sign)
+    return rdat
+    
+    
+def fft(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], fft_size: int, sign: int):
+    """
+    return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
+    power of 2, dir = 1 for fft, -1 for inverse-fft.
+    
+    :param rdat: real data
+    :param imaginary: imaginary data
+    :param fft_size: must be power of two
+    :param sign: 1 for fft, -1 for inverse-fft
+    :return: tuple of copy of rdat and idat
+    :rtype: tuple
+    
+    """
+    check_ndim(rdat)
+    check_ndim(idat)
+    compare_shapes(rdat, idat)
+    
+    rdat_cpy = np.copy(rdat)
+    idat_cpy = np.copy(idat)
+    
+    cdef double [:] rdat_view = rdat_cpy
+    cdef double [:] idat_view = idat_cpy
+    res = cclm.mus_fft(&rdat_view[0], &idat_view[0], fft_size, sign)
+    return rdat_cpy, idat_cpy
+
+
+
+cpdef np.ndarray mus_rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """
+    in-place operation. convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
     spectrum).
     
     :param rdat: real data
@@ -1443,10 +1476,35 @@ cpdef np.ndarray rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDAr
     cdef double [:] idat_view = idat
     res = cclm.mus_rectangular_to_polar(&rdat_view[0], &idat_view[0], size)
     return rdat
-
-cpdef np.ndarray rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    
+def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """
-    convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+    convert real/imaginary data in rdat and idat from rectangular form (fft output) to polar form (a
+    spectrum).
+    
+    :param rdat: real data
+    :param imaginary:  imaginary data
+    :return::return: tuple of magnitude and phases
+    :rtype: tuple
+    
+    """
+    size = len(rdat)
+    
+    check_ndim(rdat)
+    check_ndim(idat)
+    compare_shapes(rdat, idat)
+    
+    rdat_cpy = np.copy(rdat)
+    idat_cpy = np.copy(idat)
+    
+    cdef double [:] rdat_view = rdat_cpy
+    cdef double [:] idat_view = idat_cpy
+    res = cclm.mus_rectangular_to_polar(&rdat_view[0], &idat_view[0], size)
+    return rdat_cpy, idat_cpy
+
+cpdef np.ndarray mus_rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """
+    in-place operation. convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
     ignore the phases.
     
     :param rdat: real data
@@ -1456,16 +1514,40 @@ cpdef np.ndarray rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt
     
     """
     size = len(rdat)
+    compare_shapes(rdat, idat)
     cdef double [:] rdat_view = rdat
     cdef double [:] idat_view = idat
-    compare_shapes(rdat, idat)
+
     
     cclm.mus_rectangular_to_magnitudes(&rdat_view[0], &idat_view[0], size)
     return rdat
-
-cpdef np.ndarray polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    
+def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
     """
-    convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).
+    convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
+    ignore the phases.
+    
+    :param rdat: real data
+    :param imaginary:  imaginary data
+    :return: magnitude
+    :rtype: np.ndarray
+    
+    """
+    size = len(rdat)
+    compare_shapes(rdat, idat)
+    rdat_cpy = np.copy(rdat)
+    idat_cpy = np.copy(idat) #probably don't need to do this because idat should not be changed
+    
+    cdef double [:] rdat_view = rdat_cpy
+    cdef double [:] idat_view = idat_cpy
+
+    
+    cclm.mus_rectangular_to_magnitudes(&rdat_view[0], &idat_view[0], size)
+    return rdat_cpy
+
+cpdef np.ndarray mus_polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """
+    in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).
     
     :param rdat: magnitude data
     :param imaginary: phases data
@@ -1481,7 +1563,64 @@ cpdef np.ndarray polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDAr
     cclm.mus_polar_to_rectangular(&rdat_view[0], &idat_view[0], size)
     return rdat
 
-cpdef np.ndarray spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.cython.double64], norm_type: Spectrum):
+
+def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+    """
+    in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).
+    
+    :param rdat: magnitude data
+    :param imaginary: phases data
+    :return: real and imaginary
+    :rtype: tuple
+    
+    """
+    size = len(rdat)
+    compare_shapes(rdat, idat)
+
+   
+    rdat_cpy = np.copy(rdat)
+    idat_cpy = np.copy(idat) #probably don't need to do this because idat should not be changed
+    cdef double [:] rdat_view = rdat_cpy
+    cdef double [:] idat_view = idat_cpy
+    
+    cclm.mus_polar_to_rectangular(&rdat_view[0], &idat_view[0], size)
+    return rdat_cpy, idat_cpy
+
+    
+cpdef np.ndarray mus_spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.cython.double64], norm_type: Optional[Spectrum] = Spectrum.IN_DB):
+    """
+    in-place operation. real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
+    fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
+    scaled:
+    spectrum.in_db= data in db,
+    spectrum.normalized (default) = linear and normalized
+    spectrum.raw = linear and un-normalized.
+    
+    :param rdat: real data
+    :param imaginary: imaginary data
+    :param window: fft window
+    :param norm_type: normalization type
+    :return: spectrum
+    :rtype: np.ndarray
+              
+    """
+    if isinstance(window, list):
+        window = np.array(window, dtype=np.double)
+    size = len(rdat)
+    check_ndim(rdat)
+    check_ndim(idat)
+    check_ndim(window)
+    compare_shapes(rdat, idat)
+    
+    cdef double [:] rdat_view = rdat
+    cdef double [:] idat_view = idat
+    cdef double [:] window_view = window
+    
+
+    cclm.mus_spectrum(&rdat_view[0], &idat_view[0], &window_view[0], size, <cclm.mus_spectrum_t>norm_type)
+    return rdat
+    
+def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.cython.double64], norm_type: Optional[Spectrum] = Spectrum.IN_DB):
     """
     real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
     fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
@@ -1501,21 +1640,24 @@ cpdef np.ndarray spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.fl
     if isinstance(window, list):
         window = np.array(window, dtype=np.double)
     size = len(rdat)
-    cdef double [:] rdat_view = rdat
-    cdef double [:] idat_view = idat
-    cdef double [:] window_view = window
-    
     check_ndim(rdat)
     check_ndim(idat)
     check_ndim(window)
     compare_shapes(rdat, idat)
+    rdat_cpy = np.copy(rdat)
+    idat_cpy = np.copy(idat) #probably don't need to do this because idat should not be changed
+
+    cdef double [:] rdat_view = rdat_cpy
+    cdef double [:] idat_view = idat_cpy
+    cdef double [:] window_view = window
     
     cclm.mus_spectrum(&rdat_view[0], &idat_view[0], &window_view[0], size, <cclm.mus_spectrum_t>norm_type)
-    return rdat
+    return rdat_cpy
+    
 
-cpdef np.ndarray convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64], fft_size: int):
+cpdef np.ndarray mus_convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64], fft_size: int):
     """
-    convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
+    in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
 
     :param rl1: input data 1
     :param rl2: input  data 2
@@ -1533,8 +1675,36 @@ cpdef np.ndarray convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.f
     
     cclm.mus_convolution(&rl1_view[0], &rl2_view[0], size)
     return rl1
+    
+    
 
-cpdef np.ndarray autocorrelate(data: npt.NDArray[np.float64]):
+def convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64], fft_size: int):
+    """
+    convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
+
+    :param rl1: input data 1
+    :param rl2: input  data 2
+    :param fft_size: fft size
+    :return: convolved output.
+    :rtype: np.ndarray
+    
+    """
+    size = len(rl1)
+    check_ndim(rl1)
+    check_ndim(rl2)
+    compare_shapes(rl1, rl2)
+    rl1_cpy = np.copy(rl1)
+    rl2_cpy = np.copy(rl2) #probably do
+    
+    
+    cdef double [:] rl1_view = rl1_cpy
+    cdef double [:] rl2_view = rl2_cpy
+
+    
+    cclm.mus_convolution(&rl1_view[0], &rl2_view[0], size)
+    return rl1_cpy
+
+cpdef np.ndarray mus_autocorrelate(data: npt.NDArray[np.float64]):
     """
     in place autocorrelation of data (a ndarray).
 
@@ -1550,7 +1720,25 @@ cpdef np.ndarray autocorrelate(data: npt.NDArray[np.float64]):
     cclm.mus_autocorrelate(&data_view[0], size)
     return data
     
-cpdef np.ndarray correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+    
+def autocorrelate(data: npt.NDArray[np.float64]):
+    """
+    autocorrelation of data (a ndarray).
+
+    :param data: data
+    :return: autocorrelation result
+    :rtype: np.ndarray
+
+    """
+    size = len(data)
+    check_ndim(data)
+    data_cpy = np.copy(data) #probably do
+    
+    cdef double [:] data_view = data_cpy
+    cclm.mus_autocorrelate(&data_view[0], size)
+    return data_cpy
+    
+cpdef np.ndarray mus_correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
     """
     in place cross-correlation of data1 and data2 (both ndarrays).
     
@@ -1571,8 +1759,33 @@ cpdef np.ndarray correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np
 
     cclm.mus_correlate(&data1_view[0], &data2_view[0], size)
     return data1
+    
+    
+def correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+    """
+    cross-correlation of data1 and data2 (both ndarrays).
+    
+    :param data1: data 1
+    :param data2: data 2
+    :return: correlation result
+    :rtype: np.ndarray
+    
+    
+    """
+    
+    size = len(data1)
+    check_ndim(data1)
+    check_ndim(data2)
+    data1_cpy = np.copy(data1)
+    data2_cpy = np.copy(data2) 
+    compare_shapes(data1, data2)
+    cdef double [:] data1_view = data1_cpy
+    cdef double [:] data2_view = data2_cpy
 
-cpdef np.ndarray cepstrum(data: npt.NDArray[np.float64]):
+    cclm.mus_correlate(&data1_view[0], &data2_view[0], size)
+    return data1_cpy
+
+cpdef np.ndarray mus_cepstrum(data: npt.NDArray[np.float64]):
     """
     return cepstrum of signal
     
@@ -1585,6 +1798,21 @@ cpdef np.ndarray cepstrum(data: npt.NDArray[np.float64]):
     cdef double [:] data_view = data
     cclm.mus_cepstrum(&data_view[0], size)
     return data
+    
+def cepstrum(data: npt.NDArray[np.float64]):
+    """
+    return cepstrum of signal
+    
+    :param data: samples to analyze
+    :return: cepstrum.
+    :rtype: np.ndarray
+    """
+    size = len(data)
+    check_ndim(data)
+    data_cpy = np.copy(data)
+    cdef double [:] data_view = data_cpy
+    cclm.mus_cepstrum(&data_view[0], size)
+    return data_cpy
     
 cpdef np.ndarray partials2wave(partials, wave: npt.NDArray[np.float64]=None, table_size: Optional[int]=None, norm: Optional[bool]=True ):
     """
@@ -1897,8 +2125,7 @@ cpdef mus_any make_env(envelope, scaler: Optional[float]=1.0, duration: Optional
     check_ndim(envelope)
 
     cdef double [:] envelope_view = envelope
-    
-    gen =  mus_any.from_ptr(cclm.mus_make_env(&envelope_view[0], len(envelope) // 2, scaler, offset, base, duration, 0, NULL))
+    gen =  mus_any.from_ptr(cclm.mus_make_env(&envelope_view[0], len(envelope) // 2, scaler, offset, base, duration, 0, NULL),owner=True, length=len(envelope))
     gen.cache_append(envelope)
     return gen
 
