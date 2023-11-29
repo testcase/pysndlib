@@ -297,13 +297,14 @@ cdef class mus_any:
         #if simple filter the size will always be 3 and we do not want to
         #allocate a buffer
         # in other cases mus_order will be size and we do want to allocate
-        
+       
         if is_simple_filter(self):
             size = 3      
             self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
             arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
             arr.data = <char*>self._xcoeffs_ptr
             self._xcoeffs = np.asarray(arr)
+            #print('setup xcoeffs', size,is_simple_filter(self), self._xcoeffs, arr)
         else: 
             size = cclm.mus_order(self._ptr)   
             self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
@@ -323,10 +324,11 @@ cdef class mus_any:
         
         if is_simple_filter(self):
             size = 3      
-            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            self._ycoeffs_ptr = cclm.mus_ycoeffs(self._ptr)
             arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
             arr.data = <char*>self._ycoeffs_ptr
-            self._xcoeffs = np.asarray(arr)
+            self._ycoeffs = np.asarray(arr)
+           # print('setup ycoeffs',  size,is_simple_filter(self), self._xcoeffs, arr)
         else: 
             size = cclm.mus_order(self._ptr)   
             self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
@@ -572,7 +574,7 @@ cdef class mus_any:
         y (output, feedback) coefficient, np.ndarray
         not setable
         """
-        if not cclm.mus_xcoeffs_exists(self._ptr):   #could do this on all properties but seems best with array 
+        if not cclm.mus_ycoeffs_exists(self._ptr):   #could do this on all properties but seems best with array 
             raise TypeError(f'mus_ycoeffs can not be called on {cclm.mus_name(self._ptr)}')
         return self._ycoeffs
     
