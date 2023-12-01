@@ -2,7 +2,8 @@
 # cython: c_string_encoding=utf8
 
 import ctypes
-from functools import singledispatch, partial
+#from functools import singledispatch, partial
+import functools
 import math
 import random
 import subprocess
@@ -331,10 +332,10 @@ cdef class mus_any:
            # print('setup ycoeffs',  size,is_simple_filter(self), self._xcoeffs, arr)
         else: 
             size = cclm.mus_order(self._ptr)   
-            self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
+            self._ycoeffs_ptr = cclm.mus_ycoeffs(self._ptr)
             arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
             arr.data = <char*>self._ycoeffs_ptr
-            self._xcoeffs = np.asarray(arr)    
+            self._ycoeffs = np.asarray(arr)    
         
         
     cpdef set_up_pv_data(self):
@@ -825,17 +826,24 @@ class Sound(object):
   
                 CLM.reverb = make_file2sample(self.revfile)
                 
-                if self.reverb_data:
-                    self.reverb(**self.reverb_data)
+                if isinstance(self.reverb, functools.partial):
+                    self.reverb() ## reverb_data will be ignored in this case
                 else:
-                    self.reverb()
+                    if self.reverb_data:
+                        self.reverb()(**self.reverb_data)
+                    else:
+                        self.reverb()()
+                    
                 mus_close(CLM.reverb)
 
             if is_list_or_ndarray(CLM.reverb):
-                if self.reverb_data:
-                    self.reverb(**self.reverb_data)
+                if isinstance(self.reverb, functools.partial):
+                    self.reverb() ## reverb_data will be ignored in this case
                 else:
-                    self.reverb()          
+                    if self.reverb_data:
+                        self.reverb()(**self.reverb_data)
+                    else:
+                        self.reverb()()          
 
         if self.output_to_file:
             mus_close(CLM.output)
@@ -970,11 +978,17 @@ cpdef bint mus_is_input(obj: mus_any):
     """
     return cclm.mus_is_input(obj._ptr)
 
+cpdef mus_reset(obj: mus_any):
+    """
+    set gen to default starting state
+    """
+    cclm.mus_reset(obj._ptr)
+    
 
 # prepending clm to functions to avoid name clashes
     
 # --------------- clm_length ---------------- #
-@singledispatch
+@functools.singledispatch
 def clm_length(x):
     pass
     
@@ -1008,7 +1022,7 @@ def _(x: np.ndarray):
 
 
 # --------------- clm_channels ---------------- #
-@singledispatch
+@functools.singledispatch
 def clm_channels(x):
     pass
     
@@ -1034,7 +1048,7 @@ def _(x: np.ndarray):
         raise RuntimeError(f'ndarray must have 1 or 2 dimensions not {x.ndim}. ')
         
 # --------------- clm_srate ---------------- #
-@singledispatch
+@functools.singledispatch
 def clm_srate(x):
     pass
 
@@ -1043,7 +1057,7 @@ def _(x: str): #file
     return csndlib.mus_sound_srate(x)
   
 # --------------- clm_framples ---------------- #
-@singledispatch
+@functools.singledispatch
 def clm_framples(x):
     pass
     
@@ -1069,7 +1083,7 @@ def _(x: np.ndarray):
         raise RuntimeError(f'ndarray must have 1 or 2 dimensions not {x.ndim}. ')
         
 # --------------- clm random ---------------- # 
-@singledispatch
+@functools.singledispatch
 def _random(x):
     pass
 
@@ -1081,7 +1095,7 @@ def _(x: float):
 def _(x: int):
     return random.randrange(x)
 
-@singledispatch
+@functools.singledispatch
 def _random2(x, y):
     pass
     
@@ -3344,21 +3358,18 @@ cpdef mus_any make_filter(order: int, xcoeffs, ycoeffs):
     :return: filter gen
     :rtype: mus_any
     """
-    cdef double [:] xcoeffs_view = None
-    cdef double [:] ycoeffs_view = None
 
-    if isinstance(xcoeffs, list):
-        xcoeffs = np.array(xcoeffs, dtype=np.double)        
-        
-    if isinstance(ycoeffs, list):
-        ycoeffs = np.array(ycoeffs, dtype=np.double)        
+    xcoeffs_cpy = np.array(xcoeffs, dtype=np.double)        
+    ycoeffs_cpy = np.array(ycoeffs, dtype=np.double)        
        
-    xcoeffs_view = xcoeffs
-    ycoeffs_view = ycoeffs
+    cdef double [:] xcoeffs_view = xcoeffs_cpy
+    cdef double [:] ycoeffs_view = ycoeffs_cpy
 
     gen =  mus_any.from_ptr(cclm.mus_make_filter(order, &xcoeffs_view[0], &ycoeffs_view[0], NULL))
     
-    gen.cache_extend([xcoeffs, ycoeffs])
+    gen.cache_extend([xcoeffs_cpy, ycoeffs_cpy])
+    print(xcoeffs_cpy)
+    print(ycoeffs_cpy)
     return gen
     
 cpdef cython.double filter(gen: mus_any, insig: float): # todo : conflicts with buitl in function
@@ -5339,6 +5350,7 @@ cpdef is_array_readin(gen):
 
 
 
+
 # # todo: maybe add an exception that have to use keyword args
 def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
     class mus_gen():
@@ -5355,7 +5367,7 @@ def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
         return gen if not wrapper else wrapper(gen)
     def is_a(gen):
         return isinstance(gen, mus_gen) and gen.name == name
-    g =  partial(make_generator, **slots)
+    g =  functools.partial(make_generator, **slots)
     if docstring is not None:
         g.__doc__ = docstring
     
@@ -5403,6 +5415,11 @@ def array_reader(arr, chan, loop=0):
 def sndplay(file):
     subprocess.run([CLM.player,file])
     
-    
+#decorator for reverbs.
+def clm_reverb(func):
+    @functools.wraps(func)
+    def call(*args, **kwargs):
+        return functools.partial(func,*args, **kwargs)
+    return call 
 
 

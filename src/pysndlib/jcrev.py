@@ -1,6 +1,7 @@
 from pysndlib.clm import *
 
 
+@clm_reverb
 def jc_reverb(lowpass=False, volume=1., amp_env = None, decay_time=1.0):
    
     allpass1 = make_all_pass(-.7, .7, 1051)
@@ -23,7 +24,7 @@ def jc_reverb(lowpass=False, volume=1., amp_env = None, decay_time=1.0):
         
         if lowpass:
             for i in range(length):
-                out_bank(filts, i, (env(envA) * fir_filter(flt, comb_bank(combs, all_pass(allpasses, ina(i, CLM.reverb))))))
+                out_bank(filts, i, (env(envA) * fir_filter(flt, comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb))))))
         else:
             for i in range(length):
                 out_bank(filts, i, (env(envA) * comb_bank(combs, all_pass_bank(allpasses, ina(i, CLM.reverb)))))

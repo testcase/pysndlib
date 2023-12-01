@@ -1,9 +1,9 @@
+import functools
 import math
+
 import numpy as np
 from pysndlib.clm import *
 from .env import stretch_envelope, interleave, max_envelope, min_envelope
-
-
 
 # from pysndlib.env import stretch_envelope
 # --------------- pluck ---------------- #
@@ -756,7 +756,9 @@ def next_prime(n):
         if val_is_prime:
             isprime.append(j)
     return min(isprime)
+
     
+@clm_reverb
 def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0, decay_time=1.):
     srscale = get_srate() / 25641
     dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19]

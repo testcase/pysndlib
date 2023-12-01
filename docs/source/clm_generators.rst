@@ -25,7 +25,7 @@ all_pass
     mus_data         delay line itself (not setable)
     mus_feedback     feedback scaler
     mus_feedforward  feedforward scaler
-    mus_interp-type  interpolation choice (not setable)
+    mus_interp_type  interpolation choice (not setable)
     ===============  =========================================
 
 Example usage
