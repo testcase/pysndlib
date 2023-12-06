@@ -308,8 +308,11 @@ cdef class mus_any:
             #print('setup xcoeffs', size,is_simple_filter(self), self._xcoeffs, arr)
         else: 
             size = cclm.mus_order(self._ptr)   
+            #print(size)
             self._xcoeffs_ptr = cclm.mus_xcoeffs(self._ptr)
-            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            # setting allocate_buffer to false because array should be already allocated (?_)
+            # this means tis could be simplified to just us esize if simple filter all the rest would besame
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
             arr.data = <char*>self._xcoeffs_ptr
             self._xcoeffs = np.asarray(arr)
         
@@ -332,8 +335,9 @@ cdef class mus_any:
            # print('setup ycoeffs',  size,is_simple_filter(self), self._xcoeffs, arr)
         else: 
             size = cclm.mus_order(self._ptr)   
+            #print(size)
             self._ycoeffs_ptr = cclm.mus_ycoeffs(self._ptr)
-            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+            arr = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
             arr.data = <char*>self._ycoeffs_ptr
             self._ycoeffs = np.asarray(arr)    
         
@@ -379,7 +383,9 @@ cdef class mus_any:
         
     def __str__(self):
         return f'{mus_any} {cclm.mus_describe(self._ptr)}'
-          
+     
+    def mus_reset(self):
+        cclm.mus_reset(self._ptr)
         
     @property
     def mus_frequency(self):
@@ -3368,8 +3374,6 @@ cpdef mus_any make_filter(order: int, xcoeffs, ycoeffs):
     gen =  mus_any.from_ptr(cclm.mus_make_filter(order, &xcoeffs_view[0], &ycoeffs_view[0], NULL))
     
     gen.cache_extend([xcoeffs_cpy, ycoeffs_cpy])
-    print(xcoeffs_cpy)
-    print(ycoeffs_cpy)
     return gen
     
 cpdef cython.double filter(gen: mus_any, insig: float): # todo : conflicts with buitl in function
@@ -4510,6 +4514,7 @@ def make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
         res._inputcallback = <cclm.input_cb>input_callback_func
         return res
         
+            
     if not callable(inp):
         raise TypeError(f"input needs to be a clm gen or function not a {type(inp)}")
 
@@ -5187,101 +5192,133 @@ cpdef convolve_files(file1: str, file2: str, maxamp: Optional[float]=1., outputf
     return outputfile
 
 
-#########################################
-# basic file reading/writing to/from nympy arrays
-# note all of this assumes numpy dtype is np.double
-# also assumes shape is (chan, length)
-# a mono file that is 8000 samples long should
-# be a numpy array created with something like
-# arr = np.zeroes((1,8000), dtype=np.double)
-# librosa follows this convention
-#  todo : look at allowing something like np.zeroes((8000), dtype=np.double)
-# to just be treated as mono sound buffer 
-# the python soundfile library does this differently 
-# and would use 
-# arr = np.zeros((8000,1), dtype=np.double))
-# this seems less intuitive to me 
-# very issue to translate with simple np.transpose()
+# --------------- additions ---------------- #
 
 
-# cpdef sndinfo(filename):
-#     """returns a dictionary of info about a sound file including write date (data), sample rate (srate),
-#     channels (chans), length in samples (samples), length in second (length), comment (comment), and loop information (loopinfo)"""
-#     date = csndlib.mus_sound_write_date(filename)
-#     srate = csndlib.mus_sound_srate(filename)
-#     chans = csndlib.mus_sound_chans(filename)
-#     samples = csndlib.mus_sound_samples(filename)
-#     comment = csndlib.mus_sound_comment(filename) 
-#     length = samples / (chans * srate)
-# 
-#     header_type = header(mus_sound_header_type(filename))
-#     sample_type = sample(mus_sound_sample_type(filename))
-#     
-#     loop_info = mus_sound_loop_info(filename)
-#     if loop_info:
-#         loop_modes = [loop_info[6], loop_info[7]]
-#         loop_starts = [loop_info[0], loop_info[2]]
-#         loop_ends = [loop_info[1], loop_info[3]]
-#         base_note = loop_info[4]
-#         base_detune = loop_info[5]
-#     
-#         loop_info = {'sustain_start' : loop_starts[0], 'sustain_end' : loop_ends[0], 
-#                     'release_start' : loop_starts[2], 'release_end' : loop_ends[1],
-#                     'base_note' : base_note, 'base_detune' : base_detune, 
-#                     'sustain_mode' : loop_modes[0], 'release_mode' : loop_modes[1]}
-#     
-#     info = {'date' : time.localtime(date), 'srate' : srate, 'chans' : chans, 'samples' : samples,
-#             'comment' : comment, 'length' : length, 'header_type' : header_type, 'sample_type' : sample_type,
-#             'loop_info' : loop_info}
-#     return info
 
-# def sound_loop_info(filename):
-#     """returns a dictionary of info about a sound file including write date (data), sample rate (srate),
-#     channels (chans), length in samples (samples), length in second (length), comment (comment), and loop information (loopinfo)"""
-#     
-#     loop_info = sndlib.mus_sound_loop_info(filename)
-#     if loop_info:
-#         loop_modes = [loop_info[6], loop_info[7]]
-#         loop_starts = [loop_info[0], loop_info[2]]
-#         loop_ends = [loop_info[1], loop_info[3]]
-#         base_note = loop_info[4]
-#         base_detune = loop_info[5]
-#     
-#         loop_info = {'sustain_start' : loop_starts[0], 'sustain_end' : loop_ends[0], 
-#                     'release_start' : loop_starts[2], 'release_end' : loop_ends[1],
-#                     'base_note' : base_note, 'base_detune' : base_detune, 
-#                     'sustain_mode' : loop_modes[0], 'release_mode' : loop_modes[1]}
-#     return info
-#     
-# cpdef np.ndarray file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
-#     """
-#     return an ndarray with samples from file
-#     """
-#     length = dur or csndlib.mus_sound_framples(filename)
-#     chans = csndlib.mus_sound_chans(filename)
-#     srate = csndlib.mus_sound_srate(filename)
-#     bg = beg or 0
-#     out = np.zeros(length, dtype=np.double)
-#     
-#     cdef double [:] out_view = None
-#     out_view = out
-# 
-#     csndlib.mus_file_to_array(filename,channel, bg, length, &out_view[0])
-#     return out
-#     
-# def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None): 
-#     length = dur or mus_sound_framples(filename)
-#     srate = mus_sound_srate(filename)
-#     bg = beg or 0
-#     out = np.zeros((1, length), dtype=np.double)
-#     mus_file_to_array(filename,channel, bg, length, out[0].ctypes.data_as(ctypes.pointer(ctypes.c_double)))
-#     return out
-# 
-# def calc_length(start, dur):
-#     st = seconds2samples(start)
-#     nd = seconds2samples(start+dur)
-#     return st, nd
-# 
+
+# --------------- dcblock ---------------- #
+
+cpdef mus_any make_dcblock():
+    return make_filter(2, [1,-1], [0, -.99])
+    
+cpdef cython.double dcblock(gen: mus_any, insig: cython.double):
+    return filter(gen, insig)
+    
+
+# --------------- biquad ---------------- #
+
+cpdef mus_any make_biquad(a0: cython.double,a1: cython.double,a2: cython.double,b1: cython.double,b2: cython.double):
+    """returns a biquad filter (use with the CLM filter gen)"""
+    return make_filter(3, np.array([a0,a1,a2]), np.array([0.0,b1,b2]))
+    
+cpdef cython.double biquad(gen: mus_any, insig: cython.double,):
+    return filter(gen, insig)
+
+cpdef bint is_biquad(gen: mus_any):
+    return is_filter(gen) and (gen.mus_order == 3)
+
+
+cpdef mus_any make_biquad_notch(fc: cython.double, radius: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double a0 = 1.0
+    cdef cython.double a1 = 2.0 * radius * math.cos((np.pi*2) * fc /  sr)
+    cdef cython.double a2 = radius * radius
+    cdef cython.double b1 = 0.0
+    cdef cython.double b2 = 0.0
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef mus_any make_biquad_low_pass(fc: cython.double, q: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double k = math.tan(np.pi * fc / sr)
+    cdef cython.double ksqr = k * k
+    cdef cython.double denom = 1.0 / (ksqr * q + k + q)
+    cdef cython.double b1 = 2 * q * (ksqr - 1) * denom
+    cdef cython.double b2 = (ksqr * q - k + q) * denom
+    
+    cdef cython.double a0 = ksqr * q * denom
+    cdef cython.double a1 = 2 * a0
+    cdef cython.double a2 = a0
+    
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef mus_any make_biquad_high_pass(fc: cython.double, q: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double k = math.tan(np.pi * fc / sr)
+    cdef cython.double ksqr = k * k
+    cdef cython.double denom = 1.0 / (ksqr * q + k + q)
+    cdef cython.double b1 = 2 * q * (ksqr - 1) * denom
+    cdef cython.double b2 = (ksqr * q - k + q) * denom
+    
+    cdef cython.double a0 = q * denom
+    cdef cython.double a1 = -2 * a0
+    cdef cython.double a2 = a0
+    
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef mus_any make_biquad_band_pass(fc: cython.double, q: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double k = math.tan(np.pi * fc / sr)
+    cdef cython.double ksqr = k * k
+    cdef cython.double denom = 1.0 / (ksqr * q + k + q)
+    cdef cython.double b1 = 2 * q * (ksqr - 1) * denom
+    cdef cython.double b2 = (ksqr * q - k + q) * denom
+    
+    cdef cython.double a0 = k * denom
+    cdef cython.double a1 = 0.0
+    cdef cython.double a2 = -a0
+    
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef mus_any make_biquad_band_reject(fc: cython.double, q: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double k = math.tan(np.pi * fc / sr)
+    cdef cython.double ksqr = k * k
+    cdef cython.double denom = 1.0 / (ksqr * q + k + q)
+    cdef cython.double b1 = 2 * q * (ksqr - 1) * denom
+    cdef cython.double b2 = (ksqr * q - k + q) * denom
+    
+    cdef cython.double a0 = q * (ksqr + 1.) * denom
+    cdef cython.double a1 = 2.0 * q * (ksqr - 1.) * denom
+    cdef cython.double a2 = a0
+    
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef mus_any make_biquad_all_pass(fc: cython.double, q: cython.double):
+    cdef cython.double sr = get_srate()
+    cdef cython.double k = math.tan(np.pi * fc / sr)
+    cdef cython.double ksqr = k * k
+    cdef cython.double denom = 1.0 / (ksqr * q + k + q)
+    cdef cython.double b1 = 2 * q * (ksqr - 1) * denom
+    cdef cython.double b2 = (ksqr * q - k + q) * denom
+    
+    cdef cython.double a0 = b2
+    cdef cython.double a1 = b1
+    cdef cython.double a2 = 1.
+    
+    return make_biquad(a0, a1, a2, b1, b2)
+    
+cpdef biquad_set_resonance(gen: mus_any, fc: cython.double, radius: cython.double, normalize:Optional[bint]=False):
+    cdef cython.double sr = get_srate()
+    gen.mus_ycoeffs[2] = radius * radius
+    gen.mus_ycoeffs[1] = -2.0 * radius * math.cos((np.pi*2) * fc / sr)
+
+    if normalize:
+        gen.mus_xcoeffs[0] = .5 - .5 * gen.mus_ycoeffs[2]
+        gen.mus_xcoeffs[1] = 0.0
+        gen.mus_xcoeffs[2] = -gen.mus_xcoeffs[0]
+    else:
+        gen.mus_xcoeffs[0] = 1.0
+        gen.mus_xcoeffs[1] = 0.0
+        gen.mus_xcoeffs[2] = 0.0
+    
+cpdef biquad_set_equal_gain_zeroes(gen: mus_any):
+    gen.mus_xcoeffs[0] = 1.0
+    gen.mus_xcoeffs[1] = 0.0
+    gen.mus_xcoeffs[2] = -1.0    
+
+    
+
 def convert_frequency(gen):
     gen.frequency = hz2radians(gen.frequency)
     return gen
@@ -5390,7 +5427,7 @@ def _wrap(x, lo, hi):
     if x > hi:
         return lo + (math.fmod((x-hi), r))
 
-def array_reader(arr, chan, loop=0):
+def array_reader(arr, chan, loop=False):
     ind = 0
     if chan > (clm_channels(arr)):
         raise ValueError(f'array has {clm_channels(arr)} channels but {chan} asked for')
@@ -5423,3 +5460,99 @@ def clm_reverb(func):
     return call 
 
 
+
+#########################################
+# basic file reading/writing to/from nympy arrays
+# note all of this assumes numpy dtype is np.double
+# also assumes shape is (chan, length)
+# a mono file that is 8000 samples long should
+# be a numpy array created with something like
+# arr = np.zeroes((1,8000), dtype=np.double)
+# librosa follows this convention
+#  todo : look at allowing something like np.zeroes((8000), dtype=np.double)
+# to just be treated as mono sound buffer 
+# the python soundfile library does this differently 
+# and would use 
+# arr = np.zeros((8000,1), dtype=np.double))
+# this seems less intuitive to me 
+# very issue to translate with simple np.transpose()
+
+
+# cpdef sndinfo(filename):
+#     """returns a dictionary of info about a sound file including write date (data), sample rate (srate),
+#     channels (chans), length in samples (samples), length in second (length), comment (comment), and loop information (loopinfo)"""
+#     date = csndlib.mus_sound_write_date(filename)
+#     srate = csndlib.mus_sound_srate(filename)
+#     chans = csndlib.mus_sound_chans(filename)
+#     samples = csndlib.mus_sound_samples(filename)
+#     comment = csndlib.mus_sound_comment(filename) 
+#     length = samples / (chans * srate)
+# 
+#     header_type = header(mus_sound_header_type(filename))
+#     sample_type = sample(mus_sound_sample_type(filename))
+#     
+#     loop_info = mus_sound_loop_info(filename)
+#     if loop_info:
+#         loop_modes = [loop_info[6], loop_info[7]]
+#         loop_starts = [loop_info[0], loop_info[2]]
+#         loop_ends = [loop_info[1], loop_info[3]]
+#         base_note = loop_info[4]
+#         base_detune = loop_info[5]
+#     
+#         loop_info = {'sustain_start' : loop_starts[0], 'sustain_end' : loop_ends[0], 
+#                     'release_start' : loop_starts[2], 'release_end' : loop_ends[1],
+#                     'base_note' : base_note, 'base_detune' : base_detune, 
+#                     'sustain_mode' : loop_modes[0], 'release_mode' : loop_modes[1]}
+#     
+#     info = {'date' : time.localtime(date), 'srate' : srate, 'chans' : chans, 'samples' : samples,
+#             'comment' : comment, 'length' : length, 'header_type' : header_type, 'sample_type' : sample_type,
+#             'loop_info' : loop_info}
+#     return info
+
+# def sound_loop_info(filename):
+#     """returns a dictionary of info about a sound file including write date (data), sample rate (srate),
+#     channels (chans), length in samples (samples), length in second (length), comment (comment), and loop information (loopinfo)"""
+#     
+#     loop_info = sndlib.mus_sound_loop_info(filename)
+#     if loop_info:
+#         loop_modes = [loop_info[6], loop_info[7]]
+#         loop_starts = [loop_info[0], loop_info[2]]
+#         loop_ends = [loop_info[1], loop_info[3]]
+#         base_note = loop_info[4]
+#         base_detune = loop_info[5]
+#     
+#         loop_info = {'sustain_start' : loop_starts[0], 'sustain_end' : loop_ends[0], 
+#                     'release_start' : loop_starts[2], 'release_end' : loop_ends[1],
+#                     'base_note' : base_note, 'base_detune' : base_detune, 
+#                     'sustain_mode' : loop_modes[0], 'release_mode' : loop_modes[1]}
+#     return info
+#     
+# cpdef np.ndarray file2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None):
+#     """
+#     return an ndarray with samples from file
+#     """
+#     length = dur or csndlib.mus_sound_framples(filename)
+#     chans = csndlib.mus_sound_chans(filename)
+#     srate = csndlib.mus_sound_srate(filename)
+#     bg = beg or 0
+#     out = np.zeros(length, dtype=np.double)
+#     
+#     cdef double [:] out_view = None
+#     out_view = out
+# 
+#     csndlib.mus_file_to_array(filename,channel, bg, length, &out_view[0])
+#     return out
+#     
+# def channel2array(filename: str, channel: Optional[int]=0, beg: Optional[int]=None, dur: Optional[int]=None): 
+#     length = dur or mus_sound_framples(filename)
+#     srate = mus_sound_srate(filename)
+#     bg = beg or 0
+#     out = np.zeros((1, length), dtype=np.double)
+#     mus_file_to_array(filename,channel, bg, length, out[0].ctypes.data_as(ctypes.pointer(ctypes.c_double)))
+#     return out
+# 
+# def calc_length(start, dur):
+#     st = seconds2samples(start)
+#     nd = seconds2samples(start+dur)
+#     return st, nd
+# 
