@@ -22,8 +22,10 @@ from pysndlib.sndlib import Sample, Header
 import sys
 import os
 cimport pysndlib.clm 
+cimport pysndlib.sndlib
 
-np.import_array()
+# np.import_array()
+# DTYPE = np.int64
 
 # # --------------- clm enums ---------------- #
 # cpdef enum Interp:
@@ -1447,7 +1449,7 @@ cpdef np.ndarray mus_rectangular2polar(np.ndarray  rdat, np.ndarray  idat):
     res = cclm.mus_rectangular_to_polar(&rdat_view[0], &idat_view[0], size)
     return rdat
     
-def rectangular2polar(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+cpdef tuple rectangular2polar(np.ndarray  rdat, np.ndarray  idat):
     """
     convert real/imaginary data in rdat and idat from rectangular form (fft output) to polar form (a
     spectrum).
@@ -1492,7 +1494,7 @@ cpdef np.ndarray mus_rectangular2magnitudes(np.ndarray rdat, np.ndarray idat):
     cclm.mus_rectangular_to_magnitudes(&rdat_view[0], &idat_view[0], size)
     return rdat
     
-def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+cpdef tuple rectangular2magnitudes(np.ndarray rdat, np.ndarray idat):
     """
     convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
     ignore the phases.
@@ -1513,7 +1515,7 @@ def rectangular2magnitudes(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.f
 
     
     cclm.mus_rectangular_to_magnitudes(&rdat_view[0], &idat_view[0], size)
-    return rdat_cpy
+    return rdat_cpy, idat_cpy
 
 cpdef np.ndarray mus_polar2rectangular( np.ndarray rdat,  np.ndarray idat):
     """
@@ -1534,7 +1536,7 @@ cpdef np.ndarray mus_polar2rectangular( np.ndarray rdat,  np.ndarray idat):
     return rdat
 
 
-def polar2rectangular(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64]):
+cpdef tuple polar2rectangular(np.ndarray rdat, np.ndarray idat):
     """
     in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).
     
@@ -1590,7 +1592,8 @@ cpdef np.ndarray mus_spectrum(np.ndarray  rdat, np.ndarray   idat, np.ndarray  w
     cclm.mus_spectrum(&rdat_view[0], &idat_view[0], &window_view[0], size, <cclm.mus_spectrum_t>norm_type)
     return rdat
     
-def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], window: npt.NDArray[np.float64], norm_type: Optional[Spectrum] = Spectrum.IN_DB):
+
+cpdef tuple spectrum(np.ndarray rdat,np.ndarray  idat,np.ndarray window, Spectrum norm_type=Spectrum.IN_DB):
     """
     real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
     fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
@@ -1622,7 +1625,7 @@ def spectrum(rdat: npt.NDArray[np.float64], idat: npt.NDArray[np.float64], windo
     cdef double [:] window_view = window
     
     cclm.mus_spectrum(&rdat_view[0], &idat_view[0], &window_view[0], size, <cclm.mus_spectrum_t>norm_type)
-    return rdat_cpy
+    return rdat_cpy, idat_cpy
     
 
 cpdef np.ndarray mus_convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
@@ -1648,7 +1651,7 @@ cpdef np.ndarray mus_convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = No
     
     
 
-def convolution(rl1: npt.NDArray[np.float64], rl2: npt.NDArray[np.float64], fft_size: Optional[cython.int] = None):
+cpdef np.ndarray convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
     """
     convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
 
@@ -1691,7 +1694,7 @@ cpdef np.ndarray mus_autocorrelate(np.ndarray data):
     return data
     
     
-def autocorrelate(data: npt.NDArray[np.float64]):
+cpdef np.ndarray autocorrelate(np.ndarray data):
     """
     autocorrelation of data (a ndarray).
 
@@ -1731,7 +1734,7 @@ cpdef np.ndarray mus_correlate( np.ndarray  data1,  np.ndarray  data2):
     return data1
     
     
-def correlate(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]):
+cpdef np.ndarray correlate(np.ndarray  data1, np.ndarray  data2):
     """
     cross-correlation of data1 and data2 (both ndarrays).
     
@@ -1769,7 +1772,7 @@ cpdef np.ndarray mus_cepstrum( np.ndarray  data):
     cclm.mus_cepstrum(&data_view[0], size)
     return data
     
-def cepstrum(data: npt.NDArray[np.float64]):
+cpdef np.ndarray cepstrum(np.ndarray data):
     """
     return cepstrum of signal
     
@@ -3149,9 +3152,8 @@ cpdef bint is_one_zero(mus_any gen):
     """
     return cclm.mus_is_one_zero(gen._ptr)    
 
-# # make def for *args. are there other ways
 
-def make_two_pole(frequency=None, radius=None, **kwargs):
+cpdef make_two_pole(frequency=None, radius=None, a0=None,b1=None,b2=None):
     """
     return a new two_pole filter: y(n) = a0 x(n) - b1 y(n-1) - b2 y(n-2).
     
@@ -3161,33 +3163,15 @@ def make_two_pole(frequency=None, radius=None, **kwargs):
     :return: two_pole gen
     :rtype: mus_any
     """
-    
-    if kwargs:
-        if 'a0' in kwargs and 'b1' in kwargs and 'b2' in kwargs:
-            return mus_any.from_ptr(cclm.mus_make_two_pole(kwargs.get('a0'), kwargs.get('b1'), kwargs.get('b2')))
+    if all((frequency, radius)):
+        return mus_any.from_ptr(cclm.mus_make_two_pole_from_frequency_and_radius(frequency, radius))
+    elif any((frequency, radius)):
+        raise RuntimeError("If not specifying coeffs, must provide frequency and radius. got frequency: {frequency}, radius: {radius}")
+    else:  
+        if all((a0,b1,b2)):
+            return mus_any.from_ptr(cclm.mus_make_two_pole(a0,b2,b2))
         else:
-            raise KeyError(f'Filter needs values for a0, b1, b2')
-        
-    else:
-        if frequency is not None and radius is not None:
-            return mus_any.from_ptr(cclm.mus_make_two_pole_from_frequency_and_radius(frequency, radius))
-        else:
-            raise RuntimeError("If not specifying coeffs, must provide frequency and radius.")
-
-
-# 
-# cpdef mus_any make_two_pole(cython.double a0, cython.double b1, b2=None):
-#     """
-#     return a new two_pole filter: y(n) = a0 x(n) - b1 y(n-1) - b2 y(n-2).
-#     if two values they are frequency and radius
-#     if three they are filter coefficients 'a0', 'b1', 'b2'
-#     """     
-# 
-#     if b2 is None:
-#         return mus_any.from_ptr(cclm.mus_make_two_pole_from_frequency_and_radius(a0, b1))
-#     else:
-#         return mus_any.from_ptr(cclm.mus_make_two_pole(a0, b1, b2))
-
+            raise KeyError(f'Filter needs values for a0, b1, b2 got a0: {a0}, b1: {b1}, b2: {b2}')
 
                   
 cpdef cython.double two_pole(mus_any gen, cython.double insig):
@@ -3210,9 +3194,8 @@ cpdef bint is_two_pole(mus_any gen):
     """
     return cclm.mus_is_two_pole(gen._ptr)
 
-# make def for *args. are there other ways
 
-def make_two_zero(frequency=None, radius=None, **kwargs):
+cpdef make_two_zero(frequency=None, radius=None, a0=None,a1=None,a2=None):
     """
     return a new two_zero filter: y(n) = a0 x(n) + a1 x(n-1) + a2 x(n-2).
     
@@ -3222,31 +3205,15 @@ def make_two_zero(frequency=None, radius=None, **kwargs):
     :return: two_zero gen
     :rtype: mus_any
     """
-    
-    if kwargs:
-        if 'a0' in kwargs and 'a1' in kwargs and 'a1' in kwargs:
-            return mus_any.from_ptr(cclm.mus_make_two_zero(kwargs.get('a0'), kwargs.get('a1'), kwargs.get('a2')))
+    if all((frequency, radius)):
+        return mus_any.from_ptr(cclm.mus_make_two_zero_from_frequency_and_radius(frequency, radius))
+    elif any((frequency, radius)):
+        raise RuntimeError("If not specifying coeffs, must provide frequency and radius. got frequency: {frequency}, radius: {radius}")
+    else:  
+        if all((a0,a1,a2)):
+            return mus_any.from_ptr(cclm.mus_make_two_zero(a0,a1,a2))
         else:
-            raise KeyError(f'Filter needs values for a0, a1, a2')
-        
-    else:
-        if frequency is not None and radius is not None:
-            return mus_any.from_ptr(cclm.mus_make_two_zero_from_frequency_and_radius(frequency, radius))
-        else:
-            raise RuntimeError("If not specifying coeffs, must provide frequency and radius.")
-
-# cpdef mus_any make_two_zero(cython.double a0, cython.double a1, a2=None):
-#     """
-#     return a new two_zero filter: y(n) = a0 x(n) + a1 x(n-1) + a2 x(n-2).
-#     if two values they are frequency and radius
-#     if three they are filter coefficients 'a0', 'b1', 'b2'
-#     """
-#     
-#     if a2 is None:
-#         return mus_any.from_ptr(cclm.mus_make_two_zero_from_frequency_and_radius(a0, a1))
-#     else:
-#         return mus_any.from_ptr(cclm.mus_make_two_zero(a0, a1, a2))
-
+            raise KeyError(f'Filter needs values for a0, a1, a2 got a0: {a0}, a1: {a1}, a2: {a2}')
 
 
 cpdef cython.double two_zero(mus_any gen, cython.double insig):
@@ -4041,7 +4008,7 @@ cpdef mus_any make_all_pass(cython.double feedback, cython.double  feedforward, 
     gen.cache_append(initial_contents)
     return gen
     
-cpdef cython.double all_pass(gen: mus_any, insig: float, pm: Optional[float]=None):
+cpdef cython.double all_pass(mus_any gen, cython.double insig, pm=None):
     """
     all-pass filter insig value, pm changes the delay length.
     
@@ -4055,7 +4022,7 @@ cpdef cython.double all_pass(gen: mus_any, insig: float, pm: Optional[float]=Non
     else:
         return cclm.mus_all_pass_unmodulated(gen._ptr, insig)
     
-cpdef is_all_pass(gen: mus_any):
+cpdef is_all_pass(mus_any gen):
     """
     returns True if gen is a all_pass.
     
@@ -4083,7 +4050,7 @@ cpdef mus_any make_all_pass_bank(all_passes: list):
     gen.cache_extend([all_passes_array, all_passes])
     return gen
 
-cpdef cython.double all_pass_bank(gen: mus_any, insig: float):
+cpdef cython.double all_pass_bank(mus_any gen, cython.double insig):
     """
     sum an array of all_pass filters.
     
@@ -4093,7 +4060,7 @@ cpdef cython.double all_pass_bank(gen: mus_any, insig: float):
     """
     return cclm.mus_all_pass_bank(gen._ptr, insig)
     
-cpdef bint is_all_pass_bank(gen: mus_any):
+cpdef bint is_all_pass_bank(mus_any gen):
     """
     returns True if gen is a all_pass_bank.
     
@@ -4105,7 +4072,7 @@ cpdef bint is_all_pass_bank(gen: mus_any):
     
     
 # ---------------- one_pole_all_pass ---------------- #
-cpdef mus_any make_one_pole_all_pass(size: int, coeff: float):
+cpdef mus_any make_one_pole_all_pass(cython.long size, cython.double coeff):
     """
     return a new one_pole all_pass filter size, coeff.
     
@@ -4117,7 +4084,7 @@ cpdef mus_any make_one_pole_all_pass(size: int, coeff: float):
     """
     return mus_any.from_ptr(cclm.mus_make_one_pole_all_pass(size, coeff))
     
-cpdef cython.double one_pole_all_pass(gen: mus_any, insig: float):
+cpdef cython.double one_pole_all_pass(mus_any gen, cython.double insig):
     """
     one pole all pass filter of input.
     
@@ -4127,7 +4094,7 @@ cpdef cython.double one_pole_all_pass(gen: mus_any, insig: float):
     """
     return cclm.mus_one_pole_all_pass(gen._ptr, insig)
     
-cpdef bint is_one_pole_all_pass(gen: mus_any):
+cpdef bint is_one_pole_all_pass(mus_any gen):
     """
     returns True if gen is a one_pole_all_pass.
     
@@ -4137,7 +4104,7 @@ cpdef bint is_one_pole_all_pass(gen: mus_any):
     return cclm.mus_is_one_pole_all_pass(gen._ptr)
         
 # ---------------- moving-average ---------------- #
-cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_element: Optional[float]=0.0):
+cpdef mus_any make_moving_average(cython.long size, initial_contents=None, cython.double initial_element=0.0):
     """
     return a new moving_average generator. 
     
@@ -4170,7 +4137,7 @@ cpdef mus_any make_moving_average(size: int, initial_contents=None, initial_elem
     return gen
         
         
-cpdef cython.double moving_average(gen: mus_any, insig: float):
+cpdef cython.double moving_average(mus_any gen, cython.double  insig):
     """
     moving window average.
     
@@ -4180,7 +4147,7 @@ cpdef cython.double moving_average(gen: mus_any, insig: float):
     """
     return cclm.mus_moving_average(gen._ptr, insig)
     
-cpdef bint is_moving_average(gen: mus_any):
+cpdef bint is_moving_average(mus_any gen):
     """
     returns True if gen is a moving_average.
     
@@ -4190,9 +4157,9 @@ cpdef bint is_moving_average(gen: mus_any):
     return cclm.mus_is_moving_average(gen._ptr)
 
 # ---------------- moving-max ---------------- #
-cpdef mus_any make_moving_max(size: int, 
+cpdef mus_any make_moving_max(cython.long size, 
                 initial_contents=None, 
-                initial_element: Optional[float]=0.0):
+                cython.double initial_element=0.0):
                 
     """
     return a new moving-max generator.
@@ -4226,7 +4193,7 @@ cpdef mus_any make_moving_max(size: int,
         gen = mus_any.from_ptr(cclm.mus_make_moving_max(size, NULL))
     return gen
     
-cpdef cython.double moving_max(gen: mus_any, insig: float):
+cpdef cython.double moving_max(mus_any gen, cython.double insig):
     """
     moving window max.
     
@@ -4236,7 +4203,7 @@ cpdef cython.double moving_max(gen: mus_any, insig: float):
     """
     return cclm.mus_moving_max(gen._ptr, insig)
     
-cpdef bint is_moving_max(gen: mus_any):
+cpdef bint is_moving_max(mus_any gen):
     """
     returns True if gen is a moving_max.
     
@@ -4246,7 +4213,7 @@ cpdef bint is_moving_max(gen: mus_any):
     return cclm.mus_is_moving_max(gen._ptr)
     
 # ---------------- moving-norm ---------------- #
-cpdef mus_any make_moving_norm(size: int, initial_contents=None, scaler: Optional[float]=1.):
+cpdef mus_any make_moving_norm(cython.long size, initial_contents=None, cython.double scaler=1.):
     """
     return a new moving-norm generator.
     
@@ -4276,7 +4243,7 @@ cpdef mus_any make_moving_norm(size: int, initial_contents=None, scaler: Optiona
     
     return gen
     
-cpdef cython.double moving_norm(gen: mus_any, insig: float):
+cpdef cython.double moving_norm(mus_any gen, cython.double insig):
     """
     moving window norm.
     
@@ -4286,7 +4253,7 @@ cpdef cython.double moving_norm(gen: mus_any, insig: float):
     """
     return cclm.mus_moving_norm(gen._ptr, insig)
     
-cpdef is_moving_norm(gen: mus_any):
+cpdef is_moving_norm(mus_any gen ):
     """
     returns True if gen is a moving_norm.
     
@@ -4297,7 +4264,7 @@ cpdef is_moving_norm(gen: mus_any):
     
     
 # ---------------- asymmetric-fm ---------------- #
-cpdef mus_any make_asymmetric_fm(frequency: float, initial_phase: Optional[float]=0.0, r: Optional[float]=1.0, ratio: Optional[float]=1.):
+cpdef mus_any make_asymmetric_fm(cython.double frequency, cython.double initial_phase=0.0, cython.double r=1.0, cython.double ratio=1.):
     """
     return a new asymmetric_fm generator.
     
@@ -4313,7 +4280,7 @@ cpdef mus_any make_asymmetric_fm(frequency: float, initial_phase: Optional[float
     
     return mus_any.from_ptr(cclm.mus_make_asymmetric_fm(frequency, initial_phase, r, ratio))
     
-cpdef cython.double asymmetric_fm(gen: mus_any, index: float, fm: Optional[float]=None):
+cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.double fm=0.0):
     """
     next sample from asymmetric fm generator.  
        
@@ -4322,12 +4289,20 @@ cpdef cython.double asymmetric_fm(gen: mus_any, index: float, fm: Optional[float
     :param fm: fm input
     :rtype: float
     """
-    if fm:
-        return cclm.mus_asymmetric_fm(gen._ptr, index, fm)
-    else:
-        return cclm.mus_asymmetric_fm_unmodulated(gen._ptr, index)
+    return cclm.mus_asymmetric_fm(gen._ptr, index, fm)
+
+        
+cpdef cython.double asymmetric_fm_unmodulated(mus_any gen, cython.double index):
+    """
+    next sample from asymmetric fm generator.  
+       
+    :param gen: asymmetric_fm gen
+    :param index: fm index
+    :rtype: float
+    """ 
+    return cclm.mus_asymmetric_fm_unmodulated(gen._ptr, index)
     
-cpdef bint is_asymmetric_fm(gen: mus_any):
+cpdef bint is_asymmetric_fm(mus_any gen):
     """
     returns True if gen is a asymmetric_fm.
     
@@ -4337,7 +4312,7 @@ cpdef bint is_asymmetric_fm(gen: mus_any):
     return cclm.mus_is_asymmetric_fm(gen._ptr)
     
 # ---------------- file-to-sample ---------------- #
-cpdef mus_any make_file2sample(filename, buffer_size: Optional[int]=None):
+cpdef mus_any make_file2sample(str filename, buffer_size=None):
     """
     return an input generator reading 'filename' (a sound file).
     
@@ -4352,7 +4327,7 @@ cpdef mus_any make_file2sample(filename, buffer_size: Optional[int]=None):
     buffer_size = buffer_size or CLM.buffer_size
     return mus_any.from_ptr(cclm.mus_make_file_to_sample_with_buffer_size(filename, buffer_size))
     
-cpdef cython.double file2sample(gen: mus_any, loc: int, chan: Optional[int]=0):
+cpdef cython.double file2sample(mus_any gen, cython.long loc, cython.int chan=0):
     """
     sample value \in sound file read by 'obj' \in channel chan at sample.
     
@@ -4363,7 +4338,7 @@ cpdef cython.double file2sample(gen: mus_any, loc: int, chan: Optional[int]=0):
     """
     return cclm.mus_file_to_sample(gen._ptr, loc, chan)
     
-cpdef bint is_file2sample(gen: mus_any):
+cpdef bint is_file2sample(mus_any gen):
     """
     returns True if gen is a file2sample.
     
@@ -4373,7 +4348,7 @@ cpdef bint is_file2sample(gen: mus_any):
     return cclm.mus_is_file_to_sample(gen._ptr)
     
 # ---------------- sample-to-file ---------------- #
-cpdef mus_any make_sample2file(filename, chans: Optional[int]=1, sample_type: Optional[Sample]=None, header_type: Optional[Header]=None, comment: Optional[str]=None):
+cpdef mus_any make_sample2file(str filename, cython.int chans=1, sndlib.Sample sample_type=CLM.sample_type, sndlib.Header header_type=CLM.header_type, comment=None):
     """
     return an output generator writing the sound file 'filename' which is set up to have chans'
     channels of 'sample_type' samples with a header of 'header_type'.  the latter should be sndlib
@@ -4389,7 +4364,7 @@ cpdef mus_any make_sample2file(filename, chans: Optional[int]=1, sample_type: Op
     sample_type = sample_type or CLM.sample_type
     header_type = header_type or CLM.header_type
     if comment is None:
-        return mus_any.from_ptr(cclm.mus_make_sample_to_file_with_comment(filename, chans, sample_type, header_type, NULL))
+        return mus_any.from_ptr(cclm.mus_make_sample_to_file_with_comment(filename, chans, <cclm.mus_sample_t>sample_type, header_type, NULL))
     else:
         return mus_any.from_ptr(cclm.mus_make_sample_to_file_with_comment(filename, chans, sample_type, header_type, comment))
 
@@ -4568,7 +4543,7 @@ cpdef is_readin(gen: mus_any):
       
           
 # ---------------- src ---------------- #
-def make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
+cpdef make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
     """
     return a new sampling-rate conversion generator (using 'warped sinc interpolation'). 'srate' is the
     ratio between the new rate and the old. 'width' is the sine width (effectively the steepness of the
@@ -4594,15 +4569,17 @@ def make_src(inp , srate: Optional[float]=1.0, width: Optional[int]=10):
             
     if not callable(inp):
         raise TypeError(f"input needs to be a clm gen or function not a {type(inp)}")
-
-    @INPUTCALLBACK
-    def inp_f(gen, d):
-        return inp(d)
         
-    cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
+    
+
+#     @INPUTCALLBACK
+#     def inp_f(gen, d):
+#         return inp(d)
+        
+    cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp))[0]
     res = mus_any.from_ptr(cclm.mus_make_src(cy_inp_f_ptr, srate, width, NULL))
     res._inputcallback = cy_inp_f_ptr
-    res.cache_append(inp_f)
+    res.cache_append(inp)
     
     return res
   
@@ -5097,14 +5074,14 @@ cpdef inb(loc: int, inp):
 
 
 # --------------- locsig ---------------- #
-cpdef mus_any make_locsig(degree: Optional[float]=0.0, 
-    distance: Optional[float]=1., 
-    reverb: Optional[float]=0.0, 
-    output: Optional[mus_any]=None, 
-    revout: Optional[mus_any]=None, 
-    channels: Optional[int]=None, 
-    reverb_channels: Optional[int]=None,
-    interp_type: Optional[Interp]=Interp.LINEAR):
+cpdef mus_any make_locsig(cython.double degree=0.0, 
+    cython.double distance=1., 
+    cython.double reverb=0.0, 
+    output=None, 
+    revout=None, 
+    channels=None, 
+    reverb_channels=None,
+    Interp interp_type=Interp.LINEAR):
     
     """
     return a new generator for signal placement \in n channels.  channel 0 corresponds to 0 degrees.
@@ -5144,9 +5121,9 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
         out = <mus_any>output
         rout = <mus_any>revout
         if revout is not None:
-            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, rout._ptr,  interp_type))
+            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, rout._ptr,  <cclm.mus_interp_t>interp_type))
         else:
-            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, NULL ,  interp_type))
+            res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, out._ptr, reverb_channels, NULL ,  <cclm.mus_interp_t>interp_type))
         return res
         
     # todo: what if revout is not an iterable? while possible not going to deal with it right now :)   
@@ -5154,7 +5131,7 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
         if reverb_channels is None:
             reverb_channels = 0
             
-        res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, NULL, reverb_channels, NULL, interp_type))
+        res = mus_any.from_ptr(cclm.mus_make_locsig(degree, distance, reverb, channels, NULL, reverb_channels, NULL, <cclm.mus_interp_t>interp_type))
         cclm.mus_locsig_set_detour(res._ptr, <cclm.detour_cb>locsig_detour_callback_func)
 
         return res
@@ -5162,7 +5139,7 @@ cpdef mus_any make_locsig(degree: Optional[float]=0.0,
     else:
         raise TypeError(f"output needs to be a clm gen or np.array not a {type(output)}")  
         
-cpdef cython.double locsig(gen: mus_any, loc: cython.int, val: cython.double):
+cpdef cython.double locsig(mus_any gen, cython.long loc, cython.double val):
     """
     locsig 'gen' channel 'chan' scaler.
     
@@ -5174,7 +5151,7 @@ cpdef cython.double locsig(gen: mus_any, loc: cython.int, val: cython.double):
     """
     cclm.mus_locsig(gen._ptr, loc, val)
     
-cpdef bint is_locsig(gen: mus_any):
+cpdef bint is_locsig(mus_any gen):
     """
     returns True if gen is a locsig.
     
@@ -5575,77 +5552,7 @@ def impulse_generator(arr):
         yield arr[n]
         n += 1
 
-#not sure typing any of the args are worth it.
-@cython.ccall
-def fm_violin(beg, dur, frequency, amplitude, fm_index, 
-            amp_env = [ 0, 0,  25, 1,  75, 1,  100, 0],
-            periodic_vibrato_rate = 5.0,
-            random_vibrato_rate = 16.0,
-            periodic_vibrato_amplitude = 0.0025,
-            random_vibrato_amplitude = 0.005,
-            fm1_index=None,
-            fm2_index=None,
-            fm3_index=None,
-            fm1_rat = 1.0,
-            fm2_rat = 3.0,
-            fm3_rat = 4.0,
-            fm1_env = [0., 1., 25., .4, 75., .6, 100., 0.],
-            fm2_env = [0., 1., 25., .4, 75., .6, 100., 0.],
-            fm3_env = [0., 1., 25., .4, 75., .6, 100., 0.],
-            gliss_env = [0,0,100,0],
-            glissando_amount = 0.0,
-            noise_amount = 0.0,
-            noise_freq = 1000.,
-            ind_noise_freq = 10.,
-            ind_noise_amount = 0.0,
-            amp_noise_freq = 20.0,
-            amp_noise_amount = 0.0,
-            degree=45,
-            distance=1.0,
-            reverb_amount = .01):   
 
-    if cython.compiled: 
-        print("Yep, I'm compiled.")
-    else:
-        print("Just a lowly interpreted script.")
-
-    start: cython.int = seconds2samples(beg)
-    end: cython.int = start + seconds2samples(dur)
-    frq_scl: cython.double = hz2radians(frequency)
-    maxdev: cython.double = frq_scl * fm_index
-    index1: cython.double = fm1_index if fm1_index else min(math.pi, maxdev * (5.0 / math.log(frequency)))
-    index2: cython.double = fm2_index if fm2_index else min(math.pi, maxdev * 3.0 * ((8.5 - math.log(frequency)) / (3.0 + (frequency / 1000.))))
-    index3: cython.double = fm3_index if fm3_index else min(math.pi, maxdev * (4.0 / math.sqrt(frequency)))
-    carrier: mus_any = make_oscil(frequency)
-    fmosc1: mus_any = make_oscil(frequency)
-    fmosc2: mus_any = make_oscil(frequency * fm2_rat)
-    fmosc3: mus_any = make_oscil(frequency * fm3_rat)
-    ampf: mus_any= make_env(amp_env, scaler = amplitude, duration = dur)
-    indf1: mus_any= make_env(fm1_env, scaler = index1, duration = dur)
-    indf2: mus_any= make_env(fm2_env, scaler = index2, duration = dur)
-    indf3: mus_any= make_env(fm3_env, scaler = index3, duration = dur)
-    frqf: mus_any= make_env(gliss_env, (glissando_amount * frq_scl), duration=dur)
-    pervib: mus_any= make_triangle_wave(periodic_vibrato_rate,periodic_vibrato_amplitude * frq_scl)
-    ranvib: mus_any= make_rand_interp(random_vibrato_rate, random_vibrato_amplitude * frq_scl)
-    fm_noi: mus_any= make_rand(noise_freq, math.pi * noise_amount)
-    ind_noi: mus_any= make_rand_interp(ind_noise_freq, ind_noise_amount)
-    amp_noi: mus_any= make_rand_interp(amp_noise_freq, amp_noise_amount)
-    loc: mus_any = make_locsig(degree, distance, reverb_amount)
-    
-    i: cython.int
-    
-    for i in range(start, end):
-        vib: cython.double = triangle_wave(pervib) + rand_interp(ranvib) + env(frqf)
-        fuzz: cython.double = rand(fm_noi)
-        inoi: cython.double = 1.0 + rand_interp(ind_noi)
-        anoi: cython.double  = env(ampf) * (1.0 + rand_interp(amp_noi))
-        locsig(loc, i, anoi * oscil(carrier, 
-                        vib + 
-                        inoi * 
-                        ((env(indf1) * oscil(fmosc1, (vib * fm1_rat) + fuzz)) +
-                        (env(indf2) * oscil(fmosc2, ((vib * fm2_rat) + fuzz))) +
-                        (env(indf3) * oscil(fmosc3, ((vib * fm3_rat) + fuzz))))))
-       
         
 # cpdef  np.ndarray fill_array(arr:  npt.NDArray[np.float64], gen: mus_any, arg1: cython.double=0.0, arg2: cython.double=0.0):
 #     check_ndim(arr)
@@ -5653,99 +5560,6 @@ def fm_violin(beg, dur, frequency, amplitude, fm_index,
 #     cdef i = 0
 #     for i in range(arr_length):
 #         arr[i] = cclm.mus_apply(gen._ptr, arg1,arg2)
-    
-
-# @cython.ccall
-# def ppadd(n: cython.int) -> cython.int:
-#     i: cython.int = 0
-#     k: cython.int = 0
-#     for i in range(n):
-#         k += 1
-#     return k
-
-
-# cdef nbd = [
-#     [1.0,             0.0,               0.0425,             0.3,    1.0               ], # hum (-2 octave)
-#     [1.000710732054,  0.0,               0.14083333333333,   0.3,    1.0               ],
-#     [1.6958066808813, 0.0,               0.25416666666667,   0.3,    0.46153846153846  ], # prime (-1 octave)
-#     [1.6966595593461, 0.0,               0.70416666666667,   0.3,    0.46153846153846  ], # tierce
-#     [2.2359630419332, 0.0,               0.79166666666667,   0.0,    0.17142857142857  ], # quint
-#     [2.9168443496802, 0.083333333333333, 0.031666666666667,  0.25,   0.08              ], # nominal
-#     [3.7029140014215, 1.0,               0.25,               0.1,    0.34285714285714  ],
-#     [4.3918123667377, 0.0,               0.29166666666667,   0.15,   0.1               ],
-#     [4.3951670220327, 0.0,               0.15,               0.15,   0.066666666666667 ],
-#     [4.680881307747,  0.14166666666667,  0.041666666666667,  0.0,    0.06              ],
-#     [5.455579246624,  0.29166666666667,  0.10833333333333,   0.5,    0.12              ],
-#     [6.1961620469083, 0.083333333333333, 0.025,              0.3,    0.12              ],
-#     [7.0717839374556, 0.0,               0.10833333333333,   0.05,   0.12              ],
-#     [7.3546552949538, 0.0,               0.19166666666667,   0.0,    0.048             ],
-#     [7.407249466951,  0.15,              0.061666666666667,  0.11,   0.13333333333333  ],
-#     [7.4103766879886, 0.058333333333333, 0.025,              0.11,   0.13333333333333  ],
-#     [9.4015636105188, 0.0,               0.045833333333333,  0.0,    0.034285714285714 ],
-#     [9.498223169865,  0.18333333333333,  0.15,               0.25,   0.024             ],
-#     [11.674484719261, 0.05,              0.0083333333333333, 0.5,    0.08              ],
-#     [13.384506041222, 0.010416666666667, 0.00625,            0.05,   0.024             ],
-#     [13.890547263682, 0.021666666666667, 0.021666666666667,  0.1,    0.08              ],
-#     [16.136460554371, 0.0125,            0.0041666666666667, 0.07,   0.1               ]
-# ]
-# 
-# cpdef bell(beg:cython.double, dur: cython.double=8, freq: cython.double=351.75, amp: cython.double=0.3, deg: cython.double=45., dist: cython.double=0.0, rev:cython.double=0.0):
-#     cdef cython.int start = seconds2samples(beg)
-#     cdef cython.int end   = start + seconds2samples(dur)
-#     cdef mus_any location = make_locsig(degree=deg, distance=dist, reverb=rev)
-# 
-#     oscils_freqs_radians, envarray = [], []
-# 
-#     for b in nbd:
-#         hertz = round(b[0] * freq, 3)
-#         splashamp = round(b[1] * amp, 3)
-#         tailamp = round(b[2] * amp, 3)
-#         attack = round( b[3] if b[3] else .001, 3)
-#         decay = round(b[4] * dur, 3)
-#         # convert sc's envelope format [yyy][xxx] to sndlib's [xyxyxy]
-#         # Env.new([splashamp, tailamp*(2/3), tailamp, 0], [attack*(1/4), attack*(3/4), decay], 'sin');
-#         #        X                               Y
-#         envl =  [0,                              splashamp,  
-#                 attack*(1/4),                    tailamp*(2/3), 
-#                 attack*(1/4)+attack*(3/4),       tailamp,
-#                 attack*(1/4)+attack*(3/4)+decay, 0]
-#         #print("SC:", [[round(attack*(1/4), 3) , round(attack*(3/4), 3), round(decay, 3)],
-#         #                  [round(splashamp, 3), round(tailamp*(2/3), 3), round(tailamp, 3), 0]])
-#         #print("PY:", envl)
-#         #plotenv(envl)
-#         
-#         envarray.append(make_env(envl, scaler=amp, duration=dur))  
-#         
-#         #freqs in radians
-#         oscils_freqs_radians.append(hz2radians(hertz) )
-# 
-#     # use oscil bank instead of python array of oscils    
-#     # starting phase. i am going to change make_oscil_bank so if you want all the values to just start at a 
-#     # certain phase you can just pass a scaler. i meant it to work that way but screwed it up
-#     
-#     cdef cython.double [:] starting_phases_ndarray = np.zeros(len(oscils_freqs_radians))
-#     # if an numpy array is used here the oscil_bank holds on to the array and any changes to it will
-#     # impact the underlying processing. 
-#     cdef cython.double [:] amps_ndarray = np.zeros(len(oscils_freqs_radians))
-#     cdef mus_any oscils = make_oscil_bank(oscils_freqs_radians, starting_phases_ndarray, amps_ndarray)
-# 
-#     # don't know if these save much to compute this once
-#     osc_bank_len = len(oscils_freqs_radians)
-#     
-#    # cdef int i = 0
-#     
-#     for cdef int i in range(start, end):
-#         for j in range(osc_bank_len):
-#             amps_ndarray[j] = env(envarray[j])
-#         locsig(location, i, oscil_bank(oscils))
-#         
-#         
-#         
-#         
-#         
-#         
-        
-        
         
         
 #########################################
