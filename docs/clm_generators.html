@@ -1685,7 +1685,7 @@ circle’). frequency sets the resonance center frequency (hz).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.firmant">
-<span class="sig-name descname"><span class="pre">firmant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.firmant" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">firmant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.firmant" title="Permalink to this definition">#</a></dt>
 <dd><p>next sample from resonator generator.</p>
 <p>next sample from firmant generator.
 :param gen: firmant gen
@@ -1952,7 +1952,7 @@ frequency sets the resonance center frequency (hz).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.formant">
-<span class="sig-name descname"><span class="pre">formant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.formant" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">formant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radians</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.formant" title="Permalink to this definition">#</a></dt>
 <dd><p>next sample from formant generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2156,13 +2156,13 @@ length in samples of the grain, or 0.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inp</strong> – gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value</p></li>
-<li><p><strong>expansion</strong> – how much to lengthen or compress the file</p></li>
-<li><p><strong>length</strong> – length of file slices that are overlapped</p></li>
-<li><p><strong>scaler</strong> – amplitude scaler on slices (to avoid overflows)</p></li>
-<li><p><strong>hop</strong> – speed at which slices are repeated in output</p></li>
-<li><p><strong>ramp</strong> – amount of slice-time spent ramping up/down</p></li>
-<li><p><strong>jitter</strong> – affects spacing of successive grains</p></li>
-<li><p><strong>max_size</strong> – internal buffer size</p></li>
+<li><p><strong>expansion</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – how much to lengthen or compress the file</p></li>
+<li><p><strong>length</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – length of file slices that are overlapped</p></li>
+<li><p><strong>scaler</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – amplitude scaler on slices (to avoid overflows)</p></li>
+<li><p><strong>hop</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – speed at which slices are repeated in output</p></li>
+<li><p><strong>ramp</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – amount of slice-time spent ramping up/down</p></li>
+<li><p><strong>jitter</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – affects spacing of successive grains</p></li>
+<li><p><strong>max_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – internal buffer size</p></li>
 <li><p><strong>edit</strong> – grain editing function. the function should take one argument, the granulate mus_any and return length of grain or 0</p></li>
 </ul>
 </dd>
@@ -2332,7 +2332,7 @@ length in samples of the grain, or 0.</p>
 <h2>in_any, out_any, etc<a class="headerlink" href="#in-any-out-any-etc" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.out_any">
-<span class="sig-name descname"><span class="pre">out_any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.out_any" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">out_any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.out_any" title="Permalink to this definition">#</a></dt>
 <dd><p>add data to output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2943,7 +2943,7 @@ length in samples of the grain, or 0.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.ncos">
-<span class="sig-name descname"><span class="pre">ncos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mus_any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ncos" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ncos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ncos" title="Permalink to this definition">#</a></dt>
 <dd><p>get the next sample from ‘gen’, an ncos generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -3800,10 +3800,10 @@ the generator; it is called to get the current vocoder output.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inp</strong> – gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value</p></li>
-<li><p><strong>fft_size</strong> – fft size used</p></li>
-<li><p><strong>overlap</strong> – how many analysis stages overlap</p></li>
-<li><p><strong>interp</strong> – samples between fft</p></li>
-<li><p><strong>pitch</strong> – pitch scaling ratio</p></li>
+<li><p><strong>fft_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – fft size used</p></li>
+<li><p><strong>overlap</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – how many analysis stages overlap</p></li>
+<li><p><strong>interp</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – samples between fft</p></li>
+<li><p><strong>pitch</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – pitch scaling ratio</p></li>
 <li><p><strong>analyze</strong> – if used, overrides default. should be a function of two arguments, the generator and the input function.</p></li>
 <li><p><strong>edit</strong> – if used, overrides default. functions of one argument, the phase_vocoder mus_any. change amplitudes and phases</p></li>
 <li><p><strong>synthesize</strong> – if used, overrides default. unctions of one argument, the phase_vocoder mus_any.</p></li>

@@ -310,10 +310,10 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – filename</p></li>
-<li><p><strong>channel</strong> (<em>int</em><em> | </em><em>None</em>) – if None, will read all channels, otherwise just channel specified</p></li>
-<li><p><strong>beg</strong> (<em>int</em><em> | </em><em>None</em>) – beginning positions to read in samples</p></li>
-<li><p><strong>dur</strong> (<em>int</em><em> | </em><em>None</em>) – duration in samples to read</p></li>
+<li><p><strong>filename</strong> – filename</p></li>
+<li><p><strong>channel</strong> – if None, will read all channels, otherwise just channel specified</p></li>
+<li><p><strong>beg</strong> – beginning positions to read in samples</p></li>
+<li><p><strong>dur</strong> – duration in samples to read</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -332,10 +332,10 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – name of file</p></li>
-<li><p><strong>arr</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – np.ndarray of samples</p></li>
-<li><p><strong>length</strong> (<em>int</em>) – length of samples to write. if None write all</p></li>
-<li><p><strong>sr</strong> (<em>cython.double</em>) – sample rate of file to write</p></li>
+<li><p><strong>filename</strong> – name of file</p></li>
+<li><p><strong>arr</strong> – np.ndarray of samples</p></li>
+<li><p><strong>length</strong> – length of samples to write. if None write all</p></li>
+<li><p><strong>sr</strong> – sample rate of file to write</p></li>
 <li><p><strong>sample_type</strong> – type of sample type to use. defaults to clm.sample_type</p></li>
 <li><p><strong>header_type</strong> – header of sample type to use. defaults to clm.header_type</p></li>
 </ul>
