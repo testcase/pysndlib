@@ -1,5 +1,10 @@
 cimport pysndlib.csndlib as csndlib
 
+#==================================================================================
+# The code is part of an attempt at translation of Bill Schottstedaet's clm 
+# available at https://ccrma.stanford.edu/software/snd/sndlib/
+#==================================================================================
+
 cdef extern from "clm.h":
     """
     typedef mus_float_t (*connect_points_cb)(mus_float_t val);

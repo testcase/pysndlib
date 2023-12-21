@@ -1,7 +1,7 @@
 from setuptools import Extension, setup
 from Cython.Build import cythonize
 import Cython.Compiler.Options
-Cython.Compiler.Options.annotate = True
+Cython.Compiler.Options.annotate = False
 import numpy
 import sys
 import os
@@ -24,11 +24,47 @@ if sys.platform.startswith("darwin"):
             include_dirs=[numpy.get_include(), './sndlib'], 
             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-#         Extension("pysndlib.v", ["src/pysndlib/v.pyx"], 
-#             extra_objects=["./sndlib/libsndlib.a"], 
-#             include_dirs=[numpy.get_include(), './sndlib'], 
-#             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
-#             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")])
+        Extension("pysndlib.env", ["src/pysndlib/env.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.clm_ins", ["src/pysndlib/clm_ins.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.v", ["src/pysndlib/v.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.jcrev", ["src/pysndlib/jcrev.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.dsp", ["src/pysndlib/dsp.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.birds", ["src/pysndlib/birds.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.generators", ["src/pysndlib/generators.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+        Extension("pysndlib.jcvoi", ["src/pysndlib/jcvoi.pyx"], 
+            extra_objects=["./sndlib/libsndlib.a"], 
+            include_dirs=[numpy.get_include(), './sndlib'], 
+            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")])
+    
     ]
 
 

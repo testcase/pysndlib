@@ -383,11 +383,6 @@ document.write(`
 <dt class="sig sig-object py" id="pysndlib.clm.set_srate">
 <span class="sig-name descname"><span class="pre">set_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.set_srate" title="Permalink to this definition">#</a></dt>
 <dd><p>set current sample rate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>r</strong> (<em>float</em>) – </p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -399,7 +394,7 @@ document.write(`
 <dd><p>convert radians per sample to frequency:  <cite>hz = rads * srate / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – frequency in radians</p>
+<dd class="field-odd"><p><strong>radians</strong> – frequency in radians</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>frequency in hertz</p>
@@ -416,7 +411,7 @@ document.write(`
 <dd><p>convert frequency in hz to radians per sample:  <cite>hz * 2 * pi / srate</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hz</strong> (<em>float</em>) – frequency in hertz</p>
+<dd class="field-odd"><p><strong>hz</strong> – frequency in hertz</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>frequency in radians</p>
@@ -433,7 +428,7 @@ document.write(`
 <dd><p>convert degrees to radians:  <cite>degrees * 2 * pi / 360</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>degrees</strong> (<em>float</em>) – angle in degrees</p>
+<dd class="field-odd"><p><strong>degrees</strong> – angle in degrees</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>angle in radians</p>
@@ -450,7 +445,7 @@ document.write(`
 <dd><p>convert radians to degrees: <cite>rads * 360 / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radians</strong> (<em>float</em>) – angle in radians</p>
+<dd class="field-odd"><p><strong>radians</strong> – angle in radians</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>degree</p>
@@ -467,7 +462,7 @@ document.write(`
 <dd><p>convert decibel value db to linear value: <cite>pow(10, db / 20)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – decibel</p>
+<dd class="field-odd"><p><strong>x</strong> – decibel</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>linear amplitude</p>
@@ -484,7 +479,7 @@ document.write(`
 <dd><p>convert linear value to decibels 20 * log10(lin).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – linear amplitude</p>
+<dd class="field-odd"><p><strong>x</strong> – linear amplitude</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>decibel</p>
@@ -501,7 +496,7 @@ document.write(`
 <dd><p>use mus_srate to convert seconds to samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>secs</strong> (<em>float</em>) – time in seconds</p>
+<dd class="field-odd"><p><strong>secs</strong> – time in seconds</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>time in samples</p>
@@ -518,7 +513,7 @@ document.write(`
 <dd><p>use mus_srate to convert samples to seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>samples</strong> (<em>int</em>) – number of samples</p>
+<dd class="field-odd"><p><strong>samples</strong> – number of samples</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>time in seconds</p>
@@ -539,8 +534,8 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – </p></li>
-<li><p><strong>y</strong> (<em>float</em>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>y</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -559,8 +554,8 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – </p></li>
-<li><p><strong>y</strong> (<em>float</em>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>y</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -578,7 +573,7 @@ document.write(`
 <dd><p>return a number between 0.0 (x is even) and 1.0 (x is odd).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
+<dd class="field-odd"><p><strong>x</strong> – </p>
 </dd>
 <dt class="field-even">Return weight<span class="colon">:</span></dt>
 <dd class="field-even"><p></p></dd>
@@ -594,7 +589,7 @@ document.write(`
 <dd><p>return a number between 0.0 (x is odd) and 1.0 (x is even).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
+<dd class="field-odd"><p><strong>x</strong> – </p>
 </dd>
 <dt class="field-even">Return weight<span class="colon">:</span></dt>
 <dd class="field-even"><p></p></dd>
@@ -611,8 +606,8 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>s1</strong> (<em>float</em>) – input 1</p></li>
-<li><p><strong>s2</strong> (<em>float</em>) – input 2</p></li>
+<li><p><strong>s1</strong> – input 1</p></li>
+<li><p><strong>s2</strong> – input 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -631,9 +626,9 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>s1</strong> (<em>float</em>) – input 1</p></li>
-<li><p><strong>s2</strong> (<em>float</em>) – input 2</p></li>
-<li><p><strong>s3</strong> (<em>float</em>) – input 3</p></li>
+<li><p><strong>s1</strong> – input 1</p></li>
+<li><p><strong>s2</strong> – input 2</p></li>
+<li><p><strong>s3</strong> – input 3</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -653,8 +648,8 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>insig</strong> (<em>float</em>) – input</p></li>
-<li><p><strong>fm_index</strong> (<em>float</em>) – </p></li>
+<li><p><strong>insig</strong> – input</p></li>
+<li><p><strong>fm_index</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -673,8 +668,8 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input 1</p></li>
-<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input 2</p></li>
+<li><p><strong>data1</strong> – input 1</p></li>
+<li><p><strong>data2</strong> – input 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -693,8 +688,8 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – coefficients where coeffs[0] is the constant term, and so on.</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
+<li><p><strong>coeffs</strong> – coefficients where coeffs[0] is the constant term, and so on.</p></li>
+<li><p><strong>x</strong> – input</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -713,8 +708,8 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fn</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input array</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – interp point</p></li>
+<li><p><strong>fn</strong> – input array</p></li>
+<li><p><strong>x</strong> – interp point</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -730,11 +725,6 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dt class="sig sig-object py" id="pysndlib.clm.bessi0">
 <span class="sig-name descname"><span class="pre">bessi0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.bessi0" title="Permalink to this definition">#</a></dt>
 <dd><p>bessel function of zeroth order</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – </p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -744,10 +734,9 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>interp_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Interp" title="pysndlib.clm.Interp"><em>Interp</em></a>) – type of interpolation</p></li>
-<li><p><strong>x</strong> (<em>float</em>) – interpolation value</p></li>
-<li><p><strong>table</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – table to interpolate in</p></li>
-<li><p><strong>y1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>interp_type</strong> – type of interpolation</p></li>
+<li><p><strong>x</strong> – interpolation value</p></li>
+<li><p><strong>table</strong> – table to interpolate in</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -770,10 +759,10 @@ window.kaiser, beta is the window family parameter, if any.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>window_type</strong> (<a class="reference internal" href="clm_enums.html#pysndlib.clm.Window" title="pysndlib.clm.Window"><em>Window</em></a>) – type of window</p></li>
-<li><p><strong>size</strong> (<em>int</em>) – window size</p></li>
-<li><p><strong>beta</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – beta parameter if needed</p></li>
-<li><p><strong>alpha</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – alpha parameter if needed</p></li>
+<li><p><strong>window_type</strong> – type of window</p></li>
+<li><p><strong>size</strong> – window size</p></li>
+<li><p><strong>beta</strong> – beta parameter if needed</p></li>
+<li><p><strong>alpha</strong> – alpha parameter if needed</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -793,11 +782,10 @@ power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
-<li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>fft_size</strong> – must be power of two</p></li>
+<li><p><strong>sign</strong> – 1 for fft, -1 for inverse-fft</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -817,9 +805,8 @@ spectrum).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return::return<span class="colon">:</span></dt>
@@ -839,9 +826,8 @@ ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -860,9 +846,8 @@ ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – magnitude data</p></li>
+<li><p><strong>rdat</strong> – magnitude data</p></li>
 <li><p><strong>imaginary</strong> – phases data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -886,11 +871,10 @@ spectrum.raw = linear and un-normalized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – fft window</p></li>
-<li><p><strong>norm_type</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a><em>]</em>) – normalization type</p></li>
-<li><p><strong>idat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – </p></li>
+<li><p><strong>window</strong> – fft window</p></li>
+<li><p><strong>norm_type</strong> – normalization type</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -908,7 +892,7 @@ spectrum.raw = linear and un-normalized.</p>
 <dd><p>autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data</p>
+<dd class="field-odd"><p><strong>data</strong> – data</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>autocorrelation result</p>
@@ -926,8 +910,8 @@ spectrum.raw = linear and un-normalized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 1</p></li>
-<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 2</p></li>
+<li><p><strong>data1</strong> – data 1</p></li>
+<li><p><strong>data2</strong> – data 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -947,11 +931,10 @@ power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>fft_size</strong> (<em>int</em>) – must be power of two</p></li>
-<li><p><strong>sign</strong> (<em>int</em>) – 1 for fft, -1 for inverse-fft</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>fft_size</strong> – must be power of two</p></li>
+<li><p><strong>sign</strong> – 1 for fft, -1 for inverse-fft</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -971,9 +954,8 @@ spectrum).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -993,9 +975,8 @@ ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1014,9 +995,8 @@ ignore the phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – magnitude data</p></li>
+<li><p><strong>rdat</strong> – magnitude data</p></li>
 <li><p><strong>imaginary</strong> – phases data</p></li>
-<li><p><strong>idat</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1030,14 +1010,14 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_convolution">
-<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rl1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input data 1</p></li>
-<li><p><strong>rl2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – input  data 2</p></li>
-<li><p><strong>fft_size</strong> (<em>int</em>) – fft size</p></li>
+<li><p><strong>rl1</strong> – input data 1</p></li>
+<li><p><strong>rl2</strong> – input  data 2</p></li>
+<li><p><strong>fft_size</strong> – fft size</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1061,11 +1041,10 @@ spectrum.raw = linear and un-normalized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rdat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – real data</p></li>
+<li><p><strong>rdat</strong> – real data</p></li>
 <li><p><strong>imaginary</strong> – imaginary data</p></li>
-<li><p><strong>window</strong> (<em>npt.NDArray</em><em>[</em><em>np.cython.double64</em><em>]</em>) – fft window</p></li>
-<li><p><strong>norm_type</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Spectrum" title="pysndlib.clm.Spectrum"><em>Spectrum</em></a><em>]</em>) – normalization type</p></li>
-<li><p><strong>idat</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – </p></li>
+<li><p><strong>window</strong> – fft window</p></li>
+<li><p><strong>norm_type</strong> – normalization type</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1083,7 +1062,7 @@ spectrum.raw = linear and un-normalized.</p>
 <dd><p>in place autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data</p>
+<dd class="field-odd"><p><strong>data</strong> – data</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>autocorrelation result</p>
@@ -1101,8 +1080,8 @@ spectrum.raw = linear and un-normalized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 1</p></li>
-<li><p><strong>data2</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – data 2</p></li>
+<li><p><strong>data1</strong> – data 1</p></li>
+<li><p><strong>data2</strong> – data 2</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1120,7 +1099,7 @@ spectrum.raw = linear and un-normalized.</p>
 <dd><p>return cepstrum of signal</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – samples to analyze</p>
+<dd class="field-odd"><p><strong>data</strong> – samples to analyze</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>cepstrum. also written into data</p>
@@ -1143,9 +1122,9 @@ waveform for use in table_lookup.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p></li>
-<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – array to write wave into. if not provided, one will be allocated</p></li>
-<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – size of table</p></li>
-<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – whether to normalize partials</p></li>
+<li><p><strong>wave</strong> – array to write wave into. if not provided, one will be allocated</p></li>
+<li><p><strong>table_size</strong> – size of table</p></li>
+<li><p><strong>norm</strong> – whether to normalize partials</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1159,16 +1138,16 @@ waveform for use in table_lookup.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.phase_partials2wave">
-<span class="sig-name descname"><span class="pre">phase_partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.phase_partials2wave" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">phase_partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.phase_partials2wave" title="Permalink to this definition">#</a></dt>
 <dd><p>take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use
 in table_lookup.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>partials</strong> – list or np.ndarray of partials (harm, amp, phase)</p></li>
-<li><p><strong>wave</strong> (<em>npt.NDArray</em><em>[</em><em>np.float64</em><em>]</em>) – array to write wave into. if not provided, one will be allocated</p></li>
-<li><p><strong>table_size</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – size of table</p></li>
-<li><p><strong>norm</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – whether to normalize partials</p></li>
+<li><p><strong>wave</strong> – array to write wave into. if not provided, one will be allocated</p></li>
+<li><p><strong>table_size</strong> – size of table</p></li>
+<li><p><strong>norm</strong> – whether to normalize partials</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1189,7 +1168,7 @@ waveshaping) the harmonic spectrum described by the partials argument.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>partials</strong> – list or np.ndarray of partials (harm and amp)</p></li>
-<li><p><strong>kind</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="clm_enums.html#pysndlib.clm.Polynomial" title="pysndlib.clm.Polynomial"><em>Polynomial</em></a><em>]</em>) – Polynomial.EITHER_KIND, Polynomial.FIRST_KIND, Polynomial.SECOND_KIND, Polynomial.BOTH_KINDS</p></li>
+<li><p><strong>kind</strong> – Polynomial.EITHER_KIND, Polynomial.FIRST_KIND, Polynomial.SECOND_KIND, Polynomial.BOTH_KINDS</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1229,9 +1208,9 @@ that they add to 1.0). creates new array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
-<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – tn</p></li>
-<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – un</p></li>
+<li><p><strong>x</strong> – input</p></li>
+<li><p><strong>tcoeffs</strong> – tn</p></li>
+<li><p><strong>ucoeffs</strong> – un</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1247,8 +1226,8 @@ that they add to 1.0). creates new array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – nput</p></li>
-<li><p><strong>tcoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – tn</p></li>
+<li><p><strong>x</strong> – nput</p></li>
+<li><p><strong>tcoeffs</strong> – tn</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1264,8 +1243,8 @@ that they add to 1.0). creates new array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>float</em>) – input</p></li>
-<li><p><strong>ucoeffs</strong> (<em>ndarray</em><em>[</em><em>Any</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – un</p></li>
+<li><p><strong>x</strong> – input</p></li>
+<li><p><strong>ucoeffs</strong> – un</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

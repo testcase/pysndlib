@@ -1,3 +1,9 @@
+
+#==================================================================================
+# The code is part of an attempt at translation of Bill Schottstedaet's sndlib 
+# available at https://ccrma.stanford.edu/software/snd/sndlib/
+#==================================================================================
+
 cdef extern from "sndlib.h":
     ctypedef signed long  int64_t
     ctypedef double mus_float_t

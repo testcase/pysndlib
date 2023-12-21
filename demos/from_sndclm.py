@@ -15,48 +15,48 @@ import functools
 
 
 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_oscil(440.0)
 #     for i in range(44100):
 #         outa(i,  oscil(gen))
 # 
 #
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_oscil(440.0)
 #     ampf = make_env([0., 0., 0.01, 1.0, 0.25, 0.1, 1, 0], scaler=.5, length=44100)
 #     for i in range(44100):
 #         outa(i,  env(ampf)*oscil(gen))
 #     
 #      
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_table_lookup(440.0, wave=partials2wave([1., .5, 2, .5]))
 #     for i in range(44100):
 #         outa(i, .5 * table_lookup(gen))
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_polywave(440, partials=[1., .5, 2, .5])
 #     for i in range(44100):
 #         outa(i, .5 * polywave(gen))
 # 
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_triangle_wave(440.0)
 #     for i in range(44100):
 #         outa(i, .5 * triangle_wave(gen))
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_ncos(440.0, 10);
 #     for i in range(44100):
 #         outa(i, .5 * ncos(gen))
 # 
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_nrxycos(440.0,n=10)
 #     for i in range(44100):
 #         outa(i, .5 * nrxycos(gen))
 # 
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     v = np.zeros(64, dtype=np.double)
 #     g = make_ncos(400,10)
 #     g.mus_phase = -.5 * math.pi
@@ -68,7 +68,7 @@ import functools
 #         
 #         
 # 
-# with Sound(channels=2, play=True):
+# with Sound(channels=2, play=True, statistics=True):
 #     ran1 = make_rand(5.0, hz2radians(220.0))
 #     ran2 = make_rand_interp(5.0, hz2radians(220.0))
 #     osc1 = make_oscil(440.0)
@@ -78,40 +78,40 @@ import functools
 #         outb(i, 0.5 * oscil(osc2, rand_interp(ran2)))
 #         
 #!         
-# with Sound("out1.aif", 1):
+# with Sound(play=True, statistics=True):
 #     flt = make_two_pole(1000.0, 0.999)
 #     ran1 = make_rand(10000.0, 0.002)
 #     for i in range(44100):
 #         outa(i, 0.5 * two_pole(flt, rand(ran1)))
 #         
 #         
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     flt = make_two_pole(1000.0, .999)
 #     ran1 = make_rand(10000.0, .002)
 #     for i in range(44100):
 #         outa(i, .5 * two_pole(flt, rand(ran1)))
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     flt = make_firmant(1000.0, 0.999)
 #     ran1 = make_rand(10000.0, 5.0)
 #     for i in range(44100):
 #         outa(i, 0.5 * firmant(flt, rand(ran1)))
 # 
 #     
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     flt = make_iir_filter(3, [0.0, -1.978, 0.998])
 #     ran1 = make_rand(10000.0, 0.002)
 #     for i in range(44100):
 #         outa(i, 0.5 * iir_filter(flt, rand(ran1)))
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     dly = make_delay(seconds2samples(0.5))
 #     osc1 = make_oscil(440.0)
 #     osc2 = make_oscil(660.0)
 #     for i in range(44100):
 #         outa(i, 0.5 * (oscil(osc1) + delay(dly, oscil(osc2))))        
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     cmb = make_comb(0.4, seconds2samples(0.4))
 #     osc = make_oscil(440.0)
 #     ampf = make_env([0.0, 0.0, 1.0, 1.0, 2.0, 1.0, 3.0, 0.0], length=4410)
@@ -119,7 +119,7 @@ import functools
 #     for i in range(88200):
 #         outa(i, 0.5 * (comb(cmb, env(ampf) * oscil(osc))))
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     alp = make_all_pass(-0.4, 0.4, seconds2samples(0.4))
 #     osc = make_oscil(440.0)
 #     ampf = make_env([0.0, 0.0, 1.0, 1.0, 2.0, 1.0, 3.0, 0.0], length=4410)
@@ -127,7 +127,7 @@ import functools
 #         outa(i, 0.5 * (all_pass(alp, env(ampf) * oscil(osc))))
 #         
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     avg = make_moving_average(4410)
 #     osc = make_oscil(440.0)
 #     stop = 44100 - 4410
@@ -139,7 +139,7 @@ import functools
 #         outa(i, oscil(osc) * moving_average(avg, 0.0))
 #         
 #     
-# with Sound(play=True, srate=22050):    
+# with Sound(play=True, srate=22050, statistics=True):    
 #     rd = make_readin("oboe.snd");
 #     length = 2 * mus_sound_framples("oboe.snd")
 #     sr = make_src(rd, .5);
@@ -149,48 +149,53 @@ import functools
 #     
 # # slightly different as don't have samples  function. 
 # with Sound(play=True, statistics=True):    
-#     flt, _ = file2array('oboe.snd', channel=0, beg=0, dur=clm_length('pistol.snd'))
-#     cnv = make_convolve(make_readin('pistol.snd'), flt)
+#     flt, _ = file2ndarray('oboe.snd', channel=0, beg=0, dur=clm_length('pistol.snd'))
+#     cnv = make_convolve(make_readin('pistol.snd'), flt[0])
 #     for i in range(88200):
 #         outa(i, .25 * convolve(cnv))
 #     
-# with Sound(play=True):    
+# with Sound(play=True, statistics=True):    
 #     grn = make_granulate(make_readin('oboe.snd'), 2.)
 #     for i in range(44100):
 #         outa(i, granulate(grn))
 #         
 #         
-# with Sound(play=True):    
-#     osc = make_oscil(440.0)
+
+# with Sound(play=True, statistics=True):    
 #     sweep = make_env([0,0,1,1], scaler=hz2radians(440.0), length=44100)
-#     grn = make_granulate(lambda d : .2 * oscil(osc, env(sweep)), expansion=2.0, length=.5)
+#     osc = make_oscil(440.0)
+#     @inputcallback
+#     def cb(g, d):
+#         return .2 * oscil(osc, env(sweep))
+# 
+#     grn = make_granulate(cb, length=.5)
 #     for i in range(88200):
 #         outa(i, granulate(grn))
 #     
 #         
-# with Sound(play=True):    
-#     pv = make_phase_vocoder(make_readin("oboe.snd"), pitch=2.0)
+# with Sound(play=True, statistics=True):    
+#     pv = make_phase_vocoder(make_readin("oboe.snd"), pitch=1.4)
 #     for i in range(44100):
 #         outa(i, phase_vocoder(pv))    
 # 
-# with Sound(play=True):    
+# with Sound(play=True, statistics=True):    
 #     fm = make_asymmetric_fm(440.0, 0.0, 0.9, 0.5)
 #     for i in range(44100):
 #         outa(i, 0.5 * asymmetric_fm(fm, 1.0))
 #         
-# with Sound(play=True):    
+# with Sound(play=True, statistics=True):    
 #     reader = make_readin("oboe.snd")
 #     for i in range(44100):
 #         outa(i, readin(reader))
 # 
 #        
-# with Sound(play=True):    
+# with Sound(play=True, statistics=True):    
 #     infile = make_file2sample('oboe.snd')
 #     for i in range(44100):
 #         out_any(i, in_any(i, 0, infile), 0)
 # 
 # 
-# with Sound(channels=2, play=True):    
+# with Sound(channels=2, play=True, statistics=True):    
 #     loc = make_locsig(60.0)
 #     osc = make_oscil(440.0)
 #     for i in range(44100):
@@ -208,7 +213,7 @@ import functools
 #     for i in range(start, end):
 #         outa(i, env(amp_env) * oscil(os))
 #         
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     simp(0,2,440,.1,[0,0,.1,1.0,1.0,0.0])
 #     
 #     
@@ -217,8 +222,8 @@ import functools
 #     frqe = make_env(frq_env, length= (end+1) - start, scaler=hz2radians(freq))
 #     for i in range(start, end):
 #         outa(i, amp * oscil(os, env(frqe)))
-#         
-# with Sound(play=True):
+#          
+# with Sound(play=True, statistics=True):
 #     simp(0,10000,440,.1,[0, 0, 1, 1])
 #     
 #     
@@ -233,7 +238,7 @@ import functools
 #     for i in range(start, end):
 #         outa(i, env(ampf) * oscil(cr, env(indf) * oscil(md)))  
 #     
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     simple_fm(0, 1, 440, .1, 2, 1.0)
 #     
 #     
@@ -285,7 +290,8 @@ import functools
 #         outa(i, env(ampf) * sm)
 #     
 #     
-# with Sound(channels=2, play=True):
+# 
+# with Sound(channels=2, play=True, statistics=True):
 #     dur = 2.0
 #     samps = seconds2samples(dur)
 #     pitch = 1000
@@ -318,8 +324,6 @@ import functools
 #         amp = env(ampf)
 #         outa(i, amp * (oscil(car1, (rfrq*pitch) + (fm_index * oscil(mod1, (rfrq * modpitch))))))
 #         outb(i, amp * (oscil(car2, (rfrq*pitch) , (pm_index / (frq + 1)) * oscil(mod2, rfrq * modpitch))))
-# 
-
 # 
 #       
 #     
@@ -373,23 +377,23 @@ import functools
 #     
 #     
 # 
-# with Sound():
+# with Sound(play=True, statistics=True):
 #     e = make_env([0,0,1,1,2,.25,3,1,4,0], duration=.5)
 #     for i in range(44100):
 #           outa(i, env_any(e, lambda y : y * y))
-    #
+#     
 # 
 #     
 # def sine_env(e):
 #     return env_any(e, lambda y : .5 * (1.0 + math.sin((-.5*math.pi) + (math.pi*y))))
 #     
-# with Sound():
+# with Sound(play=True, statistics=True):
 #     e = make_env([0,0,1,1,2,.25,3,1,4,0], duration=.5)
 #     for i in range(44100):
 #         outa(i, sine_env(e))
 # 
 # 
-# with Sound():
+# with Sound(play=True, statistics=True):
 #     e = make_pulsed_env([0,0,1,1,2,0], .01, 1)
 #     frq = make_env([0,0,1,1], duration=1.0, scaler=hz2radians(50))
 #     for i in range(44100):
@@ -431,19 +435,19 @@ import functools
 #                 (oscil(carrier_cos) * polynomial(cos_coeffs, ax)))
 #     
 #     
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     pqw(0,1,200.0,1000.0, [2,.2,3,.3,6,.5])
 #
 #     
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     modulator = make_polyshape(100, partials=[0,.4,1,.4,2,.1,3,.05,4,.05])    
 #     carrier = make_oscil(1000.)
-#     for i in range(20000):
+#     for i in range(20000*2):
 #         outa(i, .5 * oscil(carrier) * polyshape(modulator))
 #     
 # 
-# with Sound(play=True):
-#     dur = 1
+# with Sound(play=True, statistics=True):
+#     dur = 7
 #     samps = seconds2samples(dur)
 #     coeffs = [0.0, 0.5, .25, .125, .125]
 #     x = 0.0
@@ -456,9 +460,9 @@ import functools
 #         coeffs[4] = .25 - harm
 #         outa(i, env(ampf) * chebyshev_t_sum( x, coeffs))
 #         x += incr
-# #     
 #     
-# with Sound(play=True):
+#     
+# with Sound(play=True, statistics=True):
 #     gen = make_polyshape(100, partials=[11,1,20,1])
 #     ampf = make_env([0,0,1,1,20,1,21,0], scaler=.4, length=88200)
 #     indf = make_env([0, 0, 1, 1, 1.1, 1], length=88200)
@@ -466,7 +470,7 @@ import functools
 #         outa(i, env(ampf)*polyshape(gen, env(indf)))
 
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     gen = make_polyshape(1000.0, partials=[1, .25, 2, .25, 3, .125, 4, .125, 5, .25])
 #     indf = make_env([0,0,1,1,2,0], duration = 2.0)
 #     ampf = make_env([0,0,1,1,2,1,3,0], duration=2.0)
@@ -477,14 +481,14 @@ import functools
 #         outa(i, (env(ampf)*val) / max(.001, moving_max(mx, val)))
 #     
 # 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     pcoeffs = partials2polynomial([5,1])
 #     gen1 = make_oscil(100.)
 #     gen2 = make_oscil(2000.0)
 #     for i in range(44100):
 #         outa(i, polynomial(pcoeffs, .5 * (oscil(gen1) + oscil(gen2))))
 #     
-# with Sound(play=True, channels=2):
+# with Sound(play=True, channels=2, statistics=True):
 #     dur = 2.0
 #     samps = seconds2samples(dur)
 #     p1 = make_polywave(800, [1,.1,2,.3,3,.4,5,.2])
@@ -503,14 +507,14 @@ import functools
 #         #chan B: interpolate inside the sum of Tns!
 #         outb(i, amp*(polynomial(p3, (interp * oscil(g1)) + ((1.0-interp) * oscil(g2)))))
 # 
+#
 # 
-# 
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     duty_factor = .25
 #     p_on = make_pulse_train(100, .5)
 #     p_off = make_pulse_train(100, -.5, (2 * math.pi * (1 - duty_factor)))
 #     sm = 0.0
-#     for i in range(44100):
+#     for i in range(44100*4):
 #         sm += pulse_train(p_on) + pulse_train(p_off)
 #         outa(i, sm)
 # 
@@ -548,14 +552,14 @@ import functools
 # 
 # with Sound(play=True):
 #     shift_pitch(0, 3, 'oboe.snd', 1108.0)
-    
-
-# With Sound(Play=True):
-#     Gen1 = Make_Ssb_Am(750, 40)
-#     Gen2 = Make_Ssb_Am(700, 40)
-#     Rd = Make_Readin('Oboe.Snd')
-#     For I In Range(44100):
-#         Outa(I, .5*(Ssb_Am(Gen1, Readin(Rd)) + Ssb_Am(Gen2, Readin(Rd))))
+#     
+# 
+# with Sound(play=True,  statistics=True):
+#     gen1 = make_ssb_am(750, 40)
+#     gen2 = make_ssb_am(700, 40)
+#     rd = make_readin('oboe.snd')
+#     for i in range(44100):
+#         outa(i, .5*(ssb_am(gen1, readin(rd)) + ssb_am(gen2, readin(rd))))
     
     
     
@@ -571,7 +575,7 @@ import functools
 #     frq0 = hz2radians(f0)
 #     frq1 = hz2radians(f1)
 #     frq2 = hz2radians(f2)
-#     foflen = 100 if CLM.srate == 22050 else 200
+#     foflen = 100 if default.srate == 22050 else 200
 #     vibr = make_oscil(6)
 #     vibenv = make_env(ve , scaler=vib, duration=dur)
 #     win_freq = (2 * math.pi) / foflen
@@ -586,19 +590,20 @@ import functools
 #     
 #     for i in range(start, end):
 #         outa(i, env(ampf) * wave_train(wt0, env(vibenv) * oscil(vibr)))  
-#
-# with Sound(play=True):
+
+# with Sound(play=True, statistics=True):
 #     fofins(0, 1, 270, .2, .001, 730, .6, 1090, .3, 2440, .1) # "Ahh"
-#
+
 # 
-# with Sound( play = True ): #one of JC's favorite demos
+# with Sound( play = True , statistics=True): #one of JC's favorite demos
 #     fofins(0,4,270,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
 #             [0,0,.5,1,3,.5,10,.2,20,.1,50,.1,60,.2,85,1,100,0])
 #     fofins(0,4,(6/5 * 540),.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
 #             [0,0,.5,.5,3,.25,6,.1,10,.1,50,.1,60,.2,85,1,100,0])
 #     fofins(0,4,135,.2,0.005,730,.6,1090,.3,2440,.1,[0,0,40,0,75,.2,100,1],
 #             [0,0,1,3,3,1,6,.2,10,.1,50,.1,60,.2,85,1,100,0])
-        #    
+#test.wav: : maxamp: [0.7691921] [1740] compute time: 0.16470929 seconds. 
+#         #    
 #             
 #             
 #      
@@ -613,12 +618,12 @@ import functools
 #     click_track = make_pulse_train(start_freq)
 #     grain_size =  grain_dur
 #     print(grain_size)
-#     grain_arr = file2array(grain_file, 0, 0, grain_size) #different than scheme version
-#     grains = make_wave_train(start_freq, grain_arr) # TODO: make_wave_train just take size arg
-#     original_grain = np.copy(grain_arr)
+#     grain_arr, sr = file2ndarray(grain_file, 0, 0, grain_size) #different than scheme version
+#     grains = make_wave_train(start_freq, grain_arr[0]) # TODO: make_wave_train just take size arg
+#     original_grain = np.copy(grain_arr[0])
 #     ampf = make_env([0,1,1,0], scaler=.7, offset=.3, duration=duration, base=3.0)
 #      #grain = grains.mus_data this needs work TODO:
-#     grain = grains.get_mus_data()
+#     grain = grains.mus_data
 # #     
 #     for i in range(beg, end):
 #         gliss = env(frqf)
@@ -649,7 +654,7 @@ import functools
 #         outa(i, amp * x)
 #         x = (1.0 - (m * x * x))
 # 
-# with Sound():
+# with Sound(play=True, statistics=True):
 #     fractal(0, 1, .5, 0, .5)
 #     
 # with Sound():
@@ -676,7 +681,7 @@ import functools
 #         outa(i, (scale*x))
 #         
 #             
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     attract(0, 2, .5, 7.4)
 #     attract(2, 2, .5, 4.19)
 #     attract(4, 2, .5, 6.37)
@@ -705,7 +710,7 @@ import functools
 #         inval = rd()
 #         outa(i, inval + delay(dly, scaler * (tap(dly) + inval)))
 #         
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     echo(0, 60000, .5, 1.0, 'pistol.snd')
 # #     
 # # 
@@ -726,14 +731,14 @@ import functools
 # with Sound(play=True, statistics=True):
 #     zc(0,3,100,.1,20,100,.5)
 #     zc(3.5,3,100,.1,90,100,.95)
-# 
+
 # 
 # # !!
 # TODO: fix mus_data
 # def fir_plus_comb(beg, dur, freq, amp, size):
 #     start = seconds2samples(beg)
 #     end = start + seconds2samples(dur)
-#     dly = make_comb(scaler=.9, size=size)
+#     dly = make_comb(feedback=.9, size=size)
 #     flt = make_fir_filter(order=size, xcoeffs=dly.mus_data)
 #     r = make_rand(freq)
 #     for i in range(start, end):
@@ -744,7 +749,7 @@ import functools
 #     fir_plus_comb(0,2,10000, .001, 200)
 #     fir_plus_comb(2,2,1000, .0005, 400)
 #     fir_plus_comb(4,2,3000, .001, 300)
-#     fir_plus_comb(6,2,3000, .0005, 1000)
+#     fir_plus_comb(6,2,3000, .0005, 1000)  #!
 # 
 # 
 # #callable for fucntion callback tests?
@@ -773,7 +778,7 @@ import functools
 #         x = readin(rd)
 #         outa(i, (interp * comb_bank(nc0,x)) + ((1.0 - interp) * comb_bank(nc1, x)))
 #         
-# with Sound(play=True, scaled_to=.5, clipped=False):
+# with Sound(play=True, scaled_to=.5, clipped=False, statistics=True):
 #     flux(0, 'oboe.snd', 10.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6])
 #     flux(2, 'flute_trill_1.wav', 4.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0])
 #     flux(4, 'flute_trill_1.wav', 1.0, [1.0, 1.25, 1.5], [1.0, 1.333, 1.6, 2.0, 3.0], .995, 20)
@@ -810,7 +815,8 @@ import functools
 # with Sound(play=True): srcer(0, 2, 1.0, 1.0, .5, 124, 'oboe.snd')
 # with Sound(play=True): srcer(0, 2, 10.0, .01, .2, 8, 'oboe.snd')
 # with Sound(play=True): srcer(0, 2, 1.0, 1, 3, 20, 'oboe.snd')
-# 
+
+
 # 
 # def src_change(filename, start, duration, file_start, srcenv):
 #     beg = seconds2samples(start)
@@ -819,7 +825,7 @@ import functools
 #     e = make_env(srcenv, duration=duration)
 #     inp = make_file2sample(filename)
 #     #wish python lambdas were better
-#     def reader(d): 
+#     def reader(g, d): 
 #         nonlocal loc
 #         loc += d
 #         val =  ina(loc, inp)
@@ -839,7 +845,7 @@ import functools
 #     ff = make_convolve(make_readin(file), filt, fft_size=size)
 #     for i in range(start, end):
 #         outa(i, convolve(ff))
-        
+#         
 # with Sound(play=True):
 #     convins(0, 2, [1.0, .5, .25, .125], 'oboe.snd')
 #     
@@ -854,7 +860,7 @@ import functools
 # with Sound('noiseverb.aif', play=True):
 #     dur = 44100*3
 #     e = make_env([0,1,1,0], length=dur, base=32)
-#     r = make_rand(CLM.srate)
+#     r = make_rand(default.srate)
 #     for i in range(0,dur):
 #         outa(i, env(e)*rand(r))
 # 
@@ -865,7 +871,7 @@ import functools
 # # plays sound with whatevern CLM.player is 
 # import subprocess
 # def sndplay(file):
-#     subprocess.run([CLM.player,file])
+#     subprocess.run([default.player,file])
 # convolve_files('pistol.snd', 'noiseverb.aif', outputfile='pistol_conv.aif')
 # sndplay('pistol_conv.aif')
 # convolve_files('flute_trill_1.wav', 'noiseverb.aif', outputfile='flute_trill_1_conv.aif')
@@ -894,9 +900,6 @@ import functools
 #     # than defining in make_granulate. something to look at in future
 #     #TODO Add ability to change callback functionin granulate function
 #     def reader(gen, d):
-#         print(gen)
-#        #  g = cython.cast(mus_any, gen)
-#         print(g)
 #         nonlocal fil
 #         nonlocal ctr
 #         inval = file2sample(fil, ctr, 0)
@@ -907,7 +910,7 @@ import functools
 #     for i in range(beg, beg+dur):
 #         outa(i, granulate(exA))
 #     
-# with Sound(play=True):
+# with Sound(play=True, statistics=True):
 #     grev(0, 100000, 2.0, 'pistol.snd', 40000)
 #     
 # #another way of doing this in python would be using a generator 
