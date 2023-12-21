@@ -5,6 +5,10 @@ CLM Utility Functions
 	pysndlib.clm
 	:noindex:
 
+General		
+--------------
+.. autofunction:: length
+.. autofunction:: random
 
 Sampling rate		
 --------------

@@ -2,8 +2,8 @@
 # cython: c_string_encoding=utf8
 
 #==================================================================================
-# The code is an attempt at translation of Bill Schottstedaet's 'dsp.scm' 
-# file available at https://ccrma.stanford.edu/software/snd/sndlib/
+# The code is part of an attempt at translation of Bill Schottstedaet's clm 
+# available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
 
 
@@ -958,6 +958,7 @@ cpdef mus_reset(mus_any obj):
 # --------------- length ---------------- #
 
 cpdef cython.long length(obj):
+    """Returns length in samples of a sound file, list, ndarray, or generator"""
     #assume file
     if isinstance(obj, str):
         return csndlib.mus_sound_length(obj)
@@ -985,6 +986,7 @@ cpdef cython.long length(obj):
 # --------------- clm_channels ---------------- #
 
 cpdef cython.long clm_channels(obj):
+    """Returns number of channels of a sound file, list, ndarray"""
     if isinstance(obj, str):
         return csndlib.mus_sound_chans(obj)
     elif isinstance(obj, mus_any):
@@ -1007,6 +1009,7 @@ cpdef cython.long clm_channels(obj):
 
 
 cpdef cython.double srate(obj):
+    """Return current sample rate"""
     return csndlib.mus_sound_srate(obj)
   
 # --------------- framples ---------------- #
@@ -1034,6 +1037,7 @@ cpdef cython.long framples(obj):
 # --------------- clm random ---------------- # 
  
 cpdef cython.double random(cython.double x=1.0):
+    """Returns random number +- x"""
     return cclm.mus_random(x)
 # --------------- just some extra utils ---------------- #    
 
