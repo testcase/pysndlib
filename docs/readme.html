@@ -309,7 +309,7 @@ Sources for sndlib can be found here &lt;<a class="reference external" href="htt
 <p>grab sndlib from <a class="reference external" href="ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz">ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz</a></p>
 <p>copy sndlib directory to top level of pysndlib</p>
 <p>cd sndlib</p>
-<p>./configure –without-s7</p>
+<p>./configure --with-s7=no --with-gsl=no --without-audio</p>
 <p>make</p>
 <p>leave libsndlib.a in sndlib directory</p>
 <p>this avoids writing over installed versions which might be built with other options and
@@ -320,7 +320,7 @@ potential linking issues</p>
 <p>I do the following</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
 
-<span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span><span class="o">==</span><span class="mf">3.0.0</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">cython</span>
 </pre></div>
 </div>
 <p>After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
