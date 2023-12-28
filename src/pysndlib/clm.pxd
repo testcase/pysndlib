@@ -83,8 +83,10 @@ cdef class mus_any:
     cpdef set_up_xcoeffs(self)
     cpdef set_up_ycoeffs(self)
     cpdef set_up_pv_data(self)
-
-
+    
+    # these should all be considered public
+    cpdef mus_reset(self)
+    cpdef next(self, cython.double arg1=*, cython.double arg2=*)
 
 
 
@@ -375,6 +377,13 @@ cpdef cython.double dcblock(mus_any gen, cython.double insig)
 cpdef cython.double biquad(mus_any gen, cython.double insig)
 cpdef bint is_biquad(mus_any gen)
 
+
+cpdef cython.double bes_j0(cython.double x)
+cpdef cython.double bes_j1(cython.double x)
+cpdef cython.double bes_jn(cython.int n, cython.double x)
+cpdef cython.double bes_y0(cython.double x)  
+cpdef cython.double bes_y1(cython.double x)
+cpdef cython.double bes_yn(cython.int n, cython.double x)
 
 #cpdef mus_any make_oscil(cython.double frequency=*,cython.double  initial_phase = *)
 #cpdef mus_any make_oscil_bank(freqs, phases, amps=*, bint stable=*)

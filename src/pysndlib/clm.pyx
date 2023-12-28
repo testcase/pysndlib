@@ -338,8 +338,12 @@ cdef class mus_any:
     def __str__(self):
         return f'{mus_any} {cclm.mus_describe(self._ptr)}'
      
-    def mus_reset(self):
+    cpdef mus_reset(self):
         cclm.mus_reset(self._ptr)
+        
+    cpdef next(self, cython.double arg1=0.0, cython.double arg2=0.0):
+        return cclm.mus_apply(self._ptr, arg1,arg2)
+        
         
     @property
     def mus_frequency(self):
@@ -783,6 +787,7 @@ class Sound(object):
     def __exit__(self, *args):
         cdef cclm.mus_float_t [:] vals_view = None
         cdef cclm.mus_long_t [:] times_view = None
+        maxamp_result = [0.0] * self.channels
         if self.reverb: 
             
             if self.reverb_to_file:
@@ -826,6 +831,7 @@ class Sound(object):
                     vals_view = vals
                     times_view = times
                     maxamp = csndlib.mus_sound_maxamps(self.output, chans, &vals_view[0], &times_view[0])
+                    maxamp_result = maxamp
                     statstr += f": maxamp: {vals} {times} "
             else:
                 chans = clm_channels(self.output)
@@ -836,6 +842,7 @@ class Sound(object):
                     vals[i] = np.amax(mabs)
                     times[i] = np.argmax(mabs)
                 statstr += f"maxamp: {vals} {times} "
+                maxamp_result = vals
                 
               
             if self.scaled_by or self.scaled_to:
@@ -2303,14 +2310,15 @@ cpdef mus_any make_polywave(cython.double frequency,  partials = [0.,1.], Polyno
     :return: polywave gen
     :rtype: mus_any
     """
+   # print(f'make_polywave: f: {frequency} p: {partials} x: {xcoeffs} y: {ycoeffs}')
     
     check_range('frequency', frequency, 0.0, get_srate() / 2)
     
     cdef double [:] xcoeffs_view = None
     cdef double [:] ycoeffs_view = None
-
     
-    if(isinstance(xcoeffs, np.ndarray | list) ) and (isinstance(ycoeffs, np.ndarray | list)): 
+    # TODO : catch when only one exists
+    if  isinstance(xcoeffs, (np.ndarray, list)) and isinstance(ycoeffs, (np.ndarray, list)):
         xcoeffs_arr = np.array(xcoeffs, dtype=np.double)        
         xcoeffs_view = xcoeffs_arr
         ycoeffs_arr = np.array(ycoeffs, dtype=np.double)        
@@ -2451,7 +2459,7 @@ cpdef bint is_polyshape(mus_any gen):
 
 
 # ---------------- triangle-wave ---------------- #    
-cpdef mus_any make_triangle_wave(cython.double frequency, cython.double amplitude=1.0, cython.double phase=0.0):
+cpdef mus_any make_triangle_wave(cython.double frequency, cython.double amplitude=1.0, cython.double phase=np.pi):
     """
     return a new triangle_wave generator.
     
@@ -2530,7 +2538,7 @@ cpdef bint is_square_wave(mus_any gen):
     return cclm.mus_is_square_wave(gen._ptr)
     
 # ---------------- sawtooth-wave ---------------- #    
-cpdef mus_any make_sawtooth_wave(cython.double frequency, cython.double amplitude=1.0, cython.double phase=0.0):
+cpdef mus_any make_sawtooth_wave(cython.double frequency, cython.double amplitude=1.0, cython.double phase=np.pi):
     """
     return a new sawtooth_wave generator.
     
@@ -2566,7 +2574,7 @@ cpdef bint is_sawtooth_wave(mus_any gen):
     return cclm.mus_is_sawtooth_wave(gen._ptr)
 
 # ---------------- pulse-train ---------------- #        
-cpdef mus_any make_pulse_train(cython.double frequency=1.0, cython.double amplitude=1.0, cython.double phase=0.0):
+cpdef mus_any make_pulse_train(cython.double frequency=1.0, cython.double amplitude=1.0, cython.double phase=(np.pi*2)):
     """
     return a new pulse_train generator. this produces a sequence of impulses.
     
@@ -5482,31 +5490,31 @@ cpdef is_array_readin(gen):
 
 
 
-
-
-# # todo: maybe add an exception that have to use keyword args
-
-def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
-    class mus_gen():
-        pass
-    def make_generator(**kwargs):
-        gen = mus_gen()
-        setattr(gen, 'name', name)
-        for k, v  in kwargs.items():
-            setattr(gen, k, v)
-        if methods:
-            for k, v  in methods.items():
-                setattr(mus_gen, k, property(v[0], v[1], None) )
-        
-        return gen if not wrapper else wrapper(gen)
-    def is_a(gen):
-        return isinstance(gen, mus_gen) and gen.name == name
-    g =  functools.partial(make_generator, **slots)
-    if docstring is not None:
-        g.__doc__ = docstring
-    
-    return g, is_a
-
+# 
+# 
+# # # todo: maybe add an exception that have to use keyword args
+# 
+# def make_generator(name, slots, wrapper=None, methods=None, docstring=None):
+#     class mus_gen():
+#         pass
+#     def make_generator(**kwargs):
+#         gen = mus_gen()
+#         setattr(gen, 'name', name)
+#         for k, v  in kwargs.items():
+#             setattr(gen, k, v)
+#         if methods:
+#             for k, v  in methods.items():
+#                 setattr(mus_gen, k, property(v[0], v[1], None) )
+#         
+#         return gen if not wrapper else wrapper(gen)
+#     def is_a(gen):
+#         return isinstance(gen, mus_gen) and gen.name == name
+#     g =  functools.partial(make_generator, **slots)
+#     if docstring is not None:
+#         g.__doc__ = docstring
+#     
+#     return g, is_a
+# 
 
 
 def _clip(x, lo, hi):
@@ -5595,8 +5603,47 @@ def impulse_generator(arr):
         yield arr[n]
         n += 1
 
+# 
+# # --------------- bessel functions ---------------- #
 
-        
+from math import fabs, sqrt, exp
+
+cpdef cython.double bes_i0(cython.double x):
+    cdef cython.double ax
+    cdef cython.double ans
+    cdef cython.double y
+    ax = fabs(x)
+    if  ax < 3.75:
+        y = x/3.75
+        y *= y
+        ans = 1.0+y*(3.5156229+y*(3.0899424+y*(1.2067492+y*(0.2659732+y*(0.360768e-1+y*0.45813e-2)))))
+    else:
+        y=3.75/ax;
+        ans=(exp(ax)/sqrt(ax))*(0.39894228+y*(0.1328592e-1+y*(0.225319e-2+y*(-0.157565e-2+y*(0.916281e-2+
+        y*(-0.2057706e-1+y*(0.2635537e-1+y*(-0.1647633e-1+
+        y*0.392377e-2))))))))
+    return ans
+
+from pysndlib.cmath_sf cimport j0, j1, jn, y0, y1, yn
+
+cpdef cython.double bes_j0(cython.double x):
+    return j0(x)
+    
+cpdef cython.double bes_j1(cython.double x):
+    return j1(x)
+
+cpdef cython.double bes_jn(cython.int n, cython.double x):
+    return jn(n, x)
+
+cpdef cython.double bes_y0(cython.double x):
+    return y0(x)        
+    
+cpdef cython.double bes_y1(cython.double x):
+    return y1(x)         
+    
+cpdef cython.double bes_yn(cython.int n, cython.double x):
+    return yn(n, x)
+#     
 # cpdef  np.ndarray fill_array(arr:  npt.NDArray[np.float64], gen: mus_any, arg1: cython.double=0.0, arg2: cython.double=0.0):
 #     check_ndim(arr)
 #     arr_length = len(arr)

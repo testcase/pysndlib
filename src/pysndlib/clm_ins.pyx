@@ -1573,10 +1573,5 @@ def exp_snd(beg, dur, file, amp, exp_amt=1.0, ramp=.4, seglen=.15, sr=1.0, hop=.
 
 # TODO: --------------- cnvrev ---------------- #
 
-
-
-        
-        
-        
     
     

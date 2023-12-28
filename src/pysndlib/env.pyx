@@ -7,7 +7,7 @@
 from functools import singledispatch
 import operator
 import types
-
+import math
 import numpy as np
 import numpy.typing as npt
 cimport numpy as np
@@ -222,3 +222,5 @@ def normalize_envelope(e, new_max: cython.double=1.0):
     maxy = max_envelope(e)
     scl = new_max / maxy
     return scale_envelope(e, scl)
+    
+    
