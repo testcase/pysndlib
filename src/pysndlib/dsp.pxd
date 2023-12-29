@@ -9,12 +9,13 @@
 
 cimport cython
 import numpy as np
+import pysndlib.clm as clm
 cimport numpy as np
-#cimport pysndlib.cclm as cclm
 cimport pysndlib.clm as clm
 from pysndlib.sndlib cimport Sample, Header
 
-
+cpdef cython.double src_duration(e)
+cpdef src_fit_envelope(e, target_dur)
 cpdef cython.double highpass(clm.mus_any gen, cython.double insig)
 cpdef cython.double lowpass(clm.mus_any gen, cython.double insig)
 cpdef cython.double bandpass(clm.mus_any gen, cython.double insig)

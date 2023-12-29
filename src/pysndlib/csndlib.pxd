@@ -11,6 +11,7 @@ cdef extern from "sndlib.h":
     
     ctypedef int64_t mus_long_t 
     
+    
     ctypedef enum mus_header_t:
         pass
 

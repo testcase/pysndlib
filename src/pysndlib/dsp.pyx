@@ -7,11 +7,15 @@
 # There are various fixes needed for items translated details in code
 
 import math
+from pathlib import Path
 import cython
 import pysndlib.clm as clm
-cimport pysndlib.clm as clm
+# TODO: Figure out why I need to do this. 
+from pysndlib.clm import ndarray2file
+
 import numpy as np
 from .env import scale_envelope
+
 
 NEARLY_ZERO = 1.0e-10
 
@@ -63,20 +67,48 @@ def src_fit_envelope(e, target_dur):
     
     
 # --------------- Dolph-Chebyshev window ---------------- #
-# TODO: already in sndlib but will port over later
+# already in sndlib
 
     
     
 # --------------- down_oct ---------------- #
+def down_oct(n, snd, chn, outname=None):
+    if not clm.is_power_of_2(n):
+        raise ValueError(f'n must be power of 2 not {n}')
+    length = clm.length(snd)
+    fftlen = int(math.floor(2**math.ceil(math.log(length, 2))))
     
-# def down_oct(n, snd, chn):
-#     length = clm_length(snd)
-#     fftlen = math.floor(2**math.ceil(math.log(length, 2)))
-#     fftlen2 = fftlen / 2
-#     fft_1 = (n * fftlen) - 1
-#     fftscale = (1.0 / fftlen)
-#     rl = 
-#     
+    fftlen2 = fftlen // 2
+    fft_1 = (n * fftlen) - 1
+    fftscale = (1.0 / fftlen)
+    rl1, sr = clm.file2ndarray(snd, chn, 0, fftlen )
+    rl1 = rl1[0]
+    im1 = np.zeros(fftlen)
+    clm.mus_fft(rl1, im1, fftlen, 1)
+    rl1 *= fftscale
+    im1 *= fftscale
+    rl2 = np.zeros(n * fftlen)
+    im2 = np.zeros(n * fftlen)
+    np.copyto(rl2[0:fftlen2], rl1[0:fftlen2])
+    np.copyto(im2[0:fftlen2], im1[0:fftlen2])
+
+    i: cython.long = 0
+    j: cython.long = 0
+    
+    j = fft_1
+    for k in range(fftlen-1, fftlen2):
+        rl2[j] = rl1[k]
+        im2[j] = im1[k]
+        j -= 1
+    clm.mus_fft(rl2, im2, (n * fftlen), -1)
+    
+    if outname is not None:
+        ndarray2file(outname, rl2[:n*length], sr=sr)
+        return outname
+    else:
+        ndarray2file(Path(snd).stem +'down_oct.wav', rl2[:n*length], sr=sr) 
+        return Path(snd).stem +'_down_oct.wav'
+    
 
 
 # --------------- highpass ---------------- #

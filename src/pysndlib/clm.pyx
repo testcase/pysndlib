@@ -333,7 +333,7 @@ cdef class mus_any:
         self._pv_phase_increments.fill(0.0)
         
     def __call__(self, arg1=0.0, arg2=0.0):
-        return cclm.mus_apply(self._ptr, arg1,arg2)
+        return cclm.mus_run(self._ptr, arg1,arg2)
         
     def __str__(self):
         return f'{mus_any} {cclm.mus_describe(self._ptr)}'
@@ -342,7 +342,7 @@ cdef class mus_any:
         cclm.mus_reset(self._ptr)
         
     cpdef next(self, cython.double arg1=0.0, cython.double arg2=0.0):
-        return cclm.mus_apply(self._ptr, arg1,arg2)
+        return cclm.mus_run(self._ptr, arg1,arg2)
         
         
     @property
@@ -605,7 +605,7 @@ cdef void locsig_detour_callback_func(cclm.mus_any *ptr, cclm.mus_long_t val):
          
          
 # --------------- file2ndarray, ndarray2file ---------------- #                 
-cpdef file2ndarray(str filename, channel=None, beg=None, dur=None):
+cpdef file2ndarray(str filename, channel=None, beg=None, length=None):
     """
     return an ndarray with samples from file and the sample rate of the data
     
@@ -620,19 +620,19 @@ cpdef file2ndarray(str filename, channel=None, beg=None, dur=None):
     if not os.path.isfile(filename):
         raise FileNotFoundError(f'file2ndarray: {filename} does not exist.')
     
-    length = dur or csndlib.mus_sound_framples(filename)
+    size = length or csndlib.mus_sound_framples(filename)
     chans = csndlib.mus_sound_chans(filename)
     srate = csndlib.mus_sound_srate(filename)
     bg = beg or 0
-    out = np.zeros((1 if (channel != None) else chans, length), dtype=np.double)
+    out = np.zeros((1 if (channel != None) else chans, size), dtype=np.double)
 
     cdef double [: , :] arr_view = out
 
     if channel is None:
         for i in range(chans):  
-            csndlib.mus_file_to_array(filename, i, bg, length, &arr_view[i][0])
+            csndlib.mus_file_to_array(filename, i, bg, size, &arr_view[i][0])
     else:
-        csndlib.mus_file_to_array(filename,channel, bg, length, &arr_view[0][0])
+        csndlib.mus_file_to_array(filename,channel, bg, size, &arr_view[0][0])
     return out, srate
     
 cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_type=None, header_type=None, comment=None ):
@@ -656,8 +656,17 @@ cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_ty
     sample_type = sample_type or default.sample_type
     header_type = header_type or default.header_type
 
+   
+    
+    if arr.ndim == 1:
+        size = length or np.shape(arr)[0]
+        arr = np.reshape(arr,(1,size))
+    else:
+        size = length or np.shape(arr)[1]
+        
+        
     chans = np.shape(arr)[0]
-    length = length or np.shape(arr)[1]
+    
     fd = csndlib.mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, NULL)
 
     cdef cclm.mus_float_t **obuf = <cclm.mus_float_t**>PyMem_Malloc(chans * sizeof(cclm.mus_float_t*))
@@ -673,12 +682,12 @@ cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_ty
             obuf[i] = &arr_view[0]
     
     finally:
-        err = csndlib.mus_file_write(fd, 0, length, chans, obuf)
-        csndlib.mus_sound_close_output(fd, length * csndlib.mus_bytes_per_sample(sample_type)*chans)
+        err = csndlib.mus_file_write(fd, 0, size, chans, obuf)
+        csndlib.mus_sound_close_output(fd, size * csndlib.mus_bytes_per_sample(sample_type)*chans)
         PyMem_Free(obuf)
         
     return length
-         
+
 # --------------- with sound context manager ---------------- #      
 class Sound(object):
     """
@@ -968,7 +977,7 @@ cpdef cython.long length(obj):
     """Returns length in samples of a sound file, list, ndarray, or generator"""
     #assume file
     if isinstance(obj, str):
-        return csndlib.mus_sound_length(obj)
+        return csndlib.mus_sound_samples(obj)
     #sndlib gen    
     elif  isinstance(obj, mus_any):
         return obj.mus_length
@@ -5643,6 +5652,39 @@ cpdef cython.double bes_y1(cython.double x):
     
 cpdef cython.double bes_yn(cython.int n, cython.double x):
     return yn(n, x)
+    
+
+cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data):
+    size = len(data)
+    c = np.exp(np.arange(size) * freq) * data
+    return np.sum(c)
+#     
+# print(edot_product(complex(.2,.4), np.array([1,3,6])))
+#     
+#     
+# cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data):
+# #     cdef cython.int = 0
+#     cdef cython.long size = len(data)
+# #     cdef cython.doublecomplex sm = 0.0
+#     c = np.exp(np.arange(size) * freq) * data
+#     return np.sum(c)
+#     
+# #     for i in range(size):
+# #         sm += np.exp
+    
+    
+    
+    
+# complex double mus_edot_product(complex double freq, complex double *data,
+#                                 mus_long_t size) {
+#   int i;
+#   complex double sum = 0.0;
+#   for (i = 0; i < size; i++)
+#     sum += (cexp(i * freq) * data[i]);
+#   return (sum);
+# }
+    
+    
 #     
 # cpdef  np.ndarray fill_array(arr:  npt.NDArray[np.float64], gen: mus_any, arg1: cython.double=0.0, arg2: cython.double=0.0):
 #     check_ndim(arr)

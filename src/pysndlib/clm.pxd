@@ -123,7 +123,7 @@ cpdef cython.double bessi0(cython.double x)
 cpdef cython.double mus_interpolate(Interp interp_type, cython.double x, np.ndarray table, cython.double y1 =*)
 cpdef np.ndarray make_fft_window(Window window_type, cython.int size, cython.double beta=* , cython.double alpha=*)
 
-cpdef file2ndarray(str filename, channel=*, beg=*, dur=*)
+cpdef file2ndarray(str filename, channel=*, beg=*, length=*)
 cpdef ndarray2file(str filename, np.ndarray arr, length=*, sr=*, sample_type=*, header_type=*, comment=* )
 
 
@@ -384,6 +384,9 @@ cpdef cython.double bes_jn(cython.int n, cython.double x)
 cpdef cython.double bes_y0(cython.double x)  
 cpdef cython.double bes_y1(cython.double x)
 cpdef cython.double bes_yn(cython.int n, cython.double x)
+
+
+cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data)
 
 #cpdef mus_any make_oscil(cython.double frequency=*,cython.double  initial_phase = *)
 #cpdef mus_any make_oscil_bank(freqs, phases, amps=*, bint stable=*)
