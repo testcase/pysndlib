@@ -319,7 +319,7 @@ cdef class Ercos(CLMGenerator):
     cdef public clm.mus_any osc
     
 cpdef cython.double ercos(Ercos gen, cython.double fm=*)
-cpdef cython.bint is_safe_ercos(gen)
+cpdef cython.bint is_ercos(gen)
 
 # --------------- erssb ---------------- #  
 cdef class Erssb(CLMGenerator):
@@ -329,7 +329,7 @@ cdef class Erssb(CLMGenerator):
     cdef public cython.double angle
 
 cpdef cython.double erssb(Erssb gen, cython.double fm=*)
-cpdef cython.bint is_erssbp(gen)
+cpdef cython.bint is_erssb(gen)
 
 
 # --------------- r2sin ---------------- #  
@@ -559,8 +559,12 @@ cdef class Asyfm(CLMGenerator):
     cdef public cython.double r
     cdef public cython.double index
     cdef public cython.double angle
+    cpdef cython.double next_i(self, cython.double fm =*)
+    cpdef cython.double next_j(self, cython.double fm =*)
     
 cpdef cython.double asyfm(Asyfm gen, cython.double fm=*)
+cpdef cython.double asyfm_i(Asyfm gen, cython.double fm=*)
+cpdef cython.double asyfm_j(Asyfm gen, cython.double fm=*)
 cpdef cython.bint is_asyfm(gen)
 # 
 # --------------- bess ---------------- # 

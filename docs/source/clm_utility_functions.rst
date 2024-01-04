@@ -7,8 +7,9 @@ CLM Utility Functions
 
 General		
 --------------
-.. autofunction:: length
+.. autofunction:: get_length
 .. autofunction:: random
+.. autofunction:: get_channels
 
 Sampling rate		
 --------------
@@ -77,10 +78,4 @@ Chebyshev
 
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

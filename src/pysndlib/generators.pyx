@@ -49,17 +49,34 @@ cdef class Nssb(CLMGenerator):
 
  
 cpdef Nssb make_nssb(frequency=0, ratio=1., n=1):
-    """Creates an nssb generator.
-        nssb is the single side-band version of ncos and nsin. It is very similar to nxysin and nxycos.
+    """
+    Creates an nssb generator. nssb is the single side-band version of ncos and nsin. It is very similar to nxysin and nxycos.
+    
+    :param frequency: frequency in hz
+    :param ratio: 
+    :return: Nssb gen
     """
     return Nssb(frequency, ratio, n)
     
      
-cpdef cython.double nssb(gen: Nssb, fm: cython.double = 0.):
+cpdef cython.double nssb(Nssb gen, cython.double fm = 0.):
+    """
+    returns n sinusoids from frequency spaced by frequency * ratio.
+    
+    :param gen: nssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
      
 cpdef cython.bint is_nssb(gen):
+    """
+    returns True if gen is an nssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nssb)
 
 # --------------- nxysin ---------------- #
@@ -139,14 +156,35 @@ cdef class Nxysin(CLMGenerator):
  
 
 cpdef Nxysin make_nxysin(frequency=0, ratio=1., n=1):
-    """Creates an nxysin generator."""
+    """
+    Creates an nxysin generator that produces a sum of 'n' sinsoids starting at 'frequency', spaced by 'frequency'.
+    
+    :param frequency: frequency in hz
+    :param ratio: 
+    :param n: 
+    :return: nssb gen
+    
+    """
     return Nxysin(frequency, ratio, n)
 
 cpdef cython.double nxysin(Nxysin gen, cython.double fm=0.):
-    """returns n sines from frequency spaced by frequency * ratio."""
+    """
+    returns n sines from frequency spaced by frequency * ratio.
+    
+    :param gen: nxysin gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
 
 cpdef cython.bint is_nxysin(gen):
+    """
+    returns True if gen is an nxysin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nxysin)        
 
 # --------------- nxycos ---------------- #
@@ -175,14 +213,26 @@ cdef class Nxycos(CLMGenerator):
         
 
 cpdef Nxycos make_nxycos(frequency=0, ratio=1., n=1):
-    """Creates an nxycos generator."""
+    """Creates an nxycos generator that produces a sum of 'n' sinsoids starting at 'frequency', spaced by 'frequency'."""
     return Nxycos(frequency, ratio, n)
 
 cpdef cython.double nxycos(Nxycos gen, cython.double fm =0.):
-    """returns n cosines from frequency spaced by frequency * ratio."""
+    """
+    returns n cosines from frequency spaced by frequency * ratio.
+
+    :param gen: nxycos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
 
 cpdef cython.bint is_nxycos(gen):
+    """
+    returns True if gen is an nxycos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nxycos)        
 
       
@@ -212,15 +262,31 @@ cdef class Nxy1cos(CLMGenerator):
         
 
 cpdef cython.double make_nxy1cos(frequency=0, ratio=1., n=1):
-    """Creates an nxy1co generator."""
+    """
+    Creates an nxy1co generator that produces a sum of 'n' sinsoids starting at 'frequency', spaced by 'frequency'. 
+        nxy1cos is the same as nxycos, but every other component is multiplied by -1, and "n" produces 2n components.
+    
+    """
     return Nxy1cos(frequency, ratio, n)
     
 
 cpdef cython.double nxy1cos(Nxy1cos gen, cython.double fm =0.):
+    """
+    
+    :param gen: nxy1cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 
 cpdef cython.bint is_nxy1cos(gen):
+    """
+    returns True if gen is an nxy1cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nxy1cos)  
 
 
@@ -249,15 +315,30 @@ cdef class Nxy1sin(CLMGenerator):
         
 
 cpdef Nxy1sin make_nxy1sin(frequency=0, ratio=1., n=1):
-    """Creates an nxy1sin generator."""
+    """
+    Creates an nxy1sin generator hat produces a sum of 'n' sinsoids starting at 'frequency', spaced by 'frequency'. 
+    nxy1sin is the same as nxysin, but every other component is multiplied by -1, and "n" produces 2n components. 
+    """
     return Nxy1sin(frequency, ratio, n)
 
 
 cpdef cython.double nxy1sin(Nxy1sin gen, cython.double fm =0.):
+    """
+    
+    :param gen: nxy1sin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 
 cpdef cython.bint is_nxy1sin(gen):
+    """
+    returns True if gen is an nxy1sin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nxy1sin)        
 
 
@@ -309,16 +390,30 @@ cdef class Noddsin(CLMGenerator):
         
 
 cpdef Noddsin make_noddsin(frequency=0, ratio=1., n=1):
-    """Creates an noddsin generator."""
+    """
+    Creates an noddsin generator that produces 'n' odd-numbered sines spaced by 'frequency'.
+    """
     return Noddsin(frequency, ratio, n)
 
 
 cpdef cython.double noddsin(Noddsin gen, cython.double fm =0.):
-    """returns n odd-numbered sines spaced by frequency."""
+    """
+    returns n odd-numbered sines spaced by ratio.
+    
+    :param gen: noddsin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
 
 
 cpdef cython.bint is_noddsin(gen):
+    """
+    returns True if gen is an noddsin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Noddsin) 
 
 
@@ -354,12 +449,28 @@ cdef class Noddcos(CLMGenerator):
 
 
 cpdef Noddcos make_noddcos(frequency=0, ratio=1., n=1):
+    """
+    Creates an noddcos generator that produces 'n' odd-numbered cosines spaced by 'frequency'.
+    """
     return Noddcos(frequency, ratio, n)
 
 cpdef cython.double noddcos(Noddcos gen, cython.double fm =0.):
+    """
+    returns n odd-numbered sines spaced by ratio.
+    
+    :param gen: noddcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
    
 cpdef cython.bint is_noddcos(gen):
+    """
+    returns True if gen is an noddcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Noddcos)        
     
 
@@ -394,16 +505,30 @@ cdef class Noddssb(CLMGenerator):
         
 
 cpdef Noddssb make_noddssb(frequency=0, ratio=1., n=1):
-    """Creates an noddssb generator."""
+    """
+    Creates an noddssb generator that produces 'n' sinusoids from frequency spaced by 2 * 'ratio' * 'frequency'.
+    """
     return Noddssb(frequency, ratio, n)
     
 
 cpdef cython.double noddssb(Noddssb gen, cython.double fm =0.):
-    """Returns n sinusoids from frequency spaced by 2 * ratio * frequency."""
+    """
+    Returns n sinusoids from frequency spaced by 2 * ratio * frequency.
+    
+    :param gen: noddssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 
 cpdef cython.bint is_noddssb(gen):
+    """
+    returns True if gen is an noddssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Noddssb)   
 
 # --------------- ncos2 ---------------- #
@@ -433,16 +558,30 @@ cdef class Ncos2(CLMGenerator):
         
 
 cpdef Ncos2 make_ncos2(frequency=0, n=1):
-    """Creates an ncos2 (Fejer kernel) generator"""
+    """
+    Creates an ncos2 (Fejer kernel) generator that will produce n sinusoids spaced by frequency scaled by (n-k)/(n+1)
+    """
     return Ncos2(frequency, n)
     
 
 cpdef cython.double ncos2(Ncos2 gen, cython.double fm =0.):
-    """returns n cosines from frequency spaced by frequency * ratio."""
+    """
+    returns n cosines from frequency spaced by frequency * ratio.
+        
+    :param gen: ncos2 gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
 
 
 cpdef cython.bint is_ncos2(gen):
+    """
+    returns True if gen is an ncos2
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Ncos2)        
        
 # --------------- ncos4 ---------------- #
@@ -455,16 +594,30 @@ cdef class Ncos4(Ncos2):
                 
 
 cpdef Ncos4 make_ncos4(frequency=0, n=1):
-    """Creates an ncos4 (Jackson kernel) generator."""
+    """
+    Creates an ncos4 (Jackson kernel) generator that produces 'n' sinusoids spaced by 'frequency' scaled by ((n-k)/(n+1))^2
+    """
     return Ncos4(frequency, n)
     
 
 cpdef cython.double ncos4(Ncos4 gen, cython.double fm =0.):
-    """returns n cosines from frequency spaced by frequency * ratio."""
+    """
+    returns n cosines from frequency spaced by frequency * ratio.
+    
+    :param gen: ncos4 gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
 
 
 cpdef cython.bint is_ncos4(gen):
+    """
+    returns True if gen is an ncos4
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Ncos4)      
  
 # --------------- npcos ---------------- #      
@@ -500,15 +653,31 @@ cdef class Npcos(CLMGenerator):
         
 
 cpdef Npcos make_npcos(frequency=0, n=1):
-    """Creates an npcos (Poussin kernel) generator."""
+    """
+    Creates an npcos (Poussin kernel) generator that produces 
+    n*2+1 sinusoids spaced by frequency with amplitudes in a sort of tent shape.
+    """
     return Npcos(frequency, n)
 
 
 cpdef cython.double npcos(Npcos gen, cython.double fm =0.):
-    """returns n*2+1 sinusoids spaced by frequency with amplitudes in a sort of tent shape."""
+    """
+    returns n*2+1 sinusoids spaced by frequency with amplitudes in a sort of tent shape.
+    
+    :param gen: npcos gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
 
 cpdef cython.bint is_npcos(gen):
+    """
+    returns True if gen is an npcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Npcos)        
 
 
@@ -538,15 +707,31 @@ cdef class Ncos5(CLMGenerator):
         
 
 cpdef Ncos5 make_ncos5(frequency=0, n=1):
-    """Creates an ncos5 generator"""
+    """
+    Creates an ncos5 generator that produces 'n' cosines spaced by 'frequency'. 
+    All are equal amplitude except the first and last at half amp.
+    """
     return Ncos5(frequency, n)
 
 
 cpdef cython.double ncos5(gen: Ncos5, cython.double fm =0.):
-    """returns n cosines spaced by frequency. All are equal amplitude except the first and last at half amp"""
+    """
+    returns n cosines spaced by frequency. All are equal amplitude except the first and last at half amp
+    
+    :param gen: ncos5 gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
   
 cpdef cython.bint is_ncos5(gen):
+    """
+    returns True if gen is an ncos5
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Ncos5) 
     
                   
@@ -600,13 +785,28 @@ cdef class Nsin5(CLMGenerator):
         
 
 cpdef Nsin5 make_nsin5(frequency=0, n=1):
-    """Creates an nsin5 generator."""
+    """
+    Creates an nsin5 generator that produces 'n' sines spaced by 'frequency'. 
+    All are equal amplitude except last at half amp.
+    """
     return Nsin5(frequency, n)
     
 cpdef cython.double nsin5(Nsin5 gen, cython.double fm =0.):
+    """
+    :param gen: noddssb gen
+    :param fm: fm input
+    :rtype: float
+    """
+
     return gen.next(fm)
     
 cpdef cython.bint is_nsin5(gen):
+    """
+    returns True if gen is an nsin5
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nsin5)  
 
 
@@ -616,6 +816,11 @@ cpdef clm.mus_any make_nrsin(frequency=0, n=1, r=.5):
     return clm.make_nrxysin(frequency, 1., n, r)
     
 cpdef cython.double nrsin(clm.mus_any gen, cython.double fm=0.):
+    """
+    :param gen: nrsin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return clm.nrxysin(gen, fm)
     
 cpdef cython.bint is_nrsin(gen):
@@ -687,13 +892,29 @@ cdef class Nrcos(CLMGenerator):
         
 
 cpdef Nrcos make_nrcos(frequency=0, n=1, r=.5):
-    """Creates an nxycos generator."""
+    """
+    Creates an nrcos generator that produces 'n' cosines 
+    spaced by 'frequency' with amplitudes scaled by r^k.
+    """
     return Nrcos(frequency, n, r)
     
 cpdef cython.double nrcos(Nrcos gen, cython.double fm =0.):
+    """
+    returns n cosines spaced by frequency with amplitudes scaled by r^k.
+        
+    :param gen: nrcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_nrcos(gen):
+    """
+    returns True if gen is an nrcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nrcos)         
  
 # --------------- nrssb ---------------- #
@@ -749,18 +970,39 @@ cdef class Nrssb(CLMGenerator):
         
         
 cpdef Nrssb make_nrssb(frequency=0, ratio=1.0, n=1, r=.5) :
-    """Creates an nrssb generator."""
+    """
+    Creates an nrssb generator that produces returns n sinusoids from 
+    frequency spaced by frequency * ratio with amplitudes scaled by r^k.
+    """
     return Nrssb(frequency, ratio, n, r)
     
 cpdef cython.double nrssb(Nrssb gen, cython.double fm =0.):
-    """returns n sinusoids from frequency spaced by frequency * ratio with amplitudes scaled by r^k."""
+    """returns n sinusoids from frequency spaced by frequency * ratio with amplitudes scaled by r^k.
+    
+    :param gen: nrssb gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.double nrssb_interp(Nrssb gen, cython.double fm=0.,cython.double interp =0. ):
-    """returns n sinusoids from frequency spaced by frequency * ratio with amplitudes scaled by r^k."""
+    """
+    returns n sinusoids from frequency spaced by frequency * ratio with amplitudes scaled by r^k.
+        
+    :param gen: nrssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.call_interp(fm)
     
 cpdef cython.bint is_nrssb(gen):
+    """
+    returns True if gen is an nrssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nrssb)                   
 
 # --------------- nkssb ---------------- #  
@@ -825,15 +1067,38 @@ cdef class Nkssb(CLMGenerator):
         self.norm = 1.0 / (.5 * val * (val - 1.))
 
 cpdef Nkssb make_nkssb(frequency=0, ratio=1.0, n=1):
+    """
+    Creates an nkssb generator that produces n sinusoids from 
+    frequency spaced by frequency * ratio with amplitude k.
+    """
     return Nkssb(frequency, ratio, n)
     
 cpdef cython.double nkssb(Nkssb gen, cython.double fm=0.):
+    """
+    produces n sinusoids from frequency spaced by frequency * ratio with amplitude k
+    
+        
+    :param gen: nkssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.double nkssb_interp(Nkssb gen, cython.double fm=0., cython.double interp=0.0):
+    """
+    returns n sinusoids from frequency spaced by frequency * ratio 
+    with amplitude k. The 'interp' argument determines whether the 
+    sidebands are above (1.0) or below (-1.0) frequency.
+    """
     return gen.call_interp(fm, interp)
     
 cpdef cython.bint is_nkssb(gen):
+    """
+    returns True if gen is an nkssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nkssb)    
 
 
@@ -868,9 +1133,20 @@ cpdef Nsincos make_nsincos(frequency=0, n=1):
     return Nsincos(frequency, n)
     
 cpdef cython.double nsincos(Nsincos gen, cython.double fm=0.):
+    """
+    :param gen: nsincos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_nsincos(gen):
+    """
+    returns True if gen is an nsincos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nsincos)    
      
     
@@ -878,9 +1154,6 @@ cpdef cython.bint is_nsincos(gen):
 # --------------- n1cos ---------------- #  
 
 cdef class N1cos(CLMGenerator):
-#     cdef cython.double frequency 
-#     cdef cython.double n
-#     cdef cython.double angle
 
     def __init__(self, frequency, n=1):
         self.frequency = clm.hz2radians(frequency)
@@ -900,18 +1173,29 @@ cdef class N1cos(CLMGenerator):
         return self.next(fm)    
 
 cpdef N1cos make_n1cos(frequency=0, n=1):
+    """
+    Creates an n1cos generator that produces a spikey waveform similar to ncos2
+    """
     return N1cos(frequency, n)
     
 cpdef cython.double n1cos(N1cos gen, cython.double fm=0.):
+    """
+    :param gen: n1cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_n1cos(gen):
+    """
+    returns True if gen is an n1cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, N1cos)    
      
 
-
-# 
-# 
 # --------------- npos1cos ---------------- #  
 
 cdef class Npos1cos(CLMGenerator):
@@ -938,19 +1222,32 @@ cdef class Npos1cos(CLMGenerator):
         return self.next(fm)    
 
 cpdef Npos1cos make_npos1cos(frequency=0, n=1):
+    """
+    Creates an nsincos generator that produces n cosines spaced 
+    by frequency with amplitude sin(k*pi/(n+1))/sin(pi/(n+1))
+    """
     return Npos1cos(frequency, n)
     
 cpdef cython.double npos1cos(Npos1cos gen, cython.double fm=0.):
+    """
+    produces n cosines spaced by frequency with amplitude sin(k*pi/(n+1))/sin(pi/(n+1))
+    
+    :param gen: npos1cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_npos1cos(gen):
+    """
+    returns True if gen is an npos1cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Npos1cos)    
      
 
-
-
-# 
-# 
 # --------------- npos3cos ---------------- #  
 
 cdef class Npos3cos(CLMGenerator):
@@ -975,12 +1272,28 @@ cdef class Npos3cos(CLMGenerator):
         return self.next(fm)    
 
 cpdef Npos3cos make_npos3cos(frequency=0, n=1):
+    """
+    creates an npos3cos generator that produces n cosines spaced by frequency.
+    """
     return Npos3cos(frequency, n)
     
 cpdef cython.double npos3cos(Npos3cos gen, cython.double fm=0.):
+    """
+    produces n cosines spaced by frequency
+        
+    :param gen: npos3cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_npos3cos(gen):
+    """
+    returns True if gen is an npos3cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Npos3cos)    
 
 # --------------- rcos ---------------- #
@@ -1029,13 +1342,29 @@ cdef class Rcos(CLMGenerator):
 
 
 cpdef Rcos make_rcos(frequency=0, r=1):
+    """
+    Creates an rcos generator that produces many cosines spaced by frequency with amplitude r^k.
+    """
     return Rcos(frequency, r)
     
 cpdef cython.double rcos(Rcos gen, cython.double fm =0.):
-    """returns n cosines from frequency spaced by frequency * ratio."""
+    """
+    returns many cosines spaced by frequency with amplitude r^k
+        
+    :param gen: rcos gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rcos(gen):
+    """
+    returns True if gen is an rcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rcos)    
 
 
@@ -1086,15 +1415,34 @@ cdef class Rssb(CLMGenerator):
     
 
 cpdef Rssb make_rssb(frequency, ratio=1,r=.5):
+    """
+    creates an rssb generator that produces many cosines from frequency spaced by frequency * ratio with amplitude r^k."
+    """
     return Rssb(frequency, ratio, r)
     
 cpdef cython.double rssb(Rssb gen, cython.double fm=0.):
+    """returns many cosines from frequency spaced by frequency * ratio with amplitude r^k."""
     return gen.next(fm)
     
 cpdef cython.double rssb_interp(Rssb gen, cython.double fm=0., cython.double interp=0.):
+    """returns many cosines from frequency spaced by frequency * ratio 
+    with amplitude r^k. The 'interp' argument determines whether the sidebands 
+    are above (1.0) or below (-1.0) frequency
+    
+        
+    :param gen: rssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.call_interp(fm)
     
 cpdef cython.bint is_rssb(gen):
+    """
+    returns True if gen is an rssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rssb) 
     
     
@@ -1132,12 +1480,29 @@ cdef class Rxysin(CLMGenerator):
         self.rr = 1.0 + (self.r*self.r)
 
 cpdef Rxysin make_rxysin(frequency=0, ratio=1, r=.5):
+    """
+    creates an rxysin generator (similar to rssb) that produces many sines from frequency spaced by frequency * ratio with amplitude r^k."
+    """
     return Rxysin(frequency, ratio, r)
     
 cpdef cython.double rxysin(Rxysin gen, cython.double fm=0.):
+    """
+    returns many sines from frequency spaced by frequency * ratio with amplitude r^k.
+    
+        
+    :param gen: rxysin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rxysin(gen):
+    """
+    returns True if gen is an rxysin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rxysin)  
 
 
@@ -1175,12 +1540,29 @@ cdef class Rxycos(CLMGenerator):
     
 
 cpdef Rxycos make_rxycos(frequency=0, ratio=1, r=.5):
+    """
+    creates an rxycos generator that produces many cosines 
+    from frequency spaced by frequency * ratio with amplitude r^k.
+    """
     return Rxycos(frequency, ratio, r)
     
-cpdef cython.double rxycos(Rxycos gen, cython.double fm=0.):
+cpdef cython.double rxycos(Rxycos gen, cython.double fm=0.):    
+    """
+    returns many cosines from frequency spaced by frequency * ratio with amplitude r^k.
+        
+    :param gen: rxycos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rxycos(gen):
+    """
+    returns True if gen is an rxycos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rxycos)     
     
       
@@ -1248,12 +1630,29 @@ cdef class SafeRxycos(CLMGenerator):
         
 
 cpdef SafeRxycos make_safe_rxycos(frequency=0, ratio=1, r=.5):
+    """
+    creates a safe-rxycos generator that produces many cosines from 
+    frequency spaced by frequency * ratio with amplitude r^k where 'r' is restricted to a safe value.
+    """
     return SafeRxycos(frequency, ratio, r)
     
 cpdef cython.double safe_rxycos(SafeRxycos gen, cython.double fm=0.):
+    """
+    returns many cosines from frequency spaced by frequency * ratio with amplitude r^k where 'r' is restricted to a safe value.
+        
+    :param gen: safe_rxycos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_safe_rxycos(gen):
+    """
+    returns True if gen is an safe_rxycos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, SafeRxycos)     
 
 
@@ -1295,12 +1694,29 @@ cdef class Ercos(CLMGenerator):
         
 
 cpdef Ercos make_ercos(frequency=0, r=.5):
+    """
+    creates an ercos generator (a special case of rcos) that produces 
+    many cosines from frequency with amplitude e^(-kr).
+    """
     return Ercos(frequency, r)
     
 cpdef cython.double ercos(Ercos gen, cython.double fm=0.):
+    """
+    returns many cosines from frequency with amplitude e^(-kr).
+        
+    :param gen: ercos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
-cpdef cython.bint is_safe_ercos(gen):
+cpdef cython.bint is_ercos(gen):
+    """
+    returns True if gen is an ercos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Ercos)     
 
 # 
@@ -1332,12 +1748,30 @@ cdef class Erssb(CLMGenerator):
         
 
 cpdef Erssb make_erssb(frequency=0, ratio=1.0, r=.5):
+    """
+    creates an erssb generator (a special case of rssb) the produces 
+    many sinusoids from frequency spaced by frequency * ratio with amplitude e^(-kr).
+    """
     return Erssb(frequency, ratio, r)
     
 cpdef cython.double erssb(Erssb gen, cython.double fm=0.):
+    """
+    returns many sinusoids from frequency spaced by frequency * ratio with amplitude e^(-kr).
+     
+    :param gen: erssb gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
-cpdef cython.bint is_erssbp(gen):
+cpdef cython.bint is_erssb(gen):
+    """
+    returns True if gen is an erssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Erssb)    
      
 
@@ -1345,33 +1779,7 @@ cpdef cython.bint is_erssbp(gen):
 
 # --------------- r2sin ---------------- #  
 # bil removed 
-# cdef class R2sin(CLMGenerator):
-# 
-#     def __init__(self, frequency, r=.5):
-#         self.frequency = clm.hz2radians(frequency)
-#         self.r = r
-#         if (self.r*self.r) >= 1.0:
-#             self.r = 0.9999999
-#         self.angle = 0.0
-#     
-# 
-#     cpdef cython.double next(self, cython.double fm=0.0):
-#         cdef cython.double x = self.angle
-#         self.angle += self.frequency + fm
-#         return math.sinh(self.r * math.cos(x)) * math.sin(self.r * math.sin(x))
-# 
-#     def __call__(self, cython.double fm=0.) -> cython.double:
-#         return self.next(fm)
-#         
-# 
-# cpdef R2sin make_r2sin(frequency=0, r=.5):
-#     return R2sin(frequency, r)
-#     
-# cpdef cython.double r2sin(R2sin gen, cython.double fm=0.):
-#     return gen.next(fm)
-#     
-# cpdef cython.bint is_r2sin(gen):
-#     return isinstance(gen, R2sin)  
+
 
 
 # --------------- r2cos ---------------- #  
@@ -1393,12 +1801,31 @@ cdef class R2cos(CLMGenerator):
         return self.next(fm)
         
 cpdef R2cos make_r2cos(frequency=0, r=.5):
+    """
+    creates an r2sin generator that produces many even-numbered 
+    sines from frequency with amplitude r^(2k)/(2k)!.
+    """
     return R2cos(frequency, r)
     
 cpdef cython.double r2cos(R2cos gen, cython.double fm=0.):
+    """
+    returns many even-numbered sines from frequency with amplitude r^(2k)/(2k)!.
+    
+        
+    :param gen: r2cos gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_r2cos(gen):
+    """
+    returns True if gen is an r2cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, R2cos)  
 
 # --------------- r2ssb ---------------- #  
@@ -1424,12 +1851,29 @@ cdef class R2ssb(CLMGenerator):
         return self.next(fm)
         
 cpdef R2ssb make_r2ssb(frequency=0, ratio=1., r=.5):
+    """
+    creates an r2ssb generator that produces many even-numbered sinusoids 
+    from frequency spaced by frequency * ratio, if that makes any sense, with amplitude r^(2k)/(2k)!.
+    """
     return R2ssb(frequency, ratio, r)
     
 cpdef cython.double r2ssb(R2ssb gen, cython.double fm=0.):
+    """
+    returns many even-numbered sinusoids from frequency spaced by frequency * ratio, if that makes any sense, with amplitude r^(2k)/(2k)!.
+    
+    :param gen: r2ssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_r2ssb(gen):
+    """
+    returns True if gen is an r2ssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, R2ssb)  
 
 
@@ -1471,13 +1915,33 @@ cdef class Eoddcos(CLMGenerator):
         
 
 cpdef Eoddcos make_eoddcos(frequency=0, r=1.):
+    """
+    creates an eoddcos generator that produces many cosines 
+    from spaced by frequency with amplitude e^(-r).
+    """
     return Eoddcos(frequency, r)
     
 cpdef cython.double eoddcos(Eoddcos gen, cython.double fm=0.):
+    """
+    returns many cosines from spaced by frequency with amplitude e^(-r).
+        
+    :param gen: eoddcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_eoddcos(gen):
+    """
+    returns True if gen is an eoddcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Eoddcos)    
+
+# --------------- koddcos ---------------- #  
+# removed by bill
 
 # --------------- rkcos ---------------- #  
 
@@ -1522,12 +1986,29 @@ cdef class Rkcos(CLMGenerator):
 
 
 cpdef Rkcos make_rkcos(frequency=0, r=.5):
+    """
+    creates an rkcos generator that produces many cosines 
+    from spaced by frequency with amplitude (r^k)/k.
+    """
     return Rkcos(frequency, r)
     
 cpdef cython.double rkcos(Rkcos gen, cython.double fm =0.):
+    """
+    returns many cosines from spaced by frequency with amplitude (r^k)/k.
+        
+    :param gen: rkcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rkcos(gen):
+    """
+    returns True if gen is an rkcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rkcos)     
 
 
@@ -1557,12 +2038,29 @@ cdef class Rksin(CLMGenerator):
 
 
 cpdef Rksin make_rksin(frequency=0, r=.5):
+    """
+    creates an rksin generator that produces many sines from spaced by frequency with amplitude (r^k)/k.
+    """
     return Rksin(frequency, r)
     
 cpdef cython.double rksin(Rksin gen, cython.double fm =0.):
+    """
+    returns many sines from spaced by frequency with amplitude (r^k)/k.
+    
+    :param gen: rksin gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rksin(gen):
+    """
+    returns True if gen is an rksin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rksin)     
 
 
@@ -1601,12 +2099,30 @@ cdef class Rkssb(CLMGenerator):
     
 
 cpdef Rkssb make_rkssb(frequency, ratio=1,r=.5):
+    """
+    creates an rkssb generator that produces many sinusoids from 
+    frequency from spaced by frequency * ratio with amplitude (r^k)/k.
+    """
     return Rkssb(frequency, ratio, r)
     
 cpdef cython.double rkssb(Rkssb gen, cython.double fm=0.):
+    """
+    returns many sinusoids from frequency from spaced by frequency * ratio with amplitude (r^k)/k.
+        
+    :param gen: rkssb gen
+    :param fm: fm input
+    :rtype: float
+
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rkssb(gen):
+    """
+    returns True if gen is an rkssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rkssb) 
  
 # --------------- rk!cos ---------------- #  
@@ -1645,12 +2161,30 @@ cdef class Rkfcos(CLMGenerator):
         self.norm = 1.0 / (exp(fabs(self.r)) - 1.0 )
 
 cpdef Rkfcos make_rkfcos(frequency=0, r=.5):
+    """
+    creates an rkfcos (rkf!os) generator that produces many 
+    cosines spaced by frequency with amplitude (r^k)/k!.
+    """
     return Rkfcos(frequency, r)
     
 cpdef cython.double rkfcos(Rkfcos gen, cython.double fm = 0.):
+    """
+    returns many cosines spaced by frequency with amplitude (r^k)/k!.
+       
+    :param gen: rkfcos gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rkfcos(gen):
+    """
+    returns True if gen is an rkfcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rkfcos)     
 
 
@@ -1691,12 +2225,28 @@ cdef class Rkfssb(CLMGenerator):
         
 
 cpdef Rkfssb make_rkfssb(frequency=0, ratio=1.0, r=.5):
+    """
+    creates an rkfssb (rk!ssb) generator that produces many sinusoids from frequency spaced by frequency * ratio with amplitude (r^k)/k!.
+    """
     return Rkfssb(frequency, ratio, r)
     
 cpdef cython.double rkfssb(Rkfssb gen, cython.double fm=0.):
+    """
+    returns many sinusoids from frequency spaced by frequency * ratio with amplitude (r^k)/k!.
+    
+    :param gen: rkfssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rkfssb(gen):
+    """
+    returns True if gen is an rkfssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rkfssb)    
      
 
@@ -1743,12 +2293,29 @@ cdef class R2kfcos(CLMGenerator):
 
     
 cpdef R2kfcos make_r2kfcos(frequency=0, r=.5, k=.0):
+    """
+    creates an r2kfcos (r2k!cos) generator that produces many cosines 
+    spaced by frequency with amplitude too messy to write down.
+    """
     return R2kfcos(frequency, r, k)
     
 cpdef cython.double r2kfcos(R2kfcos gen, cython.double fm =0.):
+    """
+    returns many cosines spaced by frequency with amplitude too messy to write down.
+        
+    :param gen: r2kfcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_r2kfcos(gen):
+    """
+    returns True if gen is an r2kfcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, R2kfcos)   
 
 # 
@@ -1773,12 +2340,29 @@ cdef class K2sin(CLMGenerator):
         return self.next(fm)
         
 cpdef K2sin make_k2sin(frequency=0):
+    """
+    creates a k2sin generator that produces many sines 
+    spaced by frequency with amplitude 1/(2^k).
+    """
     return K2sin(frequency)
     
 cpdef cython.double k2sin(K2sin gen, cython.double fm =0.):
+    """
+    returns many sines spaced by frequency with amplitude 1/(2^k).
+        
+    :param gen: k2sin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_k2sin(gen):
+    """
+    returns True if gen is an k2sin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, K2sin)      
 
 
@@ -1801,12 +2385,29 @@ cdef class K2cos(CLMGenerator):
         return self.next(fm)
         
 cpdef K2cos make_k2cos(frequency=0):
+    """
+     creates a k2cos generator that produces many cosines 
+     spaced by frequency with amplitude 1/(2^k).
+    """
     return K2cos(frequency)
     
 cpdef cython.double k2cos(K2cos gen, cython.double fm =0.):
+    """
+    returns many cosines spaced by frequency with amplitude 1/(2^k).
+
+    :param gen: noddssb k2cos
+    :param fm: fm input
+    :rtype: float    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_k2cos(gen):
+    """
+    returns True if gen is an k2cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, K2cos) 
 
 # --------------- k2ssb ---------------- # 
@@ -1829,12 +2430,29 @@ cdef class K2ssb(CLMGenerator):
 
  
 cpdef K2ssb make_k2ssb(frequency=0, ratio=1.):
+    """
+     creates a k2ssb generator that produces many sinusoids from 
+     frequency spaced by frequency * ratio with amplitude 1/(2^k).
+    """
     return K2ssb(frequency, ratio)
     
 cpdef cython.double k2ssb(gen: K2ssb, fm: cython.double = 0.):
+    """
+    returns many sinusoids from frequency spaced by frequency * ratio with amplitude 1/(2^k).
+        
+    :param gen: k2ssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_k2ssb(gen):
+    """
+    returns True if gen is an k2ssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, K2ssb)
 
 
@@ -1866,12 +2484,29 @@ cdef class Dblsum(CLMGenerator):
         self.frequency = clm.hz2radians(2*val)
         
 cpdef Dblsum make_dblsum(frequency=0, r=.5):
+    """
+     creates a dblsum generator that produces many sines from frequency 
+     spaced by frequency * (2k -1) with amplitude r^k (this is buggy)
+    """
     return Dblsum(frequency, r)
     
 cpdef cython.double dblsum(Dblsum gen, cython.double fm=0.):
+    """
+    returns many sines from frequency spaced by frequency * (2k -1) with amplitude r^k (this is buggy)
+       
+    :param gen: dblsum gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_dblsum(gen):
+    """
+    returns True if gen is an dblsum
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Dblsum)  
  
 # --------------- rkoddssb ---------------- #
@@ -1910,12 +2545,29 @@ cdef class Rkoddssb(CLMGenerator):
         self.norm = 1.0 / (log(1.0 + self.r) - log(1.0 - self.r))
 
 cpdef Rkoddssb make_rkoddssb(frequency=0, ratio=1., r=.5):
+    """
+    creates an rkoddssb generator that produces many sinusoids from 
+    frequency spaced by frequency * 2 * ratio with amplitude (r^(2k-1))/(2k-1).
+    """
     return Rkoddssb(frequency, ratio, r)
     
 cpdef cython.double rkoddssb(Rkoddssb gen, cython.double fm =0.):
+    """
+    returns many sinusoids from frequency spaced by frequency * 2 * ratio with amplitude (r^(2k-1))/(2k-1).
+
+    :param gen: rkoddssb gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_rkoddssb(gen):
+    """
+    returns True if gen is an rkoddssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Rkoddssb)            
        
 # --------------- krksin ---------------- #     
@@ -1938,17 +2590,34 @@ cdef class Krksin(CLMGenerator):
         return self.next(fm)
         
 cpdef Krksin make_krksin(frequency=0, r=.5):
+    """
+    creates a krksin generator that produces many sines spaced by frequency with amplitude kr^k.
+    """
     return Krksin(frequency, r)
     
 cpdef cython.double krksin(Krksin gen, cython.double fm=0.):
+    """
+    returns many sines spaced by frequency with amplitude kr^k.
+        
+    :param gen: krksin gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_krksin(gen):
+    """
+    returns True if gen is an krksin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Krksin)  
     
 
 # --------------- absin ---------------- # 
-
+# In generators.scm this is called abssin but in docs it is absin
 cdef class Absin(CLMGenerator):
     
     def __init__(self, frequency):
@@ -1980,16 +2649,30 @@ cdef class Absin(CLMGenerator):
     
     
 
-cpdef Absin make_abssin(frequency=0):
+cpdef Absin make_absin(frequency=0):
+    """creates an absin generator (abs oscil)."""
     return Absin(frequency)
     
 cpdef cython.double absin(Absin gen, cython.double fm=0.):
+    """(abs oscil)
+        
+    :param gen: absin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_absin(gen):
+    """
+    returns True if gen is an absin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Absin)     
 
-# --------------- abscos ---------------- # 
+# --------------- abcos ---------------- # 
+
 
 cdef class Abcos(CLMGenerator):
     
@@ -2009,12 +2692,29 @@ cdef class Abcos(CLMGenerator):
         return self.next(fm)
         
 cpdef Abcos make_abcos(frequency=0, a=.5, b=.25):
+    """
+    creates an abcos generator that produces many cosines spaced 
+    by frequency with amplitude (-a+sqrt(a^2-b^2))^k/b^k.
+    """
     return Abcos(frequency, a, b)
     
 cpdef cython.double abcos(Abcos gen, cython.double fm=0.):
+    """
+    returns many cosines spaced by frequency with amplitude (-a+sqrt(a^2-b^2))^k/b^k.
+        
+    :param gen: abcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_abcos(gen):
+    """
+    returns True if gen is an abcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Abcos) 
 
 # --------------- r2k2cos ---------------- # 
@@ -2040,12 +2740,29 @@ cdef class R2k2cos(CLMGenerator):
         return self.next(fm)
         
 cpdef R2k2cos make_r2k2cos(frequency=0, r=1.):
+    """
+    creates an r2k2cos generator that produces many cosines spaced by frequency with amplitude 1/(r^2+k^2).
+    """
     return R2k2cos(frequency, r)
     
 cpdef cython.double r2k2cos(R2k2cos gen, cython.double fm=0.):
+    """
+    returns many cosines spaced by frequency with amplitude 1/(r^2+k^2).
+        
+    :param gen: r2k2cos gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_r2k2cos(gen):
+    """
+    returns True if gen is an r2k2cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, R2k2cos) 
 
 
@@ -2082,12 +2799,26 @@ cdef class Blsaw(CLMGenerator):
         return self.next(fm)
         
 cpdef Blsaw make_blsaw(frequency=0, n=1, r=.5):
+    """ creates a blsaw generator that produces a band-limited sawtooth wave."""
     return Blsaw(frequency, r, n)
     
 cpdef cython.double blsaw(Blsaw gen, cython.double fm=0.):
+    """
+    returns a band-limited sawtooth wave.
+
+    :param gen: blsaw gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_blsaw(gen):
+    """
+    returns True if gen is an blsaw
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Blsaw) 
 
 
@@ -2107,20 +2838,68 @@ cdef class Asyfm(CLMGenerator):
         cdef cython.double r1 = 1 / self.r
         cdef cython.double one = -1.0 if self.r > 1.0 or (-1.0 < self.r < 0.0) else 1.0
         cdef cython.double modphase = self.ratio * self.angle
+        cdef cython.double result = exp(.5 * self.index * (self.r - r1) * (one + cos(modphase))) * (cos(self.angle + (.5 * self.index * (self.r+r1) * sin(modphase))))
         self.angle += fm + self.frequency
-        return exp(.5 * self.index * (self.r - r1) * (one + cos(modphase))) * (cos(self.angle + (.5 * self.index * (self.r+r1) * sin(modphase))))
+        return result
+        
+    cpdef cython.double next_i(self, cython.double fm =0.0):
+        self.next(fm)
+        
+    cpdef cython.double next_j(self, cython.double fm =0.0):
+        cdef cython.double r1 = 1 / self.r
+        cdef cython.double modphase = self.ratio * self.angle
+        cdef cython.double result = exp(.5 * self.index * (self.r + r1) * (cos(modphase) - 1.0)) * (cos(self.angle + (.5 * self.index * (self.r-r1) * sin(modphase))))
+        self.angle += fm + self.frequency
+        return result
         
                 
     def __call__(self, fm: cython.double=0.) -> cython.double:
         return self.next(fm)
         
 cpdef Asyfm make_asyfm(frequency=0, ratio=1., r=1., index=1.0):
+    """
+    create an asymmetric fm gens. can produce same as asymmetric-fm generator or can use is the I0 case set r != 1.0 to get the asymmetric spectra
+    """
     return Asyfm(frequency, ratio, r, index)
     
 cpdef cython.double asyfm(Asyfm gen, cython.double fm=0.):
+    """
+    same as asyfum_i. the I0 case of the asymmetric-fm generator
+    
+        
+    :param gen: asyfm gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
+cpdef cython.double asyfm_i(Asyfm gen, cython.double fm=0.):
+    """
+    the I0 case of the asymmetric-fm generator
+        
+    :param gen: asyfm gen
+    :param fm: fm input
+    :rtype: float
+    """
+    return gen.next(fm)
+    
+cpdef cython.double asyfm_j(Asyfm gen, cython.double fm=0.):
+    """
+    is the same as the CLM asymmetric-fm generator
+        
+    :param gen: asyfm gen
+    :param fm: fm input
+    :rtype: float
+    """
+    return gen.next_j(fm)
+    
 cpdef cython.bint is_asyfm(gen):
+    """
+    returns True if gen is an asyfm
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Asyfm) 
 
 
@@ -2147,12 +2926,27 @@ cdef class Bess(CLMGenerator):
         return self.next(fm)
         
 cpdef Bess make_bess(frequency=0, n=0):
+    """creates a bessel function (Jn) generator"""
     return Bess(frequency, n)
     
 cpdef cython.double bess(Bess gen, cython.double fm=0.):
+    """
+    returns Jn
+        
+    :param gen: bess gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_bess(gen):
+    """
+    returns True if gen is an bess
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Bess) 
 
 # --------------- jjcos ---------------- # 
@@ -2179,12 +2973,27 @@ cdef class Jjcos(CLMGenerator):
         return self.next(fm)
         
 cpdef Jjcos make_jjcos(frequency=0, r=.5, a=1., k=1.):
+    """creates a jjcos generator that produces a sum of cosines scaled by a product of Bessel functions.
+    """
     return Jjcos(frequency, r, a, k)
     
 cpdef cython.double jjcos(Jjcos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled by a product of Bessel functions.
+        
+    :param gen: jjcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_jjcos(gen):
+    """
+    returns True if gen is an jjcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Jjcos) 
 
 
@@ -2212,12 +3021,27 @@ cdef class J0evencos(CLMGenerator):
         return self.next(fm)
         
 cpdef J0evencos make_j0evencos(frequency=0,index=1):
+    """
+    creates a j0evencos generator that produces a sum of cosines scaled Jk^2(index/2).
+    """
     return J0evencos(frequency, index)
     
 cpdef cython.double j0evencos(J0evencos gen, cython.double fm=0.):
+    """returns a sum of cosines scaled Jk^2(index/2).
+        
+    :param gen: j0evencos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_j0evencos(gen):
+    """
+    returns True if gen is an j0evencos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, J0evencos) 
 
 
@@ -2243,12 +3067,28 @@ cdef class J2cos(CLMGenerator):
         return self.next(fm)
         
 cpdef J2cos make_j2cos(frequency=0, r=.5, n=1):
+    """
+    creates a j2cos generator that produces a sum of cosines scaled in a very complicated way.
+    """
     return J2cos(frequency, r, n)
     
 cpdef cython.double j2cos(J2cos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled in a very complicated way.
+    
+    :param gen: j2cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_j2cos(gen):
+    """
+    returns True if gen is an j2cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, J2cos) 
 
 
@@ -2278,12 +3118,28 @@ cdef class Jpcos(CLMGenerator):
         return self.next(fm)
         
 cpdef Jpcos make_jpcos(frequency=0, r=.5, a=0.0, k=1.0):
+    """
+    creates a jpcos generator that produces a sum of cosines scaled in a very complicated way.
+    """
     return Jpcos(frequency, r, a, k)
     
 cpdef cython.double jpcos(Jpcos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled in a very complicated way.
+    
+    :param gen: jpcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_jpcos(gen):
+    """
+    returns True if gen is an jpcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Jpcos) 
 
 # --------------- jncos ---------------- # 
@@ -2309,12 +3165,28 @@ cdef class Jncos(CLMGenerator):
         return self.next(fm)
         
 cpdef Jncos make_jncos(frequency=0,  r=.5, a=1.0, n=0):
+    """
+    creates a jncos generator that produces a sum of cosines scaled in a very complicated way.
+    """
     return Jncos(frequency, r, a, n)
     
 cpdef cython.double jncos(Jncos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled in a very complicated way.
+      
+    :param gen: jncos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_jncos(gen):
+    """
+    returns True if gen is an jncos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Jncos) 
 
 
@@ -2338,12 +3210,28 @@ cdef class J0j1cos(CLMGenerator):
         return self.next(fm)
         
 cpdef J0j1cos make_j0j1cos(frequency=0, index=1):
+    """
+    creates a j0j1cos generator that produces a sum of cosines scaled in a very complicated way.
+    """
     return J0j1cos(frequency, index)
     
 cpdef cython.double j0j1cos(J0j1cos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled in a very complicated way.
+         
+    :param gen: j0j1cos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_j0j1cos(gen):
+    """
+    returns True if gen is an j0j1cos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, J0j1cos) 
 
 
@@ -2377,12 +3265,28 @@ cdef class Jycos(CLMGenerator):
         return self.next(fm)
         
 cpdef Jycos make_jycos(frequency=0, r=1.0, a=.5):
+    """
+    creates a jycos generator that produces a sum of cosines scaled by Yn(r)*Jn(r).
+    """
     return Jycos(frequency, r,a)
     
-cpdef cython.double jycos(Jycos gen, cython.double fm=0.):
+cpdef cython.double jycos(Jycos gen, cython.double fm=0.): 
+    """
+    returns a sum of cosines scaled by Yn(r)*Jn(r).
+        
+    :param gen: jycos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_jycos(gen):
+    """
+    returns True if gen is an jycos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Jycos) 
 
 
@@ -2408,12 +3312,28 @@ cdef class Jcos(CLMGenerator):
         return self.next(fm)
         
 cpdef Jcos make_jcos(frequency=0, r=1.0, a=.5):
+    """
+    creates a jcos generator. (jcos gen (fm 0.0)) that produces a sum of cosines scaled in some complex manner.
+    """
     return Jcos(frequency, r,a)
     
 cpdef cython.double jcos(Jcos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled in some complex manner.
+        
+    :param gen: jcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_jcos(gen):
+    """
+    returns True if gen is an jcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Jcos) 
     
 # --------------- blackman  ---------------- # 
@@ -2442,12 +3362,26 @@ cdef class Blackman(CLMGenerator):
         self.angle = 0.
         
 cpdef Blackman make_blackman(frequency=0, n=1):
+    """
+    creates a blackman generator that produces the nth Blackman-Harris fft data window as a periodic waveform. (n <= 10)"""
     return Blackman(frequency, n)
     
 cpdef cython.double blackman(Blackman gen, cython.double fm=0.):
+    """returns the nth Blackman-Harris fft data window as a periodic waveform. (n <= 10)
+    
+    :param gen: blackman gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_blackman(gen):
+    """
+    returns True if gen is an blackman
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Blackman) 
 
 
@@ -2481,12 +3415,29 @@ cdef class Fmssb(CLMGenerator):
         
 
 cpdef Fmssb make_fmssb(frequency=0, ratio=1.0, index=1.):
+    """
+    creates an fmssb generator that produces single-sideband FM.
+    """
     return Fmssb(frequency, ratio, index)
     
 cpdef cython.double fmssb(Fmssb gen, cython.double fm =0.):
+    """
+    returns single-sideband FM.
+    
+    :param gen: fmssb gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_fmssb(gen):
+    """
+    returns True if gen is an fmssb
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Fmssb)           
          
 # --------------- k3sin  ---------------- # 
@@ -2514,16 +3465,29 @@ cdef class K3sin(CLMGenerator):
         
 
 cpdef K3sin make_k3sin(frequency=0, n=1):
-    """creates a k3sin generator."""
+    """creates a k3sin generator that produces a sum of sines scaled by k^3."""
     return K3sin(frequency)
     
 cpdef cython.double k3sin(K3sin gen, cython.double fm =0.):
+    """
+    returns a sum of sines scaled by k^3.
+    
+    :param gen: k3sin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_k3sin(gen):
+    """
+    returns True if gen is an k3sin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, K3sin)       
     
-# # 
+
 # --------------- izcos  ---------------- # 
 
 cdef class Izcos(CLMGenerator):
@@ -2562,12 +3526,27 @@ cdef class Izcos(CLMGenerator):
         self.inorm = 1.0 / self.norm
 
 cpdef Izcos make_izcos(frequency=0,r=1.):
+    """
+    creates an izcos generator that produces a sum of sines scaled by In(r).
+    """
     return Izcos(frequency, r)
     
 cpdef cython.double izcos(Izcos gen, cython.double fm =0.):
+    """
+    returns a sum of sines scaled by In(r)
+    :param gen: izcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_izcos(gen):
+    """
+    returns True if gen is an izcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Izcos)   
     
     
@@ -2621,12 +3600,29 @@ cdef class AdjustableSquareWave(CLMGenerator):
         
 
 cpdef AdjustableSquareWave make_adjustable_square_wave(frequency=0, duty_factor=.5, amplitude=1.0):
+    """
+    creates an adjustable-square-wave generator that produces square-wave 
+    where the duty-factor sets the ratio of pulse duration to pulse period."""
     return AdjustableSquareWave(frequency, duty_factor, amplitude)
     
 cpdef cython.double adjustable_square_wave(AdjustableSquareWave gen, cython.double fm=0.):
+    """
+    returns a square-wave where the duty-factor sets the ratio of pulse duration to pulse period.
+    
+    :param gen: adjustable_square_wave gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_adjustable_square_wave(gen):
+    """
+    returns True if gen is an adjustable_square_wave
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, AdjustableSquareWave)   
     
     
@@ -2680,12 +3676,29 @@ cdef class AdjustableTriangleWave(CLMGenerator):
             self.scl = self.amplitude / val
 
 cpdef AdjustableTriangleWave make_adjustable_triangle_wave(frequency=0, duty_factor=.5, amplitude=1.0):
+    """
+    creates an adjustable-triangle-wave generator that produces a triangle-wave where the 
+    duty-factor sets the ratio of pulse duration to pulse period.
+    """
     return AdjustableTriangleWave(frequency, duty_factor, amplitude)
     
 cpdef cython.double adjustable_triangle_wave(AdjustableTriangleWave gen, cython.double fm=0.):
+    """
+    returns a triangle-wave where the duty-factor sets the ratio of pulse duration to pulse period.
+    
+    :param gen: adjustable_triangle_wave gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_adjustable_triangle_wave(gen):
+    """
+    returns True if gen is an adjustable_triangle_wave
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, AdjustableTriangleWave)   
     
 # --------------- adjustable-sawtooth-wave ---------------- # 
@@ -2739,12 +3752,28 @@ cdef class AdjustableSawtoothWave(CLMGenerator):
             self.scl = self.amplitude / val
 
 cpdef AdjustableSawtoothWave make_adjustable_sawtooth_wave(frequency=0, duty_factor=.5, amplitude=1.0):
+    """
+    creates an adjustable-sawtooth-wave generator that produces a sawtooth-wave where the duty-factor sets the ratio of pulse duration to pulse period.
+    """
     return AdjustableSawtoothWave(frequency, duty_factor, amplitude)
     
 cpdef cython.double adjustable_sawtooth_wave(AdjustableSawtoothWave gen, cython.double fm=0.):
+    """
+    returns a sawtooth-wave where the duty-factor sets the ratio of pulse duration to pulse period.
+        
+    :param gen: adjustable_sawtooth_wave gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_adjustable_sawtooth_wave(gen):
+    """
+    returns True if gen is an adjustable_sawtooth_wave
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, AdjustableSawtoothWave)   
 
 
@@ -2752,14 +3781,6 @@ cpdef cython.bint is_adjustable_sawtooth_wave(gen):
 # # 
 # --------------- adjustable-oscil-wave ---------------- # 
 cdef class AdjustableOscil(CLMGenerator): 
-#     cdef public cython.double frequency 
-#     cdef public cython.double duty_factor
-#     cdef public cython.double amplitude
-#     cdef public clm.mus_any gen
-#     cdef public cython.double top
-#     cdef public cython.double mtop
-#     cdef public cython.double scl
-#     cdef public cython.double val
  
     def __init__(self, frequency, duty_factor=.5):
         self.frequency = frequency
@@ -2808,17 +3829,36 @@ cdef class AdjustableOscil(CLMGenerator):
             self.scl = 1. / val
 
 cpdef AdjustableOscil make_adjustable_oscil(frequency=0, duty_factor=.5):
+    """
+    creates an adjustable-oscil generator that produces a sinusoid where the duty-factor sets the ratio of pulse duration to pulse period.
+    """
     return AdjustableOscil(frequency, duty_factor)
     
 cpdef cython.double adjustable_oscil(AdjustableOscil gen, cython.double fm=0.):
+    """
+    returns a sinusoid where the duty-factor sets the ratio of pulse duration to pulse period.
+            
+    :param gen: adjustable_oscil gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_adjustable_oscil(gen):
+    """
+    returns True if gen is an adjustable_oscil_wave
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, AdjustableOscil)   
 
 # --------------- make-table-lookup-with-env ---------------- # 
 
 cpdef make_table_lookup_with_env(frequency, pulse_env, size=clm.default.table_size): 
+    """
+    creates a table lookup generator from an envelope
+    """
     ve = np.zeros(size)
     e = clm.make_env(pulse_env, length=size)
     for i in range(size):
@@ -2829,6 +3869,9 @@ cpdef make_table_lookup_with_env(frequency, pulse_env, size=clm.default.table_si
 # --------------- make-wave-train-with-env ---------------- # 
 
 cpdef make_wave_train_with_env(frequency, pulse_env, size=clm.default.table_size): 
+    """
+    creates a wave train generator from an envelope
+    """
     ve = np.zeros(size)
     e = clm.make_env(pulse_env, length=size)
     for i in range(size):
@@ -2872,12 +3915,28 @@ cdef class RoundInterp(CLMGenerator):
         
 
 cpdef RoundInterp make_round_interp(frequency=0, n=1, amplitude=1.0):
+    """
+    creates a round-interp generator that produces a rand-interp sequence low-pass filtered by a moving-average generator of length n.
+    """
     return RoundInterp(frequency, n, amplitude)
     
 cpdef cython.double round_interp(RoundInterp gen, cython.double fm=0.):
+    """returns a rand-interp sequence low-pass filtered by a moving-average generator of length n.
+    
+            
+    :param gen: round_interp gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_round_interp(gen):
+    """
+    returns True if gen is an round
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, RoundInterp)   
 
 # # 
@@ -2888,12 +3947,14 @@ cdef cython.double sin_env_fun(y):
     return (0.5 * (1.0 + (sin (PI * (y - 0.5)))))
     
 cpdef cython.double sine_env(e):
+    """connects envelope points using sin function"""
     return clm.env_any(e, sin_env_fun)
     
 cdef cython.double square_env_fun(y):
     return y*y
     
 cpdef cython.double square_env(e):
+    """connects envelope points using square wave function"""
     return clm.env_any(e, square_env_fun)
 
 cdef cython.double blackman4_env_fun(y):
@@ -2901,6 +3962,7 @@ cdef cython.double blackman4_env_fun(y):
     return 0.084037 + (cx * ((cx * (0.375696 + (cx * ((cx * 0.041194) - 0.20762)))) - 0.29145))
     
 cpdef cython.double blackman4_env(e):
+    """connects envelope points using blackman function"""
     return clm.env_any(e, blackman4_env_fun)
  
     
@@ -2932,12 +3994,26 @@ cdef class Nchoosekcos(CLMGenerator):
 
 
 cpdef Nchoosekcos make_nchoosekcos(frequency=0, n=1, amplitude=1.0):
+    """creates an nchoosekcos generator that produces a sum of cosines scaled by the binomial coefficients"""
     return Nchoosekcos(frequency, n, amplitude)
     
 cpdef cython.double nchoosekcos(Nchoosekcos gen, cython.double fm=0.):
+    """
+    returns a sum of cosines scaled by the binomial coefficients
+         
+    :param gen: nchoosekcos gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_nchoosekcos(gen):
+    """
+    returns True if gen is an nchoosekcos
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Nchoosekcos)   
 
 # --------------- sinc-train ---------------- # 
@@ -2997,12 +4073,28 @@ cdef class SincTrain(CLMGenerator):
             self.n = 1 + (2 * val)
             
 cpdef SincTrain make_sinc_train(frequency=0, n=1):
+    """
+    creates a sinc-train generator with n components
+    """
     return SincTrain(frequency, n)
     
 cpdef cython.double sinc_train(SincTrain gen, cython.double fm=0.):
+    """
+    returns a sinc-train
+    
+    :param gen: sinc_train gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_sinc_train(gen):
+    """
+    returns True if gen is an sinc_train
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, SincTrain)   
 
 
@@ -3045,10 +4137,22 @@ cpdef PinkNoise make_pink_noise(n=1):
     return PinkNoise( n)
     
 cpdef cython.double pink_noise(PinkNoise gen, cython.double fm=0.):
-    """Returns the next random value in the 1/f stream produced by gen."""
+    """
+    Returns the next random value in the 1/f stream produced by gen.
+    
+    :param gen: pink_noise gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_pink_noise(gen):
+    """
+    returns True if gen is an pink_noise
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, PinkNoise)           
 
 # --------------- brown-noise ---------------- # 
@@ -3075,10 +4179,22 @@ cpdef BrownNoise make_brown_noise(frequency, amplitude=1.0):
     return BrownNoise(frequency, amplitude=1.0)
     
 cpdef cython.double brown_noise(BrownNoise gen, cython.double fm=0.):
-    """returns the next brownian noise sample"""
+    """
+    returns the next brownian noise sample
+        
+    :param gen: brown_noise gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_brown_noise(gen):
+    """
+    returns True if gen is an brown_noise
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, BrownNoise)           
 
 # --------------- green-noise ---------------- # 
@@ -3111,10 +4227,23 @@ cpdef GreenNoise make_green_noise(frequency, amplitude=1.0, low=-1.0, high=1.0):
     return GreenNoise(frequency, amplitude=1.0)
     
 cpdef cython.double  green_noise(GreenNoise gen, cython.double fm=0.):
-    """returns the next sample in a sequence of bounded brownian noise samples."""
+    """
+    returns the next sample in a sequence of bounded brownian noise samples.
+            
+    :param gen: green_noise gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_green_noise(gen):
+    """
+    returns True if gen is an green_noise
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, GreenNoise)           
 
 # TODO: This is not working properly --------------- green-noise-interp ---------------- # 
@@ -3154,13 +4283,24 @@ cpdef GreenNoiseInterp make_green_noise_interp(frequency, amplitude=1.0, low=-1.
     return GreenNoiseInterp(frequency, amplitude=1.0)
     
 cpdef green_noise_interp(GreenNoiseInterp gen, cython.double fm=0.):
-    """Returns the next sample in a sequence of interpolated bounded brownian noise samples."""
+    """
+    Returns the next sample in a sequence of interpolated bounded brownian noise samples.
+    
+    :param gen: green_noise_interp gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_green_noise_interp(gen):
+    """
+    returns True if gen is an green_noise_interp
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, GreenNoiseInterp)          
-# 
-# 
+
 # --------------- moving-sum ---------------- # 
 
 cdef class MovingSum(CLMGenerator):
@@ -3177,12 +4317,27 @@ cdef class MovingSum(CLMGenerator):
         
 
 cpdef MovingSum make_moving_sum(n=128):
+    """ 
+    returns a moving-sum generator that produces the sum of the absolute values in a moving window over the last n inputs.
+    """
     return MovingSum(n)
     
 cpdef cython.double moving_sum(MovingSum gen, cython.double insig=0.):
+    """
+    returns the sum of the absolute values in a moving window over the last n inputs.
+    :param gen: moving_sum gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(insig)
     
 cpdef cython.bint is_moving_sum(gen):
+    """
+    returns True if gen is an moving_sum
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, MovingSum)    
 #      
 # --------------- moving-variance ---------------- # 
@@ -3206,12 +4361,28 @@ cdef class MovingVariance(CLMGenerator):
         
 
 cpdef MovingVariance make_moving_variance(n=128):
+    """ 
+    returns a moving-variance generator that produces the variance of the values in a moving window over the last n inputs.
+    """
     return MovingVariance(n)
     
 cpdef cython.double moving_variance(MovingVariance gen, cython.double insig=0.):
+    """
+    returns the variance of the values in a moving window over the last n inputs.
+    :param gen: moving_variance gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(insig)
     
 cpdef cython.bint is_moving_variance(gen):
+    """
+    returns True if gen is an moving_variance
+
+    :param gen: gen
+    :rtype: bool
+    """
+
     return isinstance(gen, MovingVariance)    
 
 
@@ -3232,12 +4403,28 @@ cdef class MovingRMS(CLMGenerator):
         
 
 cpdef MovingRMS make_moving_rms(n=128):
+    """
+    returns a moving-rms generator that produces
+    the rms of the values in a window over the last n inputs.
+    """
     return MovingRMS(n)
     
 cpdef cython.double moving_rms(MovingRMS gen, cython.double insig=0.):
+    """
+    returns the rms of the values in a window over the last n inputs.
+    :param gen: moving_rms gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(insig)
     
 cpdef cython.bint is_moving_rms(gen):
+    """
+    returns True if gen is an moving_rms
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, MovingRMS)    
 
 
@@ -3245,18 +4432,33 @@ cpdef cython.bint is_moving_rms(gen):
 cdef class MovingLength(MovingRMS):
 
     def __init__(self, n=128):
-#         self.n = n
-#         self.gen = clm.make_moving_average(self.n)
         super().__init__(n)
         self.gen.mus_increment = 1.0
         
 cpdef MovingLength make_moving_length(n=128):
+    """returns a moving-length generator that produces the length 
+    of the values in a window over the last few inputs.
+    """
     return MovingLength(n)
     
 cpdef cython.double moving_length(MovingLength gen, cython.double insig=0.):
+    """
+    returns the length of the values in a window over the last few inputs.
+    
+    :param gen: moving_length gen
+    :param fm: fm input
+    :rtype: float
+    """
+
     return gen.next(insig)
     
 cpdef cython.bint is_moving_length(gen):
+    """
+    returns True if gen is an moving_length
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, MovingLength)    
     
 # --------------- weighted-moving-average ---------------- # 
@@ -3280,12 +4482,26 @@ cdef class WeightedMovingAverage(CLMGenerator):
         
 
 cpdef WeightedMovingAverage make_weighted_moving_average(n=128):
+    """returns a weighted-moving-average generator that produces the sum of the last n inputs weighted by 1/n"""
     return WeightedMovingAverage(n)
     
 cpdef cython.double weighted_moving_average(WeightedMovingAverage gen, cython.double insig=0.):
+    """
+    returns the sum of the last n inputs weighted by 1/n
+    :param gen: weighted_moving_average gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(insig)
     
 cpdef cython.bint is_weighted_moving_average(gen):
+    """
+    returns True if gen is an weighted_moving_average
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, WeightedMovingAverage)   
 
 
@@ -3304,18 +4520,36 @@ cdef class ExponentiallyWeightedMovingAverage(CLMGenerator):
         
 
 cpdef ExponentiallyWeightedMovingAverage make_exponentially_weighted_moving_average(n=128):
+    """returns an exponentially-weighted-moving-average generator that produces the sum of the last n inputs weighted by (-n/(n+1))^k"""
     return ExponentiallyWeightedMovingAverage(n)
     
 cpdef cython.double exponentially_weighted_moving_average(ExponentiallyWeightedMovingAverage gen, cython.double insig=0.):
+    """
+    returns the sum of the last n inputs weighted by (-n/(n+1))^k
+    :param gen: exponentially_weighted_moving_average gen
+    :param fm: fm input
+    :rtype: float
+    
+    """
     return gen.next(insig)
     
 cpdef cython.bint is_exponentially_weighted_moving_average(gen):
+    """
+    returns True if gen is an exponentially_weighted_moving_average
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, ExponentiallyWeightedMovingAverage)  
      
 
 # --------------- polyoid ---------------- # 
 
 cpdef clm.mus_any make_polyoid(frequency, partial_amps_and_phases):
+    """
+    returns a polyoid generator that combines the first and second Chebyshev polynomials 
+    to provide a sum of sinusoids each with arbitrary amplitude and initial-phase. 
+    """
     length = len(partial_amps_and_phases)
     n = 0
     for i in range(0, length, 3):
@@ -3333,11 +4567,23 @@ cpdef clm.mus_any make_polyoid(frequency, partial_amps_and_phases):
     return clm.make_polywave(frequency, xcoeffs=cos_amps, ycoeffs=sin_amps)
 
 cpdef cython.double polyoid(clm.mus_any gen, cython.double fm=0.0):
+    """
+    returns sum of sinusoids each with arbitrary amplitude and initial-phase.
+    :param gen: polyoid gen
+    :param fm: fm input
+    :rtype: float
+    """
     return clm.polywave(gen, fm)
  
 # look at this later 
 #cpdef cython.double polyoid_env(clm.mus_any gen, cython.double fm=0.0, amps, phases, original_data):
 cpdef cython.bint is_polyoid(gen):
+    """
+    returns True if gen is an polyoid
+
+    :param gen: gen
+    :rtype: bool
+    """
     return clm.is_polywave(gen) and gen.mus_channel == clm.Polynomial.BOTH_KINDS
     
 cpdef polyoid_tn(gen):
@@ -3375,12 +4621,26 @@ cdef class Tanhsin(CLMGenerator):
         
 
 cpdef Tanhsin make_tanhsin(frequency=0, r=1.):
+    """returns a tanhsin generator that produces tanh(r*sin) which approaches a square wave as r increases."""
     return Tanhsin(frequency, r)
     
 cpdef cython.double tanhsin(Tanhsin gen, cython.double fm=0.):
+    """
+    returns tanh(r*sin) which approaches a square wave as r increases.
+    
+    :param gen: tanhsin gen
+    :param fm: fm input
+    :rtype: float
+    """
     return gen.next(fm)
     
 cpdef cython.bint is_tanhsin(gen):
+    """
+    returns True if gen is an tanhsin
+
+    :param gen: gen
+    :rtype: bool
+    """
     return isinstance(gen, Tanhsin)    
 # 
 # # # # # 

@@ -10,7 +10,6 @@ from pysndlib.sndlib cimport Sample, Header
 
 np.import_array()
 
-
 # --------------- clm enums ---------------- #
 cpdef enum Interp:
     """
@@ -94,11 +93,14 @@ cpdef int mus_close(mus_any obj)
 cpdef bint mus_is_output(mus_any obj)
 cpdef bint mus_is_input(mus_any obj)
 cpdef mus_reset(mus_any obj)
-cpdef cython.long length(obj)
-cpdef cython.double srate(obj)
-cpdef cython.long framples(obj)
+cpdef cython.long get_length(obj)
+cpdef cython.double get_srate(obj=*)
+cpdef cython.long get_framples(obj)
+cpdef cython.long get_channels(obj)
 cpdef cython.double random(cython.double x=*)
 cpdef bint is_zero( cython.double x)
+cpdef bint is_even(n)
+cpdef bint is_odd(n)
 cpdef cython.double radians2hz(cython.double radians )
 cpdef cython.double hz2radians(cython.double hz)
 cpdef cython.double degrees2radians(cython.double degrees)
@@ -109,7 +111,6 @@ cpdef cython.double odd_multiple(cython.double x, cython.double y)
 cpdef cython.double even_multiple(cython.double x, cython.double y)
 cpdef cython.double odd_weight(cython.double x)
 cpdef cython.double even_weight(cython.double x)
-cpdef cython.double get_srate()
 cpdef cython.double set_srate(cython.double r)
 cpdef cython.long seconds2samples(cython.double secs)
 cpdef cython.double samples2seconds(cython.long samples)
@@ -123,8 +124,8 @@ cpdef cython.double bessi0(cython.double x)
 cpdef cython.double mus_interpolate(Interp interp_type, cython.double x, np.ndarray table, cython.double y1 =*)
 cpdef np.ndarray make_fft_window(Window window_type, cython.int size, cython.double beta=* , cython.double alpha=*)
 
-cpdef file2ndarray(str filename, channel=*, beg=*, length=*)
-cpdef ndarray2file(str filename, np.ndarray arr, length=*, sr=*, sample_type=*, header_type=*, comment=* )
+cpdef file2ndarray(str filename, channel=*, beg=*, size=*)
+cpdef ndarray2file(str filename, np.ndarray arr, size=*, sr=*, sample_type=*, header_type=*, comment=* )
 
 
 cpdef np.ndarray mus_fft(np.ndarray rdat, np.ndarray  idat, cython.int fft_size , cython.int sign)
@@ -376,8 +377,8 @@ cpdef cython.double dcblock(mus_any gen, cython.double insig)
 
 cpdef cython.double biquad(mus_any gen, cython.double insig)
 cpdef bint is_biquad(mus_any gen)
-
-
+cpdef biquad_set_resonance(mus_any gen, cython.double fc, cython.double radius, bint normalize=*)
+cpdef biquad_set_equal_gain_zeroes(mus_any gen)
 cpdef cython.double bes_j0(cython.double x)
 cpdef cython.double bes_j1(cython.double x)
 cpdef cython.double bes_jn(cython.int n, cython.double x)
@@ -386,7 +387,7 @@ cpdef cython.double bes_y1(cython.double x)
 cpdef cython.double bes_yn(cython.int n, cython.double x)
 
 
-cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data)
+cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data, size=*)
 
 #cpdef mus_any make_oscil(cython.double frequency=*,cython.double  initial_phase = *)
 #cpdef mus_any make_oscil_bank(freqs, phases, amps=*, bint stable=*)

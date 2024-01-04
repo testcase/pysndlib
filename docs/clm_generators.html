@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>CLM Generators &#8212; pysndlib 0.6.2 documentation</title>
+    <title>CLM Generators &#8212; pysndlib 0.6.5 documentation</title>
   
   
   
@@ -115,18 +115,22 @@
   
   
   
-    <p class="title logo__title">pysndlib 0.6.2 documentation</p>
+    <p class="title logo__title">pysndlib 0.6.5 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="description.html">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
@@ -134,7 +138,6 @@
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 
@@ -4215,7 +4218,7 @@ the same in effect as make_oscil.</p>
 <h2>pulse_train<a class="headerlink" href="#pulse-train" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_pulse_train">
-<span class="sig-name descname"><span class="pre">make_pulse_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_pulse_train" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_pulse_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.283185307179586</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_pulse_train" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new pulse_train generator. this produces a sequence of impulses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -5124,7 +5127,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <h2>sawtooth_wave<a class="headerlink" href="#sawtooth-wave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_sawtooth_wave">
-<span class="sig-name descname"><span class="pre">make_sawtooth_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_sawtooth_wave" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_sawtooth_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_sawtooth_wave" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new sawtooth_wave generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -5306,7 +5309,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <h2>triangle_wave<a class="headerlink" href="#triangle-wave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_triangle_wave">
-<span class="sig-name descname"><span class="pre">make_triangle_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_triangle_wave" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_triangle_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_triangle_wave" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new triangle_wave generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -5684,11 +5687,6 @@ of the wave found in wave. successive waves can overlap.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#wave-traindoc">sndlib wave_train</a></p>
 </div>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </section>
 </section>
 

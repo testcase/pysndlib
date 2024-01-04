@@ -132,9 +132,4 @@ that uses finalize to plot the output file after the reverb has been applied
 
 
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-
 

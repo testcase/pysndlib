@@ -1578,9 +1578,3 @@ Example usage
 
 
 
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-

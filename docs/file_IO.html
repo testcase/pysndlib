@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>File IO &#8212; pysndlib 0.6.2 documentation</title>
+    <title>File IO &#8212; pysndlib 0.6.5 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CLM Initialization" href="clm_init.html" />
-    <link rel="prev" title="CLM Utility Functions" href="clm_utility_functions.html" />
+    <link rel="prev" title="Other Generators" href="other_generators.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -115,26 +115,24 @@
   
   
   
-    <p class="title logo__title">pysndlib 0.6.2 documentation</p>
+    <p class="title logo__title">pysndlib 0.6.5 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">File IO</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 
@@ -282,14 +280,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">File IO</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.file2ndarray"><code class="docutils literal notranslate"><span class="pre">file2ndarray()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.ndarray2file"><code class="docutils literal notranslate"><span class="pre">ndarray2file()</span></code></a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -305,7 +298,7 @@ document.write(`
 <p><strong>in pysndlib.clm</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.file2ndarray">
-<span class="sig-name descname"><span class="pre">file2ndarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.file2ndarray" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">file2ndarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.file2ndarray" title="Permalink to this definition">#</a></dt>
 <dd><p>return an ndarray with samples from file and the sample rate of the data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -313,7 +306,7 @@ document.write(`
 <li><p><strong>filename</strong> – filename</p></li>
 <li><p><strong>channel</strong> – if None, will read all channels, otherwise just channel specified</p></li>
 <li><p><strong>beg</strong> – beginning positions to read in samples</p></li>
-<li><p><strong>dur</strong> – duration in samples to read</p></li>
+<li><p><strong>size</strong> – size in samples to read</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -327,14 +320,14 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.ndarray2file">
-<span class="sig-name descname"><span class="pre">ndarray2file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ndarray2file" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ndarray2file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ndarray2file" title="Permalink to this definition">#</a></dt>
 <dd><p>write an ndarray of samples to file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> – name of file</p></li>
 <li><p><strong>arr</strong> – np.ndarray of samples</p></li>
-<li><p><strong>length</strong> – length of samples to write. if None write all</p></li>
+<li><p><strong>size</strong> – number of samples to write. if None write all</p></li>
 <li><p><strong>sr</strong> – sample rate of file to write</p></li>
 <li><p><strong>sample_type</strong> – type of sample type to use. defaults to clm.sample_type</p></li>
 <li><p><strong>header_type</strong> – header of sample type to use. defaults to clm.header_type</p></li>
@@ -350,14 +343,6 @@ document.write(`
 </dd></dl>
 
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
 
 
                 </article>
@@ -372,12 +357,12 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="clm_utility_functions.html"
+       href="other_generators.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">CLM Utility Functions</p>
+        <p class="prev-next-title">Other Generators</p>
       </div>
     </a>
     <a class="right-next"
@@ -407,14 +392,9 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">File IO</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.file2ndarray"><code class="docutils literal notranslate"><span class="pre">file2ndarray()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.ndarray2file"><code class="docutils literal notranslate"><span class="pre">ndarray2file()</span></code></a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
   </nav></div>
 
 </div></div>

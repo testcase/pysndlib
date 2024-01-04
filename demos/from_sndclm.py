@@ -590,7 +590,7 @@ import functools
 #     
 #     for i in range(start, end):
 #         outa(i, env(ampf) * wave_train(wt0, env(vibenv) * oscil(vibr)))  
-
+# 
 # with Sound(play=True, statistics=True):
 #     fofins(0, 1, 270, .2, .001, 730, .6, 1090, .3, 2440, .1) # "Ahh"
 
@@ -983,22 +983,19 @@ import functools
 # # 
 # 
 # 
-# 
+
 # def pvedit(gen):
 #     length = gen.mus_length
+#     print(length)
 #     amps = phase_vocoder_amp_increments(gen)
-#     #tmp = freqs + .1
-#    # print(np.min(freqs))
-#     tmp = np.where(amps < 0., amps, amps*7.)
+#     tmp = np.where(amps < 0.25, 0, amps)
 #     np.copyto(amps, tmp)
 #     return length
 # 
 # 
-# 
-# 
 # with Sound(statistics=True, play=True):
 #     pv = make_phase_vocoder(make_readin("goodness.aiff"), 512, 4, 128, 1.0, edit=pvedit)
-#     for i in range(0, clm_length(("goodness.aiff"))):
+#     for i in range(0, get_length(("goodness.aiff"))):
 #         outa(i, phase_vocoder(pv))
 #         
 #         

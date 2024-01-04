@@ -16,10 +16,6 @@ Sndlib Enums
 	
 .. autoenum:: Error
 	:members:
-	
-	
-	
-	
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+
+

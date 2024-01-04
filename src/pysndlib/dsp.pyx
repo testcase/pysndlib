@@ -15,7 +15,7 @@ from pysndlib.clm import ndarray2file
 
 import numpy as np
 from .env import scale_envelope
-
+"hello there"
 
 NEARLY_ZERO = 1.0e-10
 
@@ -72,10 +72,11 @@ def src_fit_envelope(e, target_dur):
     
     
 # --------------- down_oct ---------------- #
+# TODO: make this able to work with multi channel files
 def down_oct(n, snd, chn, outname=None):
     if not clm.is_power_of_2(n):
         raise ValueError(f'n must be power of 2 not {n}')
-    length = clm.length(snd)
+    length = clm.get_length(snd)
     fftlen = int(math.floor(2**math.ceil(math.log(length, 2))))
     
     fftlen2 = fftlen // 2
@@ -109,9 +110,73 @@ def down_oct(n, snd, chn, outname=None):
         ndarray2file(Path(snd).stem +'down_oct.wav', rl2[:n*length], sr=sr) 
         return Path(snd).stem +'_down_oct.wav'
     
+    
+# --------------- stretch-sound-via-dft ---------------- #
+# Too slow
 
+# def stretch_sound_via_dft(factor, snd, chn, outname=None):
+#     n = clm.length(snd)
+#     out_n = round(n*factor)
+#     out_data = np.zeros(out_n)
+#     fr = np.zeros(out_n)
+#     freq = (np.pi*2) / n
+#     in_data, sr = clm.file2ndarray(snd, chn, 0, n )
+#     n2 = n // 2
+#     in_data = in_data[0]
+#     for i in range(n):
+#         fr = i if i < n2 else ((out_n + i) - n - 1)
+#         clm.edot_product(freq * (complex(0, -1) * i), in_data)
+#     freq = ((np.pi*2) / out_n)
+#     for i in range(out_n):
+#         out_data[i] = clm.edot_product(freq * (complex(0, 1) * i), fr, n)   
+#     if outname is not None:
+#         ndarray2file(outname, out_data, sr=sr)
+#         return outname
+#     else:
+#         ndarray2file(Path(snd).stem +'stretch_sound_via_dft.wav', out_data, sr=sr) 
+#         return Path(snd).stem +'stretch_sound_via_dft.wav'
+
+
+# --------------- freqdiv ---------------- #
+@cython.ccall
+def freqdiv(n, snd, chn, outname=None):
+    data, sr = clm.file2ndarray(snd, chn, 0)
+    size = clm.get_length(data)
+    i: cython.long = 0
+    k: cython.long = 0
+    
+    if n > 1:
+        for i in range(0,size,n):
+            val = data[0][i]
+            stop = min(size, i+n)
+            for k in range(i+1, stop):
+                data[0][k] = val
+        if outname is None:
+            raise ValueError('missing outfile name')
+    clm.ndarray2file(outname, data, size=size, sr=sr)
+
+
+# -------- "adaptive saturation" -- an effect from sed_sed@my-dejanews.com
+
+#-------- spike
+
+#;;; -------- easily-fooled autocorrelation-based pitch tracker 
+
+#;;; -------- chorus (doesn't always work and needs speedup)
 
 # --------------- highpass ---------------- #
+
+#-------- chordalize (comb filters to make a chord using chordalize-amount and chordalize-base)
+
+# -------- zero-phase, rotate-phase
+
+# -------- brighten-slightly
+
+# ---FIR 
+
+# -------- Hilbert transform
+
+
 # freq in radians
 @cython.ccall
 def make_highpass(fc, length: cython.int =30):

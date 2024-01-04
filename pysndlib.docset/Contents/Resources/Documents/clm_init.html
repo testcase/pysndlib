@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
+<title>CLM Initialization — pysndlib 0.6.2 documentation</title>
+<script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+<!-- Loaded before other Sphinx assets -->
+<link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" rel="preload"/>
+<link as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" rel="preload"/>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+<script src="_static/doctools.js"></script>
+<script src="_static/sphinx_highlight.js"></script>
+<script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+<script>DOCUMENTATION_OPTIONS.pagename = 'clm_init';</script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="clm_enums.html" rel="next" title="CLM Enums"/>
+<link href="file_IO.html" rel="prev" title="File IO"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+</head>
+<body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode="" data-offset="180">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox"/>
+<label class="overlay overlay-primary" for="__primary"></label>
+<input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox"/>
+<label class="overlay overlay-secondary" for="__secondary"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+<form action="search.html" class="bd-search d-flex align-items-center" method="get">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input aria-label="Search..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search..." spellcheck="false" type="search"/>
+<span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+</div>
+<nav class="bd-header navbar navbar-expand-lg bd-navbar">
+</nav>
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+<div class="bd-sidebar-primary bd-sidebar">
+<div class="sidebar-header-items sidebar-primary__section">
+</div>
+<div class="sidebar-primary-items__start sidebar-primary__section">
+<div class="sidebar-primary-item">
+<a class="navbar-brand logo" href="index.html">
+<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+</a></div>
+<div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
+<div class="bd-toc-item navbar-nav active">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
+</ul>
+</div>
+</nav></div>
+</div>
+<div class="sidebar-primary-items__end sidebar-primary__section">
+</div>
+<div id="rtd-footer-container"></div>
+</div>
+<main class="bd-main" id="main-content">
+<div class="sbt-scroll-pixel-helper"></div>
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__primary" title="Toggle primary sidebar">
+<span class="fa-solid fa-bars"></span>
+</label></div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="article-header-buttons">
+<div class="dropdown dropdown-download-buttons">
+<button aria-expanded="false" aria-label="Download this page" class="btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
+<i class="fas fa-download"></i>
+</button>
+<ul class="dropdown-menu">
+<li><a class="btn btn-sm btn-download-source-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" href="_sources/clm_init.rst" target="_blank" title="Download source file">
+<span class="btn__icon-container">
+<i class="fas fa-file"></i>
+</span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+<li>
+<button class="btn btn-sm btn-download-pdf-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" onclick="window.print()" title="Print to PDF">
+<span class="btn__icon-container">
+<i class="fas fa-file-pdf"></i>
+</span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+</ul>
+</div>
+<button class="btn btn-sm btn-fullscreen-button" data-bs-placement="bottom" data-bs-toggle="tooltip" onclick="toggleFullScreen()" title="Fullscreen mode">
+<span class="btn__icon-container">
+<i class="fas fa-expand"></i>
+</span>
+</button>
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__secondary" title="Toggle secondary sidebar">
+<span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+</div>
+</div>
+</div>
+<div class="onlyprint" id="jb-print-docs-body">
+<h1>CLM Initialization</h1>
+<!-- Table of contents -->
+<div id="print-main-content">
+<div id="jb-print-toc">
+<div>
+<h2> Contents </h2>
+</div>
+<nav aria-label="Page">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Initialization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.file_name"><code class="docutils literal notranslate"><span class="pre">default.file_name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.srate"><code class="docutils literal notranslate"><span class="pre">default.srate</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.channels"><code class="docutils literal notranslate"><span class="pre">default.channels</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.sample_type"><code class="docutils literal notranslate"><span class="pre">default.sample_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.header_type"><code class="docutils literal notranslate"><span class="pre">default.header_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.verbose"><code class="docutils literal notranslate"><span class="pre">default.verbose</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.play"><code class="docutils literal notranslate"><span class="pre">default.play</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.statistics"><code class="docutils literal notranslate"><span class="pre">default.statistics</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb"><code class="docutils literal notranslate"><span class="pre">default.reverb</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_channels"><code class="docutils literal notranslate"><span class="pre">default.reverb_channels</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_data"><code class="docutils literal notranslate"><span class="pre">default.reverb_data</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_file_name"><code class="docutils literal notranslate"><span class="pre">default.reverb_file_name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.table_size"><code class="docutils literal notranslate"><span class="pre">default.table_size</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.buffer_size"><code class="docutils literal notranslate"><span class="pre">default.buffer_size</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.locsig_type"><code class="docutils literal notranslate"><span class="pre">default.locsig_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.clipped"><code class="docutils literal notranslate"><span class="pre">default.clipped</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.player"><code class="docutils literal notranslate"><span class="pre">default.player</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.output"><code class="docutils literal notranslate"><span class="pre">default.output</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.delete_reverb"><code class="docutils literal notranslate"><span class="pre">default.delete_reverb</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article" role="main">
+<section id="clm-initialization">
+<h1>CLM Initialization<a class="headerlink" href="#clm-initialization" title="Permalink to this heading">#</a></h1>
+<p><strong>in pysndlib.clm</strong></p>
+<p>There are a number of default settings when using the library, particularly when using
+the Sound context manager. These defaults are stored in a simple-namespace called default.</p>
+<p>While many of these can also be set in individual calls to with Sound, they can also be set
+globally. For instance, if you want to change the default sample rate to 48kHz put this
+statement in your code.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clm</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">srate</span> <span class="o">=</span> <span class="mi">48000</span>
+
+<span class="n">clm</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">sample_type</span> <span class="o">=</span> <span class="n">Sample</span><span class="o">.</span><span class="n">BDOUBLE</span>
+
+<span class="n">clm</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">channels</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.file_name">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'test.wav'</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.file_name"></a><a class="headerlink" href="#pysndlib.clm.default.file_name" title="Permalink to this definition">#</a></dt>
+<dd><p>Output file name</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.srate">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">srate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44100</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.srate"></a><a class="headerlink" href="#pysndlib.clm.default.srate" title="Permalink to this definition">#</a></dt>
+<dd><p>Output sampling rate</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.channels">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.channels"></a><a class="headerlink" href="#pysndlib.clm.default.channels" title="Permalink to this definition">#</a></dt>
+<dd><p>Channels in output</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.sample_type">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">sample_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.sample_type"></a><a class="headerlink" href="#pysndlib.clm.default.sample_type" title="Permalink to this definition">#</a></dt>
+<dd><p>Output sample data type</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.header_type">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">header_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.header_type"></a><a class="headerlink" href="#pysndlib.clm.default.header_type" title="Permalink to this definition">#</a></dt>
+<dd><p>Output header type</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.verbose">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">verbose</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.verbose"></a><a class="headerlink" href="#pysndlib.clm.default.verbose" title="Permalink to this definition">#</a></dt>
+<dd><p>Print out some info</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.play">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">play</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.play"></a><a class="headerlink" href="#pysndlib.clm.default.play" title="Permalink to this definition">#</a></dt>
+<dd><p>If True, play the sound automatically</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.statistics">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">statistics</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.statistics"></a><a class="headerlink" href="#pysndlib.clm.default.statistics" title="Permalink to this definition">#</a></dt>
+<dd><p>If True, print info at end of with-sound (compile time, maxamps)</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.reverb">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">reverb</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.reverb"></a><a class="headerlink" href="#pysndlib.clm.default.reverb" title="Permalink to this definition">#</a></dt>
+<dd><p>Reverb instrument</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.reverb_channels">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">reverb_channels</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.reverb_channels"></a><a class="headerlink" href="#pysndlib.clm.default.reverb_channels" title="Permalink to this definition">#</a></dt>
+<dd><p>Chans in the reverb intermediate file</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.reverb_data">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">reverb_data</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.reverb_data"></a><a class="headerlink" href="#pysndlib.clm.default.reverb_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Arguments passed to the reverb</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.reverb_file_name">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">reverb_file_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'test.rev'</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.reverb_file_name"></a><a class="headerlink" href="#pysndlib.clm.default.reverb_file_name" title="Permalink to this definition">#</a></dt>
+<dd><p>Reverb intermediate output file name</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.table_size">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">table_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">512</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.table_size"></a><a class="headerlink" href="#pysndlib.clm.default.table_size" title="Permalink to this definition">#</a></dt>
+<dd><p>Default size for wavetables</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.buffer_size">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">buffer_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">65536</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.buffer_size"></a><a class="headerlink" href="#pysndlib.clm.default.buffer_size" title="Permalink to this definition">#</a></dt>
+<dd><p>Buffer size for file IO</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.locsig_type">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">locsig_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.locsig_type"></a><a class="headerlink" href="#pysndlib.clm.default.locsig_type" title="Permalink to this definition">#</a></dt>
+<dd><p>Locsig panning mode</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.clipped">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">clipped</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.clipped"></a><a class="headerlink" href="#pysndlib.clm.default.clipped" title="Permalink to this definition">#</a></dt>
+<dd><p>Whether to clip samples if out of range</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.player">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">player</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'afplay'</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.player"></a><a class="headerlink" href="#pysndlib.clm.default.player" title="Permalink to this definition">#</a></dt>
+<dd><p>Process to use for file playback</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.output">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.output"></a><a class="headerlink" href="#pysndlib.clm.default.output" title="Permalink to this definition">#</a></dt>
+<dd><p>Default output for output gens</p>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.clm.default.delete_reverb">
+<span class="sig-prename descclassname"><span class="pre">default.</span></span><span class="sig-name descname"><span class="pre">delete_reverb</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.clm.default.delete_reverb"></a><a class="headerlink" href="#pysndlib.clm.default.delete_reverb" title="Permalink to this definition">#</a></dt>
+<dd><p>If True, delete reverb file</p>
+</dd></dl>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</article>
+<footer class="bd-footer-article">
+<div class="footer-article-items footer-article__inner">
+<div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+<a class="left-prev" href="file_IO.html" title="previous page">
+<i class="fa-solid fa-angle-left"></i>
+<div class="prev-next-info">
+<p class="prev-next-subtitle">previous</p>
+<p class="prev-next-title">File IO</p>
+</div>
+</a>
+<a class="right-next" href="clm_enums.html" title="next page">
+<div class="prev-next-info">
+<p class="prev-next-subtitle">next</p>
+<p class="prev-next-title">CLM Enums</p>
+</div>
+<i class="fa-solid fa-angle-right"></i>
+</a>
+</div></div>
+</div>
+</footer>
+</div>
+<div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+<div class="sidebar-secondary-item">
+<div class="page-toc tocsection onthispage">
+<i class="fa-solid fa-list"></i> Contents
+  </div>
+<nav class="bd-toc-nav page-toc">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Initialization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.file_name"><code class="docutils literal notranslate"><span class="pre">default.file_name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.srate"><code class="docutils literal notranslate"><span class="pre">default.srate</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.channels"><code class="docutils literal notranslate"><span class="pre">default.channels</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.sample_type"><code class="docutils literal notranslate"><span class="pre">default.sample_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.header_type"><code class="docutils literal notranslate"><span class="pre">default.header_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.verbose"><code class="docutils literal notranslate"><span class="pre">default.verbose</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.play"><code class="docutils literal notranslate"><span class="pre">default.play</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.statistics"><code class="docutils literal notranslate"><span class="pre">default.statistics</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb"><code class="docutils literal notranslate"><span class="pre">default.reverb</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_channels"><code class="docutils literal notranslate"><span class="pre">default.reverb_channels</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_data"><code class="docutils literal notranslate"><span class="pre">default.reverb_data</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.reverb_file_name"><code class="docutils literal notranslate"><span class="pre">default.reverb_file_name</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.table_size"><code class="docutils literal notranslate"><span class="pre">default.table_size</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.buffer_size"><code class="docutils literal notranslate"><span class="pre">default.buffer_size</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.locsig_type"><code class="docutils literal notranslate"><span class="pre">default.locsig_type</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.clipped"><code class="docutils literal notranslate"><span class="pre">default.clipped</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.player"><code class="docutils literal notranslate"><span class="pre">default.player</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.output"><code class="docutils literal notranslate"><span class="pre">default.output</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.default.delete_reverb"><code class="docutils literal notranslate"><span class="pre">default.delete_reverb</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</nav></div>
+</div></div>
+</div>
+<footer class="bd-footer-content">
+<div class="bd-footer-content__inner container">
+<div class="footer-item">
+<p class="component-author">
+By Todd Ingalls
+</p>
+</div>
+<div class="footer-item">
+<p class="copyright">
+    
+      © Copyright 2023, Todd Ingalls.
+      <br/>
+</p>
+</div>
+<div class="footer-item">
+</div>
+<div class="footer-item">
+</div>
+</div>
+</footer>
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+<footer class="bd-footer">
+</footer>
+</body>
+</html>

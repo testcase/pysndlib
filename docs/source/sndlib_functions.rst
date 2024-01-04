@@ -53,17 +53,3 @@ in the header. In each case the argument to the function is the full file name o
 .. autofunction:: mus_set_clipping
 
 
-
-
-
-
-
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

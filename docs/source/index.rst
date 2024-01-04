@@ -11,12 +11,14 @@ Welcome to pysndlib's documentation!
 
 .. toctree::
     :maxdepth: 1
-    :caption: Contents:
     
-    readme
+    description
+    building
+    installation
     with_sound
     clm_generators
     clm_utility_functions
+    other_generators
     file_IO
     clm_init
     clm_enums
@@ -25,8 +27,6 @@ Welcome to pysndlib's documentation!
     sndlib_enums
 
 
-Indices and tables
-==================
 
 * :ref:`genindex`
 * :ref:`modindex`

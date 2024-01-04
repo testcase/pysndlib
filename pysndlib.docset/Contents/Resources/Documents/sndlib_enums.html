@@ -1,0 +1,1267 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
+<title>Sndlib Enums — pysndlib 0.6.2 documentation</title>
+<script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+<!-- Loaded before other Sphinx assets -->
+<link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" rel="preload"/>
+<link as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" rel="preload"/>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+<script src="_static/doctools.js"></script>
+<script src="_static/sphinx_highlight.js"></script>
+<script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+<script>DOCUMENTATION_OPTIONS.pagename = 'sndlib_enums';</script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="sndlib_functions.html" rel="prev" title="Sndlib Functions"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+</head>
+<body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode="" data-offset="180">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox"/>
+<label class="overlay overlay-primary" for="__primary"></label>
+<input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox"/>
+<label class="overlay overlay-secondary" for="__secondary"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+<form action="search.html" class="bd-search d-flex align-items-center" method="get">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input aria-label="Search..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search..." spellcheck="false" type="search"/>
+<span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+</div>
+<nav class="bd-header navbar navbar-expand-lg bd-navbar">
+</nav>
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+<div class="bd-sidebar-primary bd-sidebar">
+<div class="sidebar-header-items sidebar-primary__section">
+</div>
+<div class="sidebar-primary-items__start sidebar-primary__section">
+<div class="sidebar-primary-item">
+<a class="navbar-brand logo" href="index.html">
+<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+</a></div>
+<div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
+<div class="bd-toc-item navbar-nav active">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Sndlib Enums</a></li>
+</ul>
+</div>
+</nav></div>
+</div>
+<div class="sidebar-primary-items__end sidebar-primary__section">
+</div>
+<div id="rtd-footer-container"></div>
+</div>
+<main class="bd-main" id="main-content">
+<div class="sbt-scroll-pixel-helper"></div>
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__primary" title="Toggle primary sidebar">
+<span class="fa-solid fa-bars"></span>
+</label></div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="article-header-buttons">
+<div class="dropdown dropdown-download-buttons">
+<button aria-expanded="false" aria-label="Download this page" class="btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
+<i class="fas fa-download"></i>
+</button>
+<ul class="dropdown-menu">
+<li><a class="btn btn-sm btn-download-source-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" href="_sources/sndlib_enums.rst" target="_blank" title="Download source file">
+<span class="btn__icon-container">
+<i class="fas fa-file"></i>
+</span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+<li>
+<button class="btn btn-sm btn-download-pdf-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" onclick="window.print()" title="Print to PDF">
+<span class="btn__icon-container">
+<i class="fas fa-file-pdf"></i>
+</span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+</ul>
+</div>
+<button class="btn btn-sm btn-fullscreen-button" data-bs-placement="bottom" data-bs-toggle="tooltip" onclick="toggleFullScreen()" title="Fullscreen mode">
+<span class="btn__icon-container">
+<i class="fas fa-expand"></i>
+</span>
+</button>
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__secondary" title="Toggle secondary sidebar">
+<span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+</div>
+</div>
+</div>
+<div class="onlyprint" id="jb-print-docs-body">
+<h1>Sndlib Enums</h1>
+<!-- Table of contents -->
+<div id="print-main-content">
+<div id="jb-print-toc">
+<div>
+<h2> Contents </h2>
+</div>
+<nav aria-label="Page">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header"><code class="docutils literal notranslate"><span class="pre">Header</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.UNKNOWN_HEADER"><code class="docutils literal notranslate"><span class="pre">Header.UNKNOWN_HEADER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NEXT"><code class="docutils literal notranslate"><span class="pre">Header.NEXT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AIFC"><code class="docutils literal notranslate"><span class="pre">Header.AIFC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RIFF"><code class="docutils literal notranslate"><span class="pre">Header.RIFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RF64"><code class="docutils literal notranslate"><span class="pre">Header.RF64</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.BICSF"><code class="docutils literal notranslate"><span class="pre">Header.BICSF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NIST"><code class="docutils literal notranslate"><span class="pre">Header.NIST</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.INRS"><code class="docutils literal notranslate"><span class="pre">Header.INRS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ESPS"><code class="docutils literal notranslate"><span class="pre">Header.ESPS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SVX"><code class="docutils literal notranslate"><span class="pre">Header.SVX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.VOC"><code class="docutils literal notranslate"><span class="pre">Header.VOC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SNDT"><code class="docutils literal notranslate"><span class="pre">Header.SNDT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RAW"><code class="docutils literal notranslate"><span class="pre">Header.RAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SMP"><code class="docutils literal notranslate"><span class="pre">Header.SMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AVR"><code class="docutils literal notranslate"><span class="pre">Header.AVR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IRCAM"><code class="docutils literal notranslate"><span class="pre">Header.IRCAM</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SD1"><code class="docutils literal notranslate"><span class="pre">Header.SD1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SPPACK"><code class="docutils literal notranslate"><span class="pre">Header.SPPACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MUS10"><code class="docutils literal notranslate"><span class="pre">Header.MUS10</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.HCOM"><code class="docutils literal notranslate"><span class="pre">Header.HCOM</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PSION"><code class="docutils literal notranslate"><span class="pre">Header.PSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MAUD"><code class="docutils literal notranslate"><span class="pre">Header.MAUD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IEEE"><code class="docutils literal notranslate"><span class="pre">Header.IEEE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MATLAB"><code class="docutils literal notranslate"><span class="pre">Header.MATLAB</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ADC"><code class="docutils literal notranslate"><span class="pre">Header.ADC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MIDI"><code class="docutils literal notranslate"><span class="pre">Header.MIDI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOUNDFONT"><code class="docutils literal notranslate"><span class="pre">Header.SOUNDFONT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.GRAVIS"><code class="docutils literal notranslate"><span class="pre">Header.GRAVIS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.COMDISCO"><code class="docutils literal notranslate"><span class="pre">Header.COMDISCO</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.GOLDWAVE"><code class="docutils literal notranslate"><span class="pre">Header.GOLDWAVE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SRFS"><code class="docutils literal notranslate"><span class="pre">Header.SRFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MIDI_SAMPLE_DUMP"><code class="docutils literal notranslate"><span class="pre">Header.MIDI_SAMPLE_DUMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DIAMONDWARE"><code class="docutils literal notranslate"><span class="pre">Header.DIAMONDWARE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ADF"><code class="docutils literal notranslate"><span class="pre">Header.ADF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SBSTUDIOII"><code class="docutils literal notranslate"><span class="pre">Header.SBSTUDIOII</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DELUSION"><code class="docutils literal notranslate"><span class="pre">Header.DELUSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FARANDOLE"><code class="docutils literal notranslate"><span class="pre">Header.FARANDOLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SAMPLE_DUMP"><code class="docutils literal notranslate"><span class="pre">Header.SAMPLE_DUMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ULTRATRACKER"><code class="docutils literal notranslate"><span class="pre">Header.ULTRATRACKER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_SY85"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_SY85</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_TX16W"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_TX16W</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DIGIPLAYER"><code class="docutils literal notranslate"><span class="pre">Header.DIGIPLAYER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.COVOX"><code class="docutils literal notranslate"><span class="pre">Header.COVOX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AVI"><code class="docutils literal notranslate"><span class="pre">Header.AVI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.OMF"><code class="docutils literal notranslate"><span class="pre">Header.OMF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.QUICKTIME"><code class="docutils literal notranslate"><span class="pre">Header.QUICKTIME</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ASF"><code class="docutils literal notranslate"><span class="pre">Header.ASF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_SY99"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_SY99</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.KURZWEIL_2000"><code class="docutils literal notranslate"><span class="pre">Header.KURZWEIL_2000</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AIFF"><code class="docutils literal notranslate"><span class="pre">Header.AIFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PAF"><code class="docutils literal notranslate"><span class="pre">Header.PAF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.CSL"><code class="docutils literal notranslate"><span class="pre">Header.CSL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FILE_SAMP"><code class="docutils literal notranslate"><span class="pre">Header.FILE_SAMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PVF"><code class="docutils literal notranslate"><span class="pre">Header.PVF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOUNDFORGE"><code class="docutils literal notranslate"><span class="pre">Header.SOUNDFORGE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.TWINVQ"><code class="docutils literal notranslate"><span class="pre">Header.TWINVQ</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AKAI4"><code class="docutils literal notranslate"><span class="pre">Header.AKAI4</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IMPULSETRACKER"><code class="docutils literal notranslate"><span class="pre">Header.IMPULSETRACKER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.KORG"><code class="docutils literal notranslate"><span class="pre">Header.KORG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NVF"><code class="docutils literal notranslate"><span class="pre">Header.NVF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.CAFF"><code class="docutils literal notranslate"><span class="pre">Header.CAFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MAUI"><code class="docutils literal notranslate"><span class="pre">Header.MAUI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SDIF"><code class="docutils literal notranslate"><span class="pre">Header.SDIF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.OGG"><code class="docutils literal notranslate"><span class="pre">Header.OGG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FLAC"><code class="docutils literal notranslate"><span class="pre">Header.FLAC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SPEEX"><code class="docutils literal notranslate"><span class="pre">Header.SPEEX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MPEG"><code class="docutils literal notranslate"><span class="pre">Header.MPEG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SHORTEN"><code class="docutils literal notranslate"><span class="pre">Header.SHORTEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.TTA"><code class="docutils literal notranslate"><span class="pre">Header.TTA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.WAVPACK"><code class="docutils literal notranslate"><span class="pre">Header.WAVPACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOX"><code class="docutils literal notranslate"><span class="pre">Header.SOX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NUM_HEADERS"><code class="docutils literal notranslate"><span class="pre">Header.NUM_HEADERS</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample"><code class="docutils literal notranslate"><span class="pre">Sample</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UNKNOWN_SAMPLE"><code class="docutils literal notranslate"><span class="pre">Sample.UNKNOWN_SAMPLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.BSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.MULAW"><code class="docutils literal notranslate"><span class="pre">Sample.MULAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BYTE"><code class="docutils literal notranslate"><span class="pre">Sample.BYTE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BFLOAT"><code class="docutils literal notranslate"><span class="pre">Sample.BFLOAT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BINT"><code class="docutils literal notranslate"><span class="pre">Sample.BINT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.ALAW"><code class="docutils literal notranslate"><span class="pre">Sample.ALAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UBYTE"><code class="docutils literal notranslate"><span class="pre">Sample.UBYTE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.B24INT"><code class="docutils literal notranslate"><span class="pre">Sample.B24INT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BDOUBLE"><code class="docutils literal notranslate"><span class="pre">Sample.BDOUBLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.LSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LINT"><code class="docutils literal notranslate"><span class="pre">Sample.LINT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LFLOAT"><code class="docutils literal notranslate"><span class="pre">Sample.LFLOAT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LDOUBLE"><code class="docutils literal notranslate"><span class="pre">Sample.LDOUBLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UBSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.UBSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.ULSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.ULSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.L24INT"><code class="docutils literal notranslate"><span class="pre">Sample.L24INT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BINTN"><code class="docutils literal notranslate"><span class="pre">Sample.BINTN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LINTN"><code class="docutils literal notranslate"><span class="pre">Sample.LINTN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BFLOAT_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.BFLOAT_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LFLOAT_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.LFLOAT_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BDOUBLE_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.BDOUBLE_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LDOUBLE_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.LDOUBLE_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.NUM_SAMPLES"><code class="docutils literal notranslate"><span class="pre">Sample.NUM_SAMPLES</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.NO_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FREQUENCY"><code class="docutils literal notranslate"><span class="pre">Error.NO_FREQUENCY</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_PHASE"><code class="docutils literal notranslate"><span class="pre">Error.NO_PHASE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_GEN"><code class="docutils literal notranslate"><span class="pre">Error.NO_GEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_LENGTH"><code class="docutils literal notranslate"><span class="pre">Error.NO_LENGTH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_DESCRIBE"><code class="docutils literal notranslate"><span class="pre">Error.NO_DESCRIBE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_DATA"><code class="docutils literal notranslate"><span class="pre">Error.NO_DATA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SCALER"><code class="docutils literal notranslate"><span class="pre">Error.NO_SCALER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.MEMORY_ALLOCATION_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.MEMORY_ALLOCATION_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_OPEN_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_OPEN_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SAMPLE_INPUT"><code class="docutils literal notranslate"><span class="pre">Error.NO_SAMPLE_INPUT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SAMPLE_OUTPUT"><code class="docutils literal notranslate"><span class="pre">Error.NO_SAMPLE_OUTPUT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SUCH_CHANNEL"><code class="docutils literal notranslate"><span class="pre">Error.NO_SUCH_CHANNEL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FILE_NAME_PROVIDED"><code class="docutils literal notranslate"><span class="pre">Error.NO_FILE_NAME_PROVIDED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_LOCATION"><code class="docutils literal notranslate"><span class="pre">Error.NO_LOCATION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_CHANNEL"><code class="docutils literal notranslate"><span class="pre">Error.NO_CHANNEL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SUCH_FFT_WINDOW"><code class="docutils literal notranslate"><span class="pre">Error.NO_SUCH_FFT_WINDOW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.UNSUPPORTED_SAMPLE_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.UNSUPPORTED_SAMPLE_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.HEADER_READ_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.HEADER_READ_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.UNSUPPORTED_HEADER_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.UNSUPPORTED_HEADER_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.FILE_DESCRIPTORS_NOT_INITIALIZED"><code class="docutils literal notranslate"><span class="pre">Error.FILE_DESCRIPTORS_NOT_INITIALIZED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NOT_A_SOUND_FILE"><code class="docutils literal notranslate"><span class="pre">Error.NOT_A_SOUND_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.FILE_CLOSED"><code class="docutils literal notranslate"><span class="pre">Error.FILE_CLOSED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.WRITE_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.WRITE_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.HEADER_WRITE_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.HEADER_WRITE_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_OPEN_TEMP_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_OPEN_TEMP_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.INTERRUPTED"><code class="docutils literal notranslate"><span class="pre">Error.INTERRUPTED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.BAD_ENVELOPE"><code class="docutils literal notranslate"><span class="pre">Error.BAD_ENVELOPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CHANNELS_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CHANNELS_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SRATE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SRATE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_NO_INPUT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_NO_INPUT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CONFIGURATION_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CONFIGURATION_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_WRITE_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_WRITE_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SIZE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SIZE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_DEVICE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_DEVICE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_CLOSE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_CLOSE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_OPEN"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_OPEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_READ_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_READ_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_WRITE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_WRITE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_READ"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_READ</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_NO_READ_PERMISSION"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_NO_READ_PERMISSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_CLOSE_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_CLOSE_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.ARG_OUT_OF_RANGE"><code class="docutils literal notranslate"><span class="pre">Error.ARG_OUT_OF_RANGE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_CHANNELS"><code class="docutils literal notranslate"><span class="pre">Error.NO_CHANNELS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_HOP"><code class="docutils literal notranslate"><span class="pre">Error.NO_HOP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_WIDTH"><code class="docutils literal notranslate"><span class="pre">Error.NO_WIDTH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FILE_NAME"><code class="docutils literal notranslate"><span class="pre">Error.NO_FILE_NAME</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RAMP"><code class="docutils literal notranslate"><span class="pre">Error.NO_RAMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RUN"><code class="docutils literal notranslate"><span class="pre">Error.NO_RUN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_INCREMENT"><code class="docutils literal notranslate"><span class="pre">Error.NO_INCREMENT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_OFFSET"><code class="docutils literal notranslate"><span class="pre">Error.NO_OFFSET</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_XCOEFF"><code class="docutils literal notranslate"><span class="pre">Error.NO_XCOEFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_YCOEFF"><code class="docutils literal notranslate"><span class="pre">Error.NO_YCOEFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_XCOEFFS"><code class="docutils literal notranslate"><span class="pre">Error.NO_XCOEFFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_YCOEFFS"><code class="docutils literal notranslate"><span class="pre">Error.NO_YCOEFFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RESET"><code class="docutils literal notranslate"><span class="pre">Error.NO_RESET</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.BAD_SIZE"><code class="docutils literal notranslate"><span class="pre">Error.BAD_SIZE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_CONVERT"><code class="docutils literal notranslate"><span class="pre">Error.CANT_CONVERT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.READ_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.READ_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FEEDFORWARD"><code class="docutils literal notranslate"><span class="pre">Error.NO_FEEDFORWARD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FEEDBACK"><code class="docutils literal notranslate"><span class="pre">Error.NO_FEEDBACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_INTERP_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.NO_INTERP_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_POSITION"><code class="docutils literal notranslate"><span class="pre">Error.NO_POSITION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_ORDER"><code class="docutils literal notranslate"><span class="pre">Error.NO_ORDER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_COPY"><code class="docutils literal notranslate"><span class="pre">Error.NO_COPY</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_TRANSLATE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_TRANSLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NUM_ERRORS"><code class="docutils literal notranslate"><span class="pre">Error.NUM_ERRORS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article" role="main">
+<section id="sndlib-enums">
+<h1>Sndlib Enums<a class="headerlink" href="#sndlib-enums" title="Permalink to this heading">#</a></h1>
+<p><strong>in pysndlib.sndlib</strong></p>
+<dl class="py class enum">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header">
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.sndlib.Header" title="Permalink to this definition">#</a></dt>
+<dd><p>file types for audio files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Member Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>Valid values are as follows:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.UNKNOWN_HEADER">
+<span class="sig-name descname"><span class="pre">UNKNOWN_HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.UNKNOWN_HEADER:</span> <span class="pre">0&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.UNKNOWN_HEADER"></a><a class="headerlink" href="#pysndlib.sndlib.Header.UNKNOWN_HEADER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.NEXT">
+<span class="sig-name descname"><span class="pre">NEXT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.NEXT:</span> <span class="pre">1&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.NEXT"></a><a class="headerlink" href="#pysndlib.sndlib.Header.NEXT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.AIFC">
+<span class="sig-name descname"><span class="pre">AIFC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.AIFC:</span> <span class="pre">2&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.AIFC"></a><a class="headerlink" href="#pysndlib.sndlib.Header.AIFC" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.RIFF">
+<span class="sig-name descname"><span class="pre">RIFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.RIFF:</span> <span class="pre">3&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.RIFF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.RIFF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.RF64">
+<span class="sig-name descname"><span class="pre">RF64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.RF64:</span> <span class="pre">4&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.RF64"></a><a class="headerlink" href="#pysndlib.sndlib.Header.RF64" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.BICSF">
+<span class="sig-name descname"><span class="pre">BICSF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.BICSF:</span> <span class="pre">5&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.BICSF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.BICSF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.NIST">
+<span class="sig-name descname"><span class="pre">NIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.NIST:</span> <span class="pre">6&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.NIST"></a><a class="headerlink" href="#pysndlib.sndlib.Header.NIST" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.INRS">
+<span class="sig-name descname"><span class="pre">INRS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.INRS:</span> <span class="pre">7&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.INRS"></a><a class="headerlink" href="#pysndlib.sndlib.Header.INRS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.ESPS">
+<span class="sig-name descname"><span class="pre">ESPS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.ESPS:</span> <span class="pre">8&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.ESPS"></a><a class="headerlink" href="#pysndlib.sndlib.Header.ESPS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SVX">
+<span class="sig-name descname"><span class="pre">SVX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SVX:</span> <span class="pre">9&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SVX"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SVX" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.VOC">
+<span class="sig-name descname"><span class="pre">VOC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.VOC:</span> <span class="pre">10&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.VOC"></a><a class="headerlink" href="#pysndlib.sndlib.Header.VOC" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SNDT">
+<span class="sig-name descname"><span class="pre">SNDT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SNDT:</span> <span class="pre">11&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SNDT"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SNDT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.RAW">
+<span class="sig-name descname"><span class="pre">RAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.RAW:</span> <span class="pre">12&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.RAW"></a><a class="headerlink" href="#pysndlib.sndlib.Header.RAW" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SMP">
+<span class="sig-name descname"><span class="pre">SMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SMP:</span> <span class="pre">13&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SMP"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SMP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.AVR">
+<span class="sig-name descname"><span class="pre">AVR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.AVR:</span> <span class="pre">14&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.AVR"></a><a class="headerlink" href="#pysndlib.sndlib.Header.AVR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.IRCAM">
+<span class="sig-name descname"><span class="pre">IRCAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.IRCAM:</span> <span class="pre">15&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.IRCAM"></a><a class="headerlink" href="#pysndlib.sndlib.Header.IRCAM" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SD1">
+<span class="sig-name descname"><span class="pre">SD1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SD1:</span> <span class="pre">16&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SD1"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SD1" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SPPACK">
+<span class="sig-name descname"><span class="pre">SPPACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SPPACK:</span> <span class="pre">17&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SPPACK"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SPPACK" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MUS10">
+<span class="sig-name descname"><span class="pre">MUS10</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MUS10:</span> <span class="pre">18&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MUS10"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MUS10" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.HCOM">
+<span class="sig-name descname"><span class="pre">HCOM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.HCOM:</span> <span class="pre">19&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.HCOM"></a><a class="headerlink" href="#pysndlib.sndlib.Header.HCOM" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.PSION">
+<span class="sig-name descname"><span class="pre">PSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.PSION:</span> <span class="pre">20&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.PSION"></a><a class="headerlink" href="#pysndlib.sndlib.Header.PSION" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MAUD">
+<span class="sig-name descname"><span class="pre">MAUD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MAUD:</span> <span class="pre">21&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MAUD"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MAUD" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.IEEE">
+<span class="sig-name descname"><span class="pre">IEEE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.IEEE:</span> <span class="pre">22&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.IEEE"></a><a class="headerlink" href="#pysndlib.sndlib.Header.IEEE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MATLAB">
+<span class="sig-name descname"><span class="pre">MATLAB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MATLAB:</span> <span class="pre">23&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MATLAB"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MATLAB" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.ADC">
+<span class="sig-name descname"><span class="pre">ADC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.ADC:</span> <span class="pre">24&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.ADC"></a><a class="headerlink" href="#pysndlib.sndlib.Header.ADC" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MIDI">
+<span class="sig-name descname"><span class="pre">MIDI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MIDI:</span> <span class="pre">25&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MIDI"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MIDI" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SOUNDFONT">
+<span class="sig-name descname"><span class="pre">SOUNDFONT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SOUNDFONT:</span> <span class="pre">26&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SOUNDFONT"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SOUNDFONT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.GRAVIS">
+<span class="sig-name descname"><span class="pre">GRAVIS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.GRAVIS:</span> <span class="pre">27&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.GRAVIS"></a><a class="headerlink" href="#pysndlib.sndlib.Header.GRAVIS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.COMDISCO">
+<span class="sig-name descname"><span class="pre">COMDISCO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.COMDISCO:</span> <span class="pre">28&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.COMDISCO"></a><a class="headerlink" href="#pysndlib.sndlib.Header.COMDISCO" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.GOLDWAVE">
+<span class="sig-name descname"><span class="pre">GOLDWAVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.GOLDWAVE:</span> <span class="pre">29&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.GOLDWAVE"></a><a class="headerlink" href="#pysndlib.sndlib.Header.GOLDWAVE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SRFS">
+<span class="sig-name descname"><span class="pre">SRFS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SRFS:</span> <span class="pre">30&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SRFS"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SRFS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MIDI_SAMPLE_DUMP">
+<span class="sig-name descname"><span class="pre">MIDI_SAMPLE_DUMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MIDI_SAMPLE_DUMP:</span> <span class="pre">31&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MIDI_SAMPLE_DUMP"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MIDI_SAMPLE_DUMP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.DIAMONDWARE">
+<span class="sig-name descname"><span class="pre">DIAMONDWARE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.DIAMONDWARE:</span> <span class="pre">32&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.DIAMONDWARE"></a><a class="headerlink" href="#pysndlib.sndlib.Header.DIAMONDWARE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.ADF">
+<span class="sig-name descname"><span class="pre">ADF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.ADF:</span> <span class="pre">33&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.ADF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.ADF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SBSTUDIOII">
+<span class="sig-name descname"><span class="pre">SBSTUDIOII</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SBSTUDIOII:</span> <span class="pre">34&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SBSTUDIOII"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SBSTUDIOII" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.DELUSION">
+<span class="sig-name descname"><span class="pre">DELUSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.DELUSION:</span> <span class="pre">35&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.DELUSION"></a><a class="headerlink" href="#pysndlib.sndlib.Header.DELUSION" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.FARANDOLE">
+<span class="sig-name descname"><span class="pre">FARANDOLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.FARANDOLE:</span> <span class="pre">36&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.FARANDOLE"></a><a class="headerlink" href="#pysndlib.sndlib.Header.FARANDOLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SAMPLE_DUMP">
+<span class="sig-name descname"><span class="pre">SAMPLE_DUMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SAMPLE_DUMP:</span> <span class="pre">37&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SAMPLE_DUMP"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SAMPLE_DUMP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.ULTRATRACKER">
+<span class="sig-name descname"><span class="pre">ULTRATRACKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.ULTRATRACKER:</span> <span class="pre">38&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.ULTRATRACKER"></a><a class="headerlink" href="#pysndlib.sndlib.Header.ULTRATRACKER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.YAMAHA_SY85">
+<span class="sig-name descname"><span class="pre">YAMAHA_SY85</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.YAMAHA_SY85:</span> <span class="pre">39&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.YAMAHA_SY85"></a><a class="headerlink" href="#pysndlib.sndlib.Header.YAMAHA_SY85" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.YAMAHA_TX16W">
+<span class="sig-name descname"><span class="pre">YAMAHA_TX16W</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.YAMAHA_TX16W:</span> <span class="pre">40&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.YAMAHA_TX16W"></a><a class="headerlink" href="#pysndlib.sndlib.Header.YAMAHA_TX16W" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.DIGIPLAYER">
+<span class="sig-name descname"><span class="pre">DIGIPLAYER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.DIGIPLAYER:</span> <span class="pre">41&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.DIGIPLAYER"></a><a class="headerlink" href="#pysndlib.sndlib.Header.DIGIPLAYER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.COVOX">
+<span class="sig-name descname"><span class="pre">COVOX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.COVOX:</span> <span class="pre">42&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.COVOX"></a><a class="headerlink" href="#pysndlib.sndlib.Header.COVOX" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.AVI">
+<span class="sig-name descname"><span class="pre">AVI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.AVI:</span> <span class="pre">43&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.AVI"></a><a class="headerlink" href="#pysndlib.sndlib.Header.AVI" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.OMF">
+<span class="sig-name descname"><span class="pre">OMF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.OMF:</span> <span class="pre">44&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.OMF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.OMF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.QUICKTIME">
+<span class="sig-name descname"><span class="pre">QUICKTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.QUICKTIME:</span> <span class="pre">45&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.QUICKTIME"></a><a class="headerlink" href="#pysndlib.sndlib.Header.QUICKTIME" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.ASF">
+<span class="sig-name descname"><span class="pre">ASF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.ASF:</span> <span class="pre">46&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.ASF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.ASF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.YAMAHA_SY99">
+<span class="sig-name descname"><span class="pre">YAMAHA_SY99</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.YAMAHA_SY99:</span> <span class="pre">47&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.YAMAHA_SY99"></a><a class="headerlink" href="#pysndlib.sndlib.Header.YAMAHA_SY99" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.KURZWEIL_2000">
+<span class="sig-name descname"><span class="pre">KURZWEIL_2000</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.KURZWEIL_2000:</span> <span class="pre">48&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.KURZWEIL_2000"></a><a class="headerlink" href="#pysndlib.sndlib.Header.KURZWEIL_2000" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.AIFF">
+<span class="sig-name descname"><span class="pre">AIFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.AIFF:</span> <span class="pre">49&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.AIFF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.AIFF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.PAF">
+<span class="sig-name descname"><span class="pre">PAF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.PAF:</span> <span class="pre">50&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.PAF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.PAF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.CSL">
+<span class="sig-name descname"><span class="pre">CSL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.CSL:</span> <span class="pre">51&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.CSL"></a><a class="headerlink" href="#pysndlib.sndlib.Header.CSL" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.FILE_SAMP">
+<span class="sig-name descname"><span class="pre">FILE_SAMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.FILE_SAMP:</span> <span class="pre">52&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.FILE_SAMP"></a><a class="headerlink" href="#pysndlib.sndlib.Header.FILE_SAMP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.PVF">
+<span class="sig-name descname"><span class="pre">PVF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.PVF:</span> <span class="pre">53&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.PVF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.PVF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SOUNDFORGE">
+<span class="sig-name descname"><span class="pre">SOUNDFORGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SOUNDFORGE:</span> <span class="pre">54&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SOUNDFORGE"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SOUNDFORGE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.TWINVQ">
+<span class="sig-name descname"><span class="pre">TWINVQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.TWINVQ:</span> <span class="pre">55&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.TWINVQ"></a><a class="headerlink" href="#pysndlib.sndlib.Header.TWINVQ" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.AKAI4">
+<span class="sig-name descname"><span class="pre">AKAI4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.AKAI4:</span> <span class="pre">56&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.AKAI4"></a><a class="headerlink" href="#pysndlib.sndlib.Header.AKAI4" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.IMPULSETRACKER">
+<span class="sig-name descname"><span class="pre">IMPULSETRACKER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.IMPULSETRACKER:</span> <span class="pre">57&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.IMPULSETRACKER"></a><a class="headerlink" href="#pysndlib.sndlib.Header.IMPULSETRACKER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.KORG">
+<span class="sig-name descname"><span class="pre">KORG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.KORG:</span> <span class="pre">58&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.KORG"></a><a class="headerlink" href="#pysndlib.sndlib.Header.KORG" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.NVF">
+<span class="sig-name descname"><span class="pre">NVF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.NVF:</span> <span class="pre">59&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.NVF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.NVF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.CAFF">
+<span class="sig-name descname"><span class="pre">CAFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.CAFF:</span> <span class="pre">60&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.CAFF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.CAFF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MAUI">
+<span class="sig-name descname"><span class="pre">MAUI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MAUI:</span> <span class="pre">61&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MAUI"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MAUI" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SDIF">
+<span class="sig-name descname"><span class="pre">SDIF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SDIF:</span> <span class="pre">62&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SDIF"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SDIF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.OGG">
+<span class="sig-name descname"><span class="pre">OGG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.OGG:</span> <span class="pre">63&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.OGG"></a><a class="headerlink" href="#pysndlib.sndlib.Header.OGG" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.FLAC">
+<span class="sig-name descname"><span class="pre">FLAC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.FLAC:</span> <span class="pre">64&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.FLAC"></a><a class="headerlink" href="#pysndlib.sndlib.Header.FLAC" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SPEEX">
+<span class="sig-name descname"><span class="pre">SPEEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SPEEX:</span> <span class="pre">65&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SPEEX"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SPEEX" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.MPEG">
+<span class="sig-name descname"><span class="pre">MPEG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.MPEG:</span> <span class="pre">66&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.MPEG"></a><a class="headerlink" href="#pysndlib.sndlib.Header.MPEG" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SHORTEN">
+<span class="sig-name descname"><span class="pre">SHORTEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SHORTEN:</span> <span class="pre">67&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SHORTEN"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SHORTEN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.TTA">
+<span class="sig-name descname"><span class="pre">TTA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.TTA:</span> <span class="pre">68&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.TTA"></a><a class="headerlink" href="#pysndlib.sndlib.Header.TTA" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.WAVPACK">
+<span class="sig-name descname"><span class="pre">WAVPACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.WAVPACK:</span> <span class="pre">69&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.WAVPACK"></a><a class="headerlink" href="#pysndlib.sndlib.Header.WAVPACK" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.SOX">
+<span class="sig-name descname"><span class="pre">SOX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.SOX:</span> <span class="pre">70&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.SOX"></a><a class="headerlink" href="#pysndlib.sndlib.Header.SOX" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Header.NUM_HEADERS">
+<span class="sig-name descname"><span class="pre">NUM_HEADERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Header.NUM_HEADERS:</span> <span class="pre">71&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Header.NUM_HEADERS"></a><a class="headerlink" href="#pysndlib.sndlib.Header.NUM_HEADERS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class enum">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample">
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.sndlib.Sample" title="Permalink to this definition">#</a></dt>
+<dd><p>numerical sample types</p>
+<dl class="field-list simple">
+<dt class="field-odd">Member Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>Valid values are as follows:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.UNKNOWN_SAMPLE">
+<span class="sig-name descname"><span class="pre">UNKNOWN_SAMPLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.UNKNOWN_SAMPLE:</span> <span class="pre">0&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.UNKNOWN_SAMPLE"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.UNKNOWN_SAMPLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BSHORT">
+<span class="sig-name descname"><span class="pre">BSHORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BSHORT:</span> <span class="pre">1&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BSHORT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BSHORT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.MULAW">
+<span class="sig-name descname"><span class="pre">MULAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.MULAW:</span> <span class="pre">2&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.MULAW"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.MULAW" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BYTE">
+<span class="sig-name descname"><span class="pre">BYTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BYTE:</span> <span class="pre">3&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BYTE"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BYTE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BFLOAT">
+<span class="sig-name descname"><span class="pre">BFLOAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BFLOAT:</span> <span class="pre">4&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BFLOAT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BFLOAT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BINT">
+<span class="sig-name descname"><span class="pre">BINT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BINT:</span> <span class="pre">5&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BINT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BINT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.ALAW">
+<span class="sig-name descname"><span class="pre">ALAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.ALAW:</span> <span class="pre">6&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.ALAW"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.ALAW" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.UBYTE">
+<span class="sig-name descname"><span class="pre">UBYTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.UBYTE:</span> <span class="pre">7&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.UBYTE"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.UBYTE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.B24INT">
+<span class="sig-name descname"><span class="pre">B24INT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.B24INT:</span> <span class="pre">8&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.B24INT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.B24INT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BDOUBLE">
+<span class="sig-name descname"><span class="pre">BDOUBLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BDOUBLE:</span> <span class="pre">9&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BDOUBLE"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BDOUBLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LSHORT">
+<span class="sig-name descname"><span class="pre">LSHORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LSHORT:</span> <span class="pre">10&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LSHORT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LSHORT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LINT">
+<span class="sig-name descname"><span class="pre">LINT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LINT:</span> <span class="pre">11&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LINT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LINT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LFLOAT">
+<span class="sig-name descname"><span class="pre">LFLOAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LFLOAT:</span> <span class="pre">12&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LFLOAT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LFLOAT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LDOUBLE">
+<span class="sig-name descname"><span class="pre">LDOUBLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LDOUBLE:</span> <span class="pre">13&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LDOUBLE"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LDOUBLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.UBSHORT">
+<span class="sig-name descname"><span class="pre">UBSHORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.UBSHORT:</span> <span class="pre">14&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.UBSHORT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.UBSHORT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.ULSHORT">
+<span class="sig-name descname"><span class="pre">ULSHORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.ULSHORT:</span> <span class="pre">15&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.ULSHORT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.ULSHORT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.L24INT">
+<span class="sig-name descname"><span class="pre">L24INT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.L24INT:</span> <span class="pre">16&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.L24INT"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.L24INT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BINTN">
+<span class="sig-name descname"><span class="pre">BINTN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BINTN:</span> <span class="pre">17&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BINTN"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BINTN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LINTN">
+<span class="sig-name descname"><span class="pre">LINTN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LINTN:</span> <span class="pre">18&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LINTN"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LINTN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BFLOAT_UNSCALED">
+<span class="sig-name descname"><span class="pre">BFLOAT_UNSCALED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BFLOAT_UNSCALED:</span> <span class="pre">19&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BFLOAT_UNSCALED"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BFLOAT_UNSCALED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LFLOAT_UNSCALED">
+<span class="sig-name descname"><span class="pre">LFLOAT_UNSCALED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LFLOAT_UNSCALED:</span> <span class="pre">20&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LFLOAT_UNSCALED"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LFLOAT_UNSCALED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.BDOUBLE_UNSCALED">
+<span class="sig-name descname"><span class="pre">BDOUBLE_UNSCALED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.BDOUBLE_UNSCALED:</span> <span class="pre">21&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.BDOUBLE_UNSCALED"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.BDOUBLE_UNSCALED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.LDOUBLE_UNSCALED">
+<span class="sig-name descname"><span class="pre">LDOUBLE_UNSCALED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.LDOUBLE_UNSCALED:</span> <span class="pre">22&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.LDOUBLE_UNSCALED"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.LDOUBLE_UNSCALED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Sample.NUM_SAMPLES">
+<span class="sig-name descname"><span class="pre">NUM_SAMPLES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Sample.NUM_SAMPLES:</span> <span class="pre">23&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Sample.NUM_SAMPLES"></a><a class="headerlink" href="#pysndlib.sndlib.Sample.NUM_SAMPLES" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<dl class="py class enum">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error">
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.sndlib.Error" title="Permalink to this definition">#</a></dt>
+<dd><p>sndlib and clm errors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Member Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>Valid values are as follows:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_ERROR">
+<span class="sig-name descname"><span class="pre">NO_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_ERROR:</span> <span class="pre">0&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_ERROR"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_ERROR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_FREQUENCY">
+<span class="sig-name descname"><span class="pre">NO_FREQUENCY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_FREQUENCY:</span> <span class="pre">1&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_FREQUENCY"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_FREQUENCY" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_PHASE">
+<span class="sig-name descname"><span class="pre">NO_PHASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_PHASE:</span> <span class="pre">2&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_PHASE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_PHASE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_GEN">
+<span class="sig-name descname"><span class="pre">NO_GEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_GEN:</span> <span class="pre">3&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_GEN"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_GEN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_LENGTH">
+<span class="sig-name descname"><span class="pre">NO_LENGTH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_LENGTH:</span> <span class="pre">4&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_LENGTH"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_LENGTH" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_DESCRIBE">
+<span class="sig-name descname"><span class="pre">NO_DESCRIBE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_DESCRIBE:</span> <span class="pre">5&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_DESCRIBE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_DESCRIBE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_DATA">
+<span class="sig-name descname"><span class="pre">NO_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_DATA:</span> <span class="pre">6&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_DATA"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_DATA" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_SCALER">
+<span class="sig-name descname"><span class="pre">NO_SCALER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_SCALER:</span> <span class="pre">7&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_SCALER"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_SCALER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.MEMORY_ALLOCATION_FAILED">
+<span class="sig-name descname"><span class="pre">MEMORY_ALLOCATION_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.MEMORY_ALLOCATION_FAILED:</span> <span class="pre">8&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.MEMORY_ALLOCATION_FAILED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.MEMORY_ALLOCATION_FAILED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.CANT_OPEN_FILE">
+<span class="sig-name descname"><span class="pre">CANT_OPEN_FILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.CANT_OPEN_FILE:</span> <span class="pre">9&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.CANT_OPEN_FILE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.CANT_OPEN_FILE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_SAMPLE_INPUT">
+<span class="sig-name descname"><span class="pre">NO_SAMPLE_INPUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_SAMPLE_INPUT:</span> <span class="pre">10&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_SAMPLE_INPUT"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_SAMPLE_INPUT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_SAMPLE_OUTPUT">
+<span class="sig-name descname"><span class="pre">NO_SAMPLE_OUTPUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_SAMPLE_OUTPUT:</span> <span class="pre">11&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_SAMPLE_OUTPUT"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_SAMPLE_OUTPUT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_SUCH_CHANNEL">
+<span class="sig-name descname"><span class="pre">NO_SUCH_CHANNEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_SUCH_CHANNEL:</span> <span class="pre">12&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_SUCH_CHANNEL"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_SUCH_CHANNEL" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_FILE_NAME_PROVIDED">
+<span class="sig-name descname"><span class="pre">NO_FILE_NAME_PROVIDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_FILE_NAME_PROVIDED:</span> <span class="pre">13&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_FILE_NAME_PROVIDED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_FILE_NAME_PROVIDED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_LOCATION">
+<span class="sig-name descname"><span class="pre">NO_LOCATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_LOCATION:</span> <span class="pre">14&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_LOCATION"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_LOCATION" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_CHANNEL">
+<span class="sig-name descname"><span class="pre">NO_CHANNEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_CHANNEL:</span> <span class="pre">15&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_CHANNEL"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_CHANNEL" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_SUCH_FFT_WINDOW">
+<span class="sig-name descname"><span class="pre">NO_SUCH_FFT_WINDOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_SUCH_FFT_WINDOW:</span> <span class="pre">16&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_SUCH_FFT_WINDOW"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_SUCH_FFT_WINDOW" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.UNSUPPORTED_SAMPLE_TYPE">
+<span class="sig-name descname"><span class="pre">UNSUPPORTED_SAMPLE_TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.UNSUPPORTED_SAMPLE_TYPE:</span> <span class="pre">17&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.UNSUPPORTED_SAMPLE_TYPE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.UNSUPPORTED_SAMPLE_TYPE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.HEADER_READ_FAILED">
+<span class="sig-name descname"><span class="pre">HEADER_READ_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.HEADER_READ_FAILED:</span> <span class="pre">18&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.HEADER_READ_FAILED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.HEADER_READ_FAILED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.UNSUPPORTED_HEADER_TYPE">
+<span class="sig-name descname"><span class="pre">UNSUPPORTED_HEADER_TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.UNSUPPORTED_HEADER_TYPE:</span> <span class="pre">19&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.UNSUPPORTED_HEADER_TYPE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.UNSUPPORTED_HEADER_TYPE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.FILE_DESCRIPTORS_NOT_INITIALIZED">
+<span class="sig-name descname"><span class="pre">FILE_DESCRIPTORS_NOT_INITIALIZED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.FILE_DESCRIPTORS_NOT_INITIALIZED:</span> <span class="pre">20&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.FILE_DESCRIPTORS_NOT_INITIALIZED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.FILE_DESCRIPTORS_NOT_INITIALIZED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NOT_A_SOUND_FILE">
+<span class="sig-name descname"><span class="pre">NOT_A_SOUND_FILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NOT_A_SOUND_FILE:</span> <span class="pre">21&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NOT_A_SOUND_FILE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NOT_A_SOUND_FILE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.FILE_CLOSED">
+<span class="sig-name descname"><span class="pre">FILE_CLOSED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.FILE_CLOSED:</span> <span class="pre">22&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.FILE_CLOSED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.FILE_CLOSED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.WRITE_ERROR">
+<span class="sig-name descname"><span class="pre">WRITE_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.WRITE_ERROR:</span> <span class="pre">23&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.WRITE_ERROR"></a><a class="headerlink" href="#pysndlib.sndlib.Error.WRITE_ERROR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.HEADER_WRITE_FAILED">
+<span class="sig-name descname"><span class="pre">HEADER_WRITE_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.HEADER_WRITE_FAILED:</span> <span class="pre">24&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.HEADER_WRITE_FAILED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.HEADER_WRITE_FAILED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.CANT_OPEN_TEMP_FILE">
+<span class="sig-name descname"><span class="pre">CANT_OPEN_TEMP_FILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.CANT_OPEN_TEMP_FILE:</span> <span class="pre">25&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.CANT_OPEN_TEMP_FILE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.CANT_OPEN_TEMP_FILE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.INTERRUPTED">
+<span class="sig-name descname"><span class="pre">INTERRUPTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.INTERRUPTED:</span> <span class="pre">26&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.INTERRUPTED"></a><a class="headerlink" href="#pysndlib.sndlib.Error.INTERRUPTED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.BAD_ENVELOPE">
+<span class="sig-name descname"><span class="pre">BAD_ENVELOPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.BAD_ENVELOPE:</span> <span class="pre">27&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.BAD_ENVELOPE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.BAD_ENVELOPE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CHANNELS_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_CHANNELS_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CHANNELS_NOT_AVAILABLE:</span> <span class="pre">28&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CHANNELS_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CHANNELS_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_SRATE_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_SRATE_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_SRATE_NOT_AVAILABLE:</span> <span class="pre">29&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_SRATE_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_SRATE_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_SAMPLE_TYPE_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE:</span> <span class="pre">30&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_NO_INPUT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_NO_INPUT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_NO_INPUT_AVAILABLE:</span> <span class="pre">31&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_NO_INPUT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_NO_INPUT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CONFIGURATION_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_CONFIGURATION_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CONFIGURATION_NOT_AVAILABLE:</span> <span class="pre">32&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CONFIGURATION_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CONFIGURATION_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_WRITE_ERROR">
+<span class="sig-name descname"><span class="pre">AUDIO_WRITE_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_WRITE_ERROR:</span> <span class="pre">33&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_WRITE_ERROR"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_WRITE_ERROR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_SIZE_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_SIZE_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_SIZE_NOT_AVAILABLE:</span> <span class="pre">34&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_SIZE_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_SIZE_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_DEVICE_NOT_AVAILABLE">
+<span class="sig-name descname"><span class="pre">AUDIO_DEVICE_NOT_AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_DEVICE_NOT_AVAILABLE:</span> <span class="pre">35&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_DEVICE_NOT_AVAILABLE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_DEVICE_NOT_AVAILABLE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CANT_CLOSE">
+<span class="sig-name descname"><span class="pre">AUDIO_CANT_CLOSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CANT_CLOSE:</span> <span class="pre">36&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CANT_CLOSE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CANT_CLOSE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CANT_OPEN">
+<span class="sig-name descname"><span class="pre">AUDIO_CANT_OPEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CANT_OPEN:</span> <span class="pre">37&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CANT_OPEN"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CANT_OPEN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_READ_ERROR">
+<span class="sig-name descname"><span class="pre">AUDIO_READ_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_READ_ERROR:</span> <span class="pre">38&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_READ_ERROR"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_READ_ERROR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CANT_WRITE">
+<span class="sig-name descname"><span class="pre">AUDIO_CANT_WRITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CANT_WRITE:</span> <span class="pre">39&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CANT_WRITE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CANT_WRITE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_CANT_READ">
+<span class="sig-name descname"><span class="pre">AUDIO_CANT_READ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_CANT_READ:</span> <span class="pre">40&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_CANT_READ"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_CANT_READ" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.AUDIO_NO_READ_PERMISSION">
+<span class="sig-name descname"><span class="pre">AUDIO_NO_READ_PERMISSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.AUDIO_NO_READ_PERMISSION:</span> <span class="pre">41&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.AUDIO_NO_READ_PERMISSION"></a><a class="headerlink" href="#pysndlib.sndlib.Error.AUDIO_NO_READ_PERMISSION" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.CANT_CLOSE_FILE">
+<span class="sig-name descname"><span class="pre">CANT_CLOSE_FILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.CANT_CLOSE_FILE:</span> <span class="pre">42&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.CANT_CLOSE_FILE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.CANT_CLOSE_FILE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.ARG_OUT_OF_RANGE">
+<span class="sig-name descname"><span class="pre">ARG_OUT_OF_RANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.ARG_OUT_OF_RANGE:</span> <span class="pre">43&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.ARG_OUT_OF_RANGE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.ARG_OUT_OF_RANGE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_CHANNELS">
+<span class="sig-name descname"><span class="pre">NO_CHANNELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_CHANNELS:</span> <span class="pre">44&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_CHANNELS"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_CHANNELS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_HOP">
+<span class="sig-name descname"><span class="pre">NO_HOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_HOP:</span> <span class="pre">45&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_HOP"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_HOP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_WIDTH">
+<span class="sig-name descname"><span class="pre">NO_WIDTH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_WIDTH:</span> <span class="pre">46&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_WIDTH"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_WIDTH" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_FILE_NAME">
+<span class="sig-name descname"><span class="pre">NO_FILE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_FILE_NAME:</span> <span class="pre">47&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_FILE_NAME"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_FILE_NAME" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_RAMP">
+<span class="sig-name descname"><span class="pre">NO_RAMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_RAMP:</span> <span class="pre">48&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_RAMP"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_RAMP" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_RUN">
+<span class="sig-name descname"><span class="pre">NO_RUN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_RUN:</span> <span class="pre">49&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_RUN"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_RUN" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_INCREMENT">
+<span class="sig-name descname"><span class="pre">NO_INCREMENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_INCREMENT:</span> <span class="pre">50&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_INCREMENT"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_INCREMENT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_OFFSET">
+<span class="sig-name descname"><span class="pre">NO_OFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_OFFSET:</span> <span class="pre">51&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_OFFSET"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_OFFSET" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_XCOEFF">
+<span class="sig-name descname"><span class="pre">NO_XCOEFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_XCOEFF:</span> <span class="pre">52&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_XCOEFF"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_XCOEFF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_YCOEFF">
+<span class="sig-name descname"><span class="pre">NO_YCOEFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_YCOEFF:</span> <span class="pre">53&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_YCOEFF"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_YCOEFF" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_XCOEFFS">
+<span class="sig-name descname"><span class="pre">NO_XCOEFFS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_XCOEFFS:</span> <span class="pre">54&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_XCOEFFS"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_XCOEFFS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_YCOEFFS">
+<span class="sig-name descname"><span class="pre">NO_YCOEFFS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_YCOEFFS:</span> <span class="pre">55&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_YCOEFFS"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_YCOEFFS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_RESET">
+<span class="sig-name descname"><span class="pre">NO_RESET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_RESET:</span> <span class="pre">56&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_RESET"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_RESET" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.BAD_SIZE">
+<span class="sig-name descname"><span class="pre">BAD_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.BAD_SIZE:</span> <span class="pre">57&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.BAD_SIZE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.BAD_SIZE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.CANT_CONVERT">
+<span class="sig-name descname"><span class="pre">CANT_CONVERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.CANT_CONVERT:</span> <span class="pre">58&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.CANT_CONVERT"></a><a class="headerlink" href="#pysndlib.sndlib.Error.CANT_CONVERT" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.READ_ERROR">
+<span class="sig-name descname"><span class="pre">READ_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.READ_ERROR:</span> <span class="pre">59&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.READ_ERROR"></a><a class="headerlink" href="#pysndlib.sndlib.Error.READ_ERROR" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_FEEDFORWARD">
+<span class="sig-name descname"><span class="pre">NO_FEEDFORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_FEEDFORWARD:</span> <span class="pre">60&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_FEEDFORWARD"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_FEEDFORWARD" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_FEEDBACK">
+<span class="sig-name descname"><span class="pre">NO_FEEDBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_FEEDBACK:</span> <span class="pre">61&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_FEEDBACK"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_FEEDBACK" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_INTERP_TYPE">
+<span class="sig-name descname"><span class="pre">NO_INTERP_TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_INTERP_TYPE:</span> <span class="pre">62&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_INTERP_TYPE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_INTERP_TYPE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_POSITION">
+<span class="sig-name descname"><span class="pre">NO_POSITION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_POSITION:</span> <span class="pre">63&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_POSITION"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_POSITION" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_ORDER">
+<span class="sig-name descname"><span class="pre">NO_ORDER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_ORDER:</span> <span class="pre">64&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_ORDER"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_ORDER" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NO_COPY">
+<span class="sig-name descname"><span class="pre">NO_COPY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NO_COPY:</span> <span class="pre">65&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NO_COPY"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NO_COPY" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.CANT_TRANSLATE">
+<span class="sig-name descname"><span class="pre">CANT_TRANSLATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.CANT_TRANSLATE:</span> <span class="pre">66&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.CANT_TRANSLATE"></a><a class="headerlink" href="#pysndlib.sndlib.Error.CANT_TRANSLATE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysndlib.sndlib.Error.NUM_ERRORS">
+<span class="sig-name descname"><span class="pre">NUM_ERRORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Error.NUM_ERRORS:</span> <span class="pre">67&gt;</span></em><a class="dashAnchor" name="//apple_ref/cpp/Attribute/pysndlib.sndlib.Error.NUM_ERRORS"></a><a class="headerlink" href="#pysndlib.sndlib.Error.NUM_ERRORS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+</dd></dl>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</article>
+<footer class="bd-footer-article">
+<div class="footer-article-items footer-article__inner">
+<div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+<a class="left-prev" href="sndlib_functions.html" title="previous page">
+<i class="fa-solid fa-angle-left"></i>
+<div class="prev-next-info">
+<p class="prev-next-subtitle">previous</p>
+<p class="prev-next-title">Sndlib Functions</p>
+</div>
+</a>
+</div></div>
+</div>
+</footer>
+</div>
+<div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+<div class="sidebar-secondary-item">
+<div class="page-toc tocsection onthispage">
+<i class="fa-solid fa-list"></i> Contents
+  </div>
+<nav class="bd-toc-nav page-toc">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header"><code class="docutils literal notranslate"><span class="pre">Header</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.UNKNOWN_HEADER"><code class="docutils literal notranslate"><span class="pre">Header.UNKNOWN_HEADER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NEXT"><code class="docutils literal notranslate"><span class="pre">Header.NEXT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AIFC"><code class="docutils literal notranslate"><span class="pre">Header.AIFC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RIFF"><code class="docutils literal notranslate"><span class="pre">Header.RIFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RF64"><code class="docutils literal notranslate"><span class="pre">Header.RF64</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.BICSF"><code class="docutils literal notranslate"><span class="pre">Header.BICSF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NIST"><code class="docutils literal notranslate"><span class="pre">Header.NIST</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.INRS"><code class="docutils literal notranslate"><span class="pre">Header.INRS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ESPS"><code class="docutils literal notranslate"><span class="pre">Header.ESPS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SVX"><code class="docutils literal notranslate"><span class="pre">Header.SVX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.VOC"><code class="docutils literal notranslate"><span class="pre">Header.VOC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SNDT"><code class="docutils literal notranslate"><span class="pre">Header.SNDT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.RAW"><code class="docutils literal notranslate"><span class="pre">Header.RAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SMP"><code class="docutils literal notranslate"><span class="pre">Header.SMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AVR"><code class="docutils literal notranslate"><span class="pre">Header.AVR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IRCAM"><code class="docutils literal notranslate"><span class="pre">Header.IRCAM</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SD1"><code class="docutils literal notranslate"><span class="pre">Header.SD1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SPPACK"><code class="docutils literal notranslate"><span class="pre">Header.SPPACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MUS10"><code class="docutils literal notranslate"><span class="pre">Header.MUS10</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.HCOM"><code class="docutils literal notranslate"><span class="pre">Header.HCOM</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PSION"><code class="docutils literal notranslate"><span class="pre">Header.PSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MAUD"><code class="docutils literal notranslate"><span class="pre">Header.MAUD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IEEE"><code class="docutils literal notranslate"><span class="pre">Header.IEEE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MATLAB"><code class="docutils literal notranslate"><span class="pre">Header.MATLAB</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ADC"><code class="docutils literal notranslate"><span class="pre">Header.ADC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MIDI"><code class="docutils literal notranslate"><span class="pre">Header.MIDI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOUNDFONT"><code class="docutils literal notranslate"><span class="pre">Header.SOUNDFONT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.GRAVIS"><code class="docutils literal notranslate"><span class="pre">Header.GRAVIS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.COMDISCO"><code class="docutils literal notranslate"><span class="pre">Header.COMDISCO</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.GOLDWAVE"><code class="docutils literal notranslate"><span class="pre">Header.GOLDWAVE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SRFS"><code class="docutils literal notranslate"><span class="pre">Header.SRFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MIDI_SAMPLE_DUMP"><code class="docutils literal notranslate"><span class="pre">Header.MIDI_SAMPLE_DUMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DIAMONDWARE"><code class="docutils literal notranslate"><span class="pre">Header.DIAMONDWARE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ADF"><code class="docutils literal notranslate"><span class="pre">Header.ADF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SBSTUDIOII"><code class="docutils literal notranslate"><span class="pre">Header.SBSTUDIOII</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DELUSION"><code class="docutils literal notranslate"><span class="pre">Header.DELUSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FARANDOLE"><code class="docutils literal notranslate"><span class="pre">Header.FARANDOLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SAMPLE_DUMP"><code class="docutils literal notranslate"><span class="pre">Header.SAMPLE_DUMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ULTRATRACKER"><code class="docutils literal notranslate"><span class="pre">Header.ULTRATRACKER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_SY85"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_SY85</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_TX16W"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_TX16W</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.DIGIPLAYER"><code class="docutils literal notranslate"><span class="pre">Header.DIGIPLAYER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.COVOX"><code class="docutils literal notranslate"><span class="pre">Header.COVOX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AVI"><code class="docutils literal notranslate"><span class="pre">Header.AVI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.OMF"><code class="docutils literal notranslate"><span class="pre">Header.OMF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.QUICKTIME"><code class="docutils literal notranslate"><span class="pre">Header.QUICKTIME</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.ASF"><code class="docutils literal notranslate"><span class="pre">Header.ASF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.YAMAHA_SY99"><code class="docutils literal notranslate"><span class="pre">Header.YAMAHA_SY99</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.KURZWEIL_2000"><code class="docutils literal notranslate"><span class="pre">Header.KURZWEIL_2000</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AIFF"><code class="docutils literal notranslate"><span class="pre">Header.AIFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PAF"><code class="docutils literal notranslate"><span class="pre">Header.PAF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.CSL"><code class="docutils literal notranslate"><span class="pre">Header.CSL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FILE_SAMP"><code class="docutils literal notranslate"><span class="pre">Header.FILE_SAMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.PVF"><code class="docutils literal notranslate"><span class="pre">Header.PVF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOUNDFORGE"><code class="docutils literal notranslate"><span class="pre">Header.SOUNDFORGE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.TWINVQ"><code class="docutils literal notranslate"><span class="pre">Header.TWINVQ</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.AKAI4"><code class="docutils literal notranslate"><span class="pre">Header.AKAI4</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.IMPULSETRACKER"><code class="docutils literal notranslate"><span class="pre">Header.IMPULSETRACKER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.KORG"><code class="docutils literal notranslate"><span class="pre">Header.KORG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NVF"><code class="docutils literal notranslate"><span class="pre">Header.NVF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.CAFF"><code class="docutils literal notranslate"><span class="pre">Header.CAFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MAUI"><code class="docutils literal notranslate"><span class="pre">Header.MAUI</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SDIF"><code class="docutils literal notranslate"><span class="pre">Header.SDIF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.OGG"><code class="docutils literal notranslate"><span class="pre">Header.OGG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.FLAC"><code class="docutils literal notranslate"><span class="pre">Header.FLAC</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SPEEX"><code class="docutils literal notranslate"><span class="pre">Header.SPEEX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.MPEG"><code class="docutils literal notranslate"><span class="pre">Header.MPEG</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SHORTEN"><code class="docutils literal notranslate"><span class="pre">Header.SHORTEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.TTA"><code class="docutils literal notranslate"><span class="pre">Header.TTA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.WAVPACK"><code class="docutils literal notranslate"><span class="pre">Header.WAVPACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.SOX"><code class="docutils literal notranslate"><span class="pre">Header.SOX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Header.NUM_HEADERS"><code class="docutils literal notranslate"><span class="pre">Header.NUM_HEADERS</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample"><code class="docutils literal notranslate"><span class="pre">Sample</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UNKNOWN_SAMPLE"><code class="docutils literal notranslate"><span class="pre">Sample.UNKNOWN_SAMPLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.BSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.MULAW"><code class="docutils literal notranslate"><span class="pre">Sample.MULAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BYTE"><code class="docutils literal notranslate"><span class="pre">Sample.BYTE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BFLOAT"><code class="docutils literal notranslate"><span class="pre">Sample.BFLOAT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BINT"><code class="docutils literal notranslate"><span class="pre">Sample.BINT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.ALAW"><code class="docutils literal notranslate"><span class="pre">Sample.ALAW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UBYTE"><code class="docutils literal notranslate"><span class="pre">Sample.UBYTE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.B24INT"><code class="docutils literal notranslate"><span class="pre">Sample.B24INT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BDOUBLE"><code class="docutils literal notranslate"><span class="pre">Sample.BDOUBLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.LSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LINT"><code class="docutils literal notranslate"><span class="pre">Sample.LINT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LFLOAT"><code class="docutils literal notranslate"><span class="pre">Sample.LFLOAT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LDOUBLE"><code class="docutils literal notranslate"><span class="pre">Sample.LDOUBLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.UBSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.UBSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.ULSHORT"><code class="docutils literal notranslate"><span class="pre">Sample.ULSHORT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.L24INT"><code class="docutils literal notranslate"><span class="pre">Sample.L24INT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BINTN"><code class="docutils literal notranslate"><span class="pre">Sample.BINTN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LINTN"><code class="docutils literal notranslate"><span class="pre">Sample.LINTN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BFLOAT_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.BFLOAT_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LFLOAT_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.LFLOAT_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.BDOUBLE_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.BDOUBLE_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.LDOUBLE_UNSCALED"><code class="docutils literal notranslate"><span class="pre">Sample.LDOUBLE_UNSCALED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Sample.NUM_SAMPLES"><code class="docutils literal notranslate"><span class="pre">Sample.NUM_SAMPLES</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.NO_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FREQUENCY"><code class="docutils literal notranslate"><span class="pre">Error.NO_FREQUENCY</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_PHASE"><code class="docutils literal notranslate"><span class="pre">Error.NO_PHASE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_GEN"><code class="docutils literal notranslate"><span class="pre">Error.NO_GEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_LENGTH"><code class="docutils literal notranslate"><span class="pre">Error.NO_LENGTH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_DESCRIBE"><code class="docutils literal notranslate"><span class="pre">Error.NO_DESCRIBE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_DATA"><code class="docutils literal notranslate"><span class="pre">Error.NO_DATA</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SCALER"><code class="docutils literal notranslate"><span class="pre">Error.NO_SCALER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.MEMORY_ALLOCATION_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.MEMORY_ALLOCATION_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_OPEN_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_OPEN_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SAMPLE_INPUT"><code class="docutils literal notranslate"><span class="pre">Error.NO_SAMPLE_INPUT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SAMPLE_OUTPUT"><code class="docutils literal notranslate"><span class="pre">Error.NO_SAMPLE_OUTPUT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SUCH_CHANNEL"><code class="docutils literal notranslate"><span class="pre">Error.NO_SUCH_CHANNEL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FILE_NAME_PROVIDED"><code class="docutils literal notranslate"><span class="pre">Error.NO_FILE_NAME_PROVIDED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_LOCATION"><code class="docutils literal notranslate"><span class="pre">Error.NO_LOCATION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_CHANNEL"><code class="docutils literal notranslate"><span class="pre">Error.NO_CHANNEL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_SUCH_FFT_WINDOW"><code class="docutils literal notranslate"><span class="pre">Error.NO_SUCH_FFT_WINDOW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.UNSUPPORTED_SAMPLE_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.UNSUPPORTED_SAMPLE_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.HEADER_READ_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.HEADER_READ_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.UNSUPPORTED_HEADER_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.UNSUPPORTED_HEADER_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.FILE_DESCRIPTORS_NOT_INITIALIZED"><code class="docutils literal notranslate"><span class="pre">Error.FILE_DESCRIPTORS_NOT_INITIALIZED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NOT_A_SOUND_FILE"><code class="docutils literal notranslate"><span class="pre">Error.NOT_A_SOUND_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.FILE_CLOSED"><code class="docutils literal notranslate"><span class="pre">Error.FILE_CLOSED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.WRITE_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.WRITE_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.HEADER_WRITE_FAILED"><code class="docutils literal notranslate"><span class="pre">Error.HEADER_WRITE_FAILED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_OPEN_TEMP_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_OPEN_TEMP_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.INTERRUPTED"><code class="docutils literal notranslate"><span class="pre">Error.INTERRUPTED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.BAD_ENVELOPE"><code class="docutils literal notranslate"><span class="pre">Error.BAD_ENVELOPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CHANNELS_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CHANNELS_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SRATE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SRATE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SAMPLE_TYPE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_NO_INPUT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_NO_INPUT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CONFIGURATION_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CONFIGURATION_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_WRITE_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_WRITE_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_SIZE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_SIZE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_DEVICE_NOT_AVAILABLE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_DEVICE_NOT_AVAILABLE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_CLOSE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_CLOSE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_OPEN"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_OPEN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_READ_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_READ_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_WRITE"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_WRITE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_CANT_READ"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_CANT_READ</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.AUDIO_NO_READ_PERMISSION"><code class="docutils literal notranslate"><span class="pre">Error.AUDIO_NO_READ_PERMISSION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_CLOSE_FILE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_CLOSE_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.ARG_OUT_OF_RANGE"><code class="docutils literal notranslate"><span class="pre">Error.ARG_OUT_OF_RANGE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_CHANNELS"><code class="docutils literal notranslate"><span class="pre">Error.NO_CHANNELS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_HOP"><code class="docutils literal notranslate"><span class="pre">Error.NO_HOP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_WIDTH"><code class="docutils literal notranslate"><span class="pre">Error.NO_WIDTH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FILE_NAME"><code class="docutils literal notranslate"><span class="pre">Error.NO_FILE_NAME</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RAMP"><code class="docutils literal notranslate"><span class="pre">Error.NO_RAMP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RUN"><code class="docutils literal notranslate"><span class="pre">Error.NO_RUN</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_INCREMENT"><code class="docutils literal notranslate"><span class="pre">Error.NO_INCREMENT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_OFFSET"><code class="docutils literal notranslate"><span class="pre">Error.NO_OFFSET</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_XCOEFF"><code class="docutils literal notranslate"><span class="pre">Error.NO_XCOEFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_YCOEFF"><code class="docutils literal notranslate"><span class="pre">Error.NO_YCOEFF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_XCOEFFS"><code class="docutils literal notranslate"><span class="pre">Error.NO_XCOEFFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_YCOEFFS"><code class="docutils literal notranslate"><span class="pre">Error.NO_YCOEFFS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_RESET"><code class="docutils literal notranslate"><span class="pre">Error.NO_RESET</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.BAD_SIZE"><code class="docutils literal notranslate"><span class="pre">Error.BAD_SIZE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_CONVERT"><code class="docutils literal notranslate"><span class="pre">Error.CANT_CONVERT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.READ_ERROR"><code class="docutils literal notranslate"><span class="pre">Error.READ_ERROR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FEEDFORWARD"><code class="docutils literal notranslate"><span class="pre">Error.NO_FEEDFORWARD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_FEEDBACK"><code class="docutils literal notranslate"><span class="pre">Error.NO_FEEDBACK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_INTERP_TYPE"><code class="docutils literal notranslate"><span class="pre">Error.NO_INTERP_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_POSITION"><code class="docutils literal notranslate"><span class="pre">Error.NO_POSITION</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_ORDER"><code class="docutils literal notranslate"><span class="pre">Error.NO_ORDER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NO_COPY"><code class="docutils literal notranslate"><span class="pre">Error.NO_COPY</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.CANT_TRANSLATE"><code class="docutils literal notranslate"><span class="pre">Error.CANT_TRANSLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.sndlib.Error.NUM_ERRORS"><code class="docutils literal notranslate"><span class="pre">Error.NUM_ERRORS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div></div>
+</div>
+<footer class="bd-footer-content">
+<div class="bd-footer-content__inner container">
+<div class="footer-item">
+<p class="component-author">
+By Todd Ingalls
+</p>
+</div>
+<div class="footer-item">
+<p class="copyright">
+    
+      © Copyright 2023, Todd Ingalls.
+      <br/>
+</p>
+</div>
+<div class="footer-item">
+</div>
+<div class="footer-item">
+</div>
+</div>
+</footer>
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+<footer class="bd-footer">
+</footer>
+</body>
+</html>

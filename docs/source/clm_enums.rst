@@ -19,9 +19,3 @@ CLM Enums
 	
 .. autoenum:: Polynomial
 	:members:
-	
-	
-	
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

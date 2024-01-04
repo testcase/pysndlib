@@ -6,7 +6,9 @@
 # TODO: Instruments not translated yet - mlbvoi, pins, grm, expfil, graphEq, anoi, bes_fm, sbfm, fm2, rmsg, rms, cnvrev
 # There are various fixes needed for items translated details in code
 
+# Comments with hash and semicolons (# ;;;) are from original source
 
+# ;;; CLM instruments translated to Snd/Scheme
 
 import functools
 import math
@@ -27,7 +29,11 @@ ctypedef np.double_t DTYPE
 # from pysndlib.env import stretch_envelope
 # --------------- pluck ---------------- #
 
-# could just use multiple value return
+# ;;; The Karplus-Strong algorithm as extended by David Jaffe and Julius Smith -- see 
+# ;;;  Jaffe and Smith, "Extensions of the Karplus-Strong Plucked-String Algorithm"
+# ;;;  CMJ vol 7 no 2 Summer 1983, reprinted in "The Music Machine".
+# ;;;  translated from CLM's pluck.ins
+
 
 def tuneIt(f, s1):
     def getOptimumC(S,o,p):
@@ -85,82 +91,140 @@ def pluck(start, dur, freq, amp, weighting=.5, lossfact=.9):
         clm.outa(i, amp * val)
 
 
-# TODO: --------------- mlbvoi ---------------- #
+# TODO: more complex case --------------- mlbvoi ---------------- #
 
-vox_formants = {
-    'I' : ( 390, 1990, 2550),
-    'E' : ( 530, 1840, 2480),
-    'AE' : ( 660, 1720, 2410),
-    'UH' : ( 520, 1190, 2390),
-    'A' : ( 730, 1090, 2440),
-    'OW' : ( 570, 840, 2410),
-    'U' : ( 440, 1020, 2240),
-    'OO' : ( 300, 870, 2240),
-    'ER' : ( 490, 1350, 1690),
-    'W' : ( 300, 610, 2200),
-    'LL' : ( 380, 880, 2575),
-    'R' : ( 420, 1300, 1600),
-    'Y' : ( 300, 2200, 3065),
-    'EE' : ( 260, 3500, 3800),
-    'LH' : ( 280, 1450, 1600),
-    'L' : ( 300, 1300, 3000),
-    'I2' : ( 350, 2300, 3340),
-    'B' : ( 200, 800, 1750),
-    'D' : ( 300, 1700, 2600),
-    'G' : ( 250, 1350, 2000),
-    'M' : ( 280, 900, 2200),
-    'N' : ( 280, 1700, 2600),
-    'NG' : ( 280, 2300, 2750),
-    'P' : ( 300, 800, 1750),
-    'T' : ( 200, 1700, 2600),
-    'K' : ( 350, 1350, 2000),
-    'F' : ( 175, 900, 4400),
-    'TH' : ( 200, 1400, 2200),
-    'S' : ( 200, 1300, 2500),
-    'SH' : ( 200, 1800, 2000),
-    'V' : ( 175, 1100, 2400),
-    'THE' : ( 200, 1600, 2200),
-    'Z' : ( 200, 1300, 2500),
-    'ZH' : ( 175, 1800, 2000),
-    'ZZ' : ( 900, 2400, 3800),
-    'VV' : ( 565, 1045, 2400)
-}
+# ;;; translation from MUS10 of Marc LeBrun's waveshaping voice instrument (using FM here)
+# ;;; this version translated (and simplified slightly) from CLM's mlbvoi.ins
+
+@cython.ccall
+def vox_fun(phonemes, forms):
+    formants = {'I' : (390, 1990, 2550),
+                'E' : ( 530, 1840, 2480),
+                'AE' : ( 660, 1720, 2410),
+                'UH' : ( 520, 1190, 2390),
+                'A' : ( 730, 1090, 2440),
+                'OW' : ( 570, 840, 2410),
+                'U' : ( 440, 1020, 2240),
+                'OO' : ( 300, 870, 2240),
+                'ER' : ( 490, 1350, 1690),
+                'W' : ( 300, 610, 2200),
+                'LL' : ( 380, 880, 2575),
+                'R' : ( 420, 1300, 1600),
+                'Y' : ( 300, 2200, 3065),
+                'EE' : ( 260, 3500, 3800),
+                'LH' : ( 280, 1450, 1600),
+                'L' : ( 300, 1300, 3000),
+                'I2' : ( 350, 2300, 3340),
+                'B' : ( 200, 800, 1750),
+                'D' : ( 300, 1700, 2600),
+                'G' : ( 250, 1350, 2000),
+                'M' : ( 280, 900, 2200),
+                'N' : ( 280, 1700, 2600),
+                'NG' : ( 280, 2300, 2750),
+                'P' : ( 300, 800, 1750),
+                'T' : ( 200, 1700, 2600),
+                'K' : ( 350, 1350, 2000),
+                'F' : ( 175, 900, 4400),
+                'TH' : ( 200, 1400, 2200),
+                'S' : ( 200, 1300, 2500),
+                'SH' : ( 200, 1800, 2000),
+                'V' : ( 175, 1100, 2400),
+                'THE' : ( 200, 1600, 2200),
+                'Z' : ( 200, 1300, 2500),
+                'ZH' : ( 175, 1800, 2000),
+                'ZZ' : ( 900, 2400, 3800),
+                'VV' : ( 565, 1045, 2400)}
+    x = phonemes[0::2]
+    y = phonemes[1::2]
+    f = list([formants[i][forms] for i in y])
+    return [item for first in zip(x,f) for item in first]
 
 
-# 
-# def vox_fun(phons, which):
-#     
-#     def find_phoneme(phoneme, forms):
-#                 
-#     
-#     pass
-# 
-# 
-# 
-# def vox(beg, dur, freq, amp, ampfun, freqfun, freqscl, phonemes, formant_amps, formant_indices,vibscl=.1, deg=0, pcrev=0):
-#     start = seconds2samples(beg)
-#     end = seconds2samples(beg + dur)
-#     car_os = make_oscil(0)
-#     fs = len(formant_amps)
-#     per_vib = make_triangle_wave(6, amplitude=hz2radians(freq * vibscl))
-#     ran_vib = make_rand(20, amplitude=hz2radians(freq * .5 * vibscl))
-#     freqf = make_env(freqfun, duration=dur, scaler=hz2radians(freqscl * freq), offset=hz2radians(freq))
-#     
-#     # simple case
-#     a0 = make_env(ampfun, scaler=amp*formant_amps[0], duration=dur)
-#     a1 = make_env(ampfun, scaler=amp*formant_amps[1], duration=dur)
-#     a2 = make_env(ampfun, scaler=amp*formant_amps[2], duration=dur)
-#     o0 = make_oscil(0.0)
-#     o1 = make_oscil(0.0)
-#     o2 = make_oscil(0.0)
-#     e0 = make_oscil(0.0)
-#     e1 = make_oscil(0.0)
-#     e2 = make_oscil(0.0)
-#     ind0 = formant_indices[0]
-#     ind1 = formant_indices[1]
-#     ind2 = formant_indices[2]
-#     f0 = make_env
+
+@cython.ccall
+def vox(beg, dur, freq, amp, ampfun, freqfun, freqscl, phonemes, formant_amps, formant_indices,vibscl=.1, deg=0, pcrev=0):
+    start: cython.long = clm.seconds2samples(beg)
+    end: cython.long = clm.seconds2samples(beg + dur)
+    car_os = clm.make_oscil(0)
+    fs = len(formant_amps)
+    per_vib = clm.make_triangle_wave(6, amplitude=clm.hz2radians(freq * vibscl))
+    ran_vib = clm.make_rand(20, amplitude=clm.hz2radians(freq * .5 * vibscl))
+    freqf = clm.make_env(freqfun, duration=dur, scaler=clm.hz2radians(freqscl * freq), offset=clm.hz2radians(freq))
     
+    i: cython.long = 0
+    
+    if fs == 3 and clm.get_channels(clm.default.output):
+        a0 = clm.make_env(ampfun, scaler=amp*formant_amps[0], duration=dur)
+        a1 = clm.make_env(ampfun, scaler=amp*formant_amps[1], duration=dur)
+        a2 = clm.make_env(ampfun, scaler=amp*formant_amps[2], duration=dur)
+        o0 = clm.make_oscil(0.0)
+        o1 = clm.make_oscil(0.0)
+        o2 = clm.make_oscil(0.0)
+        e0 = clm.make_oscil(0.0)
+        e1 = clm.make_oscil(0.0)
+        e2 = clm.make_oscil(0.0)
+        ind0 = formant_indices[0]
+        ind1 = formant_indices[1]
+        ind2 = formant_indices[2]
+        f0 = clm.make_env(vox_fun(phonemes,0),scaler=clm.hz2radians(1.0), duration=dur)
+        f1 = clm.make_env(vox_fun(phonemes,1),scaler=clm.hz2radians(1.0), duration=dur)
+        f2 = clm.make_env(vox_fun(phonemes,2),scaler=clm.hz2radians(1.0), duration=dur)
+        
+        for i in range(start, end):
+            frq: cython.double = clm.env(freqf) + clm.triangle_wave(per_vib) + clm.rand_interp(ran_vib)
+            carg: cython.double = clm.oscil(car_os, frq)
+            frm0: cython.double = clm.env(f0) / frq
+            frm1: cython.double = clm.env(f1) / frq
+            frm2: cython.double = clm.env(f2) / frq
+            
+            rx: cython.double = clm.even_weight(frm0) * clm.oscil(e0, ((ind0*carg) + clm.even_multiple(frm0, frq)))
+            rx += clm.odd_weight(frm0) * clm.oscil(o0, ((ind0*carg) + clm.odd_multiple(frm0, frq)))
+            rx *= clm.env(a0)
+            
+            ry: cython.double = clm.even_weight(frm1) * clm.oscil(e1, ((ind1*carg) + clm.even_multiple(frm1, frq)))
+            ry += clm.odd_weight(frm1) * clm.oscil(o1, ((ind1*carg) + clm.odd_multiple(frm1, frq)))
+            ry *= clm.env(a1)
+            
+            rz: cython.double = clm.even_weight(frm2) * clm.oscil(e2, ((ind2*carg) + clm.even_multiple(frm2, frq)))
+            rz += clm.odd_weight(frm2) * clm.oscil(o2, ((ind2*carg) + clm.odd_multiple(frm2, frq)))
+            rz *= clm.env(a2)
+            clm.outa(i, rx+ry+rz)
+#         else:
+#             evens = [None] * fs
+#             odds = [None] * fs
+#             ampfs = [None] * fs
+#             indices = [None] * fs
+#             frmfs = [None] * fs
+#             carrier = frm_int = rfrq = frm0 = frac = fracf = 0.0
+#             loc = clm.make_locsig(deg, 1.0, pcrev)
+#             
+#             for i in range(fs):
+#                 evens[i] = clm.make_oscil(0)
+#                 odds[i] = clm.make_oscil(0)
+#                 ampfs[i] = clm.make_env(ampfun, scaler=(amp * formant_amps[i]), duration=dur)
+#                 indices[i] = formant_indices[i]
+#                 frmfs[i] = clm.make_env(vox_fun(phonemes, i), scaler=clm.hz2radians(1.0), duration=dur)
+#                 
+#                 
+#             if fs == 3:
+#                 frmfs0 = frmfs[0]; frmfs1 = frmfs[1]; frmfs2 = frmfs[2]
+#                 index0 = indices[0]; index1 = indices[1]; index2 = indices[2]
+#                 ampfs0 = ampfs[0]; ampfs1 = ampfs[1]; ampfs2 = ampfs[2]
+#                 evens0 = evens[0]; evens1 = evens[1]; evens2 = evens[2]
+#                 odds0 = odds[0]; odds1 = odds[1]; odds2 = odds[2]
+#                 
+#                 for i in range(start, end):
+#                     rfrq = clm.env(freqf) + clm.triangle_wave(per_vib) + clm.rand_interp(ran_vib)
+#                     carrier = clm.oscil(car_os, rfrq)
+#                     frm0 = clm.env(frmfs0) / rfrq
+#                     frm_int = int(math.floor(frm0))
+#                     frac = frm0 - frm_int
+#                     fracf = (index0 * carrier) + (frm_int * rfrq)
+#                     
+#                     clm.locsig(i, clm.env(ampfs0), clm.is_even(frm_int))
+            
+# with clm.Sound(play=True, statistics=True):
+#     vox(0,2,170,.4, [0,0,25,1,75,1,100,0], [0,0,5,.5,10,0,100,1], .1, [0,'E',25,'AE',35,'ER',65,'ER',75,'I',100,'UH'], [.8, .15, .05], [.005, .0125, .025], .05, .1)
 
 
 # TODO: --------------- pqwvox ---------------- #
@@ -209,6 +273,9 @@ def fofins(beg, dur, frq, amp, vib, f0, a0, f1, a1, f2, a2, ae=[0, 0, 25, 1, 75,
         #    
 
 # --------------- fm_trumpet ---------------- #
+
+# ;;; Dexter Morrill's FM-trumpet:
+# ;;; from CMJ feb 77 p51
 
 @cython.ccall
 def fm_trumpet(startime, dur, frq1=250, frq2=1500, amp1=.5, amp2=.1, 
@@ -447,6 +514,8 @@ def fm_insect(startime, dur, frequency,
 #     fm_insect(4.300,1.500,900.627,.09,AMP,40,-20.707,LOCUST,300.866,BUG_HI,.246,.500)
         
 # --------------- fm_drum ---------------- #
+# ;;; Jan Mattox's fm drum:
+
 @cython.ccall
 def fm_drum(start_time, duration, frequency, amplitude, index, high=True, degree=0.0, distance=1.0, reverb_amount=.01):
     indxfun = [0,0,5,.014,10,.033,15,.061,20,.099,
@@ -491,6 +560,7 @@ def fm_drum(start_time, duration, frequency, amplitude, index, high=True, degree
 #     fm_drum(2, 1.5, 66, .3, 5, True)
 
 # --------------- gong ---------------- #
+# ;;; Paul Weineke's gong.
 @cython.ccall
 def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, reverb_amount=.005):
     mfq1 = frequency * 1.16
@@ -529,7 +599,7 @@ def gong(start_time, duration, frequency, amplitude, degree=0.0, distance=1.0, r
 #     gong(0, 3, 261.61, .6)
     
 # --------------- attract ---------------- #
-
+#   ;; by James McCartney, from CMJ vol 21 no 3 p 6
 @cython.ccall
 def attract(beg, dur, amp, c):
     st: cython.long = clm.seconds2samples(beg)
@@ -556,6 +626,8 @@ def attract(beg, dur, amp, c):
 #     attract(0, 2, .5, 4)
     
 # --------------- pqw ---------------- #
+#   ;; phase-quadrature waveshaping used to create asymmetric (i.e. single side-band) spectra.
+#   ;; The basic idea here is a variant of sin x sin y - cos x cos y = cos (x + y)
 
 def clip_env(e):
     xs = e[0::2]
@@ -598,6 +670,9 @@ def pqw(start, dur, spacing_freq, carrier_freq, amplitude,
 
 
 # --------------- tubebell ---------------- #
+# ;;; taken from Perry Cook's stkv1.tar.Z (Synthesis Toolkit), but I was
+# ;;; in a bit of a hurry and may not have made slavishly accurate translations.
+# ;;; Please let me know of any errors.
 
 @cython.ccall
 def tubebell(beg, dur, freq, amp, base=32.0):
@@ -625,7 +700,7 @@ def tubebell(beg, dur, freq, amp, base=32.0):
 #         tubebell(t, 1, random.choice(freqs), .5)    
 
 # --------------- wurley ---------------- #
-
+#   ;; from Perry Cook's Rhodey.cpp
 @cython.ccall
 def wurley(beg, dur, freq, amp):
     osc0 = clm.make_oscil(freq)
@@ -651,6 +726,7 @@ def wurley(beg, dur, freq, amp):
 
 # --------------- rhodey ---------------- #
 @cython.ccall
+#   ;; from Perry Cook's Rhodey.cpp
 def rhodey(beg, dur, freq, amp, base=.5):
     osc0 = clm.make_oscil(freq)
     osc1 = clm.make_oscil(freq * .5)
@@ -668,6 +744,7 @@ def rhodey(beg, dur, freq, amp, base=.5):
         clm.outa(i, ( clm.env(ampenv1)*clm.oscil(osc0, (.535 * clm.oscil(osc1)))) + (clm.env (ampenv2) * clm.oscil(osc2, clm.env(ampenv3) * clm.oscil(osc3))))
 
 # --------------- hammondoid ---------------- #
+#   ;; from Perry Cook's BeeThree.cpp
 @cython.ccall
 def hammondoid(beg, dur, freq, amp):
     osc0  = clm.make_oscil(freq * .999)
@@ -689,6 +766,7 @@ def hammondoid(beg, dur, freq, amp):
                     (clm.env(ampenv2)*clm.oscil(osc3)))
 
 # --------------- metal ---------------- #
+#   ;; from Perry Cook's HeavyMtl.cpp
 @cython.ccall
 def metal(beg, dur, freq, amp):
     osc0 = clm.make_oscil(freq)
@@ -800,6 +878,11 @@ def canter(beg, dur, pitch, amp_1, deg, dis, pcrev, ampfun, ranfun, skewfun, ske
     
 
 # --------------- nrev ---------------- #
+# ;;; NREV (the most popular Samson box reverb)
+# 
+#   ;; reverb-factor controls the length of the decay -- it should not exceed (/ 1.0 .823)
+#   ;; lp-coeff controls the strength of the low pass filter inserted in the feedback loop
+#   ;; output-scale can be used to boost the reverb output
 @cython.ccall
 def is_even(n):
     return bool(n%2==0)
@@ -890,10 +973,7 @@ def reson(startime, dur, pitch, amp, numformants, indxfun, skewfun, pcskew, skew
     ranvib = clm.make_rand_interp(ranvibfreq, clm.hz2radians(ranvibpc * pitch))
     frqe = clm.stretch_envelope(skewfun, 25, 100 * (skewat / dur), 75, 100 - (100 * (skewdc / dur)))
     frqf = clm.make_env(frqe, scaler=clm.hz2radians(pcskew * pitch), duration=dur)
-    
-    
-    
-    
+
     for k in range(0,numformants):
         totalamp += data[k][2]
         
@@ -958,7 +1038,7 @@ def reson(startime, dur, pitch, amp, numformants, indxfun, skewfun, pcskew, skew
         
 
 # --------------- cellon ---------------- #
-
+# ;;; STK's feedback-fm instrument named CelloN in Sambox-land
 @cython.ccall
 def cellon(beg, dur, pitch0, amp, ampfun, betafun, beta0, beta1, betaat, betadc, ampat, ampdc, dis, pcrev, deg,
             pitch1, glissfun, glissat, glissdc, pvibfreq, pvibpc, pvibfun=[0,1,100,1], pvibat=0, pvibdc=0, rvibfreq=0, rvibpc=0, rvibfun=[0,1,100,1]):
@@ -1017,7 +1097,7 @@ def jl_reverb(decay_time: cython.double  =3.0, volume: cython.double =1.0):
     comb4 = clm.make_comb(.697, 11597)
     outdel1 = clm.make_delay(clm.seconds2samples(.013))
     outdel2 = clm.make_delay(clm.seconds2samples(.011))
-    length = math.floor((decay_time * clm.get_srate()) + clm.length(clm.default.reverb))
+    length = math.floor((decay_time * clm.get_srate()) + clm.get_length(clm.default.reverb))
     filts = [outdel1, outdel2]
     combs = clm.make_comb_bank([comb1, comb2, comb3, comb4])
     allpasses = clm.make_all_pass_bank([allpass1, allpass2, allpass3])
@@ -1047,6 +1127,9 @@ def gran_synth(startime, duration, audio_freq, grain_dur, grain_interval, amp: c
 #     gran_synth(0, 2, 100, .0189, .02, .4)
 
 # --------------- touch_tone ---------------- #
+# ;;; I think the dial tone is 350 + 440
+# ;;; http://www.hackfaq.org/telephony/telephone-tone-frequencies.shtml
+
 @cython.ccall
 def touch_tone(start, telephone_number):
     touch_tab_1 = [0,697,697,697,770,770,770,852,852,852,941,941,941]
@@ -1098,6 +1181,8 @@ def spectra(startime, duration, frequency, amplitude, partials=[1,1,2,0.5], amp_
 #     spectra(0, 4, 440.0, .1, [1.0,.4,2.0,.2,3.0,.2,4.0,.1,6.0,.1], [0.0,0.0,1.0,1.0,5.0,0.9,12.0,0.5,25.0,0.25,100.0,0.0])
 
 # --------------- two_tab ---------------- #
+# ;;; interpolate between two waveforms (this could be extended to implement all the various
+# ;;; wavetable-based synthesis techniques).
 @cython.ccall
 def two_tab(startime, duration, frequency, amplitude, partial_1=[1.0,1.0,2.0,0.5], partial_2=[1.0,0.0,3.0,1.0], 
                     amp_envelope=[0,0,50,1,100,0], interp_func=[0,1,100,0], 
@@ -1128,7 +1213,17 @@ def two_tab(startime, duration, frequency, amplitude, partial_1=[1.0,1.0,2.0,0.5
 
 
 # --------------- lbj_piano ---------------- #
-
+#     ;; This thing sounds pretty good down low, below middle c or so.  
+#     ;; The high notes sound pretty rotten--they just don't
+#     ;; sparkle;  I have a feeling that this is due to the low amplitude of the 
+#     ;; original data, and the lack of mechanical noise.
+#     ;;
+#     ;; The only thing you can do to alter the sound of a piano note is to set the 
+#     ;; pfreq parameter.  Pfreq is used to look up the partials.  By default, it's 
+#     ;; set to the requested frequency.  Setting it to a neighboring freq is useful 
+#     ;; when you're repeating notes.  Note that there's no nyquist detection; 
+#     ;; a high freq with a low pfreq, will give you fold over (hmmm...maybe 
+#     ;; I can get those high notes to sparkle after all).
 
 # moved this outside function definition
 PIANO_SPECTRA = [[1.97,.0326,2.99,.0086,3.95,.0163,4.97,.0178,5.98,.0177,6.95,.0315,8.02,.0001 ,8.94,.0076,9.96,.0134,10.99,.0284,11.98,.0229,13.02,.0229,13.89,.0010,15.06,.0090,16.00,.0003 ,17.08,.0078,18.16,.0064,19.18,.0129,20.21,.0085,21.27,.0225,22.32,.0061,23.41,.0102,24.48,.0005 ,25.56,.0016,26.64,.0018,27.70,.0113,28.80,.0111,29.91,.0158,31.06,.0093,32.17,.0017,33.32,.0002 ,34.42,.0018,35.59,.0027,36.74,.0055,37.90,.0037,39.06,.0064,40.25,.0033,41.47,.0014,42.53,.0004 ,43.89,.0010,45.12,.0039,46.33,.0039,47.64,.0009,48.88,.0016,50.13,.0006,51.37,.0010,52.70,.0002 ,54.00,.0004,55.30,.0008,56.60,.0025,57.96,.0010,59.30,.0012,60.67,.0011,61.99,.0003,62.86,.0001 ,64.36,.0005,64.86,.0001,66.26,.0004,67.70,.0006,68.94,.0002,70.10,.0001,70.58,.0002,72.01,.0007 ,73.53,.0006,75.00,.0002,77.03,.0005,78.00,.0002,79.57,.0006,81.16,.0005,82.70,.0005,84.22,.0003 ,85.41,.0002,87.46,.0001,90.30,.0001,94.02,.0001,95.26,.0002,109.39,.0003],
@@ -1391,6 +1486,9 @@ def zc(time, dur, freq, amp, length1, length2, feedback):
 #     zc(3., 3, 100, .5, 100, 20, .95)
 #     
 # --------------- zn ---------------- #
+#   ;; notches are spaced at srate/len, feedforward sets depth thereof
+#   ;; so sweep of len from 20 to 100 sweeps the notches down from 1000 Hz to ca 200 Hz 
+#   ;; so we hear our downward glissando beneath the pulses.
 @cython.ccall
 def zn(time, dur, freq, amp, length1, length2, feedforward):
     beg: cython.long = clm.seconds2samples(time)
@@ -1483,6 +1581,8 @@ def clm_expsrc(beg, dur, input_file, exp_ratio, src_ratio, amp: cython.double, r
 
 # --------------- exp_snd ---------------- #
 # moved file arg from 1st arg
+#   ;; granulate with envelopes on the expansion amount, segment envelope shape,
+#   ;; segment length, hop length, and input file resampling rate
 
 @cython.ccall
 def is_pair(x): #seems only useful in this instrument

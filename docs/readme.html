@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>README for pysndlib &#8212; pysndlib 0.6.2 documentation</title>
+    <title>README for pysndlib &#8212; pysndlib 0.6.5 documentation</title>
   
   
   
@@ -42,8 +42,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'readme';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Sound Context Manager" href="with_sound.html" />
-    <link rel="prev" title="Welcome to pysndlib’s documentation!" href="index.html" />
+    <link rel="next" title="Building pysndlib" href="building.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="description.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -115,26 +115,24 @@
   
   
   
-    <p class="title logo__title">pysndlib 0.6.2 documentation</p>
+    <p class="title logo__title">pysndlib 0.6.5 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 
@@ -309,7 +307,7 @@ Sources for sndlib can be found here &lt;<a class="reference external" href="htt
 <p>grab sndlib from <a class="reference external" href="ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz">ftp://ccrma-ftp.stanford.edu/pub/Lisp/sndlib.tar.gz</a></p>
 <p>copy sndlib directory to top level of pysndlib</p>
 <p>cd sndlib</p>
-<p>./configure --with-s7=no --with-gsl=no --without-audio</p>
+<p>./configure –with-s7=no –with-gsl=no –without-audio</p>
 <p>make</p>
 <p>leave libsndlib.a in sndlib directory</p>
 <p>this avoids writing over installed versions which might be built with other options and
@@ -320,7 +318,7 @@ potential linking issues</p>
 <p>I do the following</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
 
-<span class="n">pip</span> <span class="n">install</span> <span class="n">cython</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span>
 </pre></div>
 </div>
 <p>After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level
@@ -383,20 +381,20 @@ existing examples. This may mean some aspects may not be pythonic.</p>
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="description.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Welcome to pysndlib’s documentation!</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
       </div>
     </a>
     <a class="right-next"
-       href="with_sound.html"
+       href="building.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Sound Context Manager</p>
+        <p class="prev-next-title">Building pysndlib</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

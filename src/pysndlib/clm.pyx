@@ -303,31 +303,31 @@ cdef class mus_any:
         cdef cclm.mus_long_t size = cclm.mus_length(self._ptr)
         
         self._pv_amp_increments_ptr = cclm.mus_phase_vocoder_amp_increments(self._ptr)
-        cdef view.array pvai = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+        cdef view.array pvai = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
         pvai.data = <char*>self._pv_amp_increments_ptr
         self._pv_amp_increments = np.asarray(pvai)
         self._pv_amp_increments.fill(0.0)
         
         self._pv_amps_ptr = cclm.mus_phase_vocoder_amps(self._ptr)
-        cdef view.array pva = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+        cdef view.array pva = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=False)
         pva.data = <char*>self._pv_amps_ptr
         self._pv_amps = np.asarray(pva)    
         self._pv_amps.fill(0.0)
         
         self._pv_freqs_ptr = cclm.mus_phase_vocoder_freqs(self._ptr)
-        cdef view.array pvf = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+        cdef view.array pvf = view.array(shape=(size,),itemsize=sizeof(double), format='d', allocate_buffer=False)
         pvf.data = <char*>self._pv_freqs_ptr
         self._pv_freqs = np.asarray(pvf)    
         self._pv_freqs.fill(0.0)
         
         self._pv_phases_ptr = cclm.mus_phase_vocoder_phases(self._ptr)
-        cdef view.array pvp = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+        cdef view.array pvp = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=False)
         pvp.data = <char*>self._pv_phases_ptr
         self._pv_phases = np.asarray(pvp)
         self._pv_phases.fill(0.0)
         
         self._pv_phase_increments_ptr = cclm.mus_phase_vocoder_phase_increments(self._ptr)
-        cdef view.array pvpi = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=True)
+        cdef view.array pvpi = view.array(shape=(size // 2,),itemsize=sizeof(double), format='d', allocate_buffer=False)
         pvpi.data = <char*>self._pv_phase_increments_ptr
         self._pv_phase_increments = np.asarray(pvpi)  
         self._pv_phase_increments.fill(0.0)
@@ -543,7 +543,12 @@ cdef class mus_any:
             raise TypeError(f'mus_ycoeffs can not be called on {cclm.mus_name(self._ptr)}')
         return self._ycoeffs
     
-   
+    @property
+    def mus_file_name(self):
+        """
+        file being read/written
+        """
+        return cclm.mus_file_name(self._ptr)
    
 cdef class mus_any_array:
     """
@@ -605,14 +610,14 @@ cdef void locsig_detour_callback_func(cclm.mus_any *ptr, cclm.mus_long_t val):
          
          
 # --------------- file2ndarray, ndarray2file ---------------- #                 
-cpdef file2ndarray(str filename, channel=None, beg=None, length=None):
+cpdef file2ndarray(str filename, channel=None, beg=None, size=None):
     """
     return an ndarray with samples from file and the sample rate of the data
     
     :param filename: filename
     :param channel: if None, will read all channels, otherwise just channel specified 
     :param beg: beginning positions to read in samples
-    :param dur: duration in samples to read
+    :param size: size in samples to read
     :return: tuple of np.ndarray and sample rate
     :rtype: tuple
     
@@ -620,9 +625,9 @@ cpdef file2ndarray(str filename, channel=None, beg=None, length=None):
     if not os.path.isfile(filename):
         raise FileNotFoundError(f'file2ndarray: {filename} does not exist.')
     
-    size = length or csndlib.mus_sound_framples(filename)
-    chans = csndlib.mus_sound_chans(filename)
-    srate = csndlib.mus_sound_srate(filename)
+    size = size or get_length(filename)
+    chans = get_channels(filename)
+    sr = get_srate(filename)
     bg = beg or 0
     out = np.zeros((1 if (channel != None) else chans, size), dtype=np.double)
 
@@ -633,21 +638,20 @@ cpdef file2ndarray(str filename, channel=None, beg=None, length=None):
             csndlib.mus_file_to_array(filename, i, bg, size, &arr_view[i][0])
     else:
         csndlib.mus_file_to_array(filename,channel, bg, size, &arr_view[0][0])
-    return out, srate
+    return out, sr
     
-cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_type=None, header_type=None, comment=None ):
+cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type=None, header_type=None, comment=None ):
     """
     write an ndarray of samples to file
     
     :param filename: name of file
     :param arr: np.ndarray of samples
-    :param length: length of samples to write. if None write all
+    :param size: number of samples to write. if None write all
     :param sr: sample rate of file to write
     :param sample_type: type of sample type to use. defaults to clm.sample_type
     :param header_type: header of sample type to use. defaults to clm.header_type
     :return: length in samples of file
     :rtype: int
-    
     
     """
     #sample_type: Optional[sndlib.sample]=CLM.sample_type, header_type: Optional[sndlib.header]=CLM.header_type
@@ -656,19 +660,20 @@ cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_ty
     sample_type = sample_type or default.sample_type
     header_type = header_type or default.header_type
 
-   
-    
     if arr.ndim == 1:
-        size = length or np.shape(arr)[0]
+        print('ndim', arr.ndim)
+        arr = np.copy(arr)
+        size = size or np.shape(arr)[0]
+        arr.resize(size)
         arr = np.reshape(arr,(1,size))
-    else:
-        size = length or np.shape(arr)[1]
         
+    else:
+        
+        size = size or np.shape(arr)[1]
         
     chans = np.shape(arr)[0]
-    
-    fd = csndlib.mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, NULL)
 
+    fd = csndlib.mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, NULL)
     cdef cclm.mus_float_t **obuf = <cclm.mus_float_t**>PyMem_Malloc(chans * sizeof(cclm.mus_float_t*))
 
     if not obuf:
@@ -686,7 +691,7 @@ cpdef ndarray2file(str filename, np.ndarray arr, length=None, sr=None, sample_ty
         csndlib.mus_sound_close_output(fd, size * csndlib.mus_bytes_per_sample(sample_type)*chans)
         PyMem_Free(obuf)
         
-    return length
+    return size
 
 # --------------- with sound context manager ---------------- #      
 class Sound(object):
@@ -834,7 +839,7 @@ class Sound(object):
             if isinstance(self.output, str):
                 statstr = f"{self.output}: "
             if self.output_to_file:
-                    chans = clm_channels(self.output)
+                    chans = get_channels(self.output)
                     vals = np.zeros(chans, dtype=np.double)
                     times = np.zeros(chans, dtype=np.int64)
                     vals_view = vals
@@ -843,7 +848,7 @@ class Sound(object):
                     maxamp_result = maxamp
                     statstr += f": maxamp: {vals} {times} "
             else:
-                chans = clm_channels(self.output)
+                chans = get_channels(self.output)
                 vals = np.zeros(chans, dtype=np.double)
                 times = np.zeros(chans, dtype=np.int64)
                 for i in range(chans):
@@ -861,7 +866,7 @@ class Sound(object):
             
             
             if self.reverb_to_file:
-                    chans = clm_channels(self.revfile)
+                    chans = get_channels(self.revfile)
                     vals = np.zeros(chans, dtype=np.double)
                     times = np.zeros(chans, dtype=np.int_)
                     vals_view = vals
@@ -869,7 +874,7 @@ class Sound(object):
                     maxamp = csndlib.mus_sound_maxamps(self.revfile, chans, &vals_view[0], &times_view[0])
                     statstr += f"revmax: {vals} {times}"
             elif self.reverb and not self.reverb_to_file and is_list_or_ndarray(self.output):
-                chans = clm_channels(default.reverb)
+                chans = get_channels(default.reverb)
                 
                 vals = np.zeros(chans, dtype=np.double)
                 times = np.zeros(chans, dtype=np.int_)
@@ -944,8 +949,6 @@ cpdef np.ndarray to_partials(harms):
     
 # --------------- generic functions ---------------- #
 
-# cpdef int tester(int x) :
-#     return x
 
 cpdef int mus_close(mus_any obj):
     return cclm.mus_close_file(obj._ptr)
@@ -973,11 +976,11 @@ cpdef mus_reset(mus_any obj):
     
 # --------------- length ---------------- #
 
-cpdef cython.long length(obj):
+cpdef cython.long get_length(obj):
     """Returns length in samples of a sound file, list, ndarray, or generator"""
     #assume file
     if isinstance(obj, str):
-        return csndlib.mus_sound_samples(obj)
+        return csndlib.mus_sound_framples(obj)
     #sndlib gen    
     elif  isinstance(obj, mus_any):
         return obj.mus_length
@@ -999,9 +1002,9 @@ cpdef cython.long length(obj):
 
 
 
-# --------------- clm_channels ---------------- #
+# --------------- channels ---------------- #
 
-cpdef cython.long clm_channels(obj):
+cpdef cython.long get_channels(obj):
     """Returns number of channels of a sound file, list, ndarray"""
     if isinstance(obj, str):
         return csndlib.mus_sound_chans(obj)
@@ -1023,14 +1026,18 @@ cpdef cython.long clm_channels(obj):
         
 # --------------- srate ---------------- #
 
-
-cpdef cython.double srate(obj):
+    
+cpdef cython.double get_srate(obj=None):
     """Return current sample rate"""
-    return csndlib.mus_sound_srate(obj)
+    if obj is None:
+            return cclm.mus_srate()
+    else:
+        return csndlib.mus_sound_srate(obj)
   
 # --------------- framples ---------------- #
 
-cpdef cython.long framples(obj):
+cpdef cython.long get_framples(obj):
+    """Returns length in frames of a sound file, list, ndarray, or generator"""
     if isinstance(obj, str):
         return csndlib.mus_sound_framples(obj)
     elif isinstance(obj, mus_any):
@@ -1075,6 +1082,12 @@ cpdef bint is_zero(cython.double x):
     
 cpdef bint is_number(n):
     return type(n) == int or type(n) == float
+    
+cpdef bint is_odd(n):
+    return n % 2 == 0
+
+cpdef bint is_even(n):
+    return n % 2 != 0
 
 # # --------------- clm utility functions ---------------- #
 # 
@@ -1193,15 +1206,15 @@ cpdef cython.double even_weight(cython.double x):
     
     return cclm.mus_even_weight(x)
     
-cpdef cython.double get_srate():
-    """
-    return current sample rate.
-    
-    :return samplerate:
-    :rtype: float
-    
-    """
-    return cclm.mus_srate()
+# cpdef cython.double get_srate():
+#     """
+#     return current sample rate.
+#     
+#     :return samplerate:
+#     :rtype: float
+#     
+#     """
+#     return cclm.mus_srate()
     
 cpdef cython.double set_srate(cython.double r):
     """
@@ -1609,7 +1622,7 @@ cpdef tuple spectrum(np.ndarray rdat,np.ndarray  idat,np.ndarray window, Spectru
     return rdat_cpy, idat_cpy
     
 
-cpdef np.ndarray mus_convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
+cpdef np.ndarray mus_convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = 512):
     """
     in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
 
@@ -1620,19 +1633,19 @@ cpdef np.ndarray mus_convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = No
     :rtype: np.ndarray
     
     """
-    size = len(rl1)
+    # size = len(rl1)
     cdef double [:] rl1_view = rl1
     cdef double [:] rl2_view = rl2
     check_ndim(rl1)
     check_ndim(rl2)
-    compare_shapes(rl1, rl2)
+   # compare_shapes(rl1, rl2)
     
-    cclm.mus_convolution(&rl1_view[0], &rl2_view[0], size)
+    cclm.mus_convolution(&rl1_view[0], &rl2_view[0], fft_size)
     return rl1
     
     
 
-cpdef np.ndarray convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
+cpdef np.ndarray convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = 512):
     """
     convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.
 
@@ -1643,10 +1656,10 @@ cpdef np.ndarray convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
     :rtype: np.ndarray
     
     """
-    size = len(rl1)
+    # size = len(rl1)
     check_ndim(rl1)
     check_ndim(rl2)
-    compare_shapes(rl1, rl2)
+   # compare_shapes(rl1, rl2)
     rl1_cpy = np.copy(rl1)
     rl2_cpy = np.copy(rl2) #probably do
     
@@ -1655,7 +1668,7 @@ cpdef np.ndarray convolution(np.ndarray  rl1, np.ndarray  rl2, fft_size = None):
     cdef double [:] rl2_view = rl2_cpy
 
     
-    cclm.mus_convolution(&rl1_view[0], &rl2_view[0], size)
+    cclm.mus_convolution(&rl1_view[0], &rl2_view[0], fft_size)
     return rl1_cpy
 
 cpdef np.ndarray mus_autocorrelate(np.ndarray data):
@@ -4614,7 +4627,7 @@ cpdef mus_any make_convolve(inp, filt, cython.long fft_size=512, filter_size=Non
     
 
     if filter_size is None:
-        filter_size = length(filt)
+        filter_size = get_length(filt)
      
     fft_len = 0
     
@@ -4746,78 +4759,7 @@ def make_granulate(inp,
 
     return res
     
-    
-# def make_granulate(inp, 
-#                     expansion: Optional[float]=1.0, 
-#                     length: Optional[float]=.15,
-#                     scaler: Optional[float]=.6,
-#                     hop: Optional[float]=.05,
-#                     ramp: Optional[float]=.4,
-#                     jitter: Optional[float]=0.0,
-#                     max_size: Optional[int]=0,
-#                     edit=None):
-#                     
-#     """
-#     return a new granular synthesis generator.  'length' is the grain length (seconds), 'expansion' is the
-#     ratio \in timing between the new and old (expansion > 1.0 slows things down), 'scaler' scales the grains
-#     to avoid overflows, 'hop' is the spacing (seconds) between successive grains upon output. 'jitter'
-#     controls the randomness \in that spacing, 'input' can be a file pointer. 'edit' can be a function of one
-#     arg, the current granulate generator.  it is called just before a grain is added into the output
-#     buffer. the current grain is accessible via mus_data. the edit function, if any, should return the
-#     length \in samples of the grain, or 0.
-#     
-#     :param inp: gen or function to read from. if a callback, the function takes 1 input, the direction and should return read value
-#     :param expansion: how much to lengthen or compress the file
-#     :param length: length of file slices that are overlapped
-#     :param scaler: amplitude scaler on slices (to avoid overflows)
-#     :param hop: speed at which slices are repeated \in output
-#     :param ramp: amount of slice-time spent ramping up/down
-#     :param jitter: affects spacing of successive grains
-#     :param max_size: internal buffer size
-#     :param edit: grain editing function. the function should take one argument, the granulate mus_any and return length of grain or 0
-# 
-#     """
-# 
-#     cdef cclm.input_cb cy_input_f_ptr
-#     cdef cclm.edit_cb cy_edit_f_ptr 
-# 
-#     if(isinstance(inp, mus_any) and edit is None):
-#         res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>input_callback_func, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, <void*>(<mus_any>inp)._ptr))
-#         res._inputcallback = <cclm.input_cb>input_callback_func
-#         return res
-#     
-#     if not callable(inp):
-#         raise TypeError(f"input needs to be a clm gen or function not a {type(inp)}")
-#         
-#     @_inputcallback
-#     def inp_f(gen, d):
-#         return inp(d)
-#      
-#    
-#     cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
-#     res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>cy_inp_f_ptr, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, NULL))
-#     res._inputcallback = cy_inp_f_ptr
-#     res.cache_append(inp_f)     
-#     
-#     if(edit is None):
-#         return res
-# 
-# # 
-# #     print(edit)
-# #     print(type(edit))
-# #     print(cython.typeof(edit))
-# #     
-#     
-#     @_editcallback
-#     def edit_f(gen):
-#         return edit(res)
-#     
-#     cy_edit_f_ptr = (<cclm.edit_cb*><size_t>ctypes.addressof(edit_f))[0]
-#     cclm.mus_granulate_set_edit_function(res._ptr, cy_edit_f_ptr)
-#     res._editcallback  = cy_edit_f_ptr
-#     res.cache_append(edit_f)
-# 
-#     return res
+
     
 #todo: mus_granulate_grain_max_length
 cpdef cython.double granulate(mus_any gen):
@@ -5164,13 +5106,13 @@ cpdef mus_any make_locsig(cython.double degree=0.0, cython.double distance=1., c
             revout = None #this generates and error but still works
 
     if channels is None:
-        channels = clm_channels(output)
+        channels = get_channels(output)
     
     if reverb_channels is None:
         if revout is None:
             reverb_channels = 0
         else:
-            reverb_channels = clm_channels(revout)
+            reverb_channels = get_channels(revout)
 
     if isinstance(output, mus_any):
      
@@ -5425,13 +5367,12 @@ cpdef biquad_set_resonance(mus_any gen, cython.double fc, cython.double radius, 
         gen.mus_xcoeffs[1] = 0.0
         gen.mus_xcoeffs[2] = 0.0
     
-cpdef biquad_set_equal_gain_zeroes(gen: mus_any):
+cpdef biquad_set_equal_gain_zeroes(mus_any gen):
     gen.mus_xcoeffs[0] = 1.0
     gen.mus_xcoeffs[1] = 0.0
     gen.mus_xcoeffs[2] = -1.0    
 
     
-
 def convert_frequency(gen):
     gen.frequency = hz2radians(gen.frequency)
     return gen
@@ -5525,13 +5466,17 @@ cpdef is_array_readin(gen):
 #     return g, is_a
 # 
 
-
-def _clip(x, lo, hi):
-    return max(min(x, hi),lo)
   
 def clamp(x, lo, hi):
     return max(min(x, hi),lo)  
 
+
+
+
+def _clip(x, lo, hi):
+    return max(min(x, hi),lo)
+    
+    
 def _wrap(x, lo, hi):
     r = hi-lo
     if x >= lo and x <= hi:
@@ -5543,9 +5488,9 @@ def _wrap(x, lo, hi):
 
 def array_reader(arr, chan, loop=False):
     ind = 0
-    if chan > (clm_channels(arr)):
-        raise ValueError(f'array has {clm_channels(arr)} channels but {chan} asked for')
-    length = length(arr)
+    if chan > (get_channels(arr)):
+        raise ValueError(f'array has {get_channels(arr)} channels but {chan} asked for')
+    length = get_length(arr)
     if loop:
         def reader(direction):
             nonlocal ind
@@ -5654,8 +5599,9 @@ cpdef cython.double bes_yn(cython.int n, cython.double x):
     return yn(n, x)
     
 
-cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data):
-    size = len(data)
+cpdef cython.doublecomplex edot_product(cython.doublecomplex freq, np.ndarray data, size=None):
+    if size is None:
+        size = len(data)
     c = np.exp(np.arange(size) * freq) * data
     return np.sum(c)
 #     
