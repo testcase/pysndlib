@@ -1,370 +1,160 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-
-<html lang="en" >
-
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>CLM Enums &#8212; pysndlib 0.6.5 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-  </script>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLM Enums &mdash; pysndlib 0.6.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
-
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'clm_enums';</script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CLM Generator Properties" href="mus_any.html" />
-    <link rel="prev" title="CLM Initialization" href="clm_init.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+    <link rel="prev" title="CLM Initialization" href="clm_init.html" /> 
+</head>
 
-  
-  
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search..."
-         aria-label="Search..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
-  
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
-  
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      <div class="bd-sidebar-primary bd-sidebar">
-        
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-    
-    
-  </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-  
-
-<a class="navbar-brand logo" href="index.html">
-  
-  
-  
-  
-  
-    <p class="title logo__title">pysndlib 0.6.5 documentation</p>
-  
-</a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item navbar-nav active">
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="description.html">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pysndlib
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Enums</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLM Enums</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pysndlib.clm.Interp"><code class="docutils literal notranslate"><span class="pre">Interp</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.NONE"><code class="docutils literal notranslate"><span class="pre">Interp.NONE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.LINEAR"><code class="docutils literal notranslate"><span class="pre">Interp.LINEAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.SINUSOIDAL"><code class="docutils literal notranslate"><span class="pre">Interp.SINUSOIDAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.ALL_PASS"><code class="docutils literal notranslate"><span class="pre">Interp.ALL_PASS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.LAGRANGE"><code class="docutils literal notranslate"><span class="pre">Interp.LAGRANGE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.BEZIER"><code class="docutils literal notranslate"><span class="pre">Interp.BEZIER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Interp.HERMITE"><code class="docutils literal notranslate"><span class="pre">Interp.HERMITE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysndlib.clm.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.RECTANGULAR"><code class="docutils literal notranslate"><span class="pre">Window.RECTANGULAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.HANN"><code class="docutils literal notranslate"><span class="pre">Window.HANN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.WELCH"><code class="docutils literal notranslate"><span class="pre">Window.WELCH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.PARZEN"><code class="docutils literal notranslate"><span class="pre">Window.PARZEN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BARTLETT"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.HAMMING"><code class="docutils literal notranslate"><span class="pre">Window.HAMMING</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN2"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN3"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN4"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN4</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.EXPONENTIAL"><code class="docutils literal notranslate"><span class="pre">Window.EXPONENTIAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.RIEMANN"><code class="docutils literal notranslate"><span class="pre">Window.RIEMANN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.KAISER"><code class="docutils literal notranslate"><span class="pre">Window.KAISER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.CAUCHY"><code class="docutils literal notranslate"><span class="pre">Window.CAUCHY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.POISSON"><code class="docutils literal notranslate"><span class="pre">Window.POISSON</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.GAUSSIAN"><code class="docutils literal notranslate"><span class="pre">Window.GAUSSIAN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.TUKEY"><code class="docutils literal notranslate"><span class="pre">Window.TUKEY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.DOLPH_CHEBYSHEV"><code class="docutils literal notranslate"><span class="pre">Window.DOLPH_CHEBYSHEV</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.HANN_POISSON"><code class="docutils literal notranslate"><span class="pre">Window.HANN_POISSON</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.CONNES"><code class="docutils literal notranslate"><span class="pre">Window.CONNES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.SAMARAKI"><code class="docutils literal notranslate"><span class="pre">Window.SAMARAKI</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.ULTRASPHERICAL"><code class="docutils literal notranslate"><span class="pre">Window.ULTRASPHERICAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BARTLETT_HANN"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT_HANN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BOHMAN"><code class="docutils literal notranslate"><span class="pre">Window.BOHMAN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.FLAT_TOP"><code class="docutils literal notranslate"><span class="pre">Window.FLAT_TOP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN5"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN5</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN6"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN6</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN7"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN7</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN8"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN8</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN9"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN9</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.BLACKMAN10"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN10</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.RV2"><code class="docutils literal notranslate"><span class="pre">Window.RV2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.RV3"><code class="docutils literal notranslate"><span class="pre">Window.RV3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.RV4"><code class="docutils literal notranslate"><span class="pre">Window.RV4</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.MLT_SINE"><code class="docutils literal notranslate"><span class="pre">Window.MLT_SINE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.PAPOULIS"><code class="docutils literal notranslate"><span class="pre">Window.PAPOULIS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.DPSS"><code class="docutils literal notranslate"><span class="pre">Window.DPSS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Window.SINC"><code class="docutils literal notranslate"><span class="pre">Window.SINC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysndlib.clm.Spectrum"><code class="docutils literal notranslate"><span class="pre">Spectrum</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Spectrum.IN_DB"><code class="docutils literal notranslate"><span class="pre">Spectrum.IN_DB</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Spectrum.NORMALIZED"><code class="docutils literal notranslate"><span class="pre">Spectrum.NORMALIZED</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Spectrum.RAW"><code class="docutils literal notranslate"><span class="pre">Spectrum.RAW</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysndlib.clm.Polynomial"><code class="docutils literal notranslate"><span class="pre">Polynomial</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Polynomial.EITHER_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.EITHER_KIND</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Polynomial.FIRST_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.FIRST_KIND</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Polynomial.SECOND_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.SECOND_KIND</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.Polynomial.BOTH_KINDS"><code class="docutils literal notranslate"><span class="pre">Polynomial.BOTH_KINDS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 
-    </div>
-</nav></div>
-    </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
-
-
-      </div>
-      
-      <main id="main-content" class="bd-main">
-        
-        
-
-<div class="sbt-scroll-pixel-helper"></div>
-
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <span class="fa-solid fa-bars"></span>
-</label></div>
-      
-    </div>
-  
-  
-    <div class="header-article-items__end">
-      
-        <div class="header-article-item">
-
-<div class="article-header-buttons">
-
-
-
-
-
-<div class="dropdown dropdown-download-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
-    <i class="fas fa-download"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="_sources/clm_enums.rst" target="_blank"
-   class="btn btn-sm btn-download-source-button dropdown-item"
-   title="Download source file"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="btn__text-container">.rst</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li>
-<button onclick="window.print()"
-  class="btn btn-sm btn-download-pdf-button dropdown-item"
-  title="Print to PDF"
-  data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="btn__text-container">.pdf</span>
-</button>
-</li>
-      
-  </ul>
-</div>
-
-
-
-
-<button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
-  data-bs-placement="bottom" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
-
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
-</div></div>
-      
-    </div>
-  
-</div>
-</div>
-              
-              
-
-<div id="jb-print-docs-body" class="onlyprint">
-    <h1>CLM Enums</h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp"><code class="docutils literal notranslate"><span class="pre">Interp</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.NONE"><code class="docutils literal notranslate"><span class="pre">Interp.NONE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.LINEAR"><code class="docutils literal notranslate"><span class="pre">Interp.LINEAR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.SINUSOIDAL"><code class="docutils literal notranslate"><span class="pre">Interp.SINUSOIDAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.ALL_PASS"><code class="docutils literal notranslate"><span class="pre">Interp.ALL_PASS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.LAGRANGE"><code class="docutils literal notranslate"><span class="pre">Interp.LAGRANGE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.BEZIER"><code class="docutils literal notranslate"><span class="pre">Interp.BEZIER</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.HERMITE"><code class="docutils literal notranslate"><span class="pre">Interp.HERMITE</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RECTANGULAR"><code class="docutils literal notranslate"><span class="pre">Window.RECTANGULAR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HANN"><code class="docutils literal notranslate"><span class="pre">Window.HANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.WELCH"><code class="docutils literal notranslate"><span class="pre">Window.WELCH</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.PARZEN"><code class="docutils literal notranslate"><span class="pre">Window.PARZEN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BARTLETT"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HAMMING"><code class="docutils literal notranslate"><span class="pre">Window.HAMMING</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN2"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN2</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN3"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN3</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN4"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN4</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.EXPONENTIAL"><code class="docutils literal notranslate"><span class="pre">Window.EXPONENTIAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RIEMANN"><code class="docutils literal notranslate"><span class="pre">Window.RIEMANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.KAISER"><code class="docutils literal notranslate"><span class="pre">Window.KAISER</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.CAUCHY"><code class="docutils literal notranslate"><span class="pre">Window.CAUCHY</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.POISSON"><code class="docutils literal notranslate"><span class="pre">Window.POISSON</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.GAUSSIAN"><code class="docutils literal notranslate"><span class="pre">Window.GAUSSIAN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.TUKEY"><code class="docutils literal notranslate"><span class="pre">Window.TUKEY</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.DOLPH_CHEBYSHEV"><code class="docutils literal notranslate"><span class="pre">Window.DOLPH_CHEBYSHEV</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HANN_POISSON"><code class="docutils literal notranslate"><span class="pre">Window.HANN_POISSON</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.CONNES"><code class="docutils literal notranslate"><span class="pre">Window.CONNES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.SAMARAKI"><code class="docutils literal notranslate"><span class="pre">Window.SAMARAKI</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.ULTRASPHERICAL"><code class="docutils literal notranslate"><span class="pre">Window.ULTRASPHERICAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BARTLETT_HANN"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT_HANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BOHMAN"><code class="docutils literal notranslate"><span class="pre">Window.BOHMAN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.FLAT_TOP"><code class="docutils literal notranslate"><span class="pre">Window.FLAT_TOP</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN5"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN5</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN6"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN6</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN7"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN7</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN8"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN8</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN9"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN9</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN10"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN10</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV2"><code class="docutils literal notranslate"><span class="pre">Window.RV2</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV3"><code class="docutils literal notranslate"><span class="pre">Window.RV3</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV4"><code class="docutils literal notranslate"><span class="pre">Window.RV4</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.MLT_SINE"><code class="docutils literal notranslate"><span class="pre">Window.MLT_SINE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.PAPOULIS"><code class="docutils literal notranslate"><span class="pre">Window.PAPOULIS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.DPSS"><code class="docutils literal notranslate"><span class="pre">Window.DPSS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.SINC"><code class="docutils literal notranslate"><span class="pre">Window.SINC</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum"><code class="docutils literal notranslate"><span class="pre">Spectrum</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.IN_DB"><code class="docutils literal notranslate"><span class="pre">Spectrum.IN_DB</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.NORMALIZED"><code class="docutils literal notranslate"><span class="pre">Spectrum.NORMALIZED</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.RAW"><code class="docutils literal notranslate"><span class="pre">Spectrum.RAW</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial"><code class="docutils literal notranslate"><span class="pre">Polynomial</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.EITHER_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.EITHER_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.FIRST_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.FIRST_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.SECOND_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.SECOND_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.BOTH_KINDS"><code class="docutils literal notranslate"><span class="pre">Polynomial.BOTH_KINDS</span></code></a></li>
-</ul>
-</li>
-</ul>
-            </nav>
         </div>
-    </div>
-</div>
+      </div>
+    </nav>
 
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article" role="main">
-                  
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pysndlib</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CLM Enums</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/clm_enums.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="clm-enums">
-<h1>CLM Enums<a class="headerlink" href="#clm-enums" title="Permalink to this heading">#</a></h1>
+<h1>CLM Enums<a class="headerlink" href="#clm-enums" title="Permalink to this heading"></a></h1>
 <p><strong>in pysndlib.clm</strong></p>
 <dl class="py class enum">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp">
-<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Interp" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Interp" title="Permalink to this definition"></a></dt>
 <dd><p>various interpolation types</p>
 <dl class="field-list simple">
 <dt class="field-odd">Member Type<span class="colon">:</span></dt>
@@ -374,44 +164,44 @@ document.write(`
 <p>Valid values are as follows:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.NONE">
-<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.NONE:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.NONE" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.NONE:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.NONE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.LINEAR">
-<span class="sig-name descname"><span class="pre">LINEAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.LINEAR:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.LINEAR" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">LINEAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.LINEAR:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.LINEAR" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.SINUSOIDAL">
-<span class="sig-name descname"><span class="pre">SINUSOIDAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.SINUSOIDAL:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.SINUSOIDAL" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SINUSOIDAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.SINUSOIDAL:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.SINUSOIDAL" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.ALL_PASS">
-<span class="sig-name descname"><span class="pre">ALL_PASS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.ALL_PASS:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.ALL_PASS" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ALL_PASS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.ALL_PASS:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.ALL_PASS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.LAGRANGE">
-<span class="sig-name descname"><span class="pre">LAGRANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.LAGRANGE:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.LAGRANGE" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">LAGRANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.LAGRANGE:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.LAGRANGE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.BEZIER">
-<span class="sig-name descname"><span class="pre">BEZIER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.BEZIER:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.BEZIER" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BEZIER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.BEZIER:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.BEZIER" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Interp.HERMITE">
-<span class="sig-name descname"><span class="pre">HERMITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.HERMITE:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.HERMITE" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HERMITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Interp.HERMITE:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Interp.HERMITE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class enum">
 <dt class="sig sig-object py" id="pysndlib.clm.Window">
-<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Window" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Window" title="Permalink to this definition"></a></dt>
 <dd><p>many useful windows</p>
 <dl class="field-list simple">
 <dt class="field-odd">Member Type<span class="colon">:</span></dt>
@@ -421,194 +211,194 @@ document.write(`
 <p>Valid values are as follows:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.RECTANGULAR">
-<span class="sig-name descname"><span class="pre">RECTANGULAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RECTANGULAR:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RECTANGULAR" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RECTANGULAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RECTANGULAR:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RECTANGULAR" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.HANN">
-<span class="sig-name descname"><span class="pre">HANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HANN:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HANN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HANN:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HANN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.WELCH">
-<span class="sig-name descname"><span class="pre">WELCH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.WELCH:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.WELCH" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">WELCH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.WELCH:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.WELCH" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.PARZEN">
-<span class="sig-name descname"><span class="pre">PARZEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.PARZEN:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.PARZEN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">PARZEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.PARZEN:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.PARZEN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BARTLETT">
-<span class="sig-name descname"><span class="pre">BARTLETT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BARTLETT:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BARTLETT" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BARTLETT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BARTLETT:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BARTLETT" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.HAMMING">
-<span class="sig-name descname"><span class="pre">HAMMING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HAMMING:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HAMMING" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HAMMING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HAMMING:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HAMMING" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN2">
-<span class="sig-name descname"><span class="pre">BLACKMAN2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN2:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN2" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN2:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN2" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN3">
-<span class="sig-name descname"><span class="pre">BLACKMAN3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN3:</span> <span class="pre">7&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN3" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN3:</span> <span class="pre">7&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN3" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN4">
-<span class="sig-name descname"><span class="pre">BLACKMAN4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN4:</span> <span class="pre">8&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN4" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN4:</span> <span class="pre">8&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN4" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.EXPONENTIAL">
-<span class="sig-name descname"><span class="pre">EXPONENTIAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.EXPONENTIAL:</span> <span class="pre">9&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.EXPONENTIAL" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">EXPONENTIAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.EXPONENTIAL:</span> <span class="pre">9&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.EXPONENTIAL" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.RIEMANN">
-<span class="sig-name descname"><span class="pre">RIEMANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RIEMANN:</span> <span class="pre">10&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RIEMANN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RIEMANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RIEMANN:</span> <span class="pre">10&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RIEMANN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.KAISER">
-<span class="sig-name descname"><span class="pre">KAISER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.KAISER:</span> <span class="pre">11&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.KAISER" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KAISER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.KAISER:</span> <span class="pre">11&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.KAISER" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.CAUCHY">
-<span class="sig-name descname"><span class="pre">CAUCHY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.CAUCHY:</span> <span class="pre">12&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.CAUCHY" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">CAUCHY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.CAUCHY:</span> <span class="pre">12&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.CAUCHY" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.POISSON">
-<span class="sig-name descname"><span class="pre">POISSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.POISSON:</span> <span class="pre">13&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.POISSON" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">POISSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.POISSON:</span> <span class="pre">13&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.POISSON" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.GAUSSIAN">
-<span class="sig-name descname"><span class="pre">GAUSSIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.GAUSSIAN:</span> <span class="pre">14&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.GAUSSIAN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">GAUSSIAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.GAUSSIAN:</span> <span class="pre">14&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.GAUSSIAN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.TUKEY">
-<span class="sig-name descname"><span class="pre">TUKEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.TUKEY:</span> <span class="pre">15&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.TUKEY" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">TUKEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.TUKEY:</span> <span class="pre">15&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.TUKEY" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.DOLPH_CHEBYSHEV">
-<span class="sig-name descname"><span class="pre">DOLPH_CHEBYSHEV</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.DOLPH_CHEBYSHEV:</span> <span class="pre">16&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.DOLPH_CHEBYSHEV" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">DOLPH_CHEBYSHEV</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.DOLPH_CHEBYSHEV:</span> <span class="pre">16&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.DOLPH_CHEBYSHEV" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.HANN_POISSON">
-<span class="sig-name descname"><span class="pre">HANN_POISSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HANN_POISSON:</span> <span class="pre">17&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HANN_POISSON" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">HANN_POISSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.HANN_POISSON:</span> <span class="pre">17&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.HANN_POISSON" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.CONNES">
-<span class="sig-name descname"><span class="pre">CONNES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.CONNES:</span> <span class="pre">18&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.CONNES" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">CONNES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.CONNES:</span> <span class="pre">18&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.CONNES" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.SAMARAKI">
-<span class="sig-name descname"><span class="pre">SAMARAKI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.SAMARAKI:</span> <span class="pre">19&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.SAMARAKI" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SAMARAKI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.SAMARAKI:</span> <span class="pre">19&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.SAMARAKI" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.ULTRASPHERICAL">
-<span class="sig-name descname"><span class="pre">ULTRASPHERICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.ULTRASPHERICAL:</span> <span class="pre">20&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.ULTRASPHERICAL" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ULTRASPHERICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.ULTRASPHERICAL:</span> <span class="pre">20&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.ULTRASPHERICAL" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BARTLETT_HANN">
-<span class="sig-name descname"><span class="pre">BARTLETT_HANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BARTLETT_HANN:</span> <span class="pre">21&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BARTLETT_HANN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BARTLETT_HANN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BARTLETT_HANN:</span> <span class="pre">21&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BARTLETT_HANN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BOHMAN">
-<span class="sig-name descname"><span class="pre">BOHMAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BOHMAN:</span> <span class="pre">22&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BOHMAN" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BOHMAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BOHMAN:</span> <span class="pre">22&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BOHMAN" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.FLAT_TOP">
-<span class="sig-name descname"><span class="pre">FLAT_TOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.FLAT_TOP:</span> <span class="pre">23&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.FLAT_TOP" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">FLAT_TOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.FLAT_TOP:</span> <span class="pre">23&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.FLAT_TOP" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN5">
-<span class="sig-name descname"><span class="pre">BLACKMAN5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN5:</span> <span class="pre">24&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN5" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN5:</span> <span class="pre">24&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN5" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN6">
-<span class="sig-name descname"><span class="pre">BLACKMAN6</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN6:</span> <span class="pre">25&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN6" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN6</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN6:</span> <span class="pre">25&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN6" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN7">
-<span class="sig-name descname"><span class="pre">BLACKMAN7</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN7:</span> <span class="pre">26&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN7" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN7</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN7:</span> <span class="pre">26&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN7" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN8">
-<span class="sig-name descname"><span class="pre">BLACKMAN8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN8:</span> <span class="pre">27&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN8" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN8:</span> <span class="pre">27&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN8" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN9">
-<span class="sig-name descname"><span class="pre">BLACKMAN9</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN9:</span> <span class="pre">28&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN9" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN9</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN9:</span> <span class="pre">28&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN9" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.BLACKMAN10">
-<span class="sig-name descname"><span class="pre">BLACKMAN10</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN10:</span> <span class="pre">29&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN10" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BLACKMAN10</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.BLACKMAN10:</span> <span class="pre">29&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.BLACKMAN10" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.RV2">
-<span class="sig-name descname"><span class="pre">RV2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV2:</span> <span class="pre">30&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV2" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RV2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV2:</span> <span class="pre">30&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV2" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.RV3">
-<span class="sig-name descname"><span class="pre">RV3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV3:</span> <span class="pre">31&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV3" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RV3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV3:</span> <span class="pre">31&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV3" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.RV4">
-<span class="sig-name descname"><span class="pre">RV4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV4:</span> <span class="pre">32&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV4" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RV4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.RV4:</span> <span class="pre">32&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.RV4" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.MLT_SINE">
-<span class="sig-name descname"><span class="pre">MLT_SINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.MLT_SINE:</span> <span class="pre">33&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.MLT_SINE" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">MLT_SINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.MLT_SINE:</span> <span class="pre">33&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.MLT_SINE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.PAPOULIS">
-<span class="sig-name descname"><span class="pre">PAPOULIS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.PAPOULIS:</span> <span class="pre">34&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.PAPOULIS" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">PAPOULIS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.PAPOULIS:</span> <span class="pre">34&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.PAPOULIS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.DPSS">
-<span class="sig-name descname"><span class="pre">DPSS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.DPSS:</span> <span class="pre">35&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.DPSS" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">DPSS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.DPSS:</span> <span class="pre">35&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.DPSS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Window.SINC">
-<span class="sig-name descname"><span class="pre">SINC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.SINC:</span> <span class="pre">36&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.SINC" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SINC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Window.SINC:</span> <span class="pre">36&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Window.SINC" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class enum">
 <dt class="sig sig-object py" id="pysndlib.clm.Spectrum">
-<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Spectrum" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Spectrum" title="Permalink to this definition"></a></dt>
 <dd><p>types of normalizations when using the spectrum function. the results are in db if in_db, or linear and normalized to 1.0 normalized, or linear unnormalized raw</p>
 <dl class="field-list simple">
 <dt class="field-odd">Member Type<span class="colon">:</span></dt>
@@ -618,24 +408,24 @@ document.write(`
 <p>Valid values are as follows:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Spectrum.IN_DB">
-<span class="sig-name descname"><span class="pre">IN_DB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.IN_DB:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.IN_DB" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">IN_DB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.IN_DB:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.IN_DB" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Spectrum.NORMALIZED">
-<span class="sig-name descname"><span class="pre">NORMALIZED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.NORMALIZED:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.NORMALIZED" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">NORMALIZED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.NORMALIZED:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.NORMALIZED" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Spectrum.RAW">
-<span class="sig-name descname"><span class="pre">RAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.RAW:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.RAW" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">RAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Spectrum.RAW:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Spectrum.RAW" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class enum">
 <dt class="sig sig-object py" id="pysndlib.clm.Polynomial">
-<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Polynomial" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">enum</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.Polynomial" title="Permalink to this definition"></a></dt>
 <dd><p>used for polynomial based gens</p>
 <dl class="field-list simple">
 <dt class="field-odd">Member Type<span class="colon">:</span></dt>
@@ -645,22 +435,22 @@ document.write(`
 <p>Valid values are as follows:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Polynomial.EITHER_KIND">
-<span class="sig-name descname"><span class="pre">EITHER_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.EITHER_KIND:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.EITHER_KIND" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">EITHER_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.EITHER_KIND:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.EITHER_KIND" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Polynomial.FIRST_KIND">
-<span class="sig-name descname"><span class="pre">FIRST_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.FIRST_KIND:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.FIRST_KIND" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">FIRST_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.FIRST_KIND:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.FIRST_KIND" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Polynomial.SECOND_KIND">
-<span class="sig-name descname"><span class="pre">SECOND_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.SECOND_KIND:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.SECOND_KIND" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SECOND_KIND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.SECOND_KIND:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.SECOND_KIND" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pysndlib.clm.Polynomial.BOTH_KINDS">
-<span class="sig-name descname"><span class="pre">BOTH_KINDS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.BOTH_KINDS:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.BOTH_KINDS" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">BOTH_KINDS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Polynomial.BOTH_KINDS:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pysndlib.clm.Polynomial.BOTH_KINDS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -668,167 +458,34 @@ document.write(`
 </section>
 
 
-                </article>
-              
-
-              
-              
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="clm_init.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">CLM Initialization</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="mus_any.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">CLM Generator Properties</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div></div>
-  
-</div>
-
-                </footer>
-              
-            </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp"><code class="docutils literal notranslate"><span class="pre">Interp</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.NONE"><code class="docutils literal notranslate"><span class="pre">Interp.NONE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.LINEAR"><code class="docutils literal notranslate"><span class="pre">Interp.LINEAR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.SINUSOIDAL"><code class="docutils literal notranslate"><span class="pre">Interp.SINUSOIDAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.ALL_PASS"><code class="docutils literal notranslate"><span class="pre">Interp.ALL_PASS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.LAGRANGE"><code class="docutils literal notranslate"><span class="pre">Interp.LAGRANGE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.BEZIER"><code class="docutils literal notranslate"><span class="pre">Interp.BEZIER</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Interp.HERMITE"><code class="docutils literal notranslate"><span class="pre">Interp.HERMITE</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RECTANGULAR"><code class="docutils literal notranslate"><span class="pre">Window.RECTANGULAR</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HANN"><code class="docutils literal notranslate"><span class="pre">Window.HANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.WELCH"><code class="docutils literal notranslate"><span class="pre">Window.WELCH</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.PARZEN"><code class="docutils literal notranslate"><span class="pre">Window.PARZEN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BARTLETT"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HAMMING"><code class="docutils literal notranslate"><span class="pre">Window.HAMMING</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN2"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN2</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN3"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN3</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN4"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN4</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.EXPONENTIAL"><code class="docutils literal notranslate"><span class="pre">Window.EXPONENTIAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RIEMANN"><code class="docutils literal notranslate"><span class="pre">Window.RIEMANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.KAISER"><code class="docutils literal notranslate"><span class="pre">Window.KAISER</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.CAUCHY"><code class="docutils literal notranslate"><span class="pre">Window.CAUCHY</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.POISSON"><code class="docutils literal notranslate"><span class="pre">Window.POISSON</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.GAUSSIAN"><code class="docutils literal notranslate"><span class="pre">Window.GAUSSIAN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.TUKEY"><code class="docutils literal notranslate"><span class="pre">Window.TUKEY</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.DOLPH_CHEBYSHEV"><code class="docutils literal notranslate"><span class="pre">Window.DOLPH_CHEBYSHEV</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.HANN_POISSON"><code class="docutils literal notranslate"><span class="pre">Window.HANN_POISSON</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.CONNES"><code class="docutils literal notranslate"><span class="pre">Window.CONNES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.SAMARAKI"><code class="docutils literal notranslate"><span class="pre">Window.SAMARAKI</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.ULTRASPHERICAL"><code class="docutils literal notranslate"><span class="pre">Window.ULTRASPHERICAL</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BARTLETT_HANN"><code class="docutils literal notranslate"><span class="pre">Window.BARTLETT_HANN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BOHMAN"><code class="docutils literal notranslate"><span class="pre">Window.BOHMAN</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.FLAT_TOP"><code class="docutils literal notranslate"><span class="pre">Window.FLAT_TOP</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN5"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN5</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN6"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN6</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN7"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN7</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN8"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN8</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN9"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN9</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.BLACKMAN10"><code class="docutils literal notranslate"><span class="pre">Window.BLACKMAN10</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV2"><code class="docutils literal notranslate"><span class="pre">Window.RV2</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV3"><code class="docutils literal notranslate"><span class="pre">Window.RV3</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.RV4"><code class="docutils literal notranslate"><span class="pre">Window.RV4</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.MLT_SINE"><code class="docutils literal notranslate"><span class="pre">Window.MLT_SINE</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.PAPOULIS"><code class="docutils literal notranslate"><span class="pre">Window.PAPOULIS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.DPSS"><code class="docutils literal notranslate"><span class="pre">Window.DPSS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Window.SINC"><code class="docutils literal notranslate"><span class="pre">Window.SINC</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum"><code class="docutils literal notranslate"><span class="pre">Spectrum</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.IN_DB"><code class="docutils literal notranslate"><span class="pre">Spectrum.IN_DB</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.NORMALIZED"><code class="docutils literal notranslate"><span class="pre">Spectrum.NORMALIZED</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Spectrum.RAW"><code class="docutils literal notranslate"><span class="pre">Spectrum.RAW</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial"><code class="docutils literal notranslate"><span class="pre">Polynomial</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.EITHER_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.EITHER_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.FIRST_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.FIRST_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.SECOND_KIND"><code class="docutils literal notranslate"><span class="pre">Polynomial.SECOND_KIND</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.Polynomial.BOTH_KINDS"><code class="docutils literal notranslate"><span class="pre">Polynomial.BOTH_KINDS</span></code></a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
-              
-            
+           </div>
           </div>
-          <footer class="bd-footer-content">
-            
-<div class="bd-footer-content__inner container">
-  
-  <div class="footer-item">
-    
-<p class="component-author">
-By Todd Ingalls
-</p>
-
-  </div>
-  
-  <div class="footer-item">
-    
-  <p class="copyright">
-    
-      © Copyright 2023, Todd Ingalls.
-      <br/>
-    
-  </p>
-
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-</div>
-          </footer>
-        
-
-      </main>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="clm_init.html" class="btn btn-neutral float-left" title="CLM Initialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mus_any.html" class="btn btn-neutral float-right" title="CLM Generator Properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-  <footer class="bd-footer">
-  </footer>
-  </body>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023-2024, Todd Ingalls.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

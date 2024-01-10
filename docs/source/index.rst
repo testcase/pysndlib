@@ -15,6 +15,7 @@ Welcome to pysndlib's documentation!
     description
     building
     installation
+    basic_usage
     with_sound
     clm_generators
     clm_utility_functions

@@ -127,8 +127,11 @@ if sys.platform.startswith("linux"):
 
 
 if __name__ == '__main__':
-
+    
     setup(
+        zip_safe=False,
+        name = 'pysndlib',
+        package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav"]},
         ext_modules = cythonize(extensions, compiler_directives={'language_level': '3str', 'embedsignature' : False})
     )
 

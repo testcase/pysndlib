@@ -14,7 +14,7 @@ import numpy as np
 
 #not sure typing any of the args are worth it.
 @cython.ccall
-def fm_violin(beg, dur, frequency, amplitude, fm_index, 
+def fm_violin(beg, dur, frequency, amplitude, fm_index=1, 
             amp_env = [ 0, 0,  25, 1,  75, 1,  100, 0],
             periodic_vibrato_rate = 5.0,
             random_vibrato_rate = 16.0,
@@ -39,7 +39,8 @@ def fm_violin(beg, dur, frequency, amplitude, fm_index,
             amp_noise_amount = 0.0,
             degree=45,
             distance=1.0,
-            reverb_amount = .01):   
+            reverb_amount = .01,
+            base=1):   
     start: cython.long = clm.seconds2samples(beg) # in for loop
     end: cython.long = start + clm.seconds2samples(dur) # in for loop
     
@@ -52,7 +53,7 @@ def fm_violin(beg, dur, frequency, amplitude, fm_index,
     fmosc1 = clm.make_oscil(frequency)
     fmosc2 = clm.make_oscil(frequency * fm2_rat)
     fmosc3 = clm.make_oscil(frequency * fm3_rat)
-    ampf = clm.make_env(amp_env, scaler = amplitude, duration = dur)
+    ampf = clm.make_env(amp_env, scaler = amplitude, duration = dur, base=base)
     indf1 = clm.make_env(fm1_env, scaler = index1, duration = dur)
     indf2 = clm.make_env(fm2_env, scaler = index2, duration = dur)
     indf3 = clm.make_env(fm3_env, scaler = index3, duration = dur)

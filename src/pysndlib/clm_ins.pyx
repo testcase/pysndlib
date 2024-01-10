@@ -907,8 +907,8 @@ def next_prime(n):
 def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0, decay_time=1.):
     srscale = clm.get_srate() / 25641
     dly_len = [1433,1601,1867,2053,2251,2399,347,113,37,59,53,43,37,29,19] # TODO: Make this adjust to samplerate
-    print(clm.default.output)
-    chans = clm.length(clm.default.output)
+
+    chans = clm.get_channels(clm.default.output)
     chan2 = chans > 1
     chan4 = chans == 4
     
@@ -918,7 +918,7 @@ def nrev(reverb_factor=1.09, lp_coeff=.7, volume=1.0, decay_time=1.):
             val += 1
         dly_len[i] = next_prime(val)
         
-    length: cython.long = math.floor(clm.length(clm.default.reverb) + (clm.get_srate()*decay_time))
+    length: cython.long = math.floor(clm.get_length(clm.default.reverb) + (clm.get_srate()*decay_time))
     comb1 = clm.make_comb(.822 * reverb_factor, dly_len[0])
     comb2 = clm.make_comb(.802 * reverb_factor, dly_len[1])
     comb3 = clm.make_comb(.733 * reverb_factor, dly_len[2])
@@ -1673,5 +1673,5 @@ def exp_snd(beg, dur, file, amp, exp_amt=1.0, ramp=.4, seglen=.15, sr=1.0, hop=.
 
 # TODO: --------------- cnvrev ---------------- #
 
-    
-    
+
+

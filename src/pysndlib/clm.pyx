@@ -29,6 +29,7 @@ cimport pysndlib.clm
 cimport pysndlib.sndlib
 
 
+
 # --------------- function types for ctypes ---------------- #
 _inputcallback = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_void_p, ctypes.c_int)
 _editcallback = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)
@@ -1009,7 +1010,7 @@ cpdef cython.long get_channels(obj):
     if isinstance(obj, str):
         return csndlib.mus_sound_chans(obj)
     elif isinstance(obj, mus_any):
-        return obj.mus_channel
+        return obj.mus_channels
     elif isinstance(obj, list):
         return len(obj)
     elif isinstance(obj, np.ndarray):
