@@ -1,7 +1,8 @@
 from .attract import attract
 from .bouncy import bouncy
 from .birds import bird, bigbird
-from .brassy import bird, brassy
+from .brassy import brassy
+from .cellon import cellon
 from .clm_expsrc import clm_expsrc
 from .ercoser import ercoser
 from .exp_snd import exp_snd

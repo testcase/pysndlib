@@ -31,7 +31,7 @@ def pianoy2(start, dur, freq, amp, bounce_freq=5, bounce_amp=20):
         knock.index = clm.env(indf)
         clm.outa(i, (clm.env(ampf) * gens.r2kfcos(gen)) + (clm.env(kmpf) * gens.fmssb(knock, 0.0)))
 
-
+    
 if __name__ == '__main__': 
     with clm.Sound(statistics=True, play=True):
         pianoy2(0,1,100,.5)

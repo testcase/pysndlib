@@ -2247,7 +2247,7 @@ cpdef cython.bint is_rkfssb(gen):
 # 
 # --------------- rxyk!sin ---------------- # 
 
-cdef class R2kfcos(CLMGenerator):
+cdef class  fcos(CLMGenerator):
 
     def __init__(self, frequency, r=.5, k=0.0):
         self.frequency = frequency

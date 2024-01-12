@@ -1,6 +1,6 @@
 #==================================================================================
 # The code is ported from Bill Schottstedaet's 'clm-ins.scm' 
-# file  available at https://ccrma.stanford.edu/software/snd/sndlib/
+# file available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
 
 import math
