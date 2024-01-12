@@ -41,8 +41,8 @@
 *.mxo
 *.mxe64
 
-*.aif
-*.aiff
+#*.aif
+#*.aiff
 *.rev
 *.sh
 venv/
@@ -50,7 +50,7 @@ __pycache__/
 .ipynb_checkpoints/Untitled-checkpoint.ipynb
 tmp/
 src/pysndlib/__pycache__/
-examples/
+#examples/
 src/pysndlib.egg-info/
 docs/build/
 sndlib/
