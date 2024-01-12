@@ -8,8 +8,9 @@
 import math
 import cython
 import pysndlib.clm as clm
-cimport pysndlib.clm as clm
 import numpy as np
+if cython.compiled:
+    from cython.cimports.pysndlib import clm
 
 
 #not sure typing any of the args are worth it.

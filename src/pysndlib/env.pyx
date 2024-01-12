@@ -112,7 +112,7 @@ def envelope_last_x(e):
 
 # ---------------  stretch_envelope   ---------------- #  
 @cython.ccall
-def stretch_envelope(fn, old_att: cython.double, new_att: cython.double, old_dec=None, new_dec=None):
+def stretch_envelope(fn, old_att, new_att, old_dec=None, new_dec=None):
     """
     takes 'env' and returns a new envelope based on it but with the attack and optionally decay portions stretched 
     or squeezed; 'old_att' is the original x axis attack end point, 'new_att' is where that 
@@ -130,47 +130,47 @@ def stretch_envelope(fn, old_att: cython.double, new_att: cython.double, old_dec
             return fn
         else:
             if old_dec and not new_dec:
-                raise RuntimeError("old_dec and new_dec must be specified")# TODO raise exception
+                raise RuntimeError("old_dec and new_dec must be specified")
             
             else:
-                new_x = x0 = fn[0]
-                last_x = fn[-2]
+                x0 = fn[0]
                 y0 = fn[1]
+                new_x = x0
+                last_x = fn[-2]
                 new_fn = [x0,y0]
                 scl = (new_att-x0) / max(.0001, old_att-x0)
                 
                 if old_dec and (old_dec == old_att):
-                    old_dec = old_dec + (.000001 * last_x)
+                    old_dec =  .000001 * last_x
                 
                 for i in range(2,len(fn)-1, 2):
                     x1 = fn[i]
                     y1 = fn[i+1]
-                    
+ 
                     if x0 < old_att and x1 >= old_att:
-                        y0 = y1 if x1==old_att else y0 + (y1 - y0) * ((old_att - x0) / (x1 - x0))
+                        y0 = y1 if x1==old_att else (y0 + ((y1 - y0) * ((old_att - x0) / (x1 - x0))))
                         
                         x0 = old_att
 
                         new_x = new_att
                         new_fn.extend((new_x,y0))   
+                        scl = ((new_dec - new_att) / (old_dec - old_att)) if old_dec else ((last_x - new_att) / (last_x - old_att))
                         
-                        scl = (new_dec - new_att) / (old_dec - old_att) if old_dec else (last_x - new_att) / (last_x - old_att)
-                
-                if old_dec and x0 < old_dec and x1 >= old_dec:
-                    y0 = y1 if x1 == old_dec else y0 + (y1 - y0) * ((old_dec - x0) / (x1 - x0))
-                    x0 = old_dec
-                    new_x = new_dec
+                    if old_dec and x0 < old_dec and x1 >= old_dec:
+                        y0 = y1 if x1 == old_dec else y0 + (y1 - y0) * ((old_dec - x0) / (x1 - x0))
+                        x0 = old_dec
+                        new_x = new_dec
                    
-                    new_fn.extend((new_x,y0))
-                    scl = (last_x - new_dec) / (last_x - old_dec)
-                    #print(new_fn)
-                if x0 != x1:
-                    new_x = new_x + scl * (x1 - x0)
-                    new_fn.extend((new_x,y1))
-                    x0 = x1
-                    y0 = y1
-                return new_fn
+                        new_fn.extend((new_x,y0))
+                        scl = (last_x - new_dec) / (last_x - old_dec)
 
+                    if x0 != x1:
+                        new_x = new_x + scl * (x1 - x0)
+                        new_fn.extend((new_x,y1))
+                        x0 = x1
+                        y0 = y1
+                        
+                return new_fn
 # --------------- scale_envelope  ---------------- # 
 @cython.ccall
 def scale_envelope(e, scaler: cython.double, offset: cython.double=0.0):

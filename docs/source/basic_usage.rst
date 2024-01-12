@@ -59,20 +59,21 @@ rendered. using locsig makes this even easier.
 Note clm.default.reverb gets defined within the with Sound context.
 
 ::
-
+    
+    @clm.clm_reverb
     def bad_mono_rev1(volume=1.):
         ap1 = clm.make_all_pass(-.9, .9, 1051)
         ap2 = clm.make_all_pass(-.9, .9, 1207)
         ap3 = clm.make_all_pass(-.9, .9, 1000)
-        dly = clm.make_delay(seconds2samples(.011))
-        length = clm.get_length(CLM.reverb)
+        dly = clm.make_delay(clm.seconds2samples(.011))
+        length = clm.get_length(clm.default.reverb)
     
-        apb = make_all_pass_bank([ap1, ap2, ap3])
+        apb = clm.make_all_pass_bank([ap1, ap2, ap3])
     
         for i in range(length):
-            outa(i, clm.delay(dly, volume * clm.all_pass_bank(apb, ina(i, clm.default.reverb))))
+            clm.outa(i, clm.delay(dly, volume * clm.all_pass_bank(apb, clm.ina(i, clm.default.reverb))))
 
-    with Sound('ex2.wav', play=True, statistics=True, reverb=bad_mono_rev1):#, reverb_data={'volume' : .5}):
+    with clm.Sound('ex2.wav', play=True, statistics=True, reverb=bad_mono_rev1(.5)):
         osc = clm.make_oscil(500)
         e = clm.make_env([0.,0.0, .05, .8, .4, 0.0, 1.0, 0.0], length=22050)
         for i in range(44100*2):
@@ -82,7 +83,7 @@ Note clm.default.reverb gets defined within the with Sound context.
 
 
 
-Lastly and example that demonstrates defining functions that can be called in Sound context
+Lastly an example that demonstrates defining functions that can be called in Sound context
 that uses finalize to plot the output file after the reverb has been applied
 
 ::
@@ -97,32 +98,32 @@ that uses finalize to plot the output file after the reverb has been applied
         plt.show()
 
 
-
+    @clm.clm_reverb
     def bad_mono_rev1(volume=1.):
-        ap1 = allpass1 = make_all_pass(-.9, .9, 1051)
-        ap2 = allpass2 = make_all_pass(-.9, .9, 1207)
-        ap3 = allpass3 = make_all_pass(-.9, .9, 1000)
-        dly = make_delay(seconds2samples(.011))
-        length = clm_length(CLM.reverb)
+        ap1 = clm.make_all_pass(-.9, .9, 1051)
+        ap2 = clm.make_all_pass(-.9, .9, 1207)
+        ap3 = clm.make_all_pass(-.9, .9, 1000)
+        dly = clm.make_delay(clm.seconds2samples(.011))
+        length = clm.get_length(clm.default.reverb)
     
-        apb = make_all_pass_bank([ap1, ap2, ap3])
+        apb = clm.make_all_pass_bank([ap1, ap2, ap3])
     
         for i in range(length):
-            outa(i, delay(dly, volume * all_pass_bank(apb, ina(i, CLM.reverb))))
+            clm.outa(i, clm.delay(dly, volume * clm.all_pass_bank(apb, clm.ina(i, clm.default.reverb))))
         
         
     def blip(start, dur, freq):
-        osc = make_oscil(freq)
-        beg = seconds2samples(start)
-        end = beg + seconds2samples(dur)
-        e = make_env([0.,0.0, .05, .8, .4, 0.0, 1.0, 0.0], duration=dur*.5)
+        osc = clm.make_oscil(freq)
+        beg = clm.seconds2samples(start)
+        end = beg + clm.seconds2samples(dur)
+        e = clm.make_env([0.,0.0, .05, .8, .4, 0.0, 1.0, 0.0], duration=dur*.5)
         for i in range(beg, end):
-            val = oscil(osc) * env(e)
-            outa(i, val*.6)
-            outa(i, val*.4, CLM.reverb)
+            val = clm.oscil(osc) * env(e)
+            clm.outa(i, val*.6)
+            clm.outa(i, val*.4, clm.default.reverb)
 
 
-    with Sound('ex2.wav', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
+    with clm.Sound('ex2.wav', play=True, statistics=True, reverb=bad_mono_rev1, finalize=plot_mono_soundfile):
         blip(0, 1, 400)
         blip(1, 1, 500)
         blip(2, 1, 600)

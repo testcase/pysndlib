@@ -40,7 +40,7 @@ nxycos
     `sndlib nxycos <https://ccrma.stanford.edu/software/snd/snd/sndclm.html#nxycos>`_
     
     
-nxycos
+nxy1cos
 ---------
 
 .. autofunction:: make_nxy1cos

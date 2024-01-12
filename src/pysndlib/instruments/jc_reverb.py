@@ -1,8 +1,10 @@
 import math
 import cython
-import pysndlib.clm as clm
-cimport pysndlib.clm as clm
 import numpy as np
+import pysndlib.clm as clm
+import pysndlib.env as env
+if cython.compiled:
+    from cython.cimports.pysndlib import clm
 
 @clm.clm_reverb
 def jc_reverb(lowpass=False, volume=1., amp_env = None, decay_time=1.0):
@@ -14,9 +16,9 @@ def jc_reverb(lowpass=False, volume=1., amp_env = None, decay_time=1.0):
     comb2 = clm.make_comb(.733, 4999)
     comb3 = clm.make_comb(.715, 5399)
     comb4 = clm.make_comb(.697, 5801)
-    chans = clm.clm_channels(clm.default.output)
+    chans = clm.get_channels(clm.default.output)
     
-    length: cython.long = math.floor(clm.clm_length(clm.default.reverb) + (clm.get_srate()*decay_time)) # in for loop
+    length: cython.long = math.floor(clm.get_length(clm.default.reverb) + (clm.get_srate()*decay_time)) # in for loop
     filts = [clm.make_delay(clm.seconds2samples(.013))] if chans == 1 else [clm.make_delay(clm.seconds2samples(.013)),clm.make_delay(clm.seconds2samples(.011)) ]
     combs = clm.make_comb_bank([comb1, comb2, comb3, comb4])
     allpasses = clm.make_all_pass_bank([allpass1,allpass2,allpass3])

@@ -4,13 +4,14 @@
 #==================================================================================
 
 import math
+import random
 import cython
-import pysndlib.clm as clm
-cimport pysndlib.clm as clm
 import numpy as np
-from .env import scale_envelope
-
-
+import pysndlib.clm as clm
+import numpy as np
+from pysndlib.env import scale_envelope
+if cython.compiled:
+    from cython.cimports.pysndlib import clm
 
 main_amp = [0.0, 0.0, .25, 1.0, .60, .70, .75, 1.0, 1.0, 0.0]
 bird_tap = [0.0, 0.0, .01, 1.0, .99, 1.0, 1.0, 0.0]
@@ -952,235 +953,54 @@ def various_gull_cries_from_end_of_colony_5(beg):
     bigbird(beg + 6.250, .80,  1050,  1050,  .1, gullend, bird_amp, gull_frq)
     bigbird(beg + 7.450, 1.80,  1050,  1050,  .1, gullend, bird_amp, gull_frq)
 
-# Bill's original bird score
-# birdcalls = [
-#     [orchard_oriole, 0],
-#     [cassins_kingbird, 3],
-#     [chipping_sparrow, 6],
-#     [bobwhite, 9],
-#     [western_meadowlark, 12],
-#     [scissor_tailed_flycatcher, 15],
-#     [great_horned_owl, 18],
-#     [black_throated_gray_warbler, 21],
-#     [yellow_warbler, 24],
-#     [black_necked_stilt, 27],
-#     [chestnut_sided_warbler, 30],
-#     [grasshopper_sparrow,   33],
-#     [swamp_sparrow, 36],
-#     [golden_crowned_sparrow, 39],
-#     [indigo_bunting, 42],
-#     [hooded_warbler, 45],
-#     [american_widgeon, 48],
-#     [louisiana_waterthrush, 51],
-#     [robin, 54],
-#     [solitary_vireo, 57],
-#     [pigeon_hawk, 61],
-#     [cerulean_warbler, 64],
-#     [nashville_warbler, 67],
-#     [eastern_phoebe, 70],
-#     [painted_bunting, 73],
-#     [western_flycatcher, 76],
-#     [bachmans_sparrow, 79],
-#     [cedar_waxwing, 82],
-#     [bairds_sparrow, 85],
-#     [kentucky_warbler, 88],
-#     [rufous_sided_towhee, 91],
-#     [prothonotary_warbler, 94],
-#     [audubons_warbler, 97],
-#     [lark_bunting, 100],
-#     [eastern_bluebird, 103],
-#     [chuck_wills_widow, 106],
-#     [blue_gray_gnatcatcher, 109],
-#     [black_throated_sparrow, 112],
-#     [black_chinned_sparrow, 115],
-#     [various_gull_cries_from_end_of_colony_5, 118]
-#     ]
-#     
-# #==================================================================================
-# # THE REMAINDER OF THIS FILE IS JUST SUPPORT CODE FOR BUILDING THE NOTEBOOK
-# 
-# def birdcode(birdname):
-#     """Parse out the text code for a given bird defined in this file."""
-#     bird, text = False, ""
-#     with open("birds.py") as file:
-#         for line in file:
-#             if line.startswith("def"):
-#                 x = line.split()
-#                 if len(x) > 1 and x[0] == "def" and x[1].startswith(birdname):
-#                     text = line
-#                     bird = True
-#             elif bird and len(line) == 0 or line[0] in [" ", "#", "\t"]:
-#                 if line[0] != "#":
-#                     text += line
-#             elif bird:
-#                 break
-#     return text
-#                 
-# 
-# def birdcall(birdfunc, play=True, speed=1):
-#     """Perform one bird call."""
-#     if not .125 <= speed <= 1:
-#         raise ValueError(f"birdcall(): Audio speed '{speed}' not between .125 and 1.")
-#     path = pathlib.Path(audiodir) / (birdfunc.__name__ + ".wav")
-#     if speed == 1:
-#         with CLM.Sound(str(path), play=True):
-#             birdfunc(0)
-#     elif not path.exists():
-#         raise Exception("birdcall(): Generate with speed=1 before reducing.")
-#     else:
-#         # No way to replay at lower srate so copy the audio to a new file
-#         # and set its header to the slower srate.
-#         array, srate = CLM.file2ndarray(str(path))
-#         path = path.with_name(birdfunc.__name__ + "_" + str(speed) + ".wav")
-#         with CLM.Sound(str(path), play=True, srate=int(srate*speed)):
-#             for i in range(len(array[0])):
-#                 CLM.outa(i,array[0][i])
-#     print("path:", str(path))
-# 
-# 
-# def allbirdcalls():
-#     """Performs the original score from Bill's bird.scm"""
-#     path = pathlib.Path(audiodir) / "allbirdcalls.wav"
-#     with CLM.Sound(str(path), play=True):
-#         for bird,time in birdcalls:
-#             bird(time)
-#     print("path:", str(path))
 
-##=========================================================================
-## SOURCES FOR GENERATING THE CELLS IN THE NOTEBOOK
-# funcnames='''orchard_oriole
-# cassins_kingbird
-# chipping_sparrow
-# bobwhite
-# western_meadowlark
-# scissor_tailed_flycatcher
-# great_horned_owl
-# black_throated_gray_warbler
-# yellow_warbler
-# black_necked_stilt
-# chestnut_sided_warbler
-# grasshopper_sparrow
-# swamp_sparrow
-# golden_crowned_sparrow
-# indigo_bunting
-# hooded_warbler
-# american_widgeon
-# louisiana_waterthrush
-# robin
-# solitary_vireo
-# pigeon_hawk
-# cerulean_warbler
-# nashville_warbler
-# eastern_phoebe
-# painted_bunting
-# western_flycatcher
-# bachmans_sparrow
-# cedar_waxwing
-# bairds_sparrow
-# kentucky_warbler
-# rufous_sided_towhee
-# prothonotary_warbler
-# audubons_warbler
-# lark_bunting
-# eastern_bluebird
-# chuck_wills_widow
-# blue_gray_gnatcatcher
-# black_throated_sparrow
-# black_chinned_sparrow
-# various_gull_cries_from_end_of_colony_5'''
-
-# sitenames='''https://www.allaboutbirds.org/guide/orchard_oriole
-# https://www.allaboutbirds.org/guide/cassins_kingbird
-# https://www.allaboutbirds.org/guide/chipping_sparrow
-# https://www.allaboutbirds.org/guide/northern_bobwhite
-# https://www.allaboutbirds.org/guide/western_meadowlark
-# https://www.allaboutbirds.org/guide/scissor-tailed_flycatcher
-# https://www.allaboutbirds.org/guide/great_horned_owl
-# https://www.allaboutbirds.org/guide/black-throated_gray_warbler
-# https://www.allaboutbirds.org/guide/yellow_warbler
-# https://www.allaboutbirds.org/guide/black-necked_stilt
-# https://www.allaboutbirds.org/guide/chestnut-sided_warbler
-# https://www.allaboutbirds.org/guide/grasshopper_sparrow
-# https://www.allaboutbirds.org/guide/swamp_sparrow
-# https://www.allaboutbirds.org/guide/golden-crowned_sparrow
-# https://www.allaboutbirds.org/guide/indigo_bunting
-# https://www.allaboutbirds.org/guide/hooded_warbler
-# https://www.allaboutbirds.org/guide/american_widgeon
-# https://www.allaboutbirds.org/guide/louisiana_waterthrush
-# https://www.allaboutbirds.org/guide/american_robin
-# https://www.allaboutbirds.org/guide/Blue-headed_Vireo
-# https://www.allaboutbirds.org/guide/merlin
-# https://www.allaboutbirds.org/guide/cerulean_warbler
-# https://www.allaboutbirds.org/guide/nashville_warbler
-# https://www.allaboutbirds.org/guide/eastern_phoebe
-# https://www.allaboutbirds.org/guide/painted_bunting
-# https://www.allaboutbirds.org/guide/western_flycatcher
-# https://www.allaboutbirds.org/guide/bachmans_sparrow
-# https://www.allaboutbirds.org/guide/cedar_waxwing
-# https://www.allaboutbirds.org/guide/bairds_sparrow
-# https://www.allaboutbirds.org/guide/kentucky_warbler
-# https://www.allaboutbirds.org/guide/Eastern_Towhee
-# https://www.allaboutbirds.org/guide/prothonotary_warbler
-# https://www.allaboutbirds.org/guide/Yellow-rumped_Warbler
-# https://www.allaboutbirds.org/guide/lark_bunting
-# https://www.allaboutbirds.org/guide/eastern_bluebird
-# https://www.allaboutbirds.org/guide/Chuck-wills-widow
-# https://www.allaboutbirds.org/guide/blue-gray_gnatcatcher
-# https://www.allaboutbirds.org/guide/black-throated_sparrow
-# https://www.allaboutbirds.org/guide/black-chinned_sparrow
-# <nosite>'''
-
-##=========================================================================
-# FUNCTIONS FOR CREATING BIRD CELL CONTENT FOR THE NOTEBOOK
-# def menuitem(funcname):
-#     '''menu link to a bird at top of file (markdown cell)'''
-#     birdname = " ".join(b.capitalize() for b in funcname.split('_'))
-#     return f"[{birdname}](#{funcname}) |"
-
-# def topcell(funcname):
-#     '''bird name (markdown cell)''' 
-#     birdname = " ".join(b.capitalize() for b in funcname.split('_'))
-#     return f'''----
-# <a id='{funcname}'></a>
-# ### {birdname}'''
-
-# def visitcell(funcname, sitename):
-#     '''go to website (markdown cell)'''
-#     birdname = " ".join(b.capitalize() for b in funcname.split('_'))
-#     return f"[Visit the {birdname} webpage]({sitename}) at the Cornell Lab of Ornithology."
-
-# def viewcell(funcname):
-#     '''view code (markdown cell)'''
-#     return f"View the `{funcname}()` instrument code:"
-
-# def codecell(funcname):
-#     '''display source code (code cell)'''
-#     return f"Code(birds.birdcode('{funcname}'), language='python')"
-
-# def listencell(funcname):
-#     '''listen to bird (markdown cell)'''
-#     return f"Listen to the `{funcname}()` instrument call:"
-
-# def audiocell(funcname):
-#     '''generate audio (code cell)'''
-#     return f"birds.birdcall(birds.{funcname})"
-
-# #for func in funcnames:  print(menuitem(func))
-
-# THIS CODE GENERATES THE CONTENT OF THE FIVE CELLS FOR EACH BIRD (SEE BELOW)
-# filename = "cells.text"
-# with open(filename, 'w') as file: 
-#     for func,site in zip(funcnames,sitenames):
-#         file.write(topcell(func))
-#         file.write("\n")
-#         file.write(visitcell(func,site))
-#         file.write("\n")
-#         file.write(viewcell(func))
-#         file.write("\n")
-#         file.write(codecell(func))
-#         file.write("\n")
-#         file.write(listencell(func))
-#         file.write("\n")
-#         file.write(audiocell(func))
-#         file.write("\n")
-#         file.write("=====================================\n\n")
+if __name__ == '__main__': 
+    #Bill's original bird score
+    birdcalls = [
+        [orchard_oriole, 0],
+        [cassins_kingbird, 3],
+        [chipping_sparrow, 6],
+        [bobwhite, 9],
+        [western_meadowlark, 12],
+        [scissor_tailed_flycatcher, 15],
+        [great_horned_owl, 18],
+        [black_throated_gray_warbler, 21],
+        [yellow_warbler, 24],
+        [black_necked_stilt, 27],
+        [chestnut_sided_warbler, 30],
+        [grasshopper_sparrow,   33],
+        [swamp_sparrow, 36],
+        [golden_crowned_sparrow, 39],
+        [indigo_bunting, 42],
+        [hooded_warbler, 45],
+        [american_widgeon, 48],
+        [louisiana_waterthrush, 51],
+        [robin, 54],
+        [solitary_vireo, 57],
+        [pigeon_hawk, 61],
+        [cerulean_warbler, 64],
+        [nashville_warbler, 67],
+        [eastern_phoebe, 70],
+        [painted_bunting, 73],
+        [western_flycatcher, 76],
+        [bachmans_sparrow, 79],
+        [cedar_waxwing, 82],
+        [bairds_sparrow, 85],
+        [kentucky_warbler, 88],
+        [rufous_sided_towhee, 91],
+        [prothonotary_warbler, 94],
+        [audubons_warbler, 97],
+        [lark_bunting, 100],
+        [eastern_bluebird, 103],
+        [chuck_wills_widow, 106],
+        [blue_gray_gnatcatcher, 109],
+        [black_throated_sparrow, 112],
+        [black_chinned_sparrow, 115],
+        [various_gull_cries_from_end_of_colony_5, 118]
+        ]
+        
+    with clm.Sound(play=True, statistics=True):
+        for b,time in birdcalls:
+            b(time)
+            
+            

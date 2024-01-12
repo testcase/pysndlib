@@ -925,47 +925,39 @@ cdef class Nrssb(CLMGenerator):
         self.frequency = clm.hz2radians(frequency)
         self.ratio = ratio
         self.n = n
-        self.r = clm.clamp(r, -.999999, .999999)
-        self.r = max(self.r, 0.0)
-        self.angle = 0.0
+        self.r = clm.clamp(r, 0.0, .999999)
         self.rn = -pow(self.r, self.n)
         self.rn1 = pow(self.r, (self.n + 1))
         self.norm = (self.rn - 1) / (self.r - 1)
+        self.angle = 0.0
+#         print(self.frequency,  self.ratio , self.n, self.r , self.rn , self.rn1,self.norm )
     
 
     cpdef cython.double next(self, fm: cython.double =0.0):
         cdef cython.double cx = self.angle
         cdef cython.double mx = cx * self.ratio
-        cdef cython.double n = self.n
-        cdef cython.double r = self.r
-        cdef cython.double rn1 = self.rn1
-        cdef cython.double rn = self.rn
-        cdef cython.double nmx = n * mx
-        cdef cython.double n1mx = (n - 1) * mx
-        cdef cython.double den = self.norm * (1.0 + (-2.0 * r * cos(mx)) + (r * r))
+        cdef cython.double nmx = self.n * mx
+        cdef cython.double n1mx = (self.n - 1) * mx
+        cdef cython.double den = self.norm * (1.0 + (-2.0 * self.r * cos(mx)) + (self.r * self.r))
         self.angle += fm + self.frequency
-        return (((sin(cx) * ((r * sin(mx)) + (rn * sin(nmx)) + (self.rn * sin(n1mx)))) -
-                (cos(cx) * (1.0 + (-1. * r * cos(mx)) + (rn * cos(nmx)) + (rn1 * cos(n1mx)))))) / den
+        cdef cython.double a = (sin(cx) * ((self.r * sin(mx)) + (self.rn * sin(nmx)) + (self.rn1 * sin(n1mx))))
+        cdef cython.double b = (cos(cx) * (1.0 + (-1. * self.r * cos(mx)) + (self.rn * cos(nmx)) + (self.rn1 * cos(n1mx))))
+        return (a - b) / den
 
     def __call__(self, fm: cython.double=0.) -> cython.double:
         return self.next(fm)
         
 
     cpdef call_interp(self, cython.double fm =0.0, cython.double interp=0.0):
-        self.interp = interp 
         cdef cython.double cx = self.angle
         cdef cython.double mx = cx * self.ratio
-        cdef cython.double n = self.n
-        cdef cython.double r = self.r
-        cdef cython.double rn1 = self.rn1
-        cdef cython.double rn = self.rn
-        cdef cython.double nmx = n * mx
-        cdef cython.double n1mx = (n - 1) * mx
-        cdef cython.double den = self.norm * (1.0 + (-2.0 * r * cos(mx)) + (r * r))
+        cdef cython.double nmx = self.n * mx
+        cdef cython.double n1mx = (self.n - 1) * mx
+        cdef cython.double den = self.norm * (1.0 + (-2.0 * self.r * cos(mx)) + (self.r * self.r))
         self.angle += fm + self.frequency
-    
-        return (((self.interp * sin(cx) * ((r * sin(mx)) + (rn * sin(nmx)) + (rn1 * sin(n1mx)))) -
-                (cos(cx) * (1.0 + (-1. * r * cos(mx)) + (rn * cos(nmx)) + (rn1 * cos(n1mx)))))) / den    
+        cdef cython.double a = interp * (sin(cx) * ((self.r * sin(mx)) + (self.rn * sin(nmx)) + (self.rn1 * sin(n1mx))))
+        cdef cython.double b = (cos(cx) * (1.0 + (-1. * self.r * cos(mx)) + (self.rn * cos(nmx)) + (self.rn1 * cos(n1mx))))
+        return (a - b) / den
       
         
         
@@ -2535,11 +2527,11 @@ cdef class Rkoddssb(CLMGenerator):
         return self.next(fm)
         
     @property
-    def mus_scale(self) -> cython.bint:
+    def mus_scaler(self) -> cython.double:
         return self.r
     
-    @mus_scale.setter
-    def mus_scale(self, val: cython.double):
+    @mus_scaler.setter
+    def mus_scaler(self, val: cython.double):
         self.r = clm.clamp(val, -.999999, .9999999)
         self.rr1 = 1.0 + (self.r * self.r)
         self.norm = 1.0 / (log(1.0 + self.r) - log(1.0 - self.r))

@@ -5,6 +5,8 @@ Cython.Compiler.Options.annotate = False
 import numpy
 import sys
 import os
+import glob
+
 # 
 # linking to static lib
 # 
@@ -12,7 +14,6 @@ if sys.platform.startswith("darwin"):
     os.environ['LDFLAGS'] = '-framework CoreAudio -framework CoreFoundation -framework CoreMIDI'
     os.environ['CFLAGS'] = '-arch x86_64 -arch arm64'
     
-
     extensions = [
         Extension("pysndlib.sndlib", ["src/pysndlib/sndlib.pyx"], 
             extra_objects=["./sndlib/libsndlib.a"], 
@@ -30,27 +31,12 @@ if sys.platform.startswith("darwin"):
             include_dirs=[numpy.get_include(), './sndlib'], 
             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-        Extension("pysndlib.clm_ins", ["src/pysndlib/clm_ins.pyx"], 
-            extra_objects=["./sndlib/libsndlib.a"], 
-            include_dirs=[numpy.get_include(), './sndlib'], 
-            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
-            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-        Extension("pysndlib.v", ["src/pysndlib/v.pyx"], 
-            extra_objects=["./sndlib/libsndlib.a"], 
-            include_dirs=[numpy.get_include(), './sndlib'], 
-            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
-            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-        Extension("pysndlib.jcrev", ["src/pysndlib/jcrev.pyx"], 
-            extra_objects=["./sndlib/libsndlib.a"], 
-            include_dirs=[numpy.get_include(), './sndlib'], 
-            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
-            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
+#         Extension("pysndlib.clm_ins", ["src/pysndlib/clm_ins.pyx"], 
+#             extra_objects=["./sndlib/libsndlib.a"], 
+#             include_dirs=[numpy.get_include(), './sndlib'], 
+#             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
+#             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
         Extension("pysndlib.dsp", ["src/pysndlib/dsp.pyx"], 
-            extra_objects=["./sndlib/libsndlib.a"], 
-            include_dirs=[numpy.get_include(), './sndlib'], 
-            extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
-            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-        Extension("pysndlib.birds", ["src/pysndlib/birds.pyx"], 
             extra_objects=["./sndlib/libsndlib.a"], 
             include_dirs=[numpy.get_include(), './sndlib'], 
             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
@@ -60,7 +46,7 @@ if sys.platform.startswith("darwin"):
             include_dirs=[numpy.get_include(), './sndlib'], 
             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
             define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]),
-        Extension("pysndlib.jcvoi", ["src/pysndlib/jcvoi.pyx"], 
+        Extension("*", ["src/pysndlib/instruments/*.py"], 
             extra_objects=["./sndlib/libsndlib.a"], 
             include_dirs=[numpy.get_include(), './sndlib'], 
             extra_compile_args=['-Wno-parentheses-equality', '-Wno-unreachable-code-fallthrough'],
@@ -132,7 +118,7 @@ if __name__ == '__main__':
         zip_safe=False,
         name = 'pysndlib',
         package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav"]},
-        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3str', 'embedsignature' : False})
+        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3', 'embedsignature' : False})
     )
 
 

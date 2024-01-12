@@ -814,7 +814,7 @@ class Sound(object):
                     self.reverb() ## reverb_data will be ignored in this case
                 else:
                     if self.reverb_data:
-                        self.reverb()(**self.reverb_data)
+                        self.reverb(**self.reverb_data)
                     else:
                         self.reverb()()
                     
@@ -4547,7 +4547,7 @@ cpdef is_readin(mus_any gen):
       
           
 # ---------------- src ---------------- #
-cpdef make_src(inp , cython.double srate=1.0, cython.int width=10):
+def make_src(inp , cython.double srate=1.0, cython.int width=10):
     """
     return a new sampling-rate conversion generator (using 'warped sinc interpolation'). 'srate' is the
     ratio between the new rate and the old. 'width' is the sine width (effectively the steepness of the
@@ -4568,17 +4568,21 @@ cpdef make_src(inp , cython.double srate=1.0, cython.int width=10):
     if(isinstance(inp, mus_any)):
         res = mus_any.from_ptr(cclm.mus_make_src(<cclm.input_cb>input_callback_func, srate, width, <void*>((<mus_any>inp)._ptr)))
         res._inputcallback = <cclm.input_cb>input_callback_func
+        res.cache_append(inp)
         return res
         
             
     if not callable(inp):
         raise TypeError(f"input needs to be a clm gen or function not a {type(inp)}")
     
-    inp = _inputcallback(inp)
-    cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp))[0]
-    res = mus_any.from_ptr(cclm.mus_make_src(cy_inp_f_ptr, srate, width, NULL))
+    @_inputcallback
+    def inp_f(gen, d):
+        return inp(d)
+        
+    cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
+    res = mus_any.from_ptr(cclm.mus_make_src(<cclm.input_cb>cy_inp_f_ptr, srate, width, NULL))
     res._inputcallback = cy_inp_f_ptr
-    res.cache_append(inp)
+    res.cache_append(inp_f)
     
     return res
   
@@ -4610,7 +4614,7 @@ cpdef bint is_src(mus_any gen):
 
 # ---------------- convolve ---------------- #
 
-cpdef mus_any make_convolve(inp, filt, cython.long fft_size=512, filter_size=None):
+def make_convolve(inp, filt, cython.long fft_size=512, filter_size=None):
     """
     return a new convolution generator which convolves its input with the impulse response 'filter'.
     
@@ -4657,18 +4661,21 @@ cpdef mus_any make_convolve(inp, filt, cython.long fft_size=512, filter_size=Non
         res = mus_any.from_ptr(cclm.mus_make_convolve(<cclm.input_cb>input_callback_func, &filt_view[0], fft_size, filter_size, <void*>(<mus_any>inp)._ptr))
         res._inputcallback = <cclm.input_cb>input_callback_func
         res.cache_append(filt)     
+        res.cache_append(inp)
         return res
     
     if not callable(inp):
         raise TypeError(f"input needs to be a clm gen or function not a {type(inp)}")
 
     #if isinstance(inp,types.FunctionType):
-    inp = _inputcallback(inp)
+    @_inputcallback
+    def inp_f(gen, d):
+        return inp(d)
         
-    cy_input_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp))[0]
-    res = mus_any.from_ptr(cclm.mus_make_convolve(cy_input_f_ptr, &filt_view[0], fft_size, filter_size, NULL))
-    res._inputcallback = cy_input_f_ptr
-    res.cache_append(inp)     
+    cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
+    res = mus_any.from_ptr(cclm.mus_make_convolve(cy_inp_f_ptr, &filt_view[0], fft_size, filter_size, NULL))
+    res._inputcallback = cy_inp_f_ptr
+    res.cache_append(inp_f)
 
     return res
 
@@ -4730,6 +4737,7 @@ def make_granulate(inp,
     if(isinstance(inp, mus_any) and edit is None):
         res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>input_callback_func, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, <void*>(<mus_any>inp)._ptr))
         res._inputcallback = <cclm.input_cb>input_callback_func
+        res.cache_append(inp)  
         return res
     
     if not callable(inp):
@@ -4739,15 +4747,14 @@ def make_granulate(inp,
     def inp_f(gen, d):
         return inp(d)
      
-   
     cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
-    res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>cy_inp_f_ptr, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, NULL))
+    res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>cy_inp_f_ptr, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, <void*>(<mus_any>inp)._ptr))
     res._inputcallback = cy_inp_f_ptr
     res.cache_append(inp_f)     
     
     if(edit is None):
         return res
-    
+
     @_editcallback
     def edit_f(gen):
         return edit(res)
@@ -4771,7 +4778,7 @@ cpdef cython.double granulate(mus_any gen):
     :rtype: float
     
     """
-    if gen._editcallback is not NULL:
+    if gen._editcallback:
         return cclm.mus_granulate_with_editor(gen._ptr, <cclm.input_cb>gen._inputcallback, <cclm.edit_cb>gen._editcallback)
     else:      
         return cclm.mus_granulate(gen._ptr, <cclm.input_cb>gen._inputcallback)
@@ -5027,8 +5034,7 @@ cpdef out_bank(gens, cython.long loc, cython.double val):
     for i in range(len(gens)):
         gen = gens[i]
         out_any(loc, gen(val, 0.), i, default.output)   
-        # the below stopped working for some reason  
-       # out_any(loc, cclm.mus_apply((<cclm.mus_any_ptr>gens[i])._ptr, val, 0.), i, CLM.output)    
+
 
 
 #--------------- in-any ----------------#

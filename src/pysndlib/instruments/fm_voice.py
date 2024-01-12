@@ -5,11 +5,10 @@
 import math
 import cython
 import numpy as np
-from .env import scale_envelope
-
 from pysndlib.env import add_envelopes, scale_envelope
 import pysndlib.clm as clm
-cimport pysndlib.clm as clm
+if cython.compiled:
+    from cython.cimports.pysndlib import clm
 
 
 
