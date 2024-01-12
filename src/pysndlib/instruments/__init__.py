@@ -1,6 +1,5 @@
 from .attract import attract
 from .bouncy import bouncy
-from .birds import bird, bigbird
 from .brassy import brassy
 from .cellon import cellon
 from .clm_expsrc import clm_expsrc
@@ -29,7 +28,7 @@ from .oboish import oboish
 from .organish import organish
 from .pianoy import pianoy
 from .pianoy1 import pianoy1
-from .pianoy2 import pianoy
+from .pianoy2 import pianoy2
 from .pluck import pluck
 from .pqw import pqw
 from .resflt import resflt

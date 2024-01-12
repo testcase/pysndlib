@@ -27,6 +27,7 @@ def pianoy(start, dur, freq, amp):
     for i in range(beg, end):
         clm.outa(i, clm.env(ampf) *gens.r2kfcos(gen))
 
+
 if __name__ == '__main__': 
     with clm.Sound(statistics=True, play=True):
-        pianoy(0,3,100,.5)
+        pianoy(0,3,400,.5)
