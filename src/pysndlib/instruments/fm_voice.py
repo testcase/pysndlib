@@ -1,3 +1,8 @@
+#==================================================================================
+# The code is from Rick Taube's faithful translation of Bill Schottstedaet's 'jcvoi.scm' 
+# file  available at https://ccrma.stanford.edu/software/snd/sndlib/
+#==================================================================================
+
 # from VOIDAT.SAI[220,JDC] and GLSVOI.SAI[220,JDC], then (30 years later) jcvoi.ins
 
 # python -m jcvoi

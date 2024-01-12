@@ -1,3 +1,8 @@
+#==================================================================================
+# The code is ported from Bill Schottstedaet's 'generators.scm' 
+# file  available at https://ccrma.stanford.edu/software/snd/sndlib/
+#==================================================================================
+
 import math
 import random
 import cython
@@ -13,7 +18,7 @@ if cython.compiled:
 
 # --------------- pianoy1 ---------------- #
 
-
+@cython.ccall
 def pianoy1(start, dur, freq, amp, bounce_freq=5, bounce_amp=20):
     gen = gens.make_r2kfcos(freq, r=.5, k=3)
     gen1 = clm.make_oscil(bounce_freq)

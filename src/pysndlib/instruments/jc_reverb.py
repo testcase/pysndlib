@@ -1,3 +1,7 @@
+#==================================================================================
+# The code is ported from Bill Schottstedaet's 'jcrev.scm' 
+# file  available at https://ccrma.stanford.edu/software/snd/sndlib/
+#==================================================================================
 import math
 import cython
 import numpy as np
