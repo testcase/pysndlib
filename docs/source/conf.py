@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 project = 'pysndlib'
 copyright = '2023-2024, Todd Ingalls'
 author = 'Todd Ingalls'
-release = '0.6.5'
+release = '0.6.6'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -21,7 +21,6 @@ release = '0.6.5'
 extensions = [
     'sphinx.ext.autodoc',
     'enum_tools.autoenum',
-    'sphinx_rtd_theme',
     'sphinx.ext.autosectionlabel'
 ]
 
@@ -35,6 +34,5 @@ autodoc_type_aliases = {'cclm.mus_long_t' : 'int', 'cython.double' : 'float', 'm
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# html_theme = 'sphinx_book_theme'
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']

@@ -1,129 +1,133 @@
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CLM Utility Functions &mdash; pysndlib 0.6.5 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>CLM Utility Functions &#8212; pysndlib 0.6.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'clm_utility_functions';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Other Generators" href="other_generators.html" />
-    <link rel="prev" title="CLM Generators" href="clm_generators.html" /> 
-</head>
+    <link rel="prev" title="CLM Generators" href="clm_generators.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
 
-          
-          
-          <a href="index.html" class="icon icon-home">
-            pysndlib
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">pysndlib 0.6.6 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CLM Utility Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general">General</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.get_length"><code class="docutils literal notranslate"><span class="pre">get_length()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.get_channels"><code class="docutils literal notranslate"><span class="pre">get_channels()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#sampling-rate">Sampling rate</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.get_srate"><code class="docutils literal notranslate"><span class="pre">get_srate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.set_srate"><code class="docutils literal notranslate"><span class="pre">set_srate()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#conversions">Conversions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.radians2hz"><code class="docutils literal notranslate"><span class="pre">radians2hz()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.hz2radians"><code class="docutils literal notranslate"><span class="pre">hz2radians()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.degrees2radians"><code class="docutils literal notranslate"><span class="pre">degrees2radians()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.radians2degrees"><code class="docutils literal notranslate"><span class="pre">radians2degrees()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.db2linear"><code class="docutils literal notranslate"><span class="pre">db2linear()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.linear2db"><code class="docutils literal notranslate"><span class="pre">linear2db()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.seconds2samples"><code class="docutils literal notranslate"><span class="pre">seconds2samples()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.samples2seconds"><code class="docutils literal notranslate"><span class="pre">samples2seconds()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#even-odd-multiples-and-weighting">Even/Odd multiples and weighting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.odd_multiple"><code class="docutils literal notranslate"><span class="pre">odd_multiple()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.even_multiple"><code class="docutils literal notranslate"><span class="pre">even_multiple()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.odd_weight"><code class="docutils literal notranslate"><span class="pre">odd_weight()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.even_weight"><code class="docutils literal notranslate"><span class="pre">even_weight()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.ring_modulate"><code class="docutils literal notranslate"><span class="pre">ring_modulate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.amplitude_modulate"><code class="docutils literal notranslate"><span class="pre">amplitude_modulate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.contrast_enhancement"><code class="docutils literal notranslate"><span class="pre">contrast_enhancement()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.dot_product"><code class="docutils literal notranslate"><span class="pre">dot_product()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.polynomial"><code class="docutils literal notranslate"><span class="pre">polynomial()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.array_interp"><code class="docutils literal notranslate"><span class="pre">array_interp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.bessi0"><code class="docutils literal notranslate"><span class="pre">bessi0()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_interpolate"><code class="docutils literal notranslate"><span class="pre">mus_interpolate()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#fft-and-convolution">FFT and Convolution</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.polar2rectangular"><code class="docutils literal notranslate"><span class="pre">polar2rectangular()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.autocorrelate"><code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_rectangular2polar"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2polar()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2magnitudes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_polar2rectangular"><code class="docutils literal notranslate"><span class="pre">mus_polar2rectangular()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_convolution"><code class="docutils literal notranslate"><span class="pre">mus_convolution()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_spectrum"><code class="docutils literal notranslate"><span class="pre">mus_spectrum()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_autocorrelate"><code class="docutils literal notranslate"><span class="pre">mus_autocorrelate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_correlate"><code class="docutils literal notranslate"><span class="pre">mus_correlate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.mus_cepstrum"><code class="docutils literal notranslate"><span class="pre">mus_cepstrum()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#partials">Partials</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.partials2wave"><code class="docutils literal notranslate"><span class="pre">partials2wave()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.phase_partials2wave"><code class="docutils literal notranslate"><span class="pre">phase_partials2wave()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.partials2polynomial"><code class="docutils literal notranslate"><span class="pre">partials2polynomial()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.normalize_partials"><code class="docutils literal notranslate"><span class="pre">normalize_partials()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#chebyshev">Chebyshev</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.chebyshev_tu_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_tu_sum()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.chebyshev_t_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_t_sum()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pysndlib.clm.chebyshev_u_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_u_sum()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Utility Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
@@ -133,73 +137,274 @@
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pysndlib</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">CLM Utility Functions</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/clm_utility_functions.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/clm_utility_functions.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CLM Utility Functions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_length"><code class="docutils literal notranslate"><span class="pre">get_length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_channels"><code class="docutils literal notranslate"><span class="pre">get_channels()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-rate">Sampling rate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_srate"><code class="docutils literal notranslate"><span class="pre">get_srate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.set_srate"><code class="docutils literal notranslate"><span class="pre">set_srate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversions">Conversions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.radians2hz"><code class="docutils literal notranslate"><span class="pre">radians2hz()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.hz2radians"><code class="docutils literal notranslate"><span class="pre">hz2radians()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.degrees2radians"><code class="docutils literal notranslate"><span class="pre">degrees2radians()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.radians2degrees"><code class="docutils literal notranslate"><span class="pre">radians2degrees()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.db2linear"><code class="docutils literal notranslate"><span class="pre">db2linear()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.linear2db"><code class="docutils literal notranslate"><span class="pre">linear2db()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.seconds2samples"><code class="docutils literal notranslate"><span class="pre">seconds2samples()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.samples2seconds"><code class="docutils literal notranslate"><span class="pre">samples2seconds()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#even-odd-multiples-and-weighting">Even/Odd multiples and weighting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.odd_multiple"><code class="docutils literal notranslate"><span class="pre">odd_multiple()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.even_multiple"><code class="docutils literal notranslate"><span class="pre">even_multiple()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.odd_weight"><code class="docutils literal notranslate"><span class="pre">odd_weight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.even_weight"><code class="docutils literal notranslate"><span class="pre">even_weight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.ring_modulate"><code class="docutils literal notranslate"><span class="pre">ring_modulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.amplitude_modulate"><code class="docutils literal notranslate"><span class="pre">amplitude_modulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.contrast_enhancement"><code class="docutils literal notranslate"><span class="pre">contrast_enhancement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.dot_product"><code class="docutils literal notranslate"><span class="pre">dot_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polynomial"><code class="docutils literal notranslate"><span class="pre">polynomial()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.array_interp"><code class="docutils literal notranslate"><span class="pre">array_interp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.bessi0"><code class="docutils literal notranslate"><span class="pre">bessi0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_interpolate"><code class="docutils literal notranslate"><span class="pre">mus_interpolate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polar2rectangular"><code class="docutils literal notranslate"><span class="pre">polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.autocorrelate"><code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2polar"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_polar2rectangular"><code class="docutils literal notranslate"><span class="pre">mus_polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_convolution"><code class="docutils literal notranslate"><span class="pre">mus_convolution()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_spectrum"><code class="docutils literal notranslate"><span class="pre">mus_spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_autocorrelate"><code class="docutils literal notranslate"><span class="pre">mus_autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_correlate"><code class="docutils literal notranslate"><span class="pre">mus_correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_cepstrum"><code class="docutils literal notranslate"><span class="pre">mus_cepstrum()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partials">Partials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.partials2wave"><code class="docutils literal notranslate"><span class="pre">partials2wave()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.phase_partials2wave"><code class="docutils literal notranslate"><span class="pre">phase_partials2wave()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.partials2polynomial"><code class="docutils literal notranslate"><span class="pre">partials2polynomial()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.normalize_partials"><code class="docutils literal notranslate"><span class="pre">normalize_partials()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev">Chebyshev</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_tu_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_tu_sum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_t_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_t_sum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_u_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_u_sum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="clm-utility-functions">
-<h1>CLM Utility Functions<a class="headerlink" href="#clm-utility-functions" title="Permalink to this heading"></a></h1>
+<h1>CLM Utility Functions<a class="headerlink" href="#clm-utility-functions" title="Permalink to this heading">#</a></h1>
 <section id="general">
-<h2>General<a class="headerlink" href="#general" title="Permalink to this heading"></a></h2>
+<h2>General<a class="headerlink" href="#general" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.get_length">
-<span class="sig-name descname"><span class="pre">get_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_length" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_length" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns length in samples of a sound file, list, ndarray, or generator</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.random">
-<span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.random" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.random" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns random number +- x</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.get_channels">
-<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_channels" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_channels" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns number of channels of a sound file, list, ndarray</p>
 </dd></dl>
 
 </section>
 <section id="sampling-rate">
-<h2>Sampling rate<a class="headerlink" href="#sampling-rate" title="Permalink to this heading"></a></h2>
+<h2>Sampling rate<a class="headerlink" href="#sampling-rate" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.get_srate">
-<span class="sig-name descname"><span class="pre">get_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_srate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.get_srate" title="Permalink to this definition">#</a></dt>
 <dd><p>Return current sample rate</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.set_srate">
-<span class="sig-name descname"><span class="pre">set_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.set_srate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.set_srate" title="Permalink to this definition">#</a></dt>
 <dd><p>set current sample rate.</p>
 </dd></dl>
 
 </section>
 <section id="conversions">
-<h2>Conversions<a class="headerlink" href="#conversions" title="Permalink to this heading"></a></h2>
+<h2>Conversions<a class="headerlink" href="#conversions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.radians2hz">
-<span class="sig-name descname"><span class="pre">radians2hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2hz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">radians2hz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2hz" title="Permalink to this definition">#</a></dt>
 <dd><p>convert radians per sample to frequency:  <cite>hz = rads * srate / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -216,7 +421,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.hz2radians">
-<span class="sig-name descname"><span class="pre">hz2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.hz2radians" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">hz2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.hz2radians" title="Permalink to this definition">#</a></dt>
 <dd><p>convert frequency in hz to radians per sample:  <cite>hz * 2 * pi / srate</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -233,7 +438,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.degrees2radians">
-<span class="sig-name descname"><span class="pre">degrees2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degrees</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.degrees2radians" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">degrees2radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degrees</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.degrees2radians" title="Permalink to this definition">#</a></dt>
 <dd><p>convert degrees to radians:  <cite>degrees * 2 * pi / 360</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -250,7 +455,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.radians2degrees">
-<span class="sig-name descname"><span class="pre">radians2degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2degrees" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">radians2degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radians</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.radians2degrees" title="Permalink to this definition">#</a></dt>
 <dd><p>convert radians to degrees: <cite>rads * 360 / (2 * pi)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -267,7 +472,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.db2linear">
-<span class="sig-name descname"><span class="pre">db2linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.db2linear" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">db2linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.db2linear" title="Permalink to this definition">#</a></dt>
 <dd><p>convert decibel value db to linear value: <cite>pow(10, db / 20)</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -284,7 +489,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.linear2db">
-<span class="sig-name descname"><span class="pre">linear2db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.linear2db" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">linear2db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.linear2db" title="Permalink to this definition">#</a></dt>
 <dd><p>convert linear value to decibels 20 * log10(lin).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -301,7 +506,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.seconds2samples">
-<span class="sig-name descname"><span class="pre">seconds2samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.seconds2samples" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">seconds2samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.seconds2samples" title="Permalink to this definition">#</a></dt>
 <dd><p>use mus_srate to convert seconds to samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -318,7 +523,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.samples2seconds">
-<span class="sig-name descname"><span class="pre">samples2seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.samples2seconds" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">samples2seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.samples2seconds" title="Permalink to this definition">#</a></dt>
 <dd><p>use mus_srate to convert samples to seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -335,10 +540,10 @@
 
 </section>
 <section id="even-odd-multiples-and-weighting">
-<h2>Even/Odd multiples and weighting<a class="headerlink" href="#even-odd-multiples-and-weighting" title="Permalink to this heading"></a></h2>
+<h2>Even/Odd multiples and weighting<a class="headerlink" href="#even-odd-multiples-and-weighting" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.odd_multiple">
-<span class="sig-name descname"><span class="pre">odd_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_multiple" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">odd_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_multiple" title="Permalink to this definition">#</a></dt>
 <dd><p>return y times the nearest odd integer to x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -358,7 +563,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.even_multiple">
-<span class="sig-name descname"><span class="pre">even_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_multiple" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">even_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_multiple" title="Permalink to this definition">#</a></dt>
 <dd><p>return y times the nearest even integer to x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -378,7 +583,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.odd_weight">
-<span class="sig-name descname"><span class="pre">odd_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_weight" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">odd_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.odd_weight" title="Permalink to this definition">#</a></dt>
 <dd><p>return a number between 0.0 (x is even) and 1.0 (x is odd).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -394,7 +599,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.even_weight">
-<span class="sig-name descname"><span class="pre">even_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_weight" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">even_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.even_weight" title="Permalink to this definition">#</a></dt>
 <dd><p>return a number between 0.0 (x is odd) and 1.0 (x is even).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -410,7 +615,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.ring_modulate">
-<span class="sig-name descname"><span class="pre">ring_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ring_modulate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ring_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.ring_modulate" title="Permalink to this definition">#</a></dt>
 <dd><p>return s1 * s2 (sample by sample multiply).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -430,7 +635,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.amplitude_modulate">
-<span class="sig-name descname"><span class="pre">amplitude_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.amplitude_modulate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">amplitude_modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.amplitude_modulate" title="Permalink to this definition">#</a></dt>
 <dd><p>carrier in1 in2): in1 * (carrier + in2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -451,7 +656,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.contrast_enhancement">
-<span class="sig-name descname"><span class="pre">contrast_enhancement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.contrast_enhancement" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">contrast_enhancement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.contrast_enhancement" title="Permalink to this definition">#</a></dt>
 <dd><p>returns insig (index 1.0)): sin(sig * pi / 2 + fm_index * sin(sig * 2 * pi))
 contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 <dl class="field-list simple">
@@ -472,7 +677,7 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.dot_product">
-<span class="sig-name descname"><span class="pre">dot_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.dot_product" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dot_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.dot_product" title="Permalink to this definition">#</a></dt>
 <dd><p>returns v1 v2 (size)): sum of v1[i] * v2[i] (also named scalar product).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -492,7 +697,7 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.polynomial">
-<span class="sig-name descname"><span class="pre">polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polynomial" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polynomial" title="Permalink to this definition">#</a></dt>
 <dd><p>evaluate a polynomial at x.  coeffs are in order of degree, so coeff[0] is the constant term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -512,7 +717,7 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.array_interp">
-<span class="sig-name descname"><span class="pre">array_interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.array_interp" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">array_interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.array_interp" title="Permalink to this definition">#</a></dt>
 <dd><p>taking into account wrap-around (size is size of data), with linear interpolation if phase is not an integer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -532,13 +737,13 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.bessi0">
-<span class="sig-name descname"><span class="pre">bessi0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.bessi0" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">bessi0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.bessi0" title="Permalink to this definition">#</a></dt>
 <dd><p>bessel function of zeroth order</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_interpolate">
-<span class="sig-name descname"><span class="pre">mus_interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_interpolate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_interpolate" title="Permalink to this definition">#</a></dt>
 <dd><p>interpolate in data (‘table’ is a ndarray) using interpolation ‘type’, such as Interp.linear.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -559,10 +764,10 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 
 </section>
 <section id="fft-and-convolution">
-<h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading"></a></h2>
+<h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_fft_window">
-<span class="sig-name descname"><span class="pre">make_fft_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_fft_window" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_fft_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.make_fft_window" title="Permalink to this definition">#</a></dt>
 <dd><p>fft data window (a ndarray). type is one of the sndlib fft window identifiers such as
 window.kaiser, beta is the window family parameter, if any.</p>
 <dl class="field-list simple">
@@ -585,7 +790,7 @@ window.kaiser, beta is the window family parameter, if any.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.fft">
-<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.fft" title="Permalink to this definition">#</a></dt>
 <dd><p>return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
 power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
@@ -608,7 +813,7 @@ power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.rectangular2polar">
-<span class="sig-name descname"><span class="pre">rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2polar" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2polar" title="Permalink to this definition">#</a></dt>
 <dd><p>convert real/imaginary data in rdat and idat from rectangular form (fft output) to polar form (a
 spectrum).</p>
 <dl class="field-list simple">
@@ -629,7 +834,7 @@ spectrum).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.rectangular2magnitudes">
-<span class="sig-name descname"><span class="pre">rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2magnitudes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
 <dd><p>convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
 ignore the phases.</p>
 <dl class="field-list simple">
@@ -650,7 +855,7 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.polar2rectangular">
-<span class="sig-name descname"><span class="pre">polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polar2rectangular" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.polar2rectangular" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -670,7 +875,7 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.spectrum">
-<span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.spectrum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.spectrum" title="Permalink to this definition">#</a></dt>
 <dd><p>real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
 fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
 scaled:
@@ -697,7 +902,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.autocorrelate">
-<span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.autocorrelate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.autocorrelate" title="Permalink to this definition">#</a></dt>
 <dd><p>autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -714,7 +919,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.correlate">
-<span class="sig-name descname"><span class="pre">correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.correlate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.correlate" title="Permalink to this definition">#</a></dt>
 <dd><p>cross-correlation of data1 and data2 (both ndarrays).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -734,7 +939,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_fft">
-<span class="sig-name descname"><span class="pre">mus_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_fft" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_fft" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
 power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 <dl class="field-list simple">
@@ -757,7 +962,7 @@ power of 2, dir = 1 for fft, -1 for inverse-fft.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_rectangular2polar">
-<span class="sig-name descname"><span class="pre">mus_rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2polar" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_rectangular2polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2polar" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convert real/imaginary data in s rl and im from rectangular form (fft output) to polar form (a
 spectrum).</p>
 <dl class="field-list simple">
@@ -778,7 +983,7 @@ spectrum).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_rectangular2magnitudes">
-<span class="sig-name descname"><span class="pre">mus_rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2magnitudes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_rectangular2magnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_rectangular2magnitudes" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convert real/imaginary data in rl and im from rectangular form (fft output) to polar form, but
 ignore the phases.</p>
 <dl class="field-list simple">
@@ -799,7 +1004,7 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_polar2rectangular">
-<span class="sig-name descname"><span class="pre">mus_polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_polar2rectangular" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_polar2rectangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_polar2rectangular" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convert real/imaginary data in rl and im from polar (spectrum) to rectangular (fft).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -819,7 +1024,7 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_convolution">
-<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -840,7 +1045,7 @@ ignore the phases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_spectrum">
-<span class="sig-name descname"><span class="pre">mus_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_spectrum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Spectrum.IN_DB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_spectrum" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. real and imaginary data in ndarrays rl and im, returns (in rl) the spectrum thereof; window is the
 fft data window (a ndarray as returned by make_fft_window  and type determines how the spectral data is
 scaled:
@@ -867,7 +1072,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_autocorrelate">
-<span class="sig-name descname"><span class="pre">mus_autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_autocorrelate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_autocorrelate" title="Permalink to this definition">#</a></dt>
 <dd><p>in place autocorrelation of data (a ndarray).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -884,7 +1089,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_correlate">
-<span class="sig-name descname"><span class="pre">mus_correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_correlate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_correlate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_correlate" title="Permalink to this definition">#</a></dt>
 <dd><p>in place cross-correlation of data1 and data2 (both ndarrays).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -904,7 +1109,7 @@ spectrum.raw = linear and un-normalized.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_cepstrum">
-<span class="sig-name descname"><span class="pre">mus_cepstrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_cepstrum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mus_cepstrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.mus_cepstrum" title="Permalink to this definition">#</a></dt>
 <dd><p>return cepstrum of signal</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -921,10 +1126,10 @@ spectrum.raw = linear and un-normalized.</p>
 
 </section>
 <section id="partials">
-<h2>Partials<a class="headerlink" href="#partials" title="Permalink to this heading"></a></h2>
+<h2>Partials<a class="headerlink" href="#partials" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.partials2wave">
-<span class="sig-name descname"><span class="pre">partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2wave" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2wave" title="Permalink to this definition">#</a></dt>
 <dd><p>take a list or np.ndarray of partials (harmonic number and associated amplitude) and produce a
 waveform for use in table_lookup.</p>
 <dl class="field-list simple">
@@ -947,7 +1152,7 @@ waveform for use in table_lookup.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.phase_partials2wave">
-<span class="sig-name descname"><span class="pre">phase_partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.phase_partials2wave" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">phase_partials2wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.phase_partials2wave" title="Permalink to this definition">#</a></dt>
 <dd><p>take a list of partials (harmonic number, amplitude, initial phase) and produce a waveform for use
 in table_lookup.</p>
 <dl class="field-list simple">
@@ -970,7 +1175,7 @@ in table_lookup.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.partials2polynomial">
-<span class="sig-name descname"><span class="pre">partials2polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Polynomial.FIRST_KIND</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2polynomial" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">partials2polynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Polynomial.FIRST_KIND</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.partials2polynomial" title="Permalink to this definition">#</a></dt>
 <dd><p>returns a chebyshev polynomial suitable for use with the polynomial generator to create (via
 waveshaping) the harmonic spectrum described by the partials argument.</p>
 <dl class="field-list simple">
@@ -991,7 +1196,7 @@ waveshaping) the harmonic spectrum described by the partials argument.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.normalize_partials">
-<span class="sig-name descname"><span class="pre">normalize_partials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.normalize_partials" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">normalize_partials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partials</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.normalize_partials" title="Permalink to this definition">#</a></dt>
 <dd><p>scales the partial amplitudes in the list/array or list ‘partials’ by the inverse of their sum (so
 that they add to 1.0). creates new array</p>
 <dl class="field-list simple">
@@ -1009,10 +1214,10 @@ that they add to 1.0). creates new array</p>
 
 </section>
 <section id="chebyshev">
-<h2>Chebyshev<a class="headerlink" href="#chebyshev" title="Permalink to this heading"></a></h2>
+<h2>Chebyshev<a class="headerlink" href="#chebyshev" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_tu_sum">
-<span class="sig-name descname"><span class="pre">chebyshev_tu_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_tu_sum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">chebyshev_tu_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_tu_sum" title="Permalink to this definition">#</a></dt>
 <dd><p>returns the sum of the weighted chebyshev polynomials tn and un, with phase x</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1030,7 +1235,7 @@ that they add to 1.0). creates new array</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_t_sum">
-<span class="sig-name descname"><span class="pre">chebyshev_t_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_t_sum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">chebyshev_t_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_t_sum" title="Permalink to this definition">#</a></dt>
 <dd><p>returns the sum of the weighted chebyshev polynomials tn</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1047,7 +1252,7 @@ that they add to 1.0). creates new array</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_u_sum">
-<span class="sig-name descname"><span class="pre">chebyshev_u_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_u_sum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">chebyshev_u_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucoeffs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysndlib.clm.chebyshev_u_sum" title="Permalink to this definition">#</a></dt>
 <dd><p>returns the sum of the weighted chebyshev polynomials un</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1066,34 +1271,174 @@ that they add to 1.0). creates new array</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="clm_generators.html" class="btn btn-neutral float-left" title="CLM Generators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="other_generators.html" class="btn btn-neutral float-right" title="Other Generators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2023-2024, Todd Ingalls.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="clm_generators.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CLM Generators</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="other_generators.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Other Generators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
 
-</body>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_length"><code class="docutils literal notranslate"><span class="pre">get_length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_channels"><code class="docutils literal notranslate"><span class="pre">get_channels()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-rate">Sampling rate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_srate"><code class="docutils literal notranslate"><span class="pre">get_srate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.set_srate"><code class="docutils literal notranslate"><span class="pre">set_srate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversions">Conversions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.radians2hz"><code class="docutils literal notranslate"><span class="pre">radians2hz()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.hz2radians"><code class="docutils literal notranslate"><span class="pre">hz2radians()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.degrees2radians"><code class="docutils literal notranslate"><span class="pre">degrees2radians()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.radians2degrees"><code class="docutils literal notranslate"><span class="pre">radians2degrees()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.db2linear"><code class="docutils literal notranslate"><span class="pre">db2linear()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.linear2db"><code class="docutils literal notranslate"><span class="pre">linear2db()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.seconds2samples"><code class="docutils literal notranslate"><span class="pre">seconds2samples()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.samples2seconds"><code class="docutils literal notranslate"><span class="pre">samples2seconds()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#even-odd-multiples-and-weighting">Even/Odd multiples and weighting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.odd_multiple"><code class="docutils literal notranslate"><span class="pre">odd_multiple()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.even_multiple"><code class="docutils literal notranslate"><span class="pre">even_multiple()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.odd_weight"><code class="docutils literal notranslate"><span class="pre">odd_weight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.even_weight"><code class="docutils literal notranslate"><span class="pre">even_weight()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.ring_modulate"><code class="docutils literal notranslate"><span class="pre">ring_modulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.amplitude_modulate"><code class="docutils literal notranslate"><span class="pre">amplitude_modulate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.contrast_enhancement"><code class="docutils literal notranslate"><span class="pre">contrast_enhancement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.dot_product"><code class="docutils literal notranslate"><span class="pre">dot_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polynomial"><code class="docutils literal notranslate"><span class="pre">polynomial()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.array_interp"><code class="docutils literal notranslate"><span class="pre">array_interp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.bessi0"><code class="docutils literal notranslate"><span class="pre">bessi0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_interpolate"><code class="docutils literal notranslate"><span class="pre">mus_interpolate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fft-and-convolution">FFT and Convolution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.make_fft_window"><code class="docutils literal notranslate"><span class="pre">make_fft_window()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2polar"><code class="docutils literal notranslate"><span class="pre">rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.polar2rectangular"><code class="docutils literal notranslate"><span class="pre">polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.autocorrelate"><code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_fft"><code class="docutils literal notranslate"><span class="pre">mus_fft()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2polar"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2polar()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_rectangular2magnitudes"><code class="docutils literal notranslate"><span class="pre">mus_rectangular2magnitudes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_polar2rectangular"><code class="docutils literal notranslate"><span class="pre">mus_polar2rectangular()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_convolution"><code class="docutils literal notranslate"><span class="pre">mus_convolution()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_spectrum"><code class="docutils literal notranslate"><span class="pre">mus_spectrum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_autocorrelate"><code class="docutils literal notranslate"><span class="pre">mus_autocorrelate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_correlate"><code class="docutils literal notranslate"><span class="pre">mus_correlate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.mus_cepstrum"><code class="docutils literal notranslate"><span class="pre">mus_cepstrum()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partials">Partials</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.partials2wave"><code class="docutils literal notranslate"><span class="pre">partials2wave()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.phase_partials2wave"><code class="docutils literal notranslate"><span class="pre">phase_partials2wave()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.partials2polynomial"><code class="docutils literal notranslate"><span class="pre">partials2polynomial()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.normalize_partials"><code class="docutils literal notranslate"><span class="pre">normalize_partials()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev">Chebyshev</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_tu_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_tu_sum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_t_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_t_sum()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.chebyshev_u_sum"><code class="docutils literal notranslate"><span class="pre">chebyshev_u_sum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Todd Ingalls
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023-2024, Todd Ingalls.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>
