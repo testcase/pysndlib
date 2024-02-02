@@ -330,7 +330,7 @@ and using finalize to call a function to plot the signal</p>
 </pre></div>
 </div>
 <p>This is an example of defining a reverb function that is applied after the initial output is
-rendered. using locsig makes this even easier.</p>
+rendered. using locsig makes this even easier. to make a reverb you must also use the &#64;clm.clm_reverb decorator</p>
 <p>Note clm.default.reverb gets defined within the with Sound context.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@clm</span><span class="o">.</span><span class="n">clm_reverb</span>
 <span class="k">def</span> <span class="nf">bad_mono_rev1</span><span class="p">(</span><span class="n">volume</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>

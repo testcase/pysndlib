@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
-<title>CLM Utility Functions — pysndlib 0.6.2 documentation</title>
+<title>CLM Utility Functions — pysndlib 0.6.6 documentation</title>
 <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -30,7 +30,7 @@
 <script>DOCUMENTATION_OPTIONS.pagename = 'clm_utility_functions';</script>
 <link href="genindex.html" rel="index" title="Index"/>
 <link href="search.html" rel="search" title="Search"/>
-<link href="file_IO.html" rel="next" title="File IO"/>
+<link href="other_generators.html" rel="next" title="Other Generators"/>
 <link href="clm_generators.html" rel="prev" title="CLM Generators"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="en" name="docsearch:language"/>
@@ -60,16 +60,19 @@
 <div class="sidebar-primary-items__start sidebar-primary__section">
 <div class="sidebar-primary-item">
 <a class="navbar-brand logo" href="index.html">
-<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+<p class="title logo__title">pysndlib 0.6.6 documentation</p>
 </a></div>
 <div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
 <div class="bd-toc-item navbar-nav active">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
@@ -158,10 +161,10 @@ document.write(`
 </div>
 <nav aria-label="Page">
 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Utility Functions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.length"><code class="docutils literal notranslate"><span class="pre">length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_length"><code class="docutils literal notranslate"><span class="pre">get_length()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_channels"><code class="docutils literal notranslate"><span class="pre">get_channels()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-rate">Sampling rate</a><ul class="nav section-nav flex-column">
@@ -229,22 +232,19 @@ document.write(`
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
 </nav>
 </div>
 </div>
 </div>
 <div id="searchbox"></div>
 <article class="bd-article" role="main">
-<section id="clm-utility-functions">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/CLM Utility Functions"></a><section id="clm-utility-functions">
 <h1>CLM Utility Functions<a class="headerlink" href="#clm-utility-functions" title="Permalink to this heading">#</a></h1>
-<section id="general">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/General"></a><section id="general">
 <h2>General<a class="headerlink" href="#general" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="pysndlib.clm.length">
-<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.length"></a><a class="headerlink" href="#pysndlib.clm.length" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pysndlib.clm.get_length">
+<span class="sig-name descname"><span class="pre">get_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.get_length"></a><a class="headerlink" href="#pysndlib.clm.get_length" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns length in samples of a sound file, list, ndarray, or generator</p>
 </dd></dl>
 <dl class="py function">
@@ -252,20 +252,18 @@ document.write(`
 <span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.random"></a><a class="headerlink" href="#pysndlib.clm.random" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns random number +- x</p>
 </dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysndlib.clm.get_channels">
+<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.get_channels"></a><a class="headerlink" href="#pysndlib.clm.get_channels" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns number of channels of a sound file, list, ndarray</p>
+</dd></dl>
 </section>
-<section id="sampling-rate">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Sampling rate"></a><section id="sampling-rate">
 <h2>Sampling rate<a class="headerlink" href="#sampling-rate" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.get_srate">
-<span class="sig-name descname"><span class="pre">get_srate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.get_srate"></a><a class="headerlink" href="#pysndlib.clm.get_srate" title="Permalink to this definition">#</a></dt>
-<dd><p>return current sample rate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return samplerate<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">get_srate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.get_srate"></a><a class="headerlink" href="#pysndlib.clm.get_srate" title="Permalink to this definition">#</a></dt>
+<dd><p>Return current sample rate</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.set_srate">
@@ -273,7 +271,7 @@ document.write(`
 <dd><p>set current sample rate.</p>
 </dd></dl>
 </section>
-<section id="conversions">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Conversions"></a><section id="conversions">
 <h2>Conversions<a class="headerlink" href="#conversions" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.radians2hz">
@@ -404,7 +402,7 @@ document.write(`
 </dl>
 </dd></dl>
 </section>
-<section id="even-odd-multiples-and-weighting">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Even/Odd multiples and weighting"></a><section id="even-odd-multiples-and-weighting">
 <h2>Even/Odd multiples and weighting<a class="headerlink" href="#even-odd-multiples-and-weighting" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.odd_multiple">
@@ -616,7 +614,7 @@ contrast_enhancement passes its input to sin as a kind of phase modulation.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="fft-and-convolution">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/FFT and Convolution"></a><section id="fft-and-convolution">
 <h2>FFT and Convolution<a class="headerlink" href="#fft-and-convolution" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_fft_window">
@@ -865,7 +863,7 @@ ignore the phases.</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.mus_convolution">
-<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.mus_convolution"></a><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mus_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.mus_convolution"></a><a class="headerlink" href="#pysndlib.clm.mus_convolution" title="Permalink to this definition">#</a></dt>
 <dd><p>in-place operation. convolution of ndarrays v1 with v2, using fft of size len (a power of 2), result in v1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -961,7 +959,7 @@ spectrum.raw = linear and un-normalized.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="partials">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Partials"></a><section id="partials">
 <h2>Partials<a class="headerlink" href="#partials" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.partials2wave">
@@ -1045,7 +1043,7 @@ that they add to 1.0). creates new array</p>
 </dl>
 </dd></dl>
 </section>
-<section id="chebyshev">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Chebyshev"></a><section id="chebyshev">
 <h2>Chebyshev<a class="headerlink" href="#chebyshev" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.chebyshev_tu_sum">
@@ -1098,14 +1096,6 @@ that they add to 1.0). creates new array</p>
 </dd></dl>
 </section>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
 </article>
 <footer class="bd-footer-article">
 <div class="footer-article-items footer-article__inner">
@@ -1118,10 +1108,10 @@ that they add to 1.0). creates new array</p>
 <p class="prev-next-title">CLM Generators</p>
 </div>
 </a>
-<a class="right-next" href="file_IO.html" title="next page">
+<a class="right-next" href="other_generators.html" title="next page">
 <div class="prev-next-info">
 <p class="prev-next-subtitle">next</p>
-<p class="prev-next-title">File IO</p>
+<p class="prev-next-title">Other Generators</p>
 </div>
 <i class="fa-solid fa-angle-right"></i>
 </a>
@@ -1136,10 +1126,10 @@ that they add to 1.0). creates new array</p>
   </div>
 <nav class="bd-toc-nav page-toc">
 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">CLM Utility Functions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.length"><code class="docutils literal notranslate"><span class="pre">length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_length"><code class="docutils literal notranslate"><span class="pre">get_length()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysndlib.clm.get_channels"><code class="docutils literal notranslate"><span class="pre">get_channels()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-rate">Sampling rate</a><ul class="nav section-nav flex-column">
@@ -1207,9 +1197,6 @@ that they add to 1.0). creates new array</p>
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
 </nav></div>
 </div></div>
 </div>
@@ -1223,7 +1210,7 @@ By Todd Ingalls
 <div class="footer-item">
 <p class="copyright">
     
-      © Copyright 2023, Todd Ingalls.
+      © Copyright 2023-2024, Todd Ingalls.
       <br/>
 </p>
 </div>

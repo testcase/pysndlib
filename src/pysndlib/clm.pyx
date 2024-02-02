@@ -847,7 +847,11 @@ class Sound(object):
                     times_view = times
                     maxamp = csndlib.mus_sound_maxamps(self.output, chans, &vals_view[0], &times_view[0])
                     maxamp_result = maxamp
-                    statstr += f": maxamp: {vals} {times} "
+                    statstr += f" channels: {get_channels(self.output)},"
+                    statstr += f" length: {get_length(self.output)} samples,"
+                    statstr += f" duration: {get_length(self.output) / get_srate()} seconds,"
+                    statstr += f" maxamp: {vals} {times}, "
+
             else:
                 chans = get_channels(self.output)
                 vals = np.zeros(chans, dtype=np.double)
@@ -856,7 +860,10 @@ class Sound(object):
                     mabs = np.abs(self.output[i])
                     vals[i] = np.amax(mabs)
                     times[i] = np.argmax(mabs)
-                statstr += f"maxamp: {vals} {times} "
+                statstr += f" channels: {get_channels(self.output)},"
+                statstr += f" length: {get_length(self.output)} samples,"
+                statstr += f" duration: {get_length(self.output) / get_srate()} seconds,"
+                statstr += f" maxamp: {vals} {times}, "
                 maxamp_result = vals
                 
               
@@ -904,7 +911,10 @@ class Sound(object):
                 self.output *= self.scaled_by
        
         if self.play and self.output_to_file:
-            subprocess.run([default.player,self.output])
+            if self.play:
+                subprocess.run([default.player,self.output])
+            else:
+                raise RuntimeError("no player specified")
         # need some safety if errors
         
         set_srate(self.old_srate)
@@ -5262,7 +5272,7 @@ cpdef convolve_files(str file1, str file2, cython.double maxamp=1., str outputfi
 # --------------- dcblock ---------------- #
 
 cpdef mus_any make_dcblock():
-    return make_filter(2, [1,-1], [0, -.99])
+    return make_filter(2, [1,-1], [1, -.99])
     
 cpdef cython.double dcblock(mus_any gen, cython.double insig):
     return filter(gen, insig)
@@ -5548,11 +5558,12 @@ def phase_delay(gen, freq):
     phase = math.atan2(imag, real)
     real = 0.
     imag = 0.
-    for i in range(len(gen.mus_ycoeffs)):
-        real += gen.mus_ycoeffs[i] * math.cos(i * omega_t)
-        imag -= gen.mus_ycoeffs[i] * math.sin(i * omega_t)
-    phase -= math.atan2(imag, real)
-    phase = math.fmod(-phase, 2 * np.pi)
+    if not is_fir_filter(gen):
+        for i in range(len(gen.mus_ycoeffs)):
+            real += gen.mus_ycoeffs[i] * math.cos(i * omega_t)
+            imag -= gen.mus_ycoeffs[i] * math.sin(i * omega_t)
+        phase -= math.atan2(imag, real)
+        phase = math.fmod(-phase, 2 * np.pi)
     return phase / omega_t
 
                                       

@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
-<title>CLM Generators — pysndlib 0.6.2 documentation</title>
+<title>CLM Generators — pysndlib 0.6.6 documentation</title>
 <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -60,16 +60,19 @@
 <div class="sidebar-primary-items__start sidebar-primary__section">
 <div class="sidebar-primary-item">
 <a class="navbar-brand logo" href="index.html">
-<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+<p class="title logo__title">pysndlib 0.6.6 documentation</p>
 </a></div>
 <div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
 <div class="bd-toc-item navbar-nav active">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
@@ -523,10 +526,10 @@ document.write(`
 </div>
 <div id="searchbox"></div>
 <article class="bd-article" role="main">
-<section id="clm-generators">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/CLM Generators"></a><section id="clm-generators">
 <h1>CLM Generators<a class="headerlink" href="#clm-generators" title="Permalink to this heading">#</a></h1>
 <p><strong>in pysndlib.clm</strong></p>
-<section id="all-pass">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/all_pass"></a><section id="all-pass">
 <h2>all_pass<a class="headerlink" href="#all-pass" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_all_pass">
@@ -625,7 +628,7 @@ if length will be changing at run-time, max-size sets its maximum length.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#all-passdoc">sndlib all-pass</a></p>
 </div>
 </section>
-<section id="all-pass-bank">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/all_pass_bank"></a><section id="all-pass-bank">
 <h2>all_pass_bank<a class="headerlink" href="#all-pass-bank" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_all_pass_bank">
@@ -673,7 +676,7 @@ if length will be changing at run-time, max-size sets its maximum length.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="asymmetric-fm">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/asymmetric_fm"></a><section id="asymmetric-fm">
 <h2>asymmetric_fm<a class="headerlink" href="#asymmetric-fm" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_asymmetric_fm">
@@ -759,7 +762,7 @@ if length will be changing at run-time, max-size sets its maximum length.</p>
 </pre></div>
 </div>
 </section>
-<section id="comb">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/comb"></a><section id="comb">
 <h2>comb<a class="headerlink" href="#comb" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_comb">
@@ -854,7 +857,7 @@ length will be changing at run-time, max-size sets its maximum length.</p>
 </pre></div>
 </div>
 </section>
-<section id="comb-bank">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/comb_bank"></a><section id="comb-bank">
 <h2>comb_bank<a class="headerlink" href="#comb-bank" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_comb_bank">
@@ -902,7 +905,7 @@ length will be changing at run-time, max-size sets its maximum length.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="convolve">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/convolve"></a><section id="convolve">
 <h2>convolve<a class="headerlink" href="#convolve" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_convolve">
@@ -973,10 +976,10 @@ length will be changing at run-time, max-size sets its maximum length.</p>
 </pre></div>
 </div>
 </section>
-<section id="convolve-files">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/convolve_files"></a><section id="convolve-files">
 <h2>convolve_files<a class="headerlink" href="#convolve-files" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="delay">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/delay"></a><section id="delay">
 <h2>delay<a class="headerlink" href="#delay" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_delay">
@@ -1114,7 +1117,7 @@ the argument ‘insi’ is returned.</p>
 </pre></div>
 </div>
 </section>
-<section id="env">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/env"></a><section id="env">
 <h2>env<a class="headerlink" href="#env" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_env">
@@ -1253,7 +1256,7 @@ are linear, if 0.0 you get a step function, and anything else produces an expone
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#envdoc">sndlib env</a></p>
 </div>
 </section>
-<section id="file2frample">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/file2frample"></a><section id="file2frample">
 <h2>file2frample<a class="headerlink" href="#file2frample" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_file2frample">
@@ -1304,7 +1307,7 @@ are linear, if 0.0 you get a step function, and anything else produces an expone
 </dl>
 </dd></dl>
 </section>
-<section id="file2sample">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/file2sample"></a><section id="file2sample">
 <h2>file2sample<a class="headerlink" href="#file2sample" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_file2sample">
@@ -1356,7 +1359,7 @@ are linear, if 0.0 you get a step function, and anything else produces an expone
 </dl>
 </dd></dl>
 </section>
-<section id="filtered-comb">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/filtered_comb"></a><section id="filtered-comb">
 <h2>filtered_comb<a class="headerlink" href="#filtered-comb" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_filtered_comb">
@@ -1442,7 +1445,7 @@ elements. if the comb length will be changing at run-time, max-size sets its max
 </tbody>
 </table>
 </section>
-<section id="filtered-comb-bank">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/filtered_comb_bank"></a><section id="filtered-comb-bank">
 <h2>filtered_comb_bank<a class="headerlink" href="#filtered-comb-bank" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_filtered_comb_bank">
@@ -1490,7 +1493,7 @@ elements. if the comb length will be changing at run-time, max-size sets its max
 </dl>
 </dd></dl>
 </section>
-<section id="firmant">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/firmant"></a><section id="firmant">
 <h2>firmant<a class="headerlink" href="#firmant" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_firmant">
@@ -1567,7 +1570,7 @@ circle’). frequency sets the resonance center frequency (hz).</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#formantdoc">sndlib firmant</a></p>
 </div>
 </section>
-<section id="filter">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/filter"></a><section id="filter">
 <h2>filter<a class="headerlink" href="#filter" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_filter">
@@ -1650,7 +1653,7 @@ circle’). frequency sets the resonance center frequency (hz).</p>
 </tbody>
 </table>
 </section>
-<section id="fir-filter">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/fir_filter"></a><section id="fir-filter">
 <h2>fir_filter<a class="headerlink" href="#fir-filter" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_fir_filter">
@@ -1747,7 +1750,7 @@ envelope.</p>
 </tbody>
 </table>
 </section>
-<section id="formant">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/formant"></a><section id="formant">
 <h2>formant<a class="headerlink" href="#formant" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_formant">
@@ -1823,7 +1826,7 @@ frequency sets the resonance center frequency (hz).</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#formantdoc">sndlib formant</a></p>
 </div>
 </section>
-<section id="formant-bank">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/formant_bank"></a><section id="formant-bank">
 <h2>formant_bank<a class="headerlink" href="#formant-bank" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_formant_bank">
@@ -1878,7 +1881,7 @@ frequency sets the resonance center frequency (hz).</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#formantdoc">sndlib formant_bank</a></p>
 </div>
 </section>
-<section id="frample2file">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/frample2file"></a><section id="frample2file">
 <h2>frample2file<a class="headerlink" href="#frample2file" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_frample2file">
@@ -1950,7 +1953,7 @@ identifiers.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="granulate">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/granulate"></a><section id="granulate">
 <h2>granulate<a class="headerlink" href="#granulate" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_granulate">
@@ -2048,7 +2051,7 @@ length in samples of the grain, or 0.</p>
 </pre></div>
 </div>
 </section>
-<section id="iir-filter">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/iir_filter"></a><section id="iir-filter">
 <h2>iir_filter<a class="headerlink" href="#iir-filter" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_iir_filter">
@@ -2132,7 +2135,7 @@ length in samples of the grain, or 0.</p>
 </pre></div>
 </div>
 </section>
-<section id="in-any-out-any-etc">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/in_any, out_any, etc"></a><section id="in-any-out-any-etc">
 <h2>in_any, out_any, etc<a class="headerlink" href="#in-any-out-any-etc" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.out_any">
@@ -2288,7 +2291,7 @@ length in samples of the grain, or 0.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="locsig">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/locsig"></a><section id="locsig">
 <h2>locsig<a class="headerlink" href="#locsig" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_locsig">
@@ -2471,7 +2474,7 @@ length in samples of the grain, or 0.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="moving-average">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/moving_average"></a><section id="moving-average">
 <h2>moving_average<a class="headerlink" href="#moving-average" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_moving_average">
@@ -2555,7 +2558,7 @@ length in samples of the grain, or 0.</p>
 </pre></div>
 </div>
 </section>
-<section id="moving-max">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/moving_max"></a><section id="moving-max">
 <h2>moving_max<a class="headerlink" href="#moving-max" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_moving_max">
@@ -2626,7 +2629,7 @@ length in samples of the grain, or 0.</p>
 </tbody>
 </table>
 </section>
-<section id="moving-norm">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/moving_norm"></a><section id="moving-norm">
 <h2>moving_norm<a class="headerlink" href="#moving-norm" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_moving_norm">
@@ -2697,7 +2700,7 @@ length in samples of the grain, or 0.</p>
 </tbody>
 </table>
 </section>
-<section id="ncos">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/ncos"></a><section id="ncos">
 <h2>ncos<a class="headerlink" href="#ncos" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_ncos">
@@ -2784,7 +2787,7 @@ length in samples of the grain, or 0.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#ncosdoc">sndlib ncos</a></p>
 </div>
 </section>
-<section id="notch">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/notch"></a><section id="notch">
 <h2>notch<a class="headerlink" href="#notch" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_notch">
@@ -2869,7 +2872,7 @@ if the notch length will be changing at run-time, max-size sets its maximum leng
 </tbody>
 </table>
 </section>
-<section id="nrxycos">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/nrxycos"></a><section id="nrxycos">
 <h2>nrxycos<a class="headerlink" href="#nrxycos" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_nrxycos">
@@ -2961,7 +2964,7 @@ if the notch length will be changing at run-time, max-size sets its maximum leng
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#nrxydoc">sndlib nrxycos</a></p>
 </div>
 </section>
-<section id="nrxysin">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/nrxysin"></a><section id="nrxysin">
 <h2>nrxysin<a class="headerlink" href="#nrxysin" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_nrxysin">
@@ -3053,7 +3056,7 @@ if the notch length will be changing at run-time, max-size sets its maximum leng
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#nrxydoc">sndlib nrxysin</a></p>
 </div>
 </section>
-<section id="nsin">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/nsin"></a><section id="nsin">
 <h2>nsin<a class="headerlink" href="#nsin" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_nsin">
@@ -3140,7 +3143,7 @@ if the notch length will be changing at run-time, max-size sets its maximum leng
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#ncosdoc">sndlib nsin</a></p>
 </div>
 </section>
-<section id="one-pole">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/one_pole"></a><section id="one-pole">
 <h2>one_pole<a class="headerlink" href="#one-pole" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_one_pole">
@@ -3230,7 +3233,7 @@ b1 &lt; 0.0 gives lowpass, b1 &gt; 0.0 gives highpass.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#one-poledoc">sndlib one_pole</a></p>
 </div>
 </section>
-<section id="one-pole-all-pass">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/one_pole_all_pass"></a><section id="one-pole-all-pass">
 <h2>one_pole_all_pass<a class="headerlink" href="#one-pole-all-pass" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_one_pole_all_pass">
@@ -3309,7 +3312,7 @@ b1 &lt; 0.0 gives lowpass, b1 &gt; 0.0 gives highpass.</p>
 </tbody>
 </table>
 </section>
-<section id="one-zero">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/one_zero"></a><section id="one-zero">
 <h2>one_zero<a class="headerlink" href="#one-zero" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_one_zero">
@@ -3390,7 +3393,7 @@ a1 &gt; 0.0 gives weak lowpass, a1 &lt; 0.0 highpass.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#one-poledoc">sndlib one_zero</a></p>
 </div>
 </section>
-<section id="oscil">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/oscil"></a><section id="oscil">
 <h2>oscil<a class="headerlink" href="#oscil" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_oscil">
@@ -3472,7 +3475,7 @@ a1 &gt; 0.0 gives weak lowpass, a1 &lt; 0.0 highpass.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#oscildoc">sndlib oscil</a></p>
 </div>
 </section>
-<section id="oscil-bank">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/oscil_bank"></a><section id="oscil-bank">
 <h2>oscil_bank<a class="headerlink" href="#oscil-bank" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_oscil_bank">
@@ -3532,7 +3535,7 @@ a1 &gt; 0.0 gives weak lowpass, a1 &lt; 0.0 highpass.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#oscildoc">sndlib oscil_bank</a></p>
 </div>
 </section>
-<section id="phase-vocoder">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/phase_vocoder"></a><section id="phase-vocoder">
 <h2>phase_vocoder<a class="headerlink" href="#phase-vocoder" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_phase_vocoder">
@@ -3646,7 +3649,7 @@ the generator; it is called to get the current vocoder output.</p>
 <dd><p>returns a ndarray containing the current output sinusoid phase increments.</p>
 </dd></dl>
 </section>
-<section id="polyshape">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/polyshape"></a><section id="polyshape">
 <h2>polyshape<a class="headerlink" href="#polyshape" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_polyshape">
@@ -3748,7 +3751,7 @@ the generator; it is called to get the current vocoder output.</p>
 <p>polynomial <a class="reference internal" href="clm_utility_functions.html#pysndlib.clm.polynomial" title="pysndlib.clm.polynomial"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysndlib.clm.polynomial()</span></code></a></p>
 </div>
 </section>
-<section id="polywave">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/polywave"></a><section id="polywave">
 <h2>polywave<a class="headerlink" href="#polywave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_polywave">
@@ -3847,7 +3850,7 @@ the same in effect as make_oscil.</p>
 <p>polynomial <a class="reference internal" href="clm_utility_functions.html#pysndlib.clm.polynomial" title="pysndlib.clm.polynomial"><code class="xref py py-func docutils literal notranslate"><span class="pre">pysndlib.clm.polynomial()</span></code></a></p>
 </div>
 </section>
-<section id="pulsed-env">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/pulsed_env"></a><section id="pulsed-env">
 <h2>pulsed_env<a class="headerlink" href="#pulsed-env" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_pulsed_env">
@@ -3942,11 +3945,11 @@ the same in effect as make_oscil.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#envdoc">sndlib env</a></p>
 </div>
 </section>
-<section id="pulse-train">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/pulse_train"></a><section id="pulse-train">
 <h2>pulse_train<a class="headerlink" href="#pulse-train" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_pulse_train">
-<span class="sig-name descname"><span class="pre">make_pulse_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_pulse_train"></a><a class="headerlink" href="#pysndlib.clm.make_pulse_train" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_pulse_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.283185307179586</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_pulse_train"></a><a class="headerlink" href="#pysndlib.clm.make_pulse_train" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new pulse_train generator. this produces a sequence of impulses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -4028,7 +4031,7 @@ the same in effect as make_oscil.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#sawtoothdoc">sndlib pulse_train</a></p>
 </div>
 </section>
-<section id="rand">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/rand"></a><section id="rand">
 <h2>rand<a class="headerlink" href="#rand" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_rand">
@@ -4124,7 +4127,7 @@ is the rate at which new numbers are chosen.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#randdoc">sndlib rand</a></p>
 </div>
 </section>
-<section id="rand-interp">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/rand_interp"></a><section id="rand-interp">
 <h2>rand_interp<a class="headerlink" href="#rand-interp" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_rand_interp">
@@ -4215,7 +4218,7 @@ are chosen.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#randdoc">sndlib rand_interp</a></p>
 </div>
 </section>
-<section id="readin">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/readin"></a><section id="readin">
 <h2>readin<a class="headerlink" href="#readin" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_readin">
@@ -4286,7 +4289,7 @@ are chosen.</p>
 </tbody>
 </table>
 </section>
-<section id="rxykcos">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/rxykcos"></a><section id="rxykcos">
 <h2>rxykcos<a class="headerlink" href="#rxykcos" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_rxykcos">
@@ -4369,7 +4372,7 @@ are chosen.</p>
 </pre></div>
 </div>
 </section>
-<section id="rxyksin">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/rxyksin"></a><section id="rxyksin">
 <h2>rxyksin<a class="headerlink" href="#rxyksin" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_rxyksin">
@@ -4452,7 +4455,7 @@ are chosen.</p>
 </pre></div>
 </div>
 </section>
-<section id="sample2file">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/sample2file"></a><section id="sample2file">
 <h2>sample2file<a class="headerlink" href="#sample2file" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_sample2file">
@@ -4528,7 +4531,7 @@ identifiers.</p>
 </dl>
 </dd></dl>
 </section>
-<section id="src">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/src"></a><section id="src">
 <h2>src<a class="headerlink" href="#src" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_src">
@@ -4608,7 +4611,7 @@ associated make_src included an ‘input’ argument, input-function is ignored.
 </pre></div>
 </div>
 </section>
-<section id="ssb-am">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/ssb_am"></a><section id="ssb-am">
 <h2>ssb_am<a class="headerlink" href="#ssb-am" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_ssb_am">
@@ -4709,7 +4712,7 @@ associated make_src included an ‘input’ argument, input-function is ignored.
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#ssb-amdoc">sndlib ssb_am</a></p>
 </div>
 </section>
-<section id="table-lookup">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/table_lookup"></a><section id="table-lookup">
 <h2>table_lookup<a class="headerlink" href="#table-lookup" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_table_lookup">
@@ -4819,11 +4822,11 @@ size, or pass your own list/array as the ‘wave’.</p>
 </pre></div>
 </div>
 </section>
-<section id="sawtooth-wave">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/sawtooth_wave"></a><section id="sawtooth-wave">
 <h2>sawtooth_wave<a class="headerlink" href="#sawtooth-wave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_sawtooth_wave">
-<span class="sig-name descname"><span class="pre">make_sawtooth_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_sawtooth_wave"></a><a class="headerlink" href="#pysndlib.clm.make_sawtooth_wave" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_sawtooth_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_sawtooth_wave"></a><a class="headerlink" href="#pysndlib.clm.make_sawtooth_wave" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new sawtooth_wave generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -4905,7 +4908,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#sawtoothdoc">sndlib sawtooth_wave</a></p>
 </div>
 </section>
-<section id="square-wave">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/square_wave"></a><section id="square-wave">
 <h2>square_wave<a class="headerlink" href="#square-wave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_square_wave">
@@ -4995,11 +4998,11 @@ size, or pass your own list/array as the ‘wave’.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#sawtoothdoc">sndlib square_wave</a></p>
 </div>
 </section>
-<section id="triangle-wave">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/triangle_wave"></a><section id="triangle-wave">
 <h2>triangle_wave<a class="headerlink" href="#triangle-wave" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_triangle_wave">
-<span class="sig-name descname"><span class="pre">make_triangle_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_triangle_wave"></a><a class="headerlink" href="#pysndlib.clm.make_triangle_wave" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">make_triangle_wave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.141592653589793</span></span></em><span class="sig-paren">)</span><a class="dashAnchor" name="//apple_ref/cpp/Function/pysndlib.clm.make_triangle_wave"></a><a class="headerlink" href="#pysndlib.clm.make_triangle_wave" title="Permalink to this definition">#</a></dt>
 <dd><p>return a new triangle_wave generator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -5080,7 +5083,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#sawtoothdoc">sndlib triangle_wave</a></p>
 </div>
 </section>
-<section id="two-pole">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/two_pole"></a><section id="two-pole">
 <h2>two_pole<a class="headerlink" href="#two-pole" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_two_pole">
@@ -5169,7 +5172,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#one-poledoc">sndlib two_pole</a></p>
 </div>
 </section>
-<section id="two-zero">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/two_zero"></a><section id="two-zero">
 <h2>two_zero<a class="headerlink" href="#two-zero" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_two_zero">
@@ -5250,7 +5253,7 @@ size, or pass your own list/array as the ‘wave’.</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#one-poledoc">sndlib two_zero</a></p>
 </div>
 </section>
-<section id="wave-train">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/wave_train"></a><section id="wave-train">
 <h2>wave_train<a class="headerlink" href="#wave-train" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysndlib.clm.make_wave_train">
@@ -5364,11 +5367,6 @@ of the wave found in wave. successive waves can overlap.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/sndclm.html#wave-traindoc">sndlib wave_train</a></p>
 </div>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </section>
 </section>
 </article>
@@ -5773,7 +5771,7 @@ By Todd Ingalls
 <div class="footer-item">
 <p class="copyright">
     
-      © Copyright 2023, Todd Ingalls.
+      © Copyright 2023-2024, Todd Ingalls.
       <br/>
 </p>
 </div>

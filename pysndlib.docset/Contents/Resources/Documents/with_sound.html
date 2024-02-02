@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
-<title>Sound Context Manager — pysndlib 0.6.2 documentation</title>
+<title>Sound Context Manager — pysndlib 0.6.6 documentation</title>
 <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -31,7 +31,7 @@
 <link href="genindex.html" rel="index" title="Index"/>
 <link href="search.html" rel="search" title="Search"/>
 <link href="clm_generators.html" rel="next" title="CLM Generators"/>
-<link href="readme.html" rel="prev" title="README for pysndlib"/>
+<link href="basic_usage.html" rel="prev" title="Basic Usage"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="en" name="docsearch:language"/>
 </head>
@@ -60,16 +60,19 @@
 <div class="sidebar-primary-items__start sidebar-primary__section">
 <div class="sidebar-primary-item">
 <a class="navbar-brand logo" href="index.html">
-<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+<p class="title logo__title">pysndlib 0.6.6 documentation</p>
 </a></div>
 <div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
 <div class="bd-toc-item navbar-nav active">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
@@ -166,7 +169,7 @@ document.write(`
 </div>
 <div id="searchbox"></div>
 <article class="bd-article" role="main">
-<section id="sound-context-manager">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Sound Context Manager"></a><section id="sound-context-manager">
 <h1>Sound Context Manager<a class="headerlink" href="#sound-context-manager" title="Permalink to this heading">#</a></h1>
 <p><strong>in pysndlib.clm</strong></p>
 <dl class="py class">
@@ -198,126 +201,17 @@ used as output</p></li>
 </dd>
 </dl>
 </dd></dl>
-<p>the following will generate a sound file with two sine waves
-if will play after rendering using CLM.player
-clipped is False which means it does not clip the signal at -1 to 1
-scaled_to with normalize amplitude to .5
-if clipped was True (the default) the signal would be clipped first and then scaled
-which gives a very different output in this example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled_to</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">clipped</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">osc1</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">330</span><span class="p">)</span>
-    <span class="n">osc2</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc1</span><span class="p">)</span> <span class="o">+</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc2</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Here is an example showing writing the same thing to a numpy array
-and using finalize to call a function to plot the signal</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="k">def</span> <span class="nf">plot_mono_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-<span class="n">outarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">44100</span><span class="p">))</span>
-
-
-<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="n">outarr</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled_to</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">clipped</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">plot_mono_arr</span><span class="p">):</span>
-    <span class="n">osc1</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">330</span><span class="p">)</span>
-    <span class="n">osc2</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="p">):</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc1</span><span class="p">)</span> <span class="o">+</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc2</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>This is an example of defining a reverb function that is applied after the initial output is
-rendered. using locsig makes this even easier.</p>
-<p>Note ClM.reverb gets defined within the with Sound context.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bad_mono_rev1</span><span class="p">(</span><span class="n">volume</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-    <span class="n">ap1</span> <span class="o">=</span> <span class="n">allpass1</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1051</span><span class="p">)</span>
-    <span class="n">ap2</span> <span class="o">=</span> <span class="n">allpass2</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1207</span><span class="p">)</span>
-    <span class="n">ap3</span> <span class="o">=</span> <span class="n">allpass3</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="n">dly</span> <span class="o">=</span> <span class="n">make_delay</span><span class="p">(</span><span class="n">seconds2samples</span><span class="p">(</span><span class="mf">.011</span><span class="p">))</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="n">clm_length</span><span class="p">(</span><span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
-
-    <span class="n">apb</span> <span class="o">=</span> <span class="n">make_all_pass_bank</span><span class="p">([</span><span class="n">ap1</span><span class="p">,</span> <span class="n">ap2</span><span class="p">,</span> <span class="n">ap3</span><span class="p">])</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">delay</span><span class="p">(</span><span class="n">dly</span><span class="p">,</span> <span class="n">volume</span> <span class="o">*</span> <span class="n">all_pass_bank</span><span class="p">(</span><span class="n">apb</span><span class="p">,</span> <span class="n">ina</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">))))</span>
-
-<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="s1">'ex2.aiff'</span><span class="p">,</span> <span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverb</span><span class="o">=</span><span class="n">bad_mono_rev1</span><span class="p">):</span><span class="c1">#, reverb_data={'volume' : .5}):</span>
-    <span class="n">osc</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mi">22050</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">44100</span><span class="o">*</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">*</span><span class="n">oscil</span><span class="p">(</span><span class="n">osc</span><span class="p">)</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.6</span><span class="p">)</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.4</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Lastly and example that demonstrates defining functions that can be called in Sound context
-that uses finalize to plot the output file after the reverb has been applied</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="k">def</span> <span class="nf">plot_mono_soundfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">file2ndarray</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-
-<span class="k">def</span> <span class="nf">bad_mono_rev1</span><span class="p">(</span><span class="n">volume</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-    <span class="n">ap1</span> <span class="o">=</span> <span class="n">allpass1</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1051</span><span class="p">)</span>
-    <span class="n">ap2</span> <span class="o">=</span> <span class="n">allpass2</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1207</span><span class="p">)</span>
-    <span class="n">ap3</span> <span class="o">=</span> <span class="n">allpass3</span> <span class="o">=</span> <span class="n">make_all_pass</span><span class="p">(</span><span class="o">-</span><span class="mf">.9</span><span class="p">,</span> <span class="mf">.9</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="n">dly</span> <span class="o">=</span> <span class="n">make_delay</span><span class="p">(</span><span class="n">seconds2samples</span><span class="p">(</span><span class="mf">.011</span><span class="p">))</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="n">clm_length</span><span class="p">(</span><span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
-
-    <span class="n">apb</span> <span class="o">=</span> <span class="n">make_all_pass_bank</span><span class="p">([</span><span class="n">ap1</span><span class="p">,</span> <span class="n">ap2</span><span class="p">,</span> <span class="n">ap3</span><span class="p">])</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">delay</span><span class="p">(</span><span class="n">dly</span><span class="p">,</span> <span class="n">volume</span> <span class="o">*</span> <span class="n">all_pass_bank</span><span class="p">(</span><span class="n">apb</span><span class="p">,</span> <span class="n">ina</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">))))</span>
-
-
-<span class="k">def</span> <span class="nf">blip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="n">freq</span><span class="p">):</span>
-    <span class="n">osc</span> <span class="o">=</span> <span class="n">make_oscil</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
-    <span class="n">beg</span> <span class="o">=</span> <span class="n">seconds2samples</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">beg</span> <span class="o">+</span> <span class="n">seconds2samples</span><span class="p">(</span><span class="n">dur</span><span class="p">)</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.8</span><span class="p">,</span> <span class="mf">.4</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">duration</span><span class="o">=</span><span class="n">dur</span><span class="o">*</span><span class="mf">.5</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">oscil</span><span class="p">(</span><span class="n">osc</span><span class="p">)</span> <span class="o">*</span> <span class="n">env</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.6</span><span class="p">)</span>
-        <span class="n">outa</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">*</span><span class="mf">.4</span><span class="p">,</span> <span class="n">CLM</span><span class="o">.</span><span class="n">reverb</span><span class="p">)</span>
-
-
-<span class="k">with</span> <span class="n">Sound</span><span class="p">(</span><span class="s1">'ex2.aiff'</span><span class="p">,</span> <span class="n">play</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reverb</span><span class="o">=</span><span class="n">bad_mono_rev1</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">plot_mono_soundfile</span><span class="p">):</span>
-    <span class="n">blip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
-    <span class="n">blip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
-    <span class="n">blip</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
-    <span class="n">blip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">.333333</span><span class="p">):</span>
-        <span class="n">blip</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mf">.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </section>
 </article>
 <footer class="bd-footer-article">
 <div class="footer-article-items footer-article__inner">
 <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-<a class="left-prev" href="readme.html" title="previous page">
+<a class="left-prev" href="basic_usage.html" title="previous page">
 <i class="fa-solid fa-angle-left"></i>
 <div class="prev-next-info">
 <p class="prev-next-subtitle">previous</p>
-<p class="prev-next-title">README for pysndlib</p>
+<p class="prev-next-title">Basic Usage</p>
 </div>
 </a>
 <a class="right-next" href="clm_generators.html" title="next page">
@@ -353,7 +247,7 @@ By Todd Ingalls
 <div class="footer-item">
 <p class="copyright">
     
-      © Copyright 2023, Todd Ingalls.
+      © Copyright 2023-2024, Todd Ingalls.
       <br/>
 </p>
 </div>

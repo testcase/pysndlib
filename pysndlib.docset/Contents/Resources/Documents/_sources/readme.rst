@@ -21,7 +21,7 @@ copy sndlib directory to top level of pysndlib
 
 cd sndlib
 
-./configure --without-s7
+./configure --with-s7=no --with-gsl=no --without-audio
 
 
 make
@@ -41,7 +41,7 @@ I do the following
 
     pip install numpy
     
-    pip install Cython==3.0.0
+    pip install Cython
     
     
 After grabbing the pysndlib sources i make sure I am in the venv I want and then from top level

@@ -92,7 +92,7 @@ if __name__ == '__main__':
     setup(
         zip_safe=False,
         name = 'pysndlib',
-        package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav"]},
+        package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav", "*.pxd"]},
         ext_modules = cythonize(extensions, compiler_directives={'language_level': '3', 'embedsignature' : False})
     )
 

@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
-<title>Welcome to pysndlib’s documentation! — pysndlib 0.6.2 documentation</title>
+<title>Welcome to pysndlib’s documentation! — pysndlib 0.6.6 documentation</title>
 <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -30,7 +30,7 @@
 <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
 <link href="genindex.html" rel="index" title="Index"/>
 <link href="search.html" rel="search" title="Search"/>
-<link href="readme.html" rel="next" title="README for pysndlib"/>
+<link href="description.html" rel="next" title="Description"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="en" name="docsearch:language"/>
 </head>
@@ -59,16 +59,19 @@
 <div class="sidebar-primary-items__start sidebar-primary__section">
 <div class="sidebar-primary-item">
 <a class="navbar-brand logo" href="#">
-<p class="title logo__title">pysndlib 0.6.2 documentation</p>
+<p class="title logo__title">pysndlib 0.6.6 documentation</p>
 </a></div>
 <div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
 <div class="bd-toc-item navbar-nav active">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
@@ -140,9 +143,6 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__secondary" title="Toggle secondary sidebar">
-<span class="fa-solid fa-list"></span>
-</label>
 </div></div>
 </div>
 </div>
@@ -152,44 +152,31 @@ document.write(`
 <!-- Table of contents -->
 <div id="print-main-content">
 <div id="jb-print-toc">
-<div>
-<h2> Contents </h2>
-</div>
-<nav aria-label="Page">
-<ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to pysndlib’s documentation!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</nav>
 </div>
 </div>
 </div>
 <div id="searchbox"></div>
 <article class="bd-article" role="main">
-<section id="module-pysndlib.clm">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Welcome to pysndlib’s documentation!"></a><section id="module-pysndlib.clm">
 <span id="welcome-to-pysndlib-s-documentation"></span><h1>Welcome to pysndlib’s documentation!<a class="headerlink" href="#module-pysndlib.clm" title="Permalink to this heading">#</a></h1>
 <span class="target" id="module-pysndlib.sndlib"></span><div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">README for pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="description.html">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="file_IO.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="clm_init.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
 </ul>
 </div>
-</section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">#</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -201,10 +188,10 @@ document.write(`
 <div class="footer-article-items footer-article__inner">
 <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-<a class="right-next" href="readme.html" title="next page">
+<a class="right-next" href="description.html" title="next page">
 <div class="prev-next-info">
 <p class="prev-next-subtitle">next</p>
-<p class="prev-next-title">README for pysndlib</p>
+<p class="prev-next-title">Description</p>
 </div>
 <i class="fa-solid fa-angle-right"></i>
 </a>
@@ -212,18 +199,6 @@ document.write(`
 </div>
 </footer>
 </div>
-<div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-<div class="sidebar-secondary-item">
-<div class="page-toc tocsection onthispage">
-<i class="fa-solid fa-list"></i> Contents
-  </div>
-<nav class="bd-toc-nav page-toc">
-<ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to pysndlib’s documentation!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</nav></div>
-</div></div>
 </div>
 <footer class="bd-footer-content">
 <div class="bd-footer-content__inner container">
@@ -235,7 +210,7 @@ By Todd Ingalls
 <div class="footer-item">
 <p class="copyright">
     
-      © Copyright 2023, Todd Ingalls.
+      © Copyright 2023-2024, Todd Ingalls.
       <br/>
 </p>
 </div>

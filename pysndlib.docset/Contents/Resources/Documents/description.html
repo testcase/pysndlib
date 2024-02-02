@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="Docutils 0.18.1: http://docutils.sourceforge.net/" name="generator"/>
+<title>Description — pysndlib 0.6.6 documentation</title>
+<script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+<!-- Loaded before other Sphinx assets -->
+<link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" rel="preload"/>
+<link as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" rel="preload"/>
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+<script src="_static/doctools.js"></script>
+<script src="_static/sphinx_highlight.js"></script>
+<script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+<script>DOCUMENTATION_OPTIONS.pagename = 'description';</script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="building.html" rel="next" title="Building pysndlib"/>
+<link href="index.html" rel="prev" title="Welcome to pysndlib’s documentation!"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+</head>
+<body data-bs-root-margin="0px 0px -60%" data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-default-mode="" data-offset="180">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<input class="sidebar-toggle" id="__primary" name="__primary" type="checkbox"/>
+<label class="overlay overlay-primary" for="__primary"></label>
+<input class="sidebar-toggle" id="__secondary" name="__secondary" type="checkbox"/>
+<label class="overlay overlay-secondary" for="__secondary"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+<form action="search.html" class="bd-search d-flex align-items-center" method="get">
+<i class="fa-solid fa-magnifying-glass"></i>
+<input aria-label="Search..." autocapitalize="off" autocomplete="off" autocorrect="off" class="form-control" id="search-input" name="q" placeholder="Search..." spellcheck="false" type="search"/>
+<span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+</div>
+<nav class="bd-header navbar navbar-expand-lg bd-navbar">
+</nav>
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+<div class="bd-sidebar-primary bd-sidebar">
+<div class="sidebar-header-items sidebar-primary__section">
+</div>
+<div class="sidebar-primary-items__start sidebar-primary__section">
+<div class="sidebar-primary-item">
+<a class="navbar-brand logo" href="index.html">
+<p class="title logo__title">pysndlib 0.6.6 documentation</p>
+</a></div>
+<div class="sidebar-primary-item"><nav aria-label="Main" class="bd-links" id="bd-docs-nav">
+<div class="bd-toc-item navbar-nav active">
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing pysndlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="with_sound.html">Sound Context Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_generators.html">CLM Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_utility_functions.html">CLM Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_generators.html">Other Generators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_IO.html">File IO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_init.html">CLM Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clm_enums.html">CLM Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mus_any.html">CLM Generator Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_functions.html">Sndlib Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sndlib_enums.html">Sndlib Enums</a></li>
+</ul>
+</div>
+</nav></div>
+</div>
+<div class="sidebar-primary-items__end sidebar-primary__section">
+</div>
+<div id="rtd-footer-container"></div>
+</div>
+<main class="bd-main" id="main-content">
+<div class="sbt-scroll-pixel-helper"></div>
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__primary" title="Toggle primary sidebar">
+<span class="fa-solid fa-bars"></span>
+</label></div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="article-header-buttons">
+<div class="dropdown dropdown-download-buttons">
+<button aria-expanded="false" aria-label="Download this page" class="btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
+<i class="fas fa-download"></i>
+</button>
+<ul class="dropdown-menu">
+<li><a class="btn btn-sm btn-download-source-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" href="_sources/description.rst" target="_blank" title="Download source file">
+<span class="btn__icon-container">
+<i class="fas fa-file"></i>
+</span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+<li>
+<button class="btn btn-sm btn-download-pdf-button dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" onclick="window.print()" title="Print to PDF">
+<span class="btn__icon-container">
+<i class="fas fa-file-pdf"></i>
+</span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+</ul>
+</div>
+<button class="btn btn-sm btn-fullscreen-button" data-bs-placement="bottom" data-bs-toggle="tooltip" onclick="toggleFullScreen()" title="Fullscreen mode">
+<span class="btn__icon-container">
+<i class="fas fa-expand"></i>
+</span>
+</button>
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" data-bs-placement="bottom" data-bs-toggle="tooltip" for="__secondary" title="Toggle secondary sidebar">
+<span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+</div>
+</div>
+</div>
+<div class="onlyprint" id="jb-print-docs-body">
+<h1>Description</h1>
+<!-- Table of contents -->
+<div id="print-main-content">
+<div id="jb-print-toc">
+<div>
+<h2> Contents </h2>
+</div>
+<nav aria-label="Page">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article" role="main">
+<a class="dashAnchor" name="//apple_ref/cpp/Section/Description"></a><section id="description">
+<h1>Description<a class="headerlink" href="#description" title="Permalink to this heading">#</a></h1>
+<p>This package provides a python wrapper around sndlib, by Bill Schottstaedt (<a class="reference external" href="mailto:bil%40ccrma.stanford.edu">bil<span>@</span>ccrma<span>.</span>stanford<span>.</span>edu</a>)
+Sources for sndlib can be found <a class="reference external" href="https://ccrma.stanford.edu/software/snd/sndlib/">here</a></p>
+<p>Some definitions:</p>
+<p><strong>sndlib</strong> is library by Bill Schottstaedt written in C. sndlib also includes builtin support for some extension languages
+including <a class="reference external" href="https://ccrma.stanford.edu/software/snd/snd/s7.html">s7</a>, a Scheme interpreter,  which is also written by Bill Schottstaedt. sndlib can be thought of as having two
+main parts, the first is access to audio I/O, including both file and hardware ports. sndlib is able to read a large number of files types and formats. look at the enums
+in <a class="reference internal" href="sndlib_enums.html"><span class="doc">Sndlib Enums</span></a> to get a sense of file I/O options. the second is called clm which was originally an acronym for Common Lisp Music, is a sound synthesis package
+in the Music V family. It is still <a class="reference external" href="https://ccrma.stanford.edu/software/clm/">available</a>  for Common Lisp. This part of sndlib contains many sound generators and
+are listed in <a class="reference internal" href="clm_generators.html"><span class="doc">CLM Generators</span></a>. Bill also has a sound editor called <a class="reference external" href="https://ccrma.stanford.edu/software/snd/">snd</a> which has s7 embedded in it. Throughout these
+various projects are many fascinating examples and techniques and I hope that this project makes these accessible to people who are using Python.</p>
+<p>Another project to look at is Rick Taube’s <a class="reference external" href="https://musx-admin.github.io/musx/index.html">musx</a> which is a “is a package for composing and processing symbolic music information”
+which is especially usefule for anyone wanting to use pysndlib in a music context.</p>
+<p>It is important to understand from the outset that pysndlib is focused on the synthesis and processing of sound data to/from files or <a class="reference external" href="https://numpy.org">numpy</a> arrays. One writes functions which process audio data
+a sample at a time. sndlib itself is fast and highly optimized but Python places some constraints on speed. This project relies on <a class="reference external" href="https://cython.org">cython</a> to interface with sndlib as well
+as to speed up many operations. You do not need to know cython syntax in order to use pysndlib but more involved work can take advantage of the speed improvements offered by cython. I hope to provide
+a guide for doing so in the near future.</p>
+<p>My intention was to be as literal as possible with translation so that it would be easy to port
+existing examples. This may mean some aspects of pysndlib may not be pythonic.</p>
+<a class="dashAnchor" name="//apple_ref/cpp/Section/if you are already familiar with clm"></a><section id="if-you-are-already-familiar-with-clm">
+<h2>if you are already familiar with clm<a class="headerlink" href="#if-you-are-already-familiar-with-clm" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><dl class="simple">
+<dt>Underscores replace hyphens</dt><dd><p>make_oscil instead of make-oscil</p>
+</dd>
+</dl>
+</li>
+<li><p>is_oscil instead of oscil?</p></li>
+<li><p>Using 2 instead of -&gt; e.g. hz2radians instead of hz-&gt;radians</p></li>
+<li><p>Instead of using generic methods for setting and getting use property</p>
+<blockquote>
+<div><p>(set! (mus-frequency gen) 100.) =&gt; gen.mus_frequency = 100.</p>
+<p>(set! f (mus-frequency gen)) =&gt; f = gen.mus_frequency</p>
+</div></blockquote>
+</li>
+<li><p>there is a simple name space default that hold global variables one would use in clm</p>
+<blockquote>
+<div><p>e.g. instead of <em>clm-srate</em> you would use clm.default.srate <em>clm-table-size</em> is clm.default.table_size</p>
+</div></blockquote>
+</li>
+<li><p>there are python enums for the sndlib enums. Interp, Window, Spectrum, Polynomial, Header, Sample, Error</p>
+<blockquote>
+<div><p>e.g. Window.RECTANGULAR, Header.AIFC</p>
+</div></blockquote>
+</li>
+<li><dl class="simple">
+<dt>with-sound is implemented as a context manager and has similar options.</dt><dd><p>with Sound(play=True): gen = make_oscil(440.0) for i in range(44100): outa(i, .5 * oscil(gen)) An ‘instrument’ will just be defined as a function (see examples in clm_ins.py and demos)</p>
+</dd>
+</dl>
+</li>
+<li><p>one can use ndarrays from numpy instead of writing to files. the shape for the numpy arrays is channels, length. in other words a mono audio buffer of 44100 samples with be shape (1,44100) this is similar to librosa but opposite of pysndfile</p></li>
+</ul>
+<p>Many more updates coming.</p>
+</section>
+</section>
+</article>
+<footer class="bd-footer-article">
+<div class="footer-article-items footer-article__inner">
+<div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+<a class="left-prev" href="index.html" title="previous page">
+<i class="fa-solid fa-angle-left"></i>
+<div class="prev-next-info">
+<p class="prev-next-subtitle">previous</p>
+<p class="prev-next-title">Welcome to pysndlib’s documentation!</p>
+</div>
+</a>
+<a class="right-next" href="building.html" title="next page">
+<div class="prev-next-info">
+<p class="prev-next-subtitle">next</p>
+<p class="prev-next-title">Building pysndlib</p>
+</div>
+<i class="fa-solid fa-angle-right"></i>
+</a>
+</div></div>
+</div>
+</footer>
+</div>
+<div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+<div class="sidebar-secondary-item">
+<div class="page-toc tocsection onthispage">
+<i class="fa-solid fa-list"></i> Contents
+  </div>
+<nav class="bd-toc-nav page-toc">
+<ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-are-already-familiar-with-clm">if you are already familiar with clm</a></li>
+</ul>
+</nav></div>
+</div></div>
+</div>
+<footer class="bd-footer-content">
+<div class="bd-footer-content__inner container">
+<div class="footer-item">
+<p class="component-author">
+By Todd Ingalls
+</p>
+</div>
+<div class="footer-item">
+<p class="copyright">
+    
+      © Copyright 2023-2024, Todd Ingalls.
+      <br/>
+</p>
+</div>
+<div class="footer-item">
+</div>
+<div class="footer-item">
+</div>
+</div>
+</footer>
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+<script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+<footer class="bd-footer">
+</footer>
+</body>
+</html>
