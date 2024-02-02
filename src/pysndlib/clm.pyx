@@ -870,7 +870,8 @@ class Sound(object):
             if self.scaled_by or self.scaled_to:
                 statstr += "(before scaling) "
             
-            statstr += f"compute time: {toc - self.tic:0.8f} seconds. "
+            statstr += f"compute time: {toc - self.tic:0.8f} seconds, "
+            statstr += f"compute ratio: {(toc - self.tic) / (get_length(self.output) / get_srate())}" 
             
             
             if self.reverb_to_file:
