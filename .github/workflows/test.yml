@@ -30,39 +30,39 @@ jobs:
         cibw_python: ["cp310-*", "cp311-*"]
         cibw_arch: ["universal2"]
         
-    # steps:
-    #   - uses: actions/checkout@v3
-    #   - name: Set up Python ${{ matrix.python-version }}
-    #     uses: actions/setup-python@v3
-    #     with:
-    #       python-version: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
       
-    #   - name: Fetch asset
-    #     run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
   
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
-    #   - name: See what we downloaded
-    #     run: ls
-    #   - name: unzip
-    #     run: unzip libsndlib_macos_universal2.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+      - name: See what we downloaded
+        run: ls
+      - name: unzip
+        run: unzip libsndlib_macos_universal2.zip
 
-    #   - name: Copy sndlib header files
-    #     run: |
-    #       cp ./sndlib/sndlib.h ./src/pysndlib/
-    #       cp ./sndlib/clm.h ./src/pysndlib/
-    #   - name: Build wheels
-    #     uses: pypa/cibuildwheel@v2.14.1
-    #     env:
-    #       CIBW_BUILD: ${{ matrix.cibw_python }}
-    #       CIBW_ARCHS_MACOS: ${{ matrix.cibw_arch }}
-    #       CIBW_MANYLINUX_X86_64_IMAGE: manylinux1
-    #       CIBW_MANYLINUX_I686_IMAGE: manylinux1
-    #       CIBW_TEST_SKIP: "*-macosx_arm64"
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.14.1
+        env:
+          CIBW_BUILD: ${{ matrix.cibw_python }}
+          CIBW_ARCHS_MACOS: ${{ matrix.cibw_arch }}
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux1
+          CIBW_MANYLINUX_I686_IMAGE: manylinux1
+          CIBW_TEST_SKIP: "*-macosx_arm64"
 
-    #   - uses: actions/upload-artifact@v3
-    #     with:
-    #       path: ./wheelhouse/*.whl
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
           
   make_sdist:
     name: Make SDist
