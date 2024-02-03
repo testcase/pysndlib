@@ -46,7 +46,12 @@ jobs:
         run: ls
       - name: unzip
         run: unzip libsndlib_macos_universal2.zip
-
+      
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+          
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.14.1
         env:
@@ -69,6 +74,21 @@ jobs:
           fetch-depth: 0  # Optional, use if you use setuptools_scm
           submodules: true  # Optional, use if you have submodules
 
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_linux_x86_64.zip
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+      - name: See what we downloaded
+        run: ls
+      - name: unzip
+        run: unzip libsndlib_linux_x86_64.zip
+        
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+          
       - name: Build SDist
         run: pipx run build --sdist
 
@@ -102,7 +122,11 @@ jobs:
         run: ls
       - name: unzip
         run: unzip libsndlib_linux_x86_64.zip
-
+        
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.14.1
         env:
