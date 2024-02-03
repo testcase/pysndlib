@@ -30,7 +30,7 @@ jobs:
         cibw_python: ["cp310-*", "cp311-*"]
         cibw_arch: ["universal2"]
         
-    # make_wheel:
+    # steps:
     #   - uses: actions/checkout@v3
     #   - name: Set up Python ${{ matrix.python-version }}
     #     uses: actions/setup-python@v3
