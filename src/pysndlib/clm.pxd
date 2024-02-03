@@ -10,6 +10,9 @@ from pysndlib.sndlib cimport Sample, Header
 
 np.import_array()
 
+
+
+
 # --------------- clm enums ---------------- #
 cpdef enum Interp:
     """
@@ -54,21 +57,21 @@ cdef class mus_any:
     cdef cclm.analyze_cb _analyzecallback
     cdef cclm.synthesize_cb _synthesizecallback
     cdef list _cache
-    cdef cclm.mus_float_t* _data_ptr
+    cdef cython.double* _data_ptr
     cdef np.ndarray _data
-    cdef cclm.mus_float_t* _xcoeffs_ptr
+    cdef cython.double* _xcoeffs_ptr
     cdef np.ndarray _xcoeffs
-    cdef cclm.mus_float_t* _ycoeffs_ptr
+    cdef cython.double* _ycoeffs_ptr
     cdef np.ndarray _ycoeffs
-    cdef cclm.mus_float_t* _pv_amp_increments_ptr
+    cdef cython.double* _pv_amp_increments_ptr
     cdef np.ndarray _pv_amp_increments
-    cdef cclm.mus_float_t* _pv_amps_ptr
+    cdef cython.double* _pv_amps_ptr
     cdef np.ndarray _pv_amps
-    cdef cclm.mus_float_t* _pv_freqs_ptr
+    cdef cython.double* _pv_freqs_ptr
     cdef np.ndarray _pv_freqs
-    cdef cclm.mus_float_t* _pv_phases_ptr
+    cdef cython.double* _pv_phases_ptr
     cdef np.ndarray _pv_phases
-    cdef cclm.mus_float_t* _pv_phase_increments_ptr
+    cdef cython.double* _pv_phase_increments_ptr
     cdef np.ndarray _pv_phase_increments
 
 

@@ -1,4 +1,4 @@
-from setuptools import Extension, setup
+from setuptools import Extension, setup, find_packages, find_namespace_packages
 from Cython.Build import cythonize
 import Cython.Compiler.Options
 Cython.Compiler.Options.annotate = False
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     setup(
         zip_safe=False,
         name = 'pysndlib',
-        package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav", "*.pxd"]},
+        package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav", "*.pxd", "*.h"]},
         ext_modules = cythonize(extensions, compiler_directives={'language_level': '3', 'embedsignature' : False})
     )
 
