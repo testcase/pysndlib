@@ -872,7 +872,7 @@ class Sound(object):
                 statstr += "(before scaling) "
             
             statstr += f"compute time: {toc - self.tic:0.8f} seconds, "
-            statstr += f"compute ratio: {(toc - self.tic) / (get_length(self.output) / get_srate())}" 
+            statstr += f"compute ratio: {(toc - self.tic) / (get_length(self.output) / get_srate())}, " 
             
             
             if self.reverb_to_file:
@@ -1407,7 +1407,7 @@ cpdef np.ndarray mus_fft(np.ndarray rdat, np.ndarray  idat, cython.int fft_size 
     return rdat
     
     
-cpdef np.ndarray fft(np.ndarray rdat, np.ndarray idat,  cython.int fft_size, cython.int sign ):
+cpdef tuple fft(np.ndarray rdat, np.ndarray idat,  cython.int fft_size, cython.int sign ):
     """
     return the fft of rl and im which contain the real and imaginary parts of the data; len should be a
     power of 2, dir = 1 for fft, -1 for inverse-fft.
@@ -3819,7 +3819,7 @@ cpdef mus_any make_filtered_comb(cython.double feedback,cython.long size, mus_an
         gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(feedback, int(size), &initial_contents_view[0], int(max_size), <cclm.mus_interp_t>interp_type, filter._ptr))
     else:
         gen = mus_any.from_ptr(cclm.mus_make_filtered_comb(feedback, int(size), NULL, int(max_size), <cclm.mus_interp_t>interp_type, filter._ptr))
-    gen.cache_append(initial_contents)
+    gen.cache_extend([initial_contents, filter])
     return gen    
         
 cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.double pm=0.0):
@@ -3863,7 +3863,7 @@ cpdef mus_any make_filtered_comb_bank(list fcombs):
     :return: filtered_comb_bank gen
     :rtype: mus_any
     """
-    p = list(map(is_formant, fcombs))
+    p = list(map(is_filtered_comb, fcombs))
     if not all(p):
         raise TypeError(f'filter list contains at least one element that is not a filtered_comb.')
 
@@ -3873,7 +3873,7 @@ cpdef mus_any make_filtered_comb_bank(list fcombs):
     gen.cache_extend([fcomb_array, fcombs])
     return gen
 
-cpdef cython.double filtered_comb_bank(mus_any gen):
+cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig):
     """
     sum an array of filtered_comb filters.
     
@@ -3881,7 +3881,7 @@ cpdef cython.double filtered_comb_bank(mus_any gen):
     :param inputs: can be a list/array of inputs or a single input
     :rtype: float
     """
-    return cclm.mus_filtered_comb_bank(gen._ptr, input)
+    return cclm.mus_filtered_comb_bank(gen._ptr, insig)
     
 cpdef bint is_filtered_comb_bank(mus_any gen):
     """

@@ -132,7 +132,7 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=*, sr=*, sample_type=*, he
 
 
 cpdef np.ndarray mus_fft(np.ndarray rdat, np.ndarray  idat, cython.int fft_size , cython.int sign)
-cpdef np.ndarray fft(np.ndarray rdat, np.ndarray idat,  cython.int fft_size, cython.int sign )
+cpdef tuple fft(np.ndarray rdat, np.ndarray idat,  cython.int fft_size, cython.int sign )
 cpdef np.ndarray mus_rectangular2polar(np.ndarray  rdat, np.ndarray  idat)
 cpdef tuple rectangular2polar(np.ndarray rdat, np.ndarray  idat)
 cpdef np.ndarray mus_rectangular2magnitudes(np.ndarray rdat, np.ndarray idat)
@@ -290,7 +290,7 @@ cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.doubl
 cpdef cython.double filtered_comb_unmodulated(mus_any gen, cython.double insig)
 cpdef bint is_filtered_comb(mus_any gen)
 
-cpdef cython.double filtered_comb_bank(mus_any gen)
+cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig)
 cpdef bint is_filtered_comb_bank(mus_any gen)
 
 cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=*)

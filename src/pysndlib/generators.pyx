@@ -261,7 +261,7 @@ cdef class Nxy1cos(CLMGenerator):
         return self.next(fm)
         
 
-cpdef cython.double make_nxy1cos(frequency=0, ratio=1., n=1):
+cpdef Nxy1cos make_nxy1cos(frequency=0, ratio=1., n=1):
     """
     Creates an nxy1co generator that produces a sum of 'n' sinsoids starting at 'frequency', spaced by 'frequency'. 
         nxy1cos is the same as nxycos, but every other component is multiplied by -1, and "n" produces 2n components.

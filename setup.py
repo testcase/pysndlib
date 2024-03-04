@@ -1,4 +1,4 @@
-from setuptools import Extension, setup, find_packages, find_namespace_packages
+from setuptools import Extension, setup
 from Cython.Build import cythonize
 import Cython.Compiler.Options
 Cython.Compiler.Options.annotate = False
