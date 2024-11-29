@@ -31,11 +31,11 @@ jobs:
         cibw_arch: ["universal2"]
         
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.cibw_python }}
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.cibw_python }}
       
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
@@ -61,7 +61,7 @@ jobs:
           CIBW_MANYLINUX_I686_IMAGE: manylinux1
           CIBW_TEST_SKIP: "*-macosx_arm64"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
           
@@ -107,11 +107,11 @@ jobs:
         cibw_python: ["cp310-*", "cp311-*", "cp312-*"]
       
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.cibw_python}}
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+            python-version: ${{ matrix.cibw_python }}
       
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_linux_x86_64.zip
