@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 project = 'pysndlib'
 copyright = '2023-2024, Todd Ingalls'
 author = 'Todd Ingalls'
-release = '0.6.9'
+release = '0.7.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
