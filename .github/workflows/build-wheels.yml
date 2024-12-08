@@ -27,8 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest]
-        cibw_python: ["cp310-*", "cp311-*", "cp312-*"]
-        p_ver: ["3.10-3.12"]
+        cibw_python: ["cp310-*", "cp311-*"]
         cibw_arch: ["universal2"]
         
     steps:
@@ -36,7 +35,7 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: ${{ matrix.python-version }}
       
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
