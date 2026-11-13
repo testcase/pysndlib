@@ -93,22 +93,70 @@ if os.path.exists(os.path.expanduser('~/.pysndlib')):
 
 # --------------- initializations ---------------- #
 
+# sndlib reports problems by invoking the handler registered via
+# mus_error_set_handler -- from C code, deep inside the sndlib library.
+# A Python exception cannot be usefully raised from that C callback:
+# sndlib's C code never checks Python's error indicator, so a raised
+# exception would sit pending while sndlib keeps running, and would
+# surface later at an unrelated line as a confusing "Exception ignored"
+# message.  Instead the handler below *stores* the error, and the
+# Python wrappers (mus_any.from_ptr, out_any, in_any, Sound.__exit__)
+# call check_sndlib_errors() at safe boundaries to raise it at a
+# well-defined point.
+#
+# GIL invariant: every sndlib call in pysndlib is made with the GIL
+# held, so the handlers below may safely touch Python objects.  Do not
+# call sndlib functions that can trigger these handlers from 'nogil'
+# blocks; if that ever becomes necessary, add 'with gil:' guards to
+# the handlers.
+
+cdef object _pending_error = None
+
+cdef void clm_error_handler(int error_type, char* msg) noexcept:
+    global _pending_error
+    if _pending_error is None:
+        try:
+            _pending_error = SNDLibError(msg + ". " + csndlib.mus_error_type_to_string(error_type))
+        except BaseException:
+            # never let an exception escape into sndlib's C code
+            _pending_error = SNDLibError(f"sndlib error {error_type}")
+
+cdef void clm_print_handler(char* msg) noexcept:
+    # route sndlib's mus_print() output to Python's stdout
+    try:
+        print(msg)
+    except BaseException:
+        pass
+
+class SNDLibError(Exception):
+    """
+    this is general class to raise an print errors as defined in sndlib. it is to be used internally by the defined error handler registered with sndlib
+    """
+
+cpdef check_sndlib_errors():
+    """
+    raise the most recent error recorded by the sndlib error handler, if there is one.
+    """
+    global _pending_error
+    if _pending_error is not None:
+        err = _pending_error
+        _pending_error = None
+        raise err
+
+# register the handlers AFTER initializing sndlib: sndlib's
+# mus_sound_initialize() resets the error handler to its default
+# (sound.c: mus_error_handler = default_mus_error), so a handler
+# registered before initialization would be overwritten.  Errors
+# raised during sndlib initialization itself go to the default
+# stderr handler.
 cclm.mus_initialize()
 cclm.mus_set_rand_seed(int(time.time()))
 csndlib.mus_sound_initialize()
 
-cdef void clm_error_handler(int error_type, char* msg):
-    message =  msg + ". "  +  csndlib.mus_error_type_to_string(error_type)
-    raise SNDLibError(message) 
-    
-class SNDLibError(Exception):
-    """
-    this is general class to raise an print errors as defined in sndlib. it is to be used internally by the defined error handler registered with sndlib
-    
-    :meta private:
-    """
+csndlib.mus_error_set_handler(<csndlib.mus_error_handler_t *>clm_error_handler)
+csndlib.mus_print_set_handler(<csndlib.mus_print_handler_t *>clm_print_handler)
 
-        
+
 cpdef check_ndim(arr: npt.NDArray[np.float64], dim=1):
     if arr.ndim != dim:
         raise TypeError(f'expecting {dim} dimemsions but received {arr.ndim}.')
@@ -127,8 +175,6 @@ cpdef check_range(arg: str, x, low=None, high=None):
 cpdef compare_shapes(arr1: npt.NDArray[np.float64], arr2: npt.NDArray[np.float64]):
     if arr1.shape != arr2.shape:
         raise RuntimeError(f'ndarrays of unequal shape {arr1.shape } vs. {arr2.shape }.')
-
-csndlib.mus_error_set_handler(<csndlib.mus_error_handler_t *>clm_error_handler)
 
 
 cdef bint is_simple_filter(gen: mus_any):
@@ -191,6 +237,9 @@ cdef class mus_any:
 
         :meta private:
         """
+        # surface any error recorded by the sndlib error handler
+        # (e.g. raised inside mus_make_*)
+        check_sndlib_errors()
         # fast call to __new__() that bypasses the __init__() constructor.
         cdef mus_any wrapper = mus_any.__new__(mus_any)
         if _ptr is NULL:
@@ -642,6 +691,8 @@ cpdef file2ndarray(str filename, channel=None, beg=None, size=None):
             csndlib.mus_file_to_array(filename, i, bg, size, &arr_view[i][0])
     else:
         csndlib.mus_file_to_array(filename,channel, bg, size, &arr_view[0][0])
+    # surface any error recorded by the sndlib error handler
+    check_sndlib_errors()
     return out, sr
     
 cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type=None, header_type=None, comment=None ):
@@ -677,6 +728,9 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type
     chans = np.shape(arr)[0]
 
     fd = csndlib.mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, NULL)
+    # surface any error recorded by the sndlib error handler first (it is
+    # the more informative message), then fall back to a silent-failure check
+    check_sndlib_errors()
     if fd < 0:
         raise SNDLibError(f"could not open file {filename} for output")
 
@@ -695,7 +749,8 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type
     finally:
         csndlib.mus_sound_close_output(fd, size * csndlib.mus_bytes_per_sample(sample_type)*chans)
         PyMem_Free(obuf)
-        
+    # surface any error recorded by the sndlib error handler
+    check_sndlib_errors()
     return size
 
 # --------------- with sound context manager ---------------- #      
@@ -810,6 +865,11 @@ class Sound(object):
     def __exit__(self, *args):
         cdef cclm.mus_float_t [:] vals_view = None
         cdef cclm.mus_long_t [:] times_view = None
+        # surface any error recorded by the sndlib error handler during the
+        # render -- but only when no exception is already propagating out of
+        # the with-block (so the original error is not masked)
+        if args[0] is None:
+            check_sndlib_errors()
         maxamp_result = [0.0] * self.channels
         if self.reverb: 
             
@@ -4969,6 +5029,8 @@ cpdef out_any(cython.long loc, cython.double data, cython.int channel, output=No
     :param output: output to write to. can be an appropriately shaped np.ndarray or sample2file
 
     """
+    # surface any error recorded by the sndlib error handler
+    check_sndlib_errors()
     
     
     if isinstance(output, np.ndarray): 
@@ -5071,6 +5133,8 @@ cpdef in_any(cython.long loc, cython.int channel, inp):
     :return: data
     :rtype: float
     """
+    # surface any error recorded by the sndlib error handler
+    check_sndlib_errors()
     if is_list_or_ndarray(inp):
         return inp[channel][loc]
     elif isinstance(inp, types.GeneratorType):
