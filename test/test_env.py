@@ -5,6 +5,7 @@ import pytest
 import pysndlib.env as env
 
 
+
 def test_interleave_lists():
     assert env.interleave([1, 2], [3, 4]) == [1, 3, 2, 4]
 

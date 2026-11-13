@@ -17,6 +17,8 @@ MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 # instead of mutating the CFLAGS/LDFLAGS environment variables.
 # ------------------------------------------------------------------
 
+# TODO: add windows
+
 _is_darwin = sys.platform.startswith("darwin")
 _is_linux = sys.platform.startswith("linux")
 

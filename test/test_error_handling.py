@@ -5,6 +5,7 @@ import pytest
 import pysndlib.clm as clm
 
 
+
 def test_missing_file_error_surfaces_at_boundary(tmp_path):
     clm.get_srate(str(tmp_path / "definitely_missing.wav"))
     with pytest.raises(clm.SNDLibError):

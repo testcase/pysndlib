@@ -8,6 +8,7 @@ import pysndlib.clm as clm
 import pysndlib.sndlib as sndlib
 
 
+
 def test_sound_file_header_info(sine_wav):
     path, sr, nsamples, freq = sine_wav
     assert sndlib.mus_sound_samples(path) == nsamples

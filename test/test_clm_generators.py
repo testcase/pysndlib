@@ -20,6 +20,7 @@ def _sine_wave():
     return SINE_WAVE
 
 
+
 # (factory name, args, kwargs)
 CLM_GENERATORS = [
     # sinusoids and standard waveforms

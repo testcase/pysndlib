@@ -7,6 +7,7 @@ import pysndlib.clm as clm
 import pysndlib.sndlib as sndlib
 
 
+
 # ---- Sound context manager ----
 
 def test_sound_renders_to_file(sine_wav, tmp_path):

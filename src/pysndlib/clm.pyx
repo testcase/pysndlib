@@ -8,6 +8,7 @@
 #==================================================================================
 
 
+
 import ctypes
 import functools
 import math
@@ -109,6 +110,10 @@ if os.path.exists(os.path.expanduser('~/.pysndlib')):
 # call sndlib functions that can trigger these handlers from 'nogil'
 # blocks; if that ever becomes necessary, add 'with gil:' guards to
 # the handlers.
+#
+# TODO: I need to look at this whole error handling situation
+# not sure this is best approach and there may be issues 
+# with each module linking duplicate linking to static lib7
 
 cdef object _pending_error = None
 

@@ -8,6 +8,7 @@ import pysndlib.clm as clm
 import pysndlib.generators as gens
 
 
+
 # ---- K3sin: inline Horner must match mus_polynomial ----
 
 def test_k3sin_matches_clm_polynomial():

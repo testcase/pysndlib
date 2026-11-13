@@ -17,6 +17,7 @@ import math
 ## C math functions are cimported so that per-sample calls in the
 ## generators compile to direct C calls with no Python call overhead.
 ## (`math` is still used for math.pi at module level.)
+
 from libc.math cimport sin, fabs, cos, tan, pow, floor, cosh, exp, sinh, atan2, log, acos, sqrt, ceil, tanh
 
 cdef cython.double NEARLY_ZERO = 1.0e-10

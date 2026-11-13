@@ -8,6 +8,7 @@ import pysndlib.clm as clm
 import pysndlib.dsp as dsp
 
 
+
 # ---- FIR filter helpers from dsp ----
 
 @pytest.mark.parametrize("factory", [dsp.make_highpass, dsp.make_lowpass])

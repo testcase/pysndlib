@@ -6,6 +6,8 @@
 # The code is part of an attempt at translation of Bill Schottstedaet's sndlib 
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
+# TODO : Remove commented code at bottom of file. I don't need to port ? because in
+# other places
 
 cimport pysndlib.csndlib as csndlib
 import numpy as np
@@ -280,22 +282,6 @@ cpdef cython.int mus_sound_close_output(cython.int fd, csndlib.mus_long_t bytes_
 #mus_sound_read
 #mus_sound_write
 
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 cpdef mus_set_clipping(new_value):
     return csndlib.mus_set_clipping(new_value)

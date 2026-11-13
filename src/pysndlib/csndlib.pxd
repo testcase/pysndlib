@@ -6,6 +6,7 @@
 
 from libc.stdint cimport int64_t, uint8_t
 
+
 cdef extern from "sndlib.h":
     ctypedef double mus_float_t
     

@@ -6,6 +6,7 @@ import pysndlib.clm as clm
 from pysndlib.clm_ins import canter, drone, vox
 
 
+
 def _assert_nonsilent(path):
     arr, _ = clm.file2ndarray(path)
     assert float(np.abs(arr).max()) > 0.0, f"{path} rendered silence"

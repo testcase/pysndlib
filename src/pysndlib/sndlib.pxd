@@ -2,6 +2,7 @@
 # cython: language_level=3
 # cython: c_string_encoding=utf8
 
+
 import numpy as np
 cimport cython
 cimport numpy as np
