@@ -3898,7 +3898,7 @@ cdef class RoundInterp(CLMGenerator):
 
     @mus_phase.setter
     def mus_phase(self, val: cython.double):
-        self.gen.rnd = val
+        self.rnd.mus_phase = val
 
     @property
     def mus_frequency(self) -> cython.double:
@@ -3976,6 +3976,7 @@ cdef class Nchoosekcos(CLMGenerator):
         self.frequency = frequency
         self.ratio = ratio
         self.n = n
+        self.angle = 0.0
     
     cpdef cython.double next(self, cython.double fm=0.0):
         cdef cython.double x = self.angle
@@ -3988,9 +3989,9 @@ cdef class Nchoosekcos(CLMGenerator):
         return self.next(fm)
 
 
-cpdef Nchoosekcos make_nchoosekcos(frequency=0, n=1, amplitude=1.0):
+cpdef Nchoosekcos make_nchoosekcos(frequency=0, ratio=1.0, n=1):
     """creates an nchoosekcos generator that produces a sum of cosines scaled by the binomial coefficients"""
-    return Nchoosekcos(frequency, n, amplitude)
+    return Nchoosekcos(frequency, ratio, n)
     
 cpdef cython.double nchoosekcos(Nchoosekcos gen, cython.double fm=0.):
     """
@@ -4027,8 +4028,7 @@ cdef class SincTrain(CLMGenerator):
         self.original_frequency = self.frequency
         self.frequency = .5 * self.n * clm.hz2radians(self.frequency)
         self.angle = 0.0
-        self.n = n
-    
+
     cpdef cython.double next(self, cython.double fm=0.0):
         cdef cython.double x = self.angle
         cdef cython.double max_angle = PI * .5 * self.n
@@ -4701,11 +4701,8 @@ cdef class MovingFFT(CLMGenerator):
         self.im = np.zeros(self.n)
         self.data = np.zeros(self.n)
         
-        if isinstance(self.last_moving_fft_window, np.ndarray) and len(self.last_moving_fft_window) == self.n:
-            self.window = self.last_moving_fft_window
-        else:
-            self.last_moving_fft_window = clm.make_fft_window(clm.Window.HAMMING, self.n)
-            self.window = self.last_moving_fft_window
+        self.last_moving_fft_window = clm.make_fft_window(clm.Window.HAMMING, self.n)
+        self.window = self.last_moving_fft_window
         self.window *= 2.0 / (.54 * self.n)
         self.outctr = self.n + 1
        
@@ -4733,7 +4730,7 @@ cdef class MovingFFT(CLMGenerator):
         self.outctr += 1
         return new_data
         
-    def __call__(self, cython.double insig=0.) -> cython.double:
+    def __call__(self, cython.double insig=0.):
         return self.next(insig)
     
     @property
@@ -4749,14 +4746,13 @@ cdef class MovingFFT(CLMGenerator):
         return self.im
     
     cpdef mus_run(self, arg1, arg2):
-        self.next()
+        return self.next()
 
 cpdef MovingFFT make_moving_fft(clm.mus_any reader, n=512, hop=128, outctr=0):
     return MovingFFT(reader, n, hop, outctr)
     
 cpdef cython.double moving_fft(MovingFFT gen):
-    return gen.next()
-    
+    return gen.next()    
 cpdef cython.bint is_moving_fft(gen):
     return isinstance(gen, MovingFFT)    
 

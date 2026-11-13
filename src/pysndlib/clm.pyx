@@ -107,11 +107,7 @@ class SNDLibError(Exception):
     
     :meta private:
     """
-    
-    def ___init___(self, message):
-        super().__init__(self.message)
-        
-        
+
         
 cpdef check_ndim(arr: npt.NDArray[np.float64], dim=1):
     if arr.ndim != dim:
@@ -197,6 +193,8 @@ cdef class mus_any:
         """
         # fast call to __new__() that bypasses the __init__() constructor.
         cdef mus_any wrapper = mus_any.__new__(mus_any)
+        if _ptr is NULL:
+            raise MemoryError("sndlib could not allocate generator (mus_make_* returned NULL)")
         wrapper._ptr = _ptr
         wrapper.ptr_owner = owner
         if cclm.mus_data_exists(wrapper._ptr):
@@ -667,7 +665,6 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type
     header_type = header_type or default.header_type
 
     if arr.ndim == 1:
-        print('ndim', arr.ndim)
         arr = np.copy(arr)
         size = size or np.shape(arr)[0]
         arr.resize(size)
@@ -680,6 +677,9 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type
     chans = np.shape(arr)[0]
 
     fd = csndlib.mus_sound_open_output(filename, int(sr), chans, sample_type, header_type, NULL)
+    if fd < 0:
+        raise SNDLibError(f"could not open file {filename} for output")
+
     cdef cclm.mus_float_t **obuf = <cclm.mus_float_t**>PyMem_Malloc(chans * sizeof(cclm.mus_float_t*))
 
     if not obuf:
@@ -691,9 +691,8 @@ cpdef ndarray2file(str filename, np.ndarray arr, size=None, sr=None, sample_type
         for i in range(chans):
             arr_view = arr[i]
             obuf[i] = &arr_view[0]
-    
+        csndlib.mus_file_write(fd, 0, size, chans, obuf)
     finally:
-        err = csndlib.mus_file_write(fd, 0, size, chans, obuf)
         csndlib.mus_sound_close_output(fd, size * csndlib.mus_bytes_per_sample(sample_type)*chans)
         PyMem_Free(obuf)
         
@@ -776,6 +775,10 @@ class Sound(object):
         set_srate(self.srate)
         default.srate = self.srate
 
+        # save current output/reverb state so that they can be restored on exit
+        self._prev_output = default.output
+        self._prev_reverb = default.reverb
+
         # in original why use reverb-1?
         if  self.statistics :
             self.tic = time.perf_counter()
@@ -784,8 +787,8 @@ class Sound(object):
         
         if self.output_to_file :
             if self.continue_old_file:
-                default.output = continue_sample2file(self.filename)
-                set_srate(csndlib.mus_sound_srate(self.filename)) # maybe print warning or at least note 
+                default.output = continue_sample2file(self.output)
+                set_srate(csndlib.mus_sound_srate(self.output)) # maybe print warning or at least note 
             else:
                 default.output = make_sample2file(self.output,self.channels, sample_type=self.sample_type , header_type=self.header_type)
         elif is_list_or_ndarray(self.output):
@@ -882,7 +885,7 @@ class Sound(object):
             if self.reverb_to_file:
                     chans = get_channels(self.revfile)
                     vals = np.zeros(chans, dtype=np.double)
-                    times = np.zeros(chans, dtype=np.int_)
+                    times = np.zeros(chans, dtype=np.int64)
                     vals_view = vals
                     times_view = times
                     maxamp = csndlib.mus_sound_maxamps(self.revfile, chans, &vals_view[0], &times_view[0])
@@ -891,7 +894,7 @@ class Sound(object):
                 chans = get_channels(default.reverb)
                 
                 vals = np.zeros(chans, dtype=np.double)
-                times = np.zeros(chans, dtype=np.int_)
+                times = np.zeros(chans, dtype=np.int64)
                 for i in range(chans):
                     mabs = np.abs(default.reverb[i])
                     vals[i] = np.amax(mabs)
@@ -928,6 +931,10 @@ class Sound(object):
         
         if self.finalize:
             self.finalize(self.output)
+
+        # restore output/reverb state that was in place before __enter__
+        default.output = self._prev_output
+        default.reverb = self._prev_reverb
          
 
 cpdef is_list_or_ndarray(x):
@@ -1086,9 +1093,9 @@ def validate_envelope(e):
     if len(e) < 2:
         raise RuntimeError("a valid envelope needs at least 2 elements") 
     if len(e) % 2 != 0:
-        raise RuntimeError("a valid envelope needs even number of elements. This has {len(e)}")
+        raise RuntimeError(f"a valid envelope needs even number of elements. This has {len(e)}")
     if isinstance(e, list):
-        if all([isinstance(i, int | float) for i in e]):
+        if not all(isinstance(i, (int, float)) for i in e):
             raise RuntimeError("a valid envelope can only contain numbers.")
     if not all(i < j for i, j in zip(e[: : 2], e[2: : 2])):
         raise RuntimeError("x values of envelope must be increasing")
@@ -1101,10 +1108,10 @@ cpdef bint is_number(n):
     return type(n) == int or type(n) == float
     
 cpdef bint is_odd(n):
-    return n % 2 == 0
+    return n % 2 != 0
 
 cpdef bint is_even(n):
-    return n % 2 != 0
+    return n % 2 == 0
 
 # # --------------- clm utility functions ---------------- #
 # 
@@ -1818,7 +1825,7 @@ cpdef np.ndarray partials2wave(partials,  np.ndarray wave=None, table_size=None,
     if isinstance(wave, list):
         wave = np.array(wave, dtype=np.double)
                         
-    if not wave:
+    if wave is None:
         if table_size is not None:
             wave = np.zeros(table_size)
         else:
@@ -3187,7 +3194,7 @@ cpdef make_two_pole(frequency=None, radius=None, a0=None,b1=None,b2=None):
         raise RuntimeError("If not specifying coeffs, must provide frequency and radius. got frequency: {frequency}, radius: {radius}")
     else:  
         if all((a0,b1,b2)):
-            return mus_any.from_ptr(cclm.mus_make_two_pole(a0,b2,b2))
+            return mus_any.from_ptr(cclm.mus_make_two_pole(a0,b1,b2))
         else:
             raise KeyError(f'Filter needs values for a0, b1, b2 got a0: {a0}, b1: {b1}, b2: {b2}')
 
@@ -3532,7 +3539,7 @@ cpdef np.ndarray make_fir_coeffs(cython.int order, envelope):
     cdef double [:] envelope_view = None
         
     if isinstance(envelope, list):
-        envelope = np.ndarray(envelope)
+        envelope = np.array(envelope)
 
     check_ndim(envelope)
     
@@ -4764,7 +4771,7 @@ def make_granulate(inp,
         return inp(d)
      
     cy_inp_f_ptr = (<cclm.input_cb*><size_t>ctypes.addressof(inp_f))[0]
-    res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>cy_inp_f_ptr, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, <void*>(<mus_any>inp)._ptr))
+    res = mus_any.from_ptr(cclm.mus_make_granulate(<cclm.input_cb>cy_inp_f_ptr, expansion, length, scaler, hop, ramp, jitter, max_size, NULL, NULL))
     res._inputcallback = cy_inp_f_ptr
     res.cache_append(inp_f)     
     
@@ -5064,7 +5071,7 @@ cpdef in_any(cython.long loc, cython.int channel, inp):
     :return: data
     :rtype: float
     """
-    if is_list_or_ndarray(input):
+    if is_list_or_ndarray(inp):
         return inp[channel][loc]
     elif isinstance(inp, types.GeneratorType):
         return next(inp)
@@ -5160,7 +5167,7 @@ cpdef mus_any make_locsig(cython.double degree=0.0, cython.double distance=1., c
     else:
         raise TypeError(f"output needs to be a clm gen or np.array not a {type(output)}")  
         
-cpdef cython.double locsig(mus_any gen, cython.long loc, cython.double val):
+cpdef void locsig(mus_any gen, cython.long loc, cython.double val):
     """
     locsig 'gen' channel 'chan' scaler.
     

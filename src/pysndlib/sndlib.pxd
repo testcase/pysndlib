@@ -64,7 +64,7 @@ cpdef np.ndarray mus_sound_loop_info(str filename)
 cpdef mus_sound_set_loop_info(str filename, np.ndarray info)
 cpdef cython.int  mus_sound_open_input(str filename)
 cpdef cython.int  mus_sound_open_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type, str comments)
-cpdef cython.int  mus_sound_reopen_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type,  cython.int  location)
+cpdef cython.int  mus_sound_reopen_output(str file, cython.int chans, Sample sample_type, Header header_type,  cython.int  location)
 cpdef cython.int mus_sound_close_input(cython.int fd)
 cpdef cython.int mus_sound_close_output(cython.int fd, csndlib.mus_long_t bytes_of_data)
 

@@ -109,8 +109,9 @@ def down_oct(n, snd, chn, outname=None):
         ndarray2file(outname, rl2[:n*length], sr=sr)
         return outname
     else:
-        ndarray2file(Path(snd).stem +'down_oct.wav', rl2[:n*length], sr=sr) 
-        return Path(snd).stem +'_down_oct.wav'
+        default_name = Path(snd).stem + '_down_oct.wav'
+        ndarray2file(default_name, rl2[:n*length], sr=sr)
+        return default_name
     
     
 # --------------- stretch-sound-via-dft ---------------- #
@@ -142,9 +143,10 @@ def down_oct(n, snd, chn, outname=None):
 # --------------- freqdiv ---------------- #
 @cython.ccall
 def freqdiv(n, snd, chn, outname=None):
+    if outname is None:
+        raise ValueError('missing outfile name')
     data, sr = clm.file2ndarray(snd, chn, 0)
     size = clm.get_length(data)
-    i: cython.long = 0
     k: cython.long = 0
     
     if n > 1:
@@ -153,9 +155,8 @@ def freqdiv(n, snd, chn, outname=None):
             stop = min(size, i+n)
             for k in range(i+1, stop):
                 data[0][k] = val
-        if outname is None:
-            raise ValueError('missing outfile name')
     clm.ndarray2file(outname, data, size=size, sr=sr)
+    return outname
 
 
 # -------- "adaptive saturation" -- an effect from sed_sed@my-dejanews.com
@@ -350,5 +351,5 @@ def make_iir_band_stop_2(f1, f2):
 
 @cython.ccall
 def biquad(gen: clm.mus_any, insig: cython.double) -> cython.double:
-    clm.filter(gen, insig)
+    return clm.filter(gen, insig)
 

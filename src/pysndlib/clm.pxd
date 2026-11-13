@@ -363,7 +363,7 @@ cpdef inb(cython.long loc, inp)
 
 cpdef out_bank(gens, cython.long loc, cython.double val)
 
-cpdef cython.double locsig(mus_any gen, cython.long loc, cython.double val)
+cpdef void locsig(mus_any gen, cython.long loc, cython.double val)
 cpdef bint is_locsig(mus_any gen)
 cpdef cython.double locsig_ref(mus_any gen, cython.int chan)
 cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val)

@@ -11,7 +11,7 @@ cimport pysndlib.csndlib as csndlib
 import numpy as np
 cimport numpy as np
 np.import_array()
-from cython cimport view
+from libc.stdlib cimport free
 cimport pysndlib.sndlib
 
 csndlib.mus_sound_initialize()
@@ -205,21 +205,26 @@ cpdef cython.int mus_sound_override_header(str file, cython.int srate, cython.in
     """
     override the header information
     """
-    return csndlib.mus_sound_override_header(str, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, location, size)
+    return csndlib.mus_sound_override_header(file, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, location, size)
 
 cpdef np.ndarray mus_sound_loop_info(str filename):
     """
     8 loop vals (mode,start,end) then base-detune and base-note  (empty list if no loop info found)
     """
     cdef int* info_ptr = csndlib.mus_sound_loop_info(filename)
-    cdef view.array arr = None
-    
+    cdef int i
+
     if info_ptr is NULL:
         return None
     else:
-        arr = view.array(shape=(8,),itemsize=sizeof(int), format='i', allocate_buffer=False)
-        arr.data = <char*>info_ptr
-        return np.asarray(arr)    
+        # mus_sound_loop_info calloc's its buffer and hands ownership to the caller:
+        # copy the values and free the original so the returned array owns its
+        # data and nothing leaks.
+        res = np.zeros(8, dtype=np.intc)
+        for i in range(8):
+            res[i] = info_ptr[i]
+        free(info_ptr)
+        return res
  
 cpdef mus_sound_set_loop_info(str filename, np.ndarray info):
     """
@@ -243,7 +248,7 @@ cpdef cython.int mus_sound_open_output(str file, cython.int srate, cython.int ch
     """
     return csndlib.mus_sound_open_output(file, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, comments)
 
-cpdef cython.int mus_sound_reopen_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type,  cython.int  location):
+cpdef cython.int mus_sound_reopen_output(str file, cython.int chans, Sample sample_type, Header header_type,  cython.int  location):
     """
     reopen a file for further input
     """
