@@ -64,6 +64,15 @@ if sys.platform.startswith("linux"):
     DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
 
+if sys.platform.startswith("win32"):
+    # no built-in equivalent of afplay/aplay; Sound(..., play=True)
+    # raises a clear error rather than crashing (a sndlib-based player
+    # could be wired in here later)
+    DEFAULT_FILE_PLAYER = None
+    DEFAULT_FILE_NAME = 'test.wav'
+    DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
+    DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
+
 # --------------- main clm prefs ---------------- #
 
 default  = types.SimpleNamespace(
@@ -985,8 +994,8 @@ class Sound(object):
                 self.output *= self.scaled_by
        
         if self.play and self.output_to_file:
-            if self.play:
-                subprocess.run([default.player,self.output])
+            if default.player:
+                subprocess.run([default.player, self.output])
             else:
                 raise RuntimeError("no player specified")
         # need some safety if errors

@@ -210,6 +210,39 @@ Final state: **316 passed, 10 skipped (documented skips: RNG-instance generators
 procedural runners), 0 failed** — run time ~0.2 s. Verified against a fresh wheel build
 (Cython 3.3.1 / NumPy 2.5.4 / Python 3.12).
 
+## Phase 7 — Windows (MSVC) support
+
+Implements the approved Windows plan, using the sndlib CMake port (`sndlib/CMakeLists.txt`,
+which builds on macOS, Linux, and Windows/MSVC: static target `sndlib_static` → `sndlib.lib`,
+audio via winmm). Much of the original Windows blocker list had already been fixed by earlier
+phases: the `int64_t`/`uint64_t` shadow typedefs (Phase 1), `np.int_` → `np.int64` buffers
+(Phase 2), and the per-platform `setup.py` flag computation (Phase 2).
+
+| Item | Change |
+|---|---|
+| `setup.py` | win32 branch: links `./sndlib/sndlib.lib` (CMake/MSVC artifact) instead of `libsndlib.a`; adds `libraries = ['winmm', 'ws2_32']` to **every** extension — a static archive carries no dependency metadata, so the final link must resolve sndlib's winmm (`waveOut/waveIn` audio) and Winsock (network-audio path) references itself; MSVC needs no extra compile/link args and math is in the CRT. `make_extension` now merges platform `extra_libs` with per-extension libraries. |
+| `clm.pyx` | win32 platform-defaults branch (`DEFAULT_FILE_PLAYER = None`, RIFF/LFLOAT output, `test.wav`) — previously only darwin/linux branches existed and importing `pysndlib.clm` on Windows raised `NameError`. The `Sound` play path now raises a clear `RuntimeError("no player specified")` when `default.player` is unset instead of crashing (the old `if self.play` guard was always-true/dead). |
+| `.github/workflows/build-wheels.yml` | New `build_windows_wheels` job: `windows-latest`, cp310–cp314, `CIBW_ARCHS: AMD64`, fetches the `libsndlib_windows_x64.zip` release asset (extracted with `tar -xf` since Windows runners have no `unzip`; bsdtar reads zip), headers copied via pwsh. The publish job's `needs` list and the existing `pattern: wheels-*` artifact pickup were updated (artifact: `wheels-windows-x64`). Per-wheel pytest (`CIBW_TEST_COMMAND`) exercises the Windows wheels automatically; cibuildwheel's default `delvewheel` repair step is a no-op since everything is statically linked. |
+| `pyproject.toml` | Added `"Operating System :: Microsoft :: Windows"` classifier. |
+| `docs/source/installation.rst` | Supported-platforms text updated to include Windows x86-64. |
+
+**sndlib-side prerequisite** (built in the sndlib repo, attached to the `testcase/sndlib` release):
+`libsndlib_windows_x64.zip` produced by
+`cmake -S . -B build-win -DWITH_GSL=OFF -DWITH_S7=OFF -DBUILD_TOOLS=OFF` (audio ON per user
+decision — winmm backend), containing `sndlib/sndlib.lib` plus the headers
+(`sndlib.h`, `clm.h`, `sndlib-strings.h`, `clm-strings.h`, `_sndlib.h`, `mus-config.h`).
+
+**Known caveats carried forward:** non-ASCII file paths on Windows — sndlib's `io.c` opens files
+with narrow `open()` (ANSI code page) while pysndlib passes UTF-8 filenames, so non-ASCII paths
+need either wide-char conversion in the sndlib port or a UTF-8 `activeCodePage` manifest;
+`bint` vs C `bool` in `cclm.pxd`'s `analyze_cb` typedef (cosmetic ABI match on x64); the
+per-module sndlib globals of the static-linking design (pre-existing on all platforms).
+
+**Verification:** the macOS gate (rebuild + full pytest suite) confirms the platform-guarded
+changes cause no regressions; the Windows build itself must be exercised by the CI job (or a
+real Windows machine: `pip install -e ".[test]" && pytest`), since MSVC cannot run on macOS.
+
+
 
 
 

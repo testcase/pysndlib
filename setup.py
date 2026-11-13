@@ -5,8 +5,10 @@ from setuptools import Extension, setup
 from Cython.Build import cythonize
 
 # sndlib static library and headers are expected in ./sndlib
-# (see docs/source/building.rst)
-LIBSNDBLIB = './sndlib/libsndlib.a'
+# (see docs/source/building.rst).  On Windows the CMake build produces
+# sndlib.lib (MSVC); elsewhere the autotools build produces libsndlib.a.
+_is_windows = sys.platform == "win32"
+LIBSNDBLIB = './sndlib/sndlib.lib' if _is_windows else './sndlib/libsndlib.a'
 INCLUDE_DIRS = [numpy.get_include(), './sndlib']
 MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 
@@ -17,14 +19,14 @@ MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 # instead of mutating the CFLAGS/LDFLAGS environment variables.
 # ------------------------------------------------------------------
 
-# TODO: add windows
-
 _is_darwin = sys.platform.startswith("darwin")
 _is_linux = sys.platform.startswith("linux")
 
 compile_args = []
 link_args = []
 math_libs = []
+# system libraries needed by every extension that statically links sndlib
+extra_libs = []
 
 if _is_darwin:
     # universal2 (x86_64 + arm64) builds; CoreAudio frameworks are
@@ -37,6 +39,13 @@ if _is_darwin:
     math_libs = ['m']
 elif _is_linux:
     link_args += ['-lm', '-ldl']
+elif _is_windows:
+    # MSVC: the Windows sndlib asset is built with the CMake port's
+    # winmm audio backend (WITH_AUDIO=ON).  A static archive does not
+    # carry its dependencies, so the final link of each extension must
+    # resolve winmm (waveOut/waveIn) and ws2_32 (sndlib's network-audio
+    # path) itself.  Math lives in the CRT; no extra compile/link args.
+    extra_libs += ['winmm', 'ws2_32']
 
 if _is_darwin or _is_linux:
     # silence warnings in the Cython-generated C code for clang/gcc
@@ -45,6 +54,7 @@ if _is_darwin or _is_linux:
 
 
 def make_extension(name, sources, **kwargs):
+    libs = extra_libs + kwargs.pop('libraries', [])
     return Extension(
         name,
         sources,
@@ -53,6 +63,7 @@ def make_extension(name, sources, **kwargs):
         define_macros=MACROS,
         extra_compile_args=compile_args,
         extra_link_args=link_args,
+        libraries=libs,
         **kwargs)
 
 
