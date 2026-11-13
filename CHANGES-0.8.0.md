@@ -57,3 +57,28 @@ platform lists. The `MovingFFT.next()` return type was left as `cython.double` (
 to 1.0/0.0) because the base class `CLMGenerator.next` contract is `double`; changing it to `bint`
 made the override signature incompatible.
 
+## Phase 2.5 — CI workflow modernization (`.github/workflows/build-wheels.yml`)
+
+Context: the previous workflow was already partly broken — `upload-artifact@v3` was shut down by
+GitHub (artifact uploads fail), `checkout@v3`/`setup-python@v3` are sunset, and `cibuildwheel@v2.16.5`
+cannot build CPython 3.13/3.14 wheels at all. Verified against the cibuildwheel changelog:
+v3.0 removed the `manylinux1` shortname (default is now `manylinux_2_28`), v3.1.0 made CPython
+3.14 builds default, and the current release line is v4 (v4.3.5).
+
+| Item | Change |
+|---|---|
+| Python matrix | `cp310-*` … `cp312-*` → `["cp310-*", "cp311-*", "cp312-*", "cp313-*", "cp314-*"]` on both macOS and Linux jobs (cp310 kept per user decision; it is EOL but still buildable). Free-threaded `cpNNNt` variants are excluded automatically by the per-version `cpNNN-*` glob patterns. |
+| cibuildwheel | `pypa/cibuildwheel@v2.16.5` → `@v4.3.5` (current). Removed `CIBW_MANYLINUX_X86_64_IMAGE: manylinux1` / `CIBW_MANYLINUX_I686_IMAGE: manylinux1` overrides (shortname removed in cibuildwheel 3.0; cibuildwheel's default `manylinux_2_28` image is now used). |
+| Actions | `checkout@v3` → `@v6`; dropped the broken `setup-python@v3` steps (they referenced an undefined `matrix.python-version`; cibuildwheel manages interpreters itself); `upload-artifact@v3` → `@v4` with unique names per job (`wheels-macos-universal2`, `wheels-linux-x86_64`, `wheels-sdist`); `download-artifact@v3` → `@v4` with `pattern: wheels-*` + `merge-multiple: true` (v4 no longer flattens multi-artifact downloads). |
+| macOS job | `runs-on: macos-latest` → pinned `macos-15` (arm64). Kept `CIBW_ARCHS_MACOS: universal2` and the `libsndlib_macos_universal2.zip` release asset (arch/runner-independent). `CIBW_TEST_SKIP` narrowed from `"*-macosx_arm64 *-macosx_universal2:arm64 *-macosx_universal2:x86_64"` to `"*-macosx_universal2:x86_64"` so the arm64 slice is now **tested natively** on the arm64 runner. |
+| Linux job | x86_64 only (per user decision; no aarch64 job). |
+| Wheel testing | Added global `CIBW_TEST_COMMAND: "python -m unittest discover -s {project}/test"` so every wheel runs `test/test_clm.py` before upload (wheels previously shipped untested). |
+| sdist job | `runs-on: macos-latest` → `macos-15`; same action updates. |
+| `pyproject.toml` | Added per-version Python classifiers (3.10–3.14); replaced incorrect `"Operating System :: OS Independent"` with `MacOS :: Mac OS X` and `POSIX :: Linux`. |
+| `docs/source/installation.rst` | Updated supported-versions text (3.10–3.14, previously claimed "3.10 and 3.11"). |
+
+Workflow YAML validated for syntax. `.github/workflows/test.yml` (mostly commented-out duplicate)
+was intentionally left untouched; it only runs on manual dispatch and does no harm — flagged for
+a future cleanup.
+
+
