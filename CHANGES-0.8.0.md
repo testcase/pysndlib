@@ -143,6 +143,30 @@ here as a known caveat of the static-linking design.
   (the Python call dominates), and the output can be an ndarray, list, or file generator, so a
   per-call buffer acquisition would cost roughly what the single indexing operation costs.
 
+## Phase 5 — Repo hygiene
+
+| Item | Result |
+|---|---|
+| Committed build artifacts | **No change needed** — verified `git ls-files` shows zero tracked `*.c`/`*.so`/`.DS_Store` files; `.gitignore` already covers them (`*.c`, `*.so`, `.DS_Store`, `build/`, `sndlib/`). The large generated files in the working tree are untracked local build products. The `*.h` entries in `package_data` are intentional: `build.sh` and the CI copy `sndlib.h`/`clm.h` into the package for sdist builds. |
+| `env.pyx` | Removed unused imports (`singledispatch`, `types`, `numpy.typing as npt` — `operator` is used and kept). `integrate_envelope` no longer shadows the builtin `sum` (renamed to `total`). `scale_and_offset` now raises `TypeError` for unsupported input types instead of silently returning `None` (matching its sibling functions). |
+| `dsp.pyx` | Removed stray module-level string literal `"hello there"`; removed dead typed local `i` in `down_oct` (left over from the `freqdiv` fix pattern). |
+| `setup.py` dedup | Already done in Phase 2 (single extension list, no `CFLAGS`/`LDFLAGS` env mutation). |
+| `generators.pyx` dead `isinstance` | Already removed in Phase 2 (MovingFFT init cleanup). |
+
+**Known items intentionally left as-is:** `clm.pyx`'s `exec` of `~/.pysndlib` at import (an
+intentional user rc-file feature, noted during review); `sndlib.pyx`'s `mus_sound_initialize()`
+call at import time (behavioral change with compatibility implications — flagged, not changed);
+`.github/workflows/test.yml` (mostly commented-out duplicate of the main workflow).
+
+## Final verification
+
+Full gate (wheel build from clean tree, universal2 `lipo` check, render/file-IO smoke tests,
+statistics + reverb + global-state-restore tests, error-handler boundary tests, performance-path
+correctness tests for every Phase 4 change, `test/test_clm.py`) run under:
+- Python 3.12, Cython 3.3.1, NumPy 2.5.4
+- Python 3.14.0, Cython 3.3.1, NumPy 2.5.4 (cp314 pre-verification for the new CI matrix)
+
+
 
 
 Verified: the smoke test triggers a real sndlib error (`mus_sound_open_input` on a non-sound file)

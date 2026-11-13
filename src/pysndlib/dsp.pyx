@@ -17,7 +17,6 @@ from pysndlib.clm import ndarray2file
 
 import numpy as np
 from .env import scale_envelope
-"hello there"
 
 NEARLY_ZERO = 1.0e-10
 
@@ -95,10 +94,7 @@ def down_oct(n, snd, chn, outname=None):
     np.copyto(rl2[0:fftlen2], rl1[0:fftlen2])
     np.copyto(im2[0:fftlen2], im1[0:fftlen2])
 
-    i: cython.long = 0
-    j: cython.long = 0
-    
-    j = fft_1
+    j: cython.long = fft_1
     for k in range(fftlen-1, fftlen2):
         rl2[j] = rl1[k]
         im2[j] = im1[k]
