@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 #==================================================================================
@@ -6,9 +7,10 @@
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
 
-# cimport pysndlib.csndlib as csndlib
+cimport pysndlib.csndlib as csndlib
 import numpy as np
 cimport numpy as np
+np.import_array()
 from cython cimport view
 cimport pysndlib.sndlib
 

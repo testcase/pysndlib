@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 #==================================================================================
 # The code is an attempt at translation of Bill Schottstedaet's 'clm-ins.scm' 
 # file available at https://ccrma.stanford.edu/software/snd/sndlib/

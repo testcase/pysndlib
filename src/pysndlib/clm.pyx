@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 #==================================================================================
@@ -17,11 +18,14 @@ import sys
 import tempfile
 import time
 import types
+from typing import Optional
 import cython
 from cython.cimports.cpython.mem import PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from cython cimport view
 import numpy as np
+import numpy.typing as npt
 cimport numpy as np
+np.import_array()
 cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 

@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 #==================================================================================
@@ -20,8 +21,6 @@ cimport numpy as np
 #cimport pysndlib.cclm as cclm
 cimport pysndlib.clm as clm
 from pysndlib.sndlib cimport Sample, Header
-
-np.import_array()
 
 cdef class CLMGenerator:
     cpdef cython.double next(self, cython.double  fm=*)

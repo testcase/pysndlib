@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 #==================================================================================
 # The code is an attempt at translation of Bill Schottstedaet's 'env.scm' 
 # file available at https://ccrma.stanford.edu/software/snd/sndlib/
@@ -11,6 +13,7 @@ import math
 import numpy as np
 import numpy.typing as npt
 cimport numpy as np
+np.import_array()
 import cython
 cimport cython
 import pysndlib.clm as clm

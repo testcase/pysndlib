@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 cimport cython
@@ -7,8 +8,6 @@ cimport numpy as np
 cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 from pysndlib.sndlib cimport Sample, Header
-
-np.import_array()
 
 
 

@@ -1,7 +1,5 @@
 from setuptools import Extension, setup
 from Cython.Build import cythonize
-import Cython.Compiler.Options
-Cython.Compiler.Options.annotate = False
 import numpy
 import sys
 import os
@@ -93,7 +91,7 @@ if __name__ == '__main__':
         zip_safe=False,
         name = 'pysndlib',
         package_data={'pysndlib': ["*.pyx", "*.py", "*.snd", "*.aiff", "*.wav", "*.pxd", "*.h"]},
-        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3', 'embedsignature' : False})
+        ext_modules = cythonize(extensions, compiler_directives={'language_level': '3', 'embedsignature' : False}, annotate=False)
     )
 
 

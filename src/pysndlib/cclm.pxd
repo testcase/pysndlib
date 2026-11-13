@@ -1,5 +1,7 @@
 cimport pysndlib.csndlib as csndlib
 
+from libc.stdint cimport int64_t, uint64_t
+
 #==================================================================================
 # The code is part of an attempt at translation of Bill Schottstedaet's clm 
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
@@ -19,9 +21,8 @@ cdef extern from "clm.h":
     """
     
     
-    ctypedef signed long int64_t
     ctypedef double mus_float_t
-    ctypedef unsigned long uint64_t
+    
     ctypedef int64_t mus_long_t 
     
     ctypedef struct mus_any_class:

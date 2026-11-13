@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 #==================================================================================
 # The code is part of an attempt at translation of Bill Schottstedaet's sndlib 
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
@@ -9,6 +11,7 @@ import pysndlib.clm as clm
 cimport pysndlib.clm as clm
 import numpy as np
 cimport numpy as np
+np.import_array()
 
 import math
 ## TODO: Look into using cimports for c math for c . as here - https://cython.readthedocs.io/en/latest/src/tutorial/pure.html?highlight=math#calling-c-functions

@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 import math
 from pysndlib import *
 import numpy as np
