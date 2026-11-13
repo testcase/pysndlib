@@ -88,6 +88,20 @@ cdef class Noddcos(CLMGenerator):
 cpdef cython.double noddcos(Noddcos gen, cython.double fm=*)
 cpdef cython.bint is_noddcos(gen)
 
+# --------------- noddsin ---------------- #
+# NOTE: this attribute block was missing entirely, which made Noddsin
+# impossible to instantiate (AttributeError on the first attribute
+# assignment in __init__). Found by the pytest generator sweep.
+cdef class Noddsin(CLMGenerator):
+    cdef public cython.double frequency
+    cdef public cython.double ratio
+    cdef public cython.int n
+    cdef public cython.double norm
+    cdef public cython.double angle
+
+cpdef cython.double noddsin(Noddsin gen, cython.double fm=*)
+cpdef cython.bint is_noddsin(gen)
+
 # --------------- noddssb ---------------- #
 cdef class Noddssb(CLMGenerator):
     cdef public cython.double frequency 

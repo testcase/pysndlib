@@ -183,7 +183,18 @@ cpdef str mus_sound_comment(str file):
     """
     retrieve file comment if one exists
     """
-    return csndlib.mus_sound_comment(file) 
+    # mus_sound_comment returns NULL when the file has no comment; with
+    # c_string_type=unicode the implicit char*->str conversion would call
+    # strlen(NULL) and segfault, so handle NULL explicitly.  when a comment
+    # exists, sndlib calloc's the buffer: copy it into the Python string and
+    # free the original (nothing else owns it).
+    cdef char* comment_ptr = csndlib.mus_sound_comment(file)
+    if comment_ptr is NULL:
+        return None
+    try:
+        return comment_ptr
+    finally:
+        free(comment_ptr)
 
 cpdef cython.int mus_bytes_per_sample(Sample samp_type):
     """

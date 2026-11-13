@@ -2219,15 +2219,37 @@ cpdef cython.double env_interp(cython.double x , mus_any env):
     """
     return cclm.mus_env_interp(x, env._ptr)
 
-cpdef cython.double envelope_interp(cython.double x ,  mus_any env):
+cpdef cython.double envelope_interp(cython.double x , env):
     """
     value of envelope env at x.
+
+    env can be a clm env generator or a breakpoint list/ndarray
+    (x0, y0, x1, y1, ...), evaluated linearly in its own x-axis units
+    (clm envelopes conventionally use 0..100 for x). this mirrors the
+    original CLM's env-interp, which accepts both; the generator form
+    is also available as env_interp.
     
     :param x: location \in envelope
-    :param env: env gen
+    :param env: env gen or breakpoint list/ndarray
     :rtype: float
     """
-    return cclm.mus_env_interp(x, env._ptr)
+    cdef cython.double x0, y0, x1, y1, frac
+    cdef Py_ssize_t i
+    if isinstance(env, (list, tuple, np.ndarray)):
+        if x <= env[0]:
+            return env[1]
+        for i in range(0, len(env) - 2, 2):
+            x0 = env[i]
+            x1 = env[i + 2]
+            if x0 <= x <= x1:
+                y0 = env[i + 1]
+                y1 = env[i + 3]
+                if x1 == x0:
+                    return y0
+                frac = (x - x0) / (x1 - x0)
+                return y0 + (frac * (y1 - y0))
+        return env[-1]
+    return cclm.mus_env_interp(x, (<mus_any>env)._ptr)
     
       
 # #mus_env_rates
@@ -3597,9 +3619,11 @@ cpdef np.ndarray make_fir_coeffs(cython.int order, envelope):
     :param envelope: response envelope
     """
     cdef double [:] envelope_view = None
-        
+
     if isinstance(envelope, list):
-        envelope = np.array(envelope)
+        # coerce to double: plain np.array(int list) gives an int64 array,
+        # which the double memoryview below rejects
+        envelope = np.array(envelope, dtype=np.double)
 
     check_ndim(envelope)
     

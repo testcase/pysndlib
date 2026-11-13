@@ -166,6 +166,51 @@ correctness tests for every Phase 4 change, `test/test_clm.py`) run under:
 - Python 3.12, Cython 3.3.1, NumPy 2.5.4
 - Python 3.14.0, Cython 3.3.1, NumPy 2.5.4 (cp314 pre-verification for the new CI matrix)
 
+## Phase 6 — pytest test suite
+
+Replaced the 3-test unittest file with a full pytest suite (`test/`), per the approved plan.
+`test_clm.py` was ported into the sweep and deleted.
+
+| File | Coverage |
+|---|---|
+| `test/conftest.py` | `sine_wav` fixture (known 440 Hz render), autouse `clean_clm_default` (snapshots/restores `clm.default`, fails teardown if a test leaves a pending sndlib error) |
+| `test/test_clm_generators.py` | Parametrized sweep over ~55 clm generator factories (registry-driven: construction, `is_*` checks, 500 finite samples, `gen()` vs procedural-runner equivalence) plus known-value waveform tests (oscil zero crossings, env endpoints, rand range, delay indexing, one-pole DC gain, moving average impulse, bank sums) and the ported `all_pass` tests |
+| `test/test_sndlib.py` | header/sound-file API: samples/framples/srate/chans/duration, header/sample-type enums, comment, loop info, open/close, override_header, reopen_output signature |
+| `test/test_clm_core.py` | `Sound` (file + ndarray output, statistics capture, reverb, global-state restore, `continue_old_file`, `scaled_to`), `out_any`/`outa`/`outb`/`in_any`, `file2ndarray ↔ ndarray2file` round-trip, unit conversions, `mus_fft` peak-bin |
+| `test/test_cyth_generators.py` | `generators.pyx` classes: K3sin vs `clm.polynomial`, PinkNoise bounds, MovingFFT flags, Nchoosekcos/SincTrain, env connection functions, 15-factory construction sweep |
+| `test/test_filters_dsp.py` | FIR/IIR/biquad/butter construction + behavior (incl. sndlib's `y(n) = a0·x − b1·y(n−1)` one-pole convention), `freqdiv`, `down_oct`, `src_duration` |
+| `test/test_env.py` | all envelope utilities incl. exact `stretch_envelope` value and `integrate_envelope` areas |
+| `test/test_error_handling.py` | store-and-raise model: `SNDLibError` surfaces exactly once, slot clean after, `ndarray2file` bad-dir, `validate_envelope` rejections |
+| `test/test_clm_ins.py` | `vox`, `drone`, `canter` render non-silent output |
+| `test/test_regressions.py` | one pinned test per 0.8.0 bug fix + the new fixes below, cross-referenced |
+
+Wiring: `pyproject.toml` gains `[project.optional-dependencies] test = ["pytest"]` and
+`[tool.pytest.ini_options] testpaths = ["test"]`; `build-wheels.yml` switches the wheel test to
+`CIBW_TEST_REQUIRES: pytest` + `CIBW_TEST_COMMAND: "pytest {project}/test"` (pytest is not a
+runtime dependency of the wheels).
+
+**Pre-existing module bugs found by the suite and fixed:**
+- **`sndlib.mus_sound_comment` segfault**: returned NULL for files without a comment and the
+  implicit `char*`→`str` conversion (with `c_string_type=unicode`) called `strlen(NULL)`. The
+  wrapper now returns `None` for NULL, and copies + frees sndlib's calloc'd buffer when a comment
+  exists (also fixes a per-call leak).
+- **`Noddsin` was never instantiable**: its `cdef class` attribute block was missing from
+  `generators.pxd` entirely (same class of bug as `MovingFFT` in Phase 4). Attribute declarations
+  added.
+- **`envelope_interp` only accepted env generators**, but CLM's `env-interp` (and pysndlib's own
+  `canter` instrument and `instruments/fm_voice.py`) evaluate breakpoint lists — so `canter` was
+  uncallable. `envelope_interp` now accepts lists/ndarrays (linear interpolation in the list's own
+  x units, clamped outside the range) in addition to env generators; `canter`'s four `env_interp`
+  calls corrected to `envelope_interp`. This likely also fixes `fm_voice` and other instruments
+  that pass lists.
+- **`make_fir_coeffs` rejected integer lists**: `np.array(envelope)` produced an int64 array that
+  the double memoryview rejected; now coerced with `dtype=np.double`.
+
+Final state: **316 passed, 10 skipped (documented skips: RNG-instance generators and missing
+procedural runners), 0 failed** — run time ~0.2 s. Verified against a fresh wheel build
+(Cython 3.3.1 / NumPy 2.5.4 / Python 3.12).
+
+
 
 
 

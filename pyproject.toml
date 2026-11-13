@@ -24,6 +24,12 @@ classifiers = [
 "Homepage" = "https://github.com/testcase/pysndlib"
 "Bug Tracker" = "https://github.com/testcase/pysndlib/issues"
 
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+
 [build-system]
 requires = ["setuptools>=61.0", "wheel", "Cython>=3.0.5", "numpy"]
 build-backend = "setuptools.build_meta"

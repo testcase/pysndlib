@@ -219,10 +219,12 @@ def canter(beg, dur, pitch, amp_1, deg, dis, pcrev, ampfun, ranfun, skewfun, ske
     k = math.floor(100 * math.log(pitch / rangebot, rangetop / rangebot))
     atpt = 100 * (atdr / dur)
     dcpt = 100 - ( 100 * (dcdr / dur))
-    lfmt1 = clm.env_interp(k, fmtfun1)
-    lfmt2 = clm.env_interp(k, fmtfun2)
-    lfmt3 = clm.env_interp(k, fmtfun3)
-    lfmt4 = clm.env_interp(k, fmtfun4)
+    # clm's env-interp evaluates breakpoint lists; pysndlib's env_interp only
+    # accepted env generators, which made canter uncallable with list envelopes
+    lfmt1 = clm.envelope_interp(k, fmtfun1)
+    lfmt2 = clm.envelope_interp(k, fmtfun2)
+    lfmt3 = clm.envelope_interp(k, fmtfun3)
+    lfmt4 = clm.envelope_interp(k, fmtfun4)
     
     dev11 = clm.hz2radians(clm.envelope_interp(k, indfun1) * pitch)
     dev12 = clm.hz2radians(clm.envelope_interp(k, indfun2) * pitch)

@@ -171,7 +171,7 @@ cpdef bint is_oscil_bank(mus_any gen)
 cpdef cython.double env(mus_any gen ) noexcept
 cpdef bint is_env(mus_any gen)
 cpdef cython.double env_interp(cython.double x , mus_any env)
-cpdef cython.double envelope_interp(cython.double x, mus_any env)
+cpdef cython.double envelope_interp(cython.double x, env)
 cpdef np.ndarray env_rates( mus_any gen)
 cpdef cython.double env_any(mus_any gen , connection_function) noexcept
 
