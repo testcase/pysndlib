@@ -2061,7 +2061,7 @@ cpdef mus_any make_oscil(cython.double frequency=0.,cython.double  initial_phase
     return mus_any.from_ptr(cclm.mus_make_oscil(frequency, initial_phase))
     
 ## Changing to avoid None overhead. Think it slows thing s down even if mus_oscil_unmodulated can be used.
-cpdef cython.double oscil(mus_any gen, cython.double fm=0.0, cython.double pm=0.0):
+cpdef cython.double oscil(mus_any gen, cython.double fm=0.0, cython.double pm=0.0) noexcept:
     """
     return next sample from oscil gen: val = sin(phase + pm); phase += (freq + fm)
     
@@ -2073,7 +2073,7 @@ cpdef cython.double oscil(mus_any gen, cython.double fm=0.0, cython.double pm=0.
     """    
     return cclm.mus_oscil(gen._ptr, fm, pm)
     
-cpdef cython.double oscil_unmodulated(mus_any gen):
+cpdef cython.double oscil_unmodulated(mus_any gen) noexcept:
     """
     return next sample from oscil gen. no modulation
     
@@ -2134,7 +2134,7 @@ cpdef mus_any make_oscil_bank(freqs, phases, amps=None, bint stable=False):
     gen.cache_extend([freqs, phases, amps])
     return gen
 
-cpdef cython.double oscil_bank(mus_any gen):
+cpdef cython.double oscil_bank(mus_any gen) noexcept:
     """
     sum an array of oscils
     
@@ -2191,7 +2191,7 @@ cpdef mus_any make_env(envelope, cython.double duration=1.0, cython.double scale
     gen.cache_append(envelope)
     return gen
 
-cpdef cython.double env(mus_any gen ):
+cpdef cython.double env(mus_any gen ) noexcept:
     """
     next sample from envelope generator.
     
@@ -2243,7 +2243,7 @@ cpdef np.ndarray env_rates(gen: mus_any):
 
 # this is slow because of needing ctypes to define function at runtime
 # but no other way to do it with cython without changing sndlib code
-cpdef cython.double env_any(mus_any gen, connection_function):
+cpdef cython.double env_any(mus_any gen, connection_function) noexcept:
     """
     generate env output using conncection_func to 'connect the dots'.
     
@@ -2284,7 +2284,7 @@ cpdef mus_any make_pulsed_env(envelope, cython.double duration , cython.double f
     gen.cache_extend([pl, ge, envelope])
     return gen
     
-cpdef cython.double pulsed_env(mus_any gen, cython.double fm=0.0):
+cpdef cython.double pulsed_env(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next sample from envelope generator.
     
@@ -2294,7 +2294,7 @@ cpdef cython.double pulsed_env(mus_any gen, cython.double fm=0.0):
     """
     return cclm.mus_pulsed_env(gen._ptr, fm)
     
-cpdef cython.double pulsed_env_unmodulated(mus_any gen):
+cpdef cython.double pulsed_env_unmodulated(mus_any gen) noexcept:
     """
     next sample from envelope generator. no modulations
     
@@ -2348,7 +2348,7 @@ cpdef mus_any make_table_lookup(cython.double frequency=0.0, cython.double initi
     gen.cache_append(wave)
     return gen
     
-cpdef cython.double table_lookup(mus_any gen, cython.double fm =0.0):
+cpdef cython.double table_lookup(mus_any gen, cython.double fm =0.0) noexcept:
     """
     return next sample from table_lookup generator.
     
@@ -2358,7 +2358,7 @@ cpdef cython.double table_lookup(mus_any gen, cython.double fm =0.0):
     """
     return cclm.mus_table_lookup(gen._ptr, fm)
         
-cpdef cython.double table_lookup_unmodulated(mus_any gen):
+cpdef cython.double table_lookup_unmodulated(mus_any gen) noexcept:
     """
     return next sample from table_lookup generator. unmodulated
     
@@ -2463,7 +2463,7 @@ cpdef mus_any make_polywave(cython.double frequency,  partials = [0.,1.], Polyno
         return gen
     
     
-cpdef cython.double polywave(mus_any gen, cython.double fm=0.0):
+cpdef cython.double polywave(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next sample of polywave waveshaper.
     
@@ -2474,7 +2474,7 @@ cpdef cython.double polywave(mus_any gen, cython.double fm=0.0):
     return cclm.mus_polywave(gen._ptr, fm)
 
     
-cpdef cython.double polywave_unmodulated(mus_any gen):
+cpdef cython.double polywave_unmodulated(mus_any gen) noexcept:
     """
     next sample of polywave waveshaper. unmodulated
     
@@ -2529,7 +2529,7 @@ cpdef mus_any make_polyshape(cython.double frequency, cython.double initial_phas
     gen.cache_append(data)
     return gen
     
-cpdef cython.double polyshape(mus_any gen, cython.double index=1.0, cython.double fm=0.0):
+cpdef cython.double polyshape(mus_any gen, cython.double index=1.0, cython.double fm=0.0) noexcept:
     """
     next sample of polynomial-based waveshaper.
     
@@ -2543,7 +2543,7 @@ cpdef cython.double polyshape(mus_any gen, cython.double index=1.0, cython.doubl
     else:
         return cclm.mus_polyshape_unmodulated(gen._ptr, index)
         
-cpdef cython.double polyshape_unmodulated(mus_any gen, cython.double index=1.0):
+cpdef cython.double polyshape_unmodulated(mus_any gen, cython.double index=1.0) noexcept:
     """
     next sample of polynomial-based waveshaper. unmodulated
     
@@ -2580,7 +2580,7 @@ cpdef mus_any make_triangle_wave(cython.double frequency, cython.double amplitud
     
     return mus_any.from_ptr(cclm.mus_make_triangle_wave(frequency, amplitude, phase))
     
-cpdef cython.double triangle_wave(mus_any gen, cython.double fm=0.0):
+cpdef cython.double triangle_wave(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next triangle wave sample from generator. 
     
@@ -2591,7 +2591,7 @@ cpdef cython.double triangle_wave(mus_any gen, cython.double fm=0.0):
     return cclm.mus_triangle_wave(gen._ptr, fm)
 
     
-cpdef cython.double triangle_wave_unmodulated(mus_any gen):
+cpdef cython.double triangle_wave_unmodulated(mus_any gen) noexcept:
     """
     next triangle wave sample from generator. unmodulated
     
@@ -2624,7 +2624,7 @@ cpdef mus_any make_square_wave(cython.double frequency , cython.double amplitude
     
     return mus_any.from_ptr(cclm.mus_make_square_wave(frequency, amplitude, phase))
     
-cpdef cython.double square_wave(mus_any gen, cython.double fm=0.0):
+cpdef cython.double square_wave(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next square wave sample from generator.
     
@@ -2659,7 +2659,7 @@ cpdef mus_any make_sawtooth_wave(cython.double frequency, cython.double amplitud
     
     return mus_any.from_ptr(cclm.mus_make_sawtooth_wave(frequency, amplitude, phase))
     
-cpdef cython.double sawtooth_wave(mus_any gen, cython.double fm =0.0):
+cpdef cython.double sawtooth_wave(mus_any gen, cython.double fm =0.0) noexcept:
     """
     next sawtooth wave sample from generator.
     
@@ -2695,7 +2695,7 @@ cpdef mus_any make_pulse_train(cython.double frequency=1.0, cython.double amplit
     
     return mus_any.from_ptr(cclm.mus_make_pulse_train(frequency, amplitude, phase))
     
-cpdef cython.double pulse_train(mus_any gen, cython.double fm=0.0):
+cpdef cython.double pulse_train(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next pulse train sample from generator.
     
@@ -2706,7 +2706,7 @@ cpdef cython.double pulse_train(mus_any gen, cython.double fm=0.0):
     return cclm.mus_pulse_train(gen._ptr, fm)
 
         
-cpdef cython.double pulse_train_unmodulated(mus_any gen):
+cpdef cython.double pulse_train_unmodulated(mus_any gen) noexcept:
     """
     next pulse train sample from generator. unmodulated
     :param gen: pulse_train gen
@@ -2738,7 +2738,7 @@ cpdef mus_any make_ncos(cython.double frequency, cython.int n=1):
     check_range('n', n, 0, None)
     return mus_any.from_ptr(cclm.mus_make_ncos(frequency, n))
     
-cpdef cython.double ncos(mus_any gen, cython.double fm=0.0):
+cpdef cython.double ncos(mus_any gen, cython.double fm=0.0) noexcept:
     """
     get the next sample from 'gen', an ncos generator.
     
@@ -2774,7 +2774,7 @@ cpdef mus_any make_nsin(cython.double frequency, cython.int n =1):
     
     return mus_any.from_ptr(cclm.mus_make_nsin(frequency, n))
     
-cpdef cython.double nsin(mus_any gen, cython.double fm=0.0):
+cpdef cython.double nsin(mus_any gen, cython.double fm=0.0) noexcept:
     """
     get the next sample from 'gen', an nsin generator.
     
@@ -2812,7 +2812,7 @@ cpdef mus_any make_nrxysin( cython.double frequency,  cython.double ratio=1., cy
     
     return mus_any.from_ptr(cclm.mus_make_nrxysin(frequency, ratio, n, r))
     
-cpdef cython.double nrxysin(mus_any gen, cython.double fm=0.):
+cpdef cython.double nrxysin(mus_any gen, cython.double fm=0.) noexcept:
     """
     next sample of nrxysin generator.
     
@@ -2850,7 +2850,7 @@ cpdef mus_any make_nrxycos(cython.double frequency , cython.double ratio=1., cyt
     
     return mus_any.from_ptr(cclm.mus_make_nrxycos(frequency, ratio, n, r))
     
-cpdef cython.double nrxycos(mus_any gen, cython.double fm=0.):
+cpdef cython.double nrxycos(mus_any gen, cython.double fm=0.) noexcept:
     """
     next sample of nrxycos generator.
     
@@ -2886,7 +2886,7 @@ cpdef mus_any make_rxykcos(cython.double frequency, cython.double phase=0.0, cyt
     
     return mus_any.from_ptr(cclm.mus_make_rxykcos(frequency, phase, r, ratio))
     
-cpdef cython.double rxykcos(mus_any gen, cython.double fm=0.):
+cpdef cython.double rxykcos(mus_any gen, cython.double fm=0.) noexcept:
     """
     next sample of rxykcos generator.
     
@@ -2920,7 +2920,7 @@ cpdef mus_any make_rxyksin(cython.double frequency, cython.double phase, cython.
     
     return mus_any.from_ptr(cclm.mus_make_rxyksin(frequency, phase, r, ratio))
 
-cpdef cython.double rxyksin(mus_any gen, cython.double fm=0.):
+cpdef cython.double rxyksin(mus_any gen, cython.double fm=0.) noexcept:
     """
     next sample of rxyksin generator.
     
@@ -2953,7 +2953,7 @@ cpdef mus_any make_ssb_am(cython.double frequency, cython.int order=40):
     
     return mus_any.from_ptr(cclm.mus_make_ssb_am(frequency, order))
     
-cpdef cython.double ssb_am(mus_any gen, cython.double insig , cython.double  fm=0.0):
+cpdef cython.double ssb_am(mus_any gen, cython.double insig , cython.double  fm=0.0) noexcept:
     """
     get the next sample from ssb_am generator.
     
@@ -2964,7 +2964,7 @@ cpdef cython.double ssb_am(mus_any gen, cython.double insig , cython.double  fm=
     return cclm.mus_ssb_am(gen._ptr, insig, fm)
 
 
-cpdef cython.double ssb_am_unmodulated(mus_any gen, cython.double insig):
+cpdef cython.double ssb_am_unmodulated(mus_any gen, cython.double insig) noexcept:
     """
     get the next sample from ssb_am generator. unmodulated.
     
@@ -3008,7 +3008,7 @@ cpdef mus_any make_wave_train(cython.double frequency, wave=None, cython.double 
     gen.cache_append(wave)
     return gen
     
-cpdef cython.double wave_train(mus_any gen, cython.double fm=0.0):
+cpdef cython.double wave_train(mus_any gen, cython.double fm=0.0) noexcept:
     """
     next sample of wave_train.
     
@@ -3019,7 +3019,7 @@ cpdef cython.double wave_train(mus_any gen, cython.double fm=0.0):
     return cclm.mus_wave_train(gen._ptr, fm)
 
         
-cpdef cython.double wave_train_unmodulated(mus_any gen):
+cpdef cython.double wave_train_unmodulated(mus_any gen) noexcept:
     """
     next sample of wave_train. unmodulated
     
@@ -3085,7 +3085,7 @@ cpdef mus_any make_rand(cython.double frequency, cython.double amplitude=1.0, di
     else:
         return mus_any.from_ptr(cclm.mus_make_rand(frequency, amplitude))
 
-cpdef cython.double rand(mus_any gen, cython.double sweep=0.0):
+cpdef cython.double rand(mus_any gen, cython.double sweep=0.0) noexcept:
     """
     gen's current random number. sweep modulates the rate at which the current number is changed.
     
@@ -3096,7 +3096,7 @@ cpdef cython.double rand(mus_any gen, cython.double sweep=0.0):
     """
     return cclm.mus_rand(gen._ptr, sweep)
         
-cpdef cython.double rand_unmodulated(mus_any gen):
+cpdef cython.double rand_unmodulated(mus_any gen) noexcept:
     """
     gen's current random number. sweep modulates the rate at which the current number is changed. unmodulated
     
@@ -3185,7 +3185,7 @@ cpdef mus_any make_one_pole(cython.double a0, cython.double b1):
 
     
     
-cpdef cython.double one_pole(mus_any gen, cython.double insig):
+cpdef cython.double one_pole(mus_any gen, cython.double insig) noexcept:
     """
     one pole filter of input.
     
@@ -3218,7 +3218,7 @@ cpdef mus_any make_one_zero(cython.double a0 , cython.double a1):
     """
     return mus_any.from_ptr(cclm.mus_make_one_zero(a0, a1))
     
-cpdef cython.double one_zero(mus_any gen, cython.double insig):
+cpdef cython.double one_zero(mus_any gen, cython.double insig) noexcept:
     """
     one zero filter of input.
     
@@ -3259,7 +3259,7 @@ cpdef make_two_pole(frequency=None, radius=None, a0=None,b1=None,b2=None):
             raise KeyError(f'Filter needs values for a0, b1, b2 got a0: {a0}, b1: {b1}, b2: {b2}')
 
                   
-cpdef cython.double two_pole(mus_any gen, cython.double insig):
+cpdef cython.double two_pole(mus_any gen, cython.double insig) noexcept:
     """
     two pole filter of input.
     
@@ -3301,7 +3301,7 @@ cpdef make_two_zero(frequency=None, radius=None, a0=None,a1=None,a2=None):
             raise KeyError(f'Filter needs values for a0, a1, a2 got a0: {a0}, a1: {a1}, a2: {a2}')
 
 
-cpdef cython.double two_zero(mus_any gen, cython.double insig):
+cpdef cython.double two_zero(mus_any gen, cython.double insig) noexcept:
     """
     two zero filter of input. 
     
@@ -3338,7 +3338,7 @@ cpdef mus_any make_formant(cython.double frequency, cython.double radius):
         
     return mus_any.from_ptr(cclm.mus_make_formant(frequency, radius))
 
-cpdef cython.double formant(mus_any gen, cython.double insig, cython.double radians=0.0):
+cpdef cython.double formant(mus_any gen, cython.double insig, cython.double radians=0.0) noexcept:
     """
     next sample from formant generator.
     
@@ -3394,7 +3394,7 @@ cpdef mus_any make_formant_bank(list filters, amps=None):
     return gen
 
 
-cpdef cython.double formant_bank(mus_any gen, inputs):
+cpdef cython.double formant_bank(mus_any gen, inputs) noexcept:
     """
     sum a bank of formant generators.
     
@@ -3486,7 +3486,7 @@ cpdef mus_any make_filter(cython.int order, xcoeffs, ycoeffs):
     gen.cache_extend([xcoeffs_cpy, ycoeffs_cpy])
     return gen
     
-cpdef cython.double filter(mus_any gen, cython.double insig): # todo : conflicts with buitl in function
+cpdef cython.double filter(mus_any gen, cython.double insig) noexcept: # todo : conflicts with buitl in function
     """
     next sample from filter.
     
@@ -3527,7 +3527,7 @@ cpdef mus_any make_fir_filter(cython.int order, xcoeffs):
     
     return gen
     
-cpdef cython.double fir_filter(mus_any gen, cython.double insig):
+cpdef cython.double fir_filter(mus_any gen, cython.double insig) noexcept:
     """
     next sample from fir filter.
     
@@ -3569,7 +3569,7 @@ cpdef mus_any make_iir_filter(cython.int order, ycoeffs):
     gen.cache_append(ycoeffs)
     return gen
     
-cpdef cython.double iir_filter(mus_any gen, cython.double insig ):
+cpdef cython.double iir_filter(mus_any gen, cython.double insig ) noexcept:
     """
     next sample from iir filter.
     
@@ -3658,7 +3658,7 @@ cpdef mus_any make_delay(cython.long size, initial_contents=None, initial_elemen
     gen.cache_append(initial_contents)
     return gen
     
-cpdef cython.double delay(mus_any gen, cython.double insig, cython.double pm=0.0):
+cpdef cython.double delay(mus_any gen, cython.double insig, cython.double pm=0.0) noexcept:
     """
     delay val according to the delay line's length and pm ('phase-modulation').
     if pm is greater than 0.0, the max-size argument used to create gen should have accommodated 
@@ -3673,7 +3673,7 @@ cpdef cython.double delay(mus_any gen, cython.double insig, cython.double pm=0.0
     return cclm.mus_delay(gen._ptr, insig, pm)
 
         
-cpdef cython.double delay_unmodulated(mus_any gen, cython.double insig):
+cpdef cython.double delay_unmodulated(mus_any gen, cython.double insig) noexcept:
     """
     delay val according to the delay line's length and pm ('phase-modulation').
     if pm is greater than 0.0, the max-size argument used to create gen should have accommodated 
@@ -3695,7 +3695,7 @@ cpdef bint is_delay(mus_any gen):
     """
     return cclm.mus_is_delay(gen._ptr)
 
-cpdef cython.double tap(mus_any gen, offset=0.):
+cpdef cython.double tap(mus_any gen, offset=0.) noexcept:
     """
     tap the delay mus_any offset by pm
     
@@ -3707,7 +3707,7 @@ cpdef cython.double tap(mus_any gen, offset=0.):
 
     return cclm.mus_tap(gen._ptr, offset)
 
-cpdef cython.double tap_unmodulated(mus_any gen):
+cpdef cython.double tap_unmodulated(mus_any gen) noexcept:
     """
     tap the delay mus_any offset by pm
     
@@ -3727,7 +3727,7 @@ cpdef bint is_tap(mus_any gen):
     """
     return cclm.mus_is_tap(gen._ptr)
     
-cpdef cython.double delay_tick(mus_any gen, cython.double insig ):
+cpdef cython.double delay_tick(mus_any gen, cython.double insig ) noexcept:
     """
     delay val according to the delay line's length. this merely 'ticks' the delay line forward.
     the argument 'insi' is returned.
@@ -3784,7 +3784,7 @@ cpdef mus_any make_comb(cython.double feedback=1.0,size=None, initial_contents=N
     gen.cache_append(initial_contents)
     return gen    
            
-cpdef cython.double comb(mus_any gen, cython.double insig, pm=None):
+cpdef cython.double comb(mus_any gen, cython.double insig, pm=None) noexcept:
     """
     comb filter val, pm changes the delay length.
     
@@ -3828,7 +3828,7 @@ cpdef mus_any make_comb_bank(list combs):
     gen.cache_extend([comb_array, combs])
     return gen
 
-cpdef cython.double comb_bank(mus_any gen, cython.double insig):
+cpdef cython.double comb_bank(mus_any gen, cython.double insig) noexcept:
     """
     sum an array of comb filters.
     
@@ -3893,7 +3893,7 @@ cpdef mus_any make_filtered_comb(cython.double feedback,cython.long size, mus_an
     gen.cache_extend([initial_contents, filter])
     return gen    
         
-cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.double pm=0.0):
+cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.double pm=0.0) noexcept:
     """
     filtered comb filter val, pm changes the delay length.
     
@@ -3905,7 +3905,7 @@ cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.doubl
     return cclm.mus_filtered_comb(gen._ptr, insig, pm)
 
         
-cpdef cython.double filtered_comb_unmodulated(mus_any gen, cython.double insig):
+cpdef cython.double filtered_comb_unmodulated(mus_any gen, cython.double insig) noexcept:
     """
     filtered comb filter val, pm changes the delay length. unmodulated
     
@@ -3944,7 +3944,7 @@ cpdef mus_any make_filtered_comb_bank(list fcombs):
     gen.cache_extend([fcomb_array, fcombs])
     return gen
 
-cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig):
+cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig) noexcept:
     """
     sum an array of filtered_comb filters.
     
@@ -4014,7 +4014,7 @@ cpdef mus_any make_notch(cython.double feedforward=1.0,size=None,
     gen.cache_append(initial_contents)
     return gen    
 
-cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=0.0):
+cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=0.0) noexcept:
     """
     notch filter val, pm changes the delay length.
         
@@ -4026,7 +4026,7 @@ cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=0.0
     return cclm.mus_notch(gen._ptr, insig, pm)
 
    
-cpdef cython.double notch_unmodulated(mus_any gen, cython.double insig):
+cpdef cython.double notch_unmodulated(mus_any gen, cython.double insig) noexcept:
     """
     notch filter val, pm changes the delay length. unmodulated
         
@@ -4095,7 +4095,7 @@ cpdef mus_any make_all_pass(cython.double feedback, cython.double  feedforward, 
     gen.cache_append(initial_contents)
     return gen
     
-cpdef cython.double all_pass(mus_any gen, cython.double insig, pm=None):
+cpdef cython.double all_pass(mus_any gen, cython.double insig, pm=None) noexcept:
     """
     all-pass filter insig value, pm changes the delay length.
     
@@ -4137,7 +4137,7 @@ cpdef mus_any make_all_pass_bank(all_passes: list):
     gen.cache_extend([all_passes_array, all_passes])
     return gen
 
-cpdef cython.double all_pass_bank(mus_any gen, cython.double insig):
+cpdef cython.double all_pass_bank(mus_any gen, cython.double insig) noexcept:
     """
     sum an array of all_pass filters.
     
@@ -4171,7 +4171,7 @@ cpdef mus_any make_one_pole_all_pass(cython.long size, cython.double coeff):
     """
     return mus_any.from_ptr(cclm.mus_make_one_pole_all_pass(size, coeff))
     
-cpdef cython.double one_pole_all_pass(mus_any gen, cython.double insig):
+cpdef cython.double one_pole_all_pass(mus_any gen, cython.double insig) noexcept:
     """
     one pole all pass filter of input.
     
@@ -4224,7 +4224,7 @@ cpdef mus_any make_moving_average(cython.long size, initial_contents=None, cytho
     return gen
         
         
-cpdef cython.double moving_average(mus_any gen, cython.double  insig):
+cpdef cython.double moving_average(mus_any gen, cython.double  insig) noexcept:
     """
     moving window average.
     
@@ -4280,7 +4280,7 @@ cpdef mus_any make_moving_max(cython.long size,
         gen = mus_any.from_ptr(cclm.mus_make_moving_max(size, NULL))
     return gen
     
-cpdef cython.double moving_max(mus_any gen, cython.double insig):
+cpdef cython.double moving_max(mus_any gen, cython.double insig) noexcept:
     """
     moving window max.
     
@@ -4330,7 +4330,7 @@ cpdef mus_any make_moving_norm(cython.long size, initial_contents=None, cython.d
     
     return gen
     
-cpdef cython.double moving_norm(mus_any gen, cython.double insig):
+cpdef cython.double moving_norm(mus_any gen, cython.double insig) noexcept:
     """
     moving window norm.
     
@@ -4367,7 +4367,7 @@ cpdef mus_any make_asymmetric_fm(cython.double frequency, cython.double initial_
     
     return mus_any.from_ptr(cclm.mus_make_asymmetric_fm(frequency, initial_phase, r, ratio))
     
-cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.double fm=0.0):
+cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.double fm=0.0) noexcept:
     """
     next sample from asymmetric fm generator.  
        
@@ -4379,7 +4379,7 @@ cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.doubl
     return cclm.mus_asymmetric_fm(gen._ptr, index, fm)
 
         
-cpdef cython.double asymmetric_fm_unmodulated(mus_any gen, cython.double index):
+cpdef cython.double asymmetric_fm_unmodulated(mus_any gen, cython.double index) noexcept:
     """
     next sample from asymmetric fm generator.  
        
@@ -4414,7 +4414,7 @@ cpdef mus_any make_file2sample(str filename, buffer_size=None):
     buffer_size = buffer_size or default.buffer_size
     return mus_any.from_ptr(cclm.mus_make_file_to_sample_with_buffer_size(filename, buffer_size))
     
-cpdef cython.double file2sample(mus_any gen, cython.long loc, cython.int chan=0):
+cpdef cython.double file2sample(mus_any gen, cython.long loc, cython.int chan=0) noexcept:
     """
     sample value \in sound file read by 'obj' \in channel chan at sample.
     
@@ -4455,7 +4455,7 @@ cpdef mus_any make_sample2file(str filename, cython.int chans=1, sample_type=Non
     else:
         return mus_any.from_ptr(cclm.mus_make_sample_to_file_with_comment(filename, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, comment))
 
-cpdef cython.double sample2file(mus_any gen, cython.long samp, cython.int chan ,  cython.double val):
+cpdef cython.double sample2file(mus_any gen, cython.long samp, cython.int chan ,  cython.double val) noexcept:
     """
     add val to the output stream handled by the output generator 'obj', \in channel 'chan' at frample 'samp'.
     
@@ -4546,7 +4546,7 @@ cpdef mus_any make_frample2file(str filename, cython.int chans=1, sample_type=No
     else:
         return mus_any.from_ptr(cclm.mus_make_frample_to_file_with_comment(filename, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, NULL))
 
-cpdef cython.double frample2file(mus_any gen, cython.long samp, vals):
+cpdef cython.double frample2file(mus_any gen, cython.long samp, vals) noexcept:
     """
     add frample 'val' to the output stream handled by the output generator 'obj' at frample 'samp'.
     
@@ -4610,7 +4610,7 @@ cpdef mus_any make_readin(str filename, cython.int chan=0, cython.long start=0, 
     buffer_size = buffer_size or default.buffer_size
     return mus_any.from_ptr(cclm.mus_make_readin_with_buffer_size(filename, chan, start, direction, buffer_size))
     
-cpdef cython.double readin(mus_any gen):
+cpdef cython.double readin(mus_any gen) noexcept:
     """
     next sample from readin generator (a sound file reader).
     
@@ -4669,7 +4669,7 @@ def make_src(inp , cython.double srate=1.0, cython.int width=10):
     
     return res
   
-cpdef cython.double src(mus_any gen, cython.double sr_change=0.0):
+cpdef cython.double src(mus_any gen, cython.double sr_change=0.0) noexcept:
     """
     next sampling rate conversion sample. 'pm' can be used to change the sampling rate on a
     sample-by-sample basis. 'input-function' is a function of one argument (the current input direction,
@@ -4763,7 +4763,7 @@ def make_convolve(inp, filt, cython.long fft_size=512, filter_size=None):
     return res
 
     
-cpdef cython.double convolve(mus_any gen):
+cpdef cython.double convolve(mus_any gen) noexcept:
     """
     next sample from convolution generator.
     
@@ -4853,7 +4853,7 @@ def make_granulate(inp,
 
     
 #todo: mus_granulate_grain_max_length
-cpdef cython.double granulate(mus_any gen):
+cpdef cython.double granulate(mus_any gen) noexcept:
     """
     next sample from granular synthesis generator.
     
@@ -4966,7 +4966,7 @@ def make_phase_vocoder(inp,
     return res
 
 
-cpdef cython.double phase_vocoder(mus_any gen):
+cpdef cython.double phase_vocoder(mus_any gen) noexcept:
     """
     next phase vocoder value.
     
@@ -5253,7 +5253,7 @@ cpdef bint is_locsig(mus_any gen):
     """
     return cclm.mus_is_locsig(gen._ptr)
     
-cpdef cython.double locsig_ref(mus_any gen, cython.int chan):
+cpdef cython.double locsig_ref(mus_any gen, cython.int chan) noexcept:
     """
     get locsig 'gen' channel 'chan' scaler for main output.
     
@@ -5264,7 +5264,7 @@ cpdef cython.double locsig_ref(mus_any gen, cython.int chan):
     """
     return cclm.mus_locsig_ref(gen._ptr, chan)
     
-cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val):
+cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val) noexcept:
     """
     set the locsig generator's channel 'chan' scaler to 'val'  for main output.
     
@@ -5276,7 +5276,7 @@ cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val):
     """
     return cclm.mus_locsig_set(gen._ptr, chan, val)
     
-cpdef cython.double locsig_reverb_ref(mus_any gen, cython.int chan):
+cpdef cython.double locsig_reverb_ref(mus_any gen, cython.int chan) noexcept:
     """
     get locsig reverb channel 'chan' scaler.
     
@@ -5288,7 +5288,7 @@ cpdef cython.double locsig_reverb_ref(mus_any gen, cython.int chan):
     """
     return cclm.mus_locsig_reverb_ref(gen._ptr, chan)
 
-cpdef cython.double locsig_reverb_set(mus_any gen, cython.int chan, cython.double val):
+cpdef cython.double locsig_reverb_set(mus_any gen, cython.int chan, cython.double val) noexcept:
     """
     set the locsig reverb channel 'chan' scaler to 'val'.
     
@@ -5351,7 +5351,7 @@ cpdef convolve_files(str file1, str file2, cython.double maxamp=1., str outputfi
 cpdef mus_any make_dcblock():
     return make_filter(2, [1,-1], [1, -.99])
     
-cpdef cython.double dcblock(mus_any gen, cython.double insig):
+cpdef cython.double dcblock(mus_any gen, cython.double insig) noexcept:
     return filter(gen, insig)
     
 
@@ -5361,7 +5361,7 @@ cpdef mus_any make_biquad(cython.double a0, cython.double a1, cython.double a2, 
     """returns a biquad filter (use with the CLM filter gen)"""
     return make_filter(3, np.array([a0,a1,a2]), np.array([0.0,b1,b2]))
     
-cpdef cython.double biquad(mus_any gen, cython.double insig):
+cpdef cython.double biquad(mus_any gen, cython.double insig) noexcept:
     return filter(gen, insig)
 
 cpdef bint is_biquad(mus_any gen):

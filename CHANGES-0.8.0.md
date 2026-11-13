@@ -108,6 +108,42 @@ only sees sndlib errors from calls made through `clm`'s functions (and the instr
 behavior (the old raising handler was likewise registered only in `clm`'s copy) and is recorded
 here as a known caveat of the static-linking design.
 
+## Phase 4 — Performance pass
+
+| Change | Detail |
+|---|---|
+| `noexcept` on hot per-sample wrappers | All 74 `cpdef cython.double <gen-func>(mus_any …)` wrappers in `clm.pyx`/`clm.pxd` (`oscil`, `env`, filters, `delay`, `readin`, `src`, bank generators, …) are now `noexcept`, removing Cython 3's per-call `PyErr_Occurred()` check. Safety analysis: none of the 74 raises, and the ones invoking user Python callbacks (`env_any`, `src`, `granulate`) do so through ctypes trampolines, which print-and-swallow exceptions rather than propagating; with the Phase 3 store-and-raise handler, sndlib C errors never surface as exceptions from these wrappers anyway. |
+| C math in `generators.pyx` | `from math import sin, cos, …` (Python call machinery per sample) replaced with `from libc.math cimport …` (direct C calls), resolving the file's own TODO. The four `math.sin/cos/pow` call sites (Izcos, Bessel, blackman4, Nchoosekcos) converted to the cimported names; `import math` kept for `math.pi` at module level. |
+| Typed memoryviews in hot generator loops | `PinkNoise.next()`: per-element ndarray `__getitem__`/`__setitem__` in the per-octave loop replaced with a `double[::1]` memoryview. `K3sin.next()`: per-sample call to `clm.polynomial` (which re-checks ndim and re-acquires a memoryview of the 4-coefficient array every call) replaced with an inlined Horner evaluation over a local memoryview — verified numerically identical to `mus_polynomial`'s evaluation order in the smoke test. `MovingFFT.next()`: readin loops write through a `double[::1]` memoryview, captured per branch because `np.roll()` assigns a fresh array. |
+| `noexcept` env helpers | `sin_env_fun`, `square_env_fun`, `blackman4_env_fun` in `generators.pyx` — called per envelope breakpoint through `env_any`. |
+| Typed locals in `clm_ins.pyx` | Generator locals in the per-sample loops of `vox`, `drone`, `canter` typed as `clm.mus_any` so `cpdef` calls skip the runtime type-check dispatch (previously untyped Python objects). |
+
+**Bugs found by the new performance-path tests (fixed in this phase):**
+- `MovingFFT` was **never instantiable**: its `cdef class` attribute block was commented out in
+  `generators.pxd`, so `reader`/`n`/`hop`/`outctr`/`rl`/`im`/`data`/`window` were undeclared, and
+  every `MovingFFT(...)` / `make_moving_fft(...)` raised `AttributeError: no attribute 'reader'`
+  on the first assignment (Cython extension types cannot take undeclared attributes). The
+  attribute declarations (plus `mus_run`) are now restored in the pxd. The new smoke test is the
+  first time this class has ever been exercised.
+- The first attempt at the inlined `K3sin` polynomial evaluated the coefficient array in the
+  wrong direction; `mus_polynomial` (clm.c:940) treats `coeffs[0]` as the **constant term**
+  (starting `sum = coeffs[ncoeffs-1]` and iterating downward). The inline Horner now mirrors
+  `mus_polynomial` exactly — including arbitrary coefficient-array lengths, since `coeffs` is a
+  public attribute — and the test asserts agreement with `clm.polynomial` over multiple samples.
+
+**Deviations from plan (skipped, with reasons):**
+- `@cython.final` on leaf generator classes: skipped — the generator classes are part of the
+  public API and users may subclass them (the codebase's own pattern for custom generators);
+  `final` would break that.
+- `nogil` for bulk C routines (`mus_fft`, `mus_convolution`, `mus_file_to_array`): skipped — these
+  are invoked with Python buffer/numpy objects that require the GIL, and Phase 3 documented the
+  GIL invariant for the error/print handlers; the gain would be marginal while the callback/GIL
+  interaction risk is real.
+- Memoryview fast path in `out_any`: skipped — `out_any` is invoked per sample from Python loops
+  (the Python call dominates), and the output can be an ndarray, list, or file generator, so a
+  per-call buffer acquisition would cost roughly what the single indexing operation costs.
+
+
 
 Verified: the smoke test triggers a real sndlib error (`mus_sound_open_input` on a non-sound file)
 and asserts that `SNDLibError` surfaces via `check_sndlib_errors()` exactly once, then the slot is

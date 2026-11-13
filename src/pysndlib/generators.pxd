@@ -962,19 +962,21 @@ cpdef cython.bint is_tanhsin(gen)
 # 
 # --------------- moving-fft ---------------- # 
 
-# cdef class MovingFFT(CLMGenerator):
-#     cdef public clm.mus_any reader
-#     cdef public cython.int n 
-#     cdef public cython.int hop
-#     cdef public cython.int outctr
-#     cdef public np.ndarray rl
-#     cdef public np.ndarray im
-#     cdef public np.ndarray data
-#     cdef public np.ndarray window
-#     cdef last_moving_fft_window
-#     cpdef mus_run(self, arg1, arg1)
-# 
-# cpdef cython.double moving_fft(MovingFFT gen)
+# NOTE: MovingFFT's attribute declarations were previously commented out,
+# which made the class impossible to instantiate (Cython extension types
+# cannot take undeclared attributes) -- every MovingFFT.__init__ raised
+# AttributeError. Declared below with the attribute block restored.
+cdef class MovingFFT(CLMGenerator):
+    cdef public clm.mus_any reader
+    cdef public cython.int n
+    cdef public cython.int hop
+    cdef public cython.int outctr
+    cdef public np.ndarray rl
+    cdef public np.ndarray im
+    cdef public np.ndarray data
+    cdef public np.ndarray window
+    cdef public object last_moving_fft_window
+    cpdef mus_run(self, arg1, arg2)
 # cpdef cython.bint is_moving_fft(gen)
 # 
 # # --------------- moving-spectrum ---------------- # 

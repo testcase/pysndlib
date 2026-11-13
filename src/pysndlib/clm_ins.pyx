@@ -84,30 +84,30 @@ def vox_fun(phonemes, forms):
 def vox(beg, dur, freq, amp, ampfun, freqfun, freqscl, phonemes, formant_amps, formant_indices,vibscl=.1, deg=0, pcrev=0):
     start: cython.long = clm.seconds2samples(beg)
     end: cython.long = clm.seconds2samples(beg + dur)
-    car_os = clm.make_oscil(0)
+    car_os: clm.mus_any = clm.make_oscil(0)
     fs = len(formant_amps)
-    per_vib = clm.make_triangle_wave(6, amplitude=clm.hz2radians(freq * vibscl))
-    ran_vib = clm.make_rand(20, amplitude=clm.hz2radians(freq * .5 * vibscl))
-    freqf = clm.make_env(freqfun, duration=dur, scaler=clm.hz2radians(freqscl * freq), offset=clm.hz2radians(freq))
+    per_vib: clm.mus_any = clm.make_triangle_wave(6, amplitude=clm.hz2radians(freq * vibscl))
+    ran_vib: clm.mus_any = clm.make_rand(20, amplitude=clm.hz2radians(freq * .5 * vibscl))
+    freqf: clm.mus_any = clm.make_env(freqfun, duration=dur, scaler=clm.hz2radians(freqscl * freq), offset=clm.hz2radians(freq))
     
     i: cython.long = 0
     
     if fs == 3 and clm.get_channels(clm.default.output):
-        a0 = clm.make_env(ampfun, scaler=amp*formant_amps[0], duration=dur)
-        a1 = clm.make_env(ampfun, scaler=amp*formant_amps[1], duration=dur)
-        a2 = clm.make_env(ampfun, scaler=amp*formant_amps[2], duration=dur)
-        o0 = clm.make_oscil(0.0)
-        o1 = clm.make_oscil(0.0)
-        o2 = clm.make_oscil(0.0)
-        e0 = clm.make_oscil(0.0)
-        e1 = clm.make_oscil(0.0)
-        e2 = clm.make_oscil(0.0)
+        a0: clm.mus_any = clm.make_env(ampfun, scaler=amp*formant_amps[0], duration=dur)
+        a1: clm.mus_any = clm.make_env(ampfun, scaler=amp*formant_amps[1], duration=dur)
+        a2: clm.mus_any = clm.make_env(ampfun, scaler=amp*formant_amps[2], duration=dur)
+        o0: clm.mus_any = clm.make_oscil(0.0)
+        o1: clm.mus_any = clm.make_oscil(0.0)
+        o2: clm.mus_any = clm.make_oscil(0.0)
+        e0: clm.mus_any = clm.make_oscil(0.0)
+        e1: clm.mus_any = clm.make_oscil(0.0)
+        e2: clm.mus_any = clm.make_oscil(0.0)
         ind0 = formant_indices[0]
         ind1 = formant_indices[1]
         ind2 = formant_indices[2]
-        f0 = clm.make_env(vox_fun(phonemes,0),scaler=clm.hz2radians(1.0), duration=dur)
-        f1 = clm.make_env(vox_fun(phonemes,1),scaler=clm.hz2radians(1.0), duration=dur)
-        f2 = clm.make_env(vox_fun(phonemes,2),scaler=clm.hz2radians(1.0), duration=dur)
+        f0: clm.mus_any = clm.make_env(vox_fun(phonemes,0),scaler=clm.hz2radians(1.0), duration=dur)
+        f1: clm.mus_any = clm.make_env(vox_fun(phonemes,1),scaler=clm.hz2radians(1.0), duration=dur)
+        f2: clm.mus_any = clm.make_env(vox_fun(phonemes,2),scaler=clm.hz2radians(1.0), duration=dur)
         
         for i in range(start, end):
             frq: cython.double = clm.env(freqf) + clm.triangle_wave(per_vib) + clm.rand_interp(ran_vib)
@@ -193,11 +193,11 @@ def drone(startime, dur, frequency, amp, ampfun, synth, ampat, ampdc, amtrev, de
     waveform: np.ndarray = clm.partials2wave(synth)
     amplitude: cython.double = amp * .25
     freq: cython.double = clm.hz2radians(frequency)
-    s = clm.make_table_lookup(frequency, wave=waveform)
+    s: clm.mus_any = clm.make_table_lookup(frequency, wave=waveform)
     ampe = stretch_envelope(ampfun, 25, (100 * (ampat / dur)), 75, (100 - (100 * (ampdc / dur))))
-    amp_env = clm.make_env(ampe, scaler=amplitude, duration=dur)
-    ran_vib = clm.make_rand(rvibfreq, rvibamt*freq)
-    loc = clm.make_locsig(deg, dis, amtrev)
+    amp_env: clm.mus_any = clm.make_env(ampe, scaler=amplitude, duration=dur)
+    ran_vib: clm.mus_any = clm.make_rand(rvibfreq, rvibamt*freq)
+    loc: clm.mus_any = clm.make_locsig(deg, dis, amtrev)
     
     i: cython.long = 0
         
@@ -246,20 +246,20 @@ def canter(beg, dur, pitch, amp_1, deg, dis, pcrev, ampfun, ranfun, skewfun, ske
     lamp4 = clm.envelope_interp(k, ampfun4) * amp * (1 - math.fabs(harm4 - (lfmt4 / pitch)))
     
     tidx_stretched = stretch_envelope(indexfun, 25, atpt, 75, dcpt)
-    tampfun = clm.make_env(stretch_envelope(ampfun, 25, atpt, 75, dcpt), duration=dur)
-    tskwfun = clm.make_env(stretch_envelope(skewfun, 25, atpt, 75, dcpt), scaler=clm.hz2radians(pitch * skewpc), duration=dur)
-    tranfun = clm.make_env(stretch_envelope(ranfun, 25, atpt, 75, dcpt), duration=dur)    
-    d1env = clm.make_env(tidx_stretched, offset=dev01, scaler=dev11, duration=dur)
-    d2env = clm.make_env(tidx_stretched, offset=dev02, scaler=dev12, duration=dur)
-    d3env = clm.make_env(tidx_stretched, offset=dev03, scaler=dev13, duration=dur)
-    d4env = clm.make_env(tidx_stretched, offset=dev04, scaler=dev14, duration=dur)
-    modgen = clm.make_oscil(pitch)
-    ranvib = clm.make_rand(ranfreq, clm.hz2radians(ranpc * pitch))
-    loc = clm.make_locsig(deg, dis, pcrev)
-    gen1 = clm.make_oscil(pitch * harm1)
-    gen2 = clm.make_oscil(pitch * harm2)
-    gen3 = clm.make_oscil(pitch * harm3)
-    gen4 = clm.make_oscil(pitch * harm4)
+    tampfun: clm.mus_any = clm.make_env(stretch_envelope(ampfun, 25, atpt, 75, dcpt), duration=dur)
+    tskwfun: clm.mus_any = clm.make_env(stretch_envelope(skewfun, 25, atpt, 75, dcpt), scaler=clm.hz2radians(pitch * skewpc), duration=dur)
+    tranfun: clm.mus_any = clm.make_env(stretch_envelope(ranfun, 25, atpt, 75, dcpt), duration=dur)    
+    d1env: clm.mus_any = clm.make_env(tidx_stretched, offset=dev01, scaler=dev11, duration=dur)
+    d2env: clm.mus_any = clm.make_env(tidx_stretched, offset=dev02, scaler=dev12, duration=dur)
+    d3env: clm.mus_any = clm.make_env(tidx_stretched, offset=dev03, scaler=dev13, duration=dur)
+    d4env: clm.mus_any = clm.make_env(tidx_stretched, offset=dev04, scaler=dev14, duration=dur)
+    modgen: clm.mus_any = clm.make_oscil(pitch)
+    ranvib: clm.mus_any = clm.make_rand(ranfreq, clm.hz2radians(ranpc * pitch))
+    loc: clm.mus_any = clm.make_locsig(deg, dis, pcrev)
+    gen1: clm.mus_any = clm.make_oscil(pitch * harm1)
+    gen2: clm.mus_any = clm.make_oscil(pitch * harm2)
+    gen3: clm.mus_any = clm.make_oscil(pitch * harm3)
+    gen4: clm.mus_any = clm.make_oscil(pitch * harm4)
     
     frqval: cython.double = 0.0
     modval: cython.double = 0.0
