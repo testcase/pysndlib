@@ -1,12 +1,12 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
+
 
 import numpy as np
 cimport cython
 cimport numpy as np
 cimport pysndlib.csndlib as csndlib
-
-csndlib.mus_sound_initialize()
 
 cpdef enum Header:
     """
@@ -60,12 +60,12 @@ cpdef str mus_sound_comment(str file)
 cpdef cython.int mus_bytes_per_sample(Sample samp_type)
 cpdef cython.double mus_sound_duration(str file)
 cpdef cython.int mus_sound_initialize()
-cpdef cython.int mus_sound_override_header(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type, cython.int location, cython.int size: int )
+cpdef cython.int mus_sound_override_header(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type, cython.int location, cython.int size)
 cpdef np.ndarray mus_sound_loop_info(str filename)
 cpdef mus_sound_set_loop_info(str filename, np.ndarray info)
 cpdef cython.int  mus_sound_open_input(str filename)
 cpdef cython.int  mus_sound_open_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type, str comments)
-cpdef cython.int  mus_sound_reopen_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type,  cython.int  location)
+cpdef cython.int  mus_sound_reopen_output(str file, cython.int chans, Sample sample_type, Header header_type,  cython.int  location)
 cpdef cython.int mus_sound_close_input(cython.int fd)
 cpdef cython.int mus_sound_close_output(cython.int fd, csndlib.mus_long_t bytes_of_data)
 

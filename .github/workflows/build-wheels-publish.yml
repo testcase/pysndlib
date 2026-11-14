@@ -1,0 +1,201 @@
+name: Python build Wheels and SDist
+
+on:
+  # pushing a version tag (vX.Y.Z) IS the release: the version of every
+  # wheel and the sdist is derived from the tag via setuptools-scm
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'making pysndlib'
+        # Default value to be explicitly provided for the workflow to run
+        default: 'make'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
+
+env:
+  CIBW_BUILD_VERBOSITY: 2
+  CIBW_ENVIRONMENT: PIP_PREFER_BINARY=1
+  # run the pytest suite against every built wheel
+  CIBW_TEST_REQUIRES: pytest
+  CIBW_TEST_COMMAND: "pytest {project}/test"
+  # the universal2 x86_64 slice cannot be tested on arm64 runners;
+  # the arm64 slice IS tested natively
+  CIBW_TEST_SKIP: "*-macosx_universal2:x86_64"
+
+jobs:
+  build_macos_wheels:
+    name: Build python ${{ matrix.cibw_python }} wheels on macOS
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        cibw_python: ["cp310-*", "cp311-*", "cp312-*", "cp313-*", "cp314-*"]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
+
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+
+      - name: unzip
+        run: unzip libsndlib_macos_universal2.zip
+
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v4.3.5
+        env:
+          CIBW_BUILD: ${{ matrix.cibw_python }}
+          CIBW_ARCHS_MACOS: universal2
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-macos-universal2
+          path: ./wheelhouse/*.whl
+
+  build_linux_wheels:
+    name: Build python ${{ matrix.cibw_python }} ${{ matrix.cibw_arch }} wheels on Linux
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cibw_arch: ["x86_64"]
+        cibw_python: ["cp310-*", "cp311-*", "cp312-*", "cp313-*", "cp314-*"]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
+
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_linux_x86_64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+
+      - name: unzip
+        run: unzip libsndlib_linux_x86_64.zip
+
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v4.3.5
+        env:
+          CIBW_BUILD: ${{ matrix.cibw_python }}
+          CIBW_ARCHS: ${{ matrix.cibw_arch }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-linux-${{ matrix.cibw_arch }}
+          path: ./wheelhouse/*.whl
+
+  build_windows_wheels:
+    name: Build python ${{ matrix.cibw_python }} wheels on Windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cibw_arch: ["AMD64"]
+        cibw_python: ["cp310-*", "cp311-*", "cp312-*", "cp313-*", "cp314-*"]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
+
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_windows_x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+
+      - name: unzip
+        # windows runners have no unzip; tar (bsdtar) reads zip archives
+        run: tar -xf libsndlib_windows_x64.zip
+        shell: pwsh
+
+      - name: Copy sndlib header files
+        run: |
+          Copy-Item ./sndlib/sndlib.h ./src/pysndlib/
+          Copy-Item ./sndlib/clm.h ./src/pysndlib/
+        shell: pwsh
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v4.3.5
+        env:
+          CIBW_BUILD: ${{ matrix.cibw_python }}
+          CIBW_ARCHS: ${{ matrix.cibw_arch }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-windows-x64
+          path: ./wheelhouse/*.whl
+
+  make_sdist:
+    name: Make SDist
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Optional, use if you use setuptools_scm
+          submodules: true  # Optional, use if you have submodules
+
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_linux_x86_64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+
+      - name: unzip
+        run: unzip libsndlib_linux_x86_64.zip
+
+      - name: Copy sndlib header files
+        run: |
+          cp ./sndlib/sndlib.h ./src/pysndlib/
+          cp ./sndlib/clm.h ./src/pysndlib/
+
+      - name: Build SDist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-sdist
+          path: dist/*.tar.gz
+
+  pypi-publish:
+    name: Upload release to PyPI
+    needs: [build_macos_wheels, build_linux_wheels, build_windows_wheels, make_sdist]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pysndlib
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # download all wheel + sdist artifacts, flattened into dist/
+          pattern: wheels-*
+          merge-multiple: true
+          path: dist
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+
+
+
+

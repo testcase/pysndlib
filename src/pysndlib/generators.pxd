@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 #==================================================================================
@@ -13,15 +14,12 @@
 #==================================================================================
 
 
-
 cimport cython
 import numpy as np
 cimport numpy as np
 #cimport pysndlib.cclm as cclm
 cimport pysndlib.clm as clm
 from pysndlib.sndlib cimport Sample, Header
-
-np.import_array()
 
 cdef class CLMGenerator:
     cpdef cython.double next(self, cython.double  fm=*)
@@ -88,6 +86,20 @@ cdef class Noddcos(CLMGenerator):
 
 cpdef cython.double noddcos(Noddcos gen, cython.double fm=*)
 cpdef cython.bint is_noddcos(gen)
+
+# --------------- noddsin ---------------- #
+# NOTE: this attribute block was missing entirely, which made Noddsin
+# impossible to instantiate (AttributeError on the first attribute
+# assignment in __init__). Found by the pytest generator sweep.
+cdef class Noddsin(CLMGenerator):
+    cdef public cython.double frequency
+    cdef public cython.double ratio
+    cdef public cython.int n
+    cdef public cython.double norm
+    cdef public cython.double angle
+
+cpdef cython.double noddsin(Noddsin gen, cython.double fm=*)
+cpdef cython.bint is_noddsin(gen)
 
 # --------------- noddssb ---------------- #
 cdef class Noddssb(CLMGenerator):
@@ -963,19 +975,21 @@ cpdef cython.bint is_tanhsin(gen)
 # 
 # --------------- moving-fft ---------------- # 
 
-# cdef class MovingFFT(CLMGenerator):
-#     cdef public clm.mus_any reader
-#     cdef public cython.int n 
-#     cdef public cython.int hop
-#     cdef public cython.int outctr
-#     cdef public np.ndarray rl
-#     cdef public np.ndarray im
-#     cdef public np.ndarray data
-#     cdef public np.ndarray window
-#     cdef last_moving_fft_window
-#     cpdef mus_run(self, arg1, arg1)
-# 
-# cpdef cython.double moving_fft(MovingFFT gen)
+# NOTE: MovingFFT's attribute declarations were previously commented out,
+# which made the class impossible to instantiate (Cython extension types
+# cannot take undeclared attributes) -- every MovingFFT.__init__ raised
+# AttributeError. Declared below with the attribute block restored.
+cdef class MovingFFT(CLMGenerator):
+    cdef public clm.mus_any reader
+    cdef public cython.int n
+    cdef public cython.int hop
+    cdef public cython.int outctr
+    cdef public np.ndarray rl
+    cdef public np.ndarray im
+    cdef public np.ndarray data
+    cdef public np.ndarray window
+    cdef public object last_moving_fft_window
+    cpdef mus_run(self, arg1, arg2)
 # cpdef cython.bint is_moving_fft(gen)
 # 
 # # --------------- moving-spectrum ---------------- # 

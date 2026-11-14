@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 cimport cython
@@ -8,7 +9,6 @@ cimport pysndlib.cclm as cclm
 cimport pysndlib.csndlib as csndlib
 from pysndlib.sndlib cimport Sample, Header
 
-np.import_array()
 
 
 
@@ -160,191 +160,191 @@ cpdef cython.double chebyshev_u_sum(cython.double x, ucoeffs)
 
 # ---------------- clm gen ---------------- #
 
-cpdef cython.double oscil(mus_any gen, cython.double fm=*, cython.double pm=*)
-cpdef cython.double oscil_unmodulated(mus_any gen)
+cpdef cython.double oscil(mus_any gen, cython.double fm=*, cython.double pm=*) noexcept
+cpdef cython.double oscil_unmodulated(mus_any gen) noexcept
 cpdef bint is_oscil(mus_any gen)
 
 
-cpdef cython.double oscil_bank(mus_any gen)
+cpdef cython.double oscil_bank(mus_any gen) noexcept
 cpdef bint is_oscil_bank(mus_any gen)
 
 #
-cpdef cython.double env(mus_any gen )
+cpdef cython.double env(mus_any gen ) noexcept
 cpdef bint is_env(mus_any gen)
 cpdef cython.double env_interp(cython.double x , mus_any env)
-cpdef cython.double envelope_interp(cython.double x, mus_any env)
+cpdef cython.double envelope_interp(cython.double x, env)
 cpdef np.ndarray env_rates( mus_any gen)
-cpdef cython.double env_any(mus_any gen , connection_function)
+cpdef cython.double env_any(mus_any gen , connection_function) noexcept
 
-cpdef cython.double pulsed_env(mus_any gen, cython.double fm=*)
-cpdef cython.double pulsed_env_unmodulated(mus_any gen)
+cpdef cython.double pulsed_env(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double pulsed_env_unmodulated(mus_any gen) noexcept
 cpdef bint is_pulsed_env(mus_any gen)
 
-cpdef cython.double table_lookup(mus_any gen, cython.double fm=*)
-cpdef cython.double table_lookup_unmodulated(mus_any gen)
+cpdef cython.double table_lookup(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double table_lookup_unmodulated(mus_any gen) noexcept
 cpdef bint is_table_lookup(mus_any gen)
 cpdef mus_any make_table_lookup_with_env(cython.double frequency, envelope, size= *)
 
-cpdef cython.double polywave(mus_any gen, cython.double fm=*)
-cpdef cython.double polywave_unmodulated(mus_any gen)        
+cpdef cython.double polywave(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double polywave_unmodulated(mus_any gen) noexcept
 cpdef bint is_polywave(mus_any gen)
 
-cpdef cython.double polyshape(mus_any gen, cython.double index=*, cython.double fm=*)
-cpdef cython.double polyshape_unmodulated(mus_any gen, cython.double index=*)
+cpdef cython.double polyshape(mus_any gen, cython.double index=*, cython.double fm=*) noexcept
+cpdef cython.double polyshape_unmodulated(mus_any gen, cython.double index=*) noexcept
 cpdef bint is_polyshape(mus_any gen)
 
-cpdef cython.double triangle_wave(mus_any gen, cython.double fm=*)
-cpdef cython.double triangle_wave_unmodulated(mus_any gen)
+cpdef cython.double triangle_wave(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double triangle_wave_unmodulated(mus_any gen) noexcept
 cpdef bint is_triangle_wave(mus_any gen)
 
-cpdef cython.double square_wave(mus_any gen, cython.double fm=*)
+cpdef cython.double square_wave(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_square_wave(mus_any gen)
 
 cpdef mus_any make_sawtooth_wave(cython.double frequency, cython.double amplitude=*, cython.double phase=*)
-cpdef cython.double sawtooth_wave(mus_any gen, cython.double fm =*)
+cpdef cython.double sawtooth_wave(mus_any gen, cython.double fm =*) noexcept
 cpdef bint is_sawtooth_wave(mus_any gen)
 
-cpdef cython.double pulse_train(mus_any gen, cython.double fm=*)
-cpdef cython.double pulse_train_unmodulated(mus_any gen)
+cpdef cython.double pulse_train(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double pulse_train_unmodulated(mus_any gen) noexcept
 cpdef bint is_pulse_train(mus_any gen)
 
-cpdef cython.double ncos(mus_any gen, cython.double fm=*)
+cpdef cython.double ncos(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_ncos(mus_any gen)
 
-cpdef cython.double nsin(mus_any gen, cython.double fm=*)
+cpdef cython.double nsin(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_nsin(mus_any gen )
 
-cpdef cython.double nrxysin(mus_any gen, cython.double fm=*)
+cpdef cython.double nrxysin(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_nrxysin(mus_any gen)
 
-cpdef cython.double nrxycos(mus_any gen, cython.double fm=*)
+cpdef cython.double nrxycos(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_nrxycos(mus_any gen)
 
-cpdef cython.double rxykcos(mus_any gen, cython.double fm=*)
+cpdef cython.double rxykcos(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_rxykcos(mus_any gen)
 
-cpdef cython.double rxyksin(mus_any gen, cython.double fm=*)
+cpdef cython.double rxyksin(mus_any gen, cython.double fm=*) noexcept
 cpdef bint is_rxyksin(mus_any gen)
 
-cpdef cython.double ssb_am(mus_any gen, cython.double insig, cython.double fm=*)
-cpdef cython.double ssb_am_unmodulated(mus_any gen, cython.double insig)
+cpdef cython.double ssb_am(mus_any gen, cython.double insig, cython.double fm=*) noexcept
+cpdef cython.double ssb_am_unmodulated(mus_any gen, cython.double insig) noexcept
 cpdef bint is_ssb_am(mus_any gen)
 
-cpdef cython.double wave_train(mus_any gen, cython.double fm=*)
-cpdef cython.double wave_train_unmodulated(mus_any gen)
+cpdef cython.double wave_train(mus_any gen, cython.double fm=*) noexcept
+cpdef cython.double wave_train_unmodulated(mus_any gen) noexcept
 cpdef bint is_wave_train(mus_any gen)
 
-cpdef cython.double rand(mus_any gen, cython.double sweep=*)
-cpdef cython.double rand_unmodulated(mus_any gen)
+cpdef cython.double rand(mus_any gen, cython.double sweep=*) noexcept
+cpdef cython.double rand_unmodulated(mus_any gen) noexcept
 cpdef bint is_rand(mus_any gen)
 
 cpdef rand_interp(mus_any gen, cython.double sweep=*)
 cpdef rand_interp_unmodulated(mus_any gen)
 cpdef bint is_rand_interp(mus_any gen)
 
-cpdef cython.double one_pole(mus_any gen, cython.double insig)
+cpdef cython.double one_pole(mus_any gen, cython.double insig) noexcept
 cpdef bint is_one_pole(mus_any gen)
 
-cpdef cython.double one_zero(mus_any gen, cython.double insig)
+cpdef cython.double one_zero(mus_any gen, cython.double insig) noexcept
 cpdef bint is_one_zero(mus_any gen)
 
-cpdef cython.double two_pole(mus_any gen, cython.double insig)
+cpdef cython.double two_pole(mus_any gen, cython.double insig) noexcept
 cpdef bint is_two_pole(mus_any gen)
 
-cpdef cython.double two_zero(mus_any gen, cython.double insig)
+cpdef cython.double two_zero(mus_any gen, cython.double insig) noexcept
 cpdef bint is_two_zero(mus_any gen)
 
-cpdef cython.double formant(mus_any gen, cython.double insig, cython.double radians=*)
+cpdef cython.double formant(mus_any gen, cython.double insig, cython.double radians=*) noexcept
 cpdef bint is_formant(mus_any gen)
 
-cpdef cython.double formant_bank(mus_any gen, inputs)
+cpdef cython.double formant_bank(mus_any gen, inputs) noexcept
 cpdef bint is_formant_bank(mus_any gen)
 
 cpdef firmant(mus_any gen, cython.double insig, cython.double radians=*)
 cpdef is_firmant(mus_any gen)
 
-cpdef cython.double filter(mus_any gen, cython.double insig)
+cpdef cython.double filter(mus_any gen, cython.double insig) noexcept
 cpdef bint is_filter(mus_any gen)
 
-cpdef cython.double fir_filter(mus_any gen, cython.double insig)
+cpdef cython.double fir_filter(mus_any gen, cython.double insig) noexcept
 cpdef bint is_fir_filter(mus_any gen)
 
-cpdef cython.double iir_filter(mus_any gen, cython.double insig)
+cpdef cython.double iir_filter(mus_any gen, cython.double insig) noexcept
 cpdef bint is_iir_filter(mus_any gen)
 
-cpdef cython.double delay(mus_any gen, cython.double insig, cython.double pm=*)
-cpdef cython.double delay_unmodulated(mus_any gen, cython.double insig)
+cpdef cython.double delay(mus_any gen, cython.double insig, cython.double pm=*) noexcept
+cpdef cython.double delay_unmodulated(mus_any gen, cython.double insig) noexcept
 cpdef bint is_delay(mus_any gen)
-cpdef cython.double tap(mus_any gen, offset=*)
-cpdef cython.double tap_unmodulated(mus_any gen)
+cpdef cython.double tap(mus_any gen, offset=*) noexcept
+cpdef cython.double tap_unmodulated(mus_any gen) noexcept
 cpdef bint is_tap(mus_any gen)
-cpdef cython.double delay_tick(mus_any gen, cython.double insig )
+cpdef cython.double delay_tick(mus_any gen, cython.double insig ) noexcept
 
-cpdef cython.double comb(mus_any gen, cython.double insig, pm=*)
+cpdef cython.double comb(mus_any gen, cython.double insig, pm=*) noexcept
 cpdef bint is_comb(mus_any gen)
 
-cpdef cython.double comb_bank(mus_any gen, cython.double insig)
+cpdef cython.double comb_bank(mus_any gen, cython.double insig) noexcept
 cpdef bint is_comb_bank(mus_any gen)
 
-cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.double pm=*)
-cpdef cython.double filtered_comb_unmodulated(mus_any gen, cython.double insig)
+cpdef cython.double filtered_comb(mus_any gen, cython.double insig, cython.double pm=*) noexcept
+cpdef cython.double filtered_comb_unmodulated(mus_any gen, cython.double insig) noexcept
 cpdef bint is_filtered_comb(mus_any gen)
 
-cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig)
+cpdef cython.double filtered_comb_bank(mus_any gen, cython.double insig) noexcept
 cpdef bint is_filtered_comb_bank(mus_any gen)
 
-cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=*)
-cpdef cython.double notch_unmodulated(mus_any gen, cython.double insig)
+cpdef cython.double notch(mus_any gen, cython.double insig, cython.double pm=*) noexcept
+cpdef cython.double notch_unmodulated(mus_any gen, cython.double insig) noexcept
 cpdef bint is_notch(mus_any gen)
 
-cpdef cython.double all_pass(mus_any gen, cython.double insig, pm=*)
+cpdef cython.double all_pass(mus_any gen, cython.double insig, pm=*) noexcept
 cpdef is_all_pass(mus_any gen)
 
-cpdef cython.double all_pass_bank(mus_any gen, cython.double insig)
+cpdef cython.double all_pass_bank(mus_any gen, cython.double insig) noexcept
 cpdef bint is_all_pass_bank(mus_any gen)
 
-cpdef cython.double one_pole_all_pass(mus_any gen, cython.double insig)
+cpdef cython.double one_pole_all_pass(mus_any gen, cython.double insig) noexcept
 cpdef bint is_one_pole_all_pass(mus_any gen)
 
-cpdef cython.double moving_average(mus_any gen, cython.double  insig)
+cpdef cython.double moving_average(mus_any gen, cython.double  insig) noexcept
 cpdef bint is_moving_average(mus_any gen)
 
-cpdef cython.double moving_max(mus_any gen, cython.double insig)
+cpdef cython.double moving_max(mus_any gen, cython.double insig) noexcept
 cpdef bint is_moving_max(mus_any gen)
 
-cpdef cython.double moving_norm(mus_any gen, cython.double insig)
+cpdef cython.double moving_norm(mus_any gen, cython.double insig) noexcept
 cpdef is_moving_norm(mus_any gen)
 
-cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.double fm=*)
-cpdef cython.double asymmetric_fm_unmodulated(mus_any gen, cython.double index)
+cpdef cython.double asymmetric_fm(mus_any gen, cython.double index, cython.double fm=*) noexcept
+cpdef cython.double asymmetric_fm_unmodulated(mus_any gen, cython.double index) noexcept
 cpdef bint is_asymmetric_fm(mus_any gen)
 
-cpdef cython.double file2sample(mus_any gen, cython.long loc, cython.int chan=*)
+cpdef cython.double file2sample(mus_any gen, cython.long loc, cython.int chan=*) noexcept
 cpdef bint is_file2sample(mus_any gen)
 
-cpdef cython.double sample2file(mus_any gen, cython.long samp, cython.int chan, cython.double val)
+cpdef cython.double sample2file(mus_any gen, cython.long samp, cython.int chan, cython.double val) noexcept
 cpdef bint is_sample2file(mus_any gen)
 
 cpdef file2frample(mus_any gen, cython.long loc)
 cpdef is_file2frample(mus_any gen)
 
-cpdef cython.double frample2file(mus_any gen, cython.long samp, vals)
+cpdef cython.double frample2file(mus_any gen, cython.long samp, vals) noexcept
 cpdef bint is_frample2file(mus_any gen)
 cpdef mus_any continue_frample2file(str name)
 
-cpdef cython.double readin(mus_any gen)
+cpdef cython.double readin(mus_any gen) noexcept
 cpdef is_readin(mus_any gen)
 
-cpdef cython.double src(mus_any gen, cython.double sr_change=*)
+cpdef cython.double src(mus_any gen, cython.double sr_change=*) noexcept
 cpdef bint is_src(mus_any gen)
 
-cpdef cython.double convolve(mus_any gen)
+cpdef cython.double convolve(mus_any gen) noexcept
 cpdef bint is_convolve(mus_any gen)
 
-cpdef cython.double granulate(mus_any gen)
+cpdef cython.double granulate(mus_any gen) noexcept
 cpdef bint is_granulate(mus_any e)
 
-cpdef cython.double phase_vocoder(mus_any gen)
+cpdef cython.double phase_vocoder(mus_any gen) noexcept
 cpdef bint is_phase_vocoder(mus_any gen)
 cpdef np.ndarray phase_vocoder_amp_increments(mus_any gen)
 cpdef np.ndarray phase_vocoder_amps(mus_any gen)
@@ -364,21 +364,21 @@ cpdef inb(cython.long loc, inp)
 
 cpdef out_bank(gens, cython.long loc, cython.double val)
 
-cpdef cython.double locsig(mus_any gen, cython.long loc, cython.double val)
+cpdef void locsig(mus_any gen, cython.long loc, cython.double val)
 cpdef bint is_locsig(mus_any gen)
-cpdef cython.double locsig_ref(mus_any gen, cython.int chan)
-cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val)
-cpdef cython.double locsig_reverb_ref(mus_any gen, cython.int chan)
-cpdef cython.double locsig_reverb_set(mus_any gen, cython.int chan, cython.double val)
+cpdef cython.double locsig_ref(mus_any gen, cython.int chan) noexcept
+cpdef cython.double locsig_set(mus_any gen, cython.int chan, cython.double val) noexcept
+cpdef cython.double locsig_reverb_ref(mus_any gen, cython.int chan) noexcept
+cpdef cython.double locsig_reverb_set(mus_any gen, cython.int chan, cython.double val) noexcept
 cpdef move_locsig(mus_any gen,cython.double degree, cython.double distance)
 
 cpdef convolve_files(str file1, str file2, cython.double maxamp=*, str outputfile=*, sample_type=*, header_type=*)
 
 
 #cpdef mus_any make_dcblock()
-cpdef cython.double dcblock(mus_any gen, cython.double insig)
+cpdef cython.double dcblock(mus_any gen, cython.double insig) noexcept
 
-cpdef cython.double biquad(mus_any gen, cython.double insig)
+cpdef cython.double biquad(mus_any gen, cython.double insig) noexcept
 cpdef bint is_biquad(mus_any gen)
 cpdef biquad_set_resonance(mus_any gen, cython.double fc, cython.double radius, bint normalize=*)
 cpdef biquad_set_equal_gain_zeroes(mus_any gen)

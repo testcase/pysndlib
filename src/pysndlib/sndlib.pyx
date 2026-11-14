@@ -1,15 +1,19 @@
 # cython: c_string_type=unicode
+# cython: language_level=3
 # cython: c_string_encoding=utf8
 
 #==================================================================================
 # The code is part of an attempt at translation of Bill Schottstedaet's sndlib 
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
+# TODO : Remove commented code at bottom of file. I don't need to port ? because in
+# other places
 
-# cimport pysndlib.csndlib as csndlib
+cimport pysndlib.csndlib as csndlib
 import numpy as np
 cimport numpy as np
-from cython cimport view
+np.import_array()
+from libc.stdlib cimport free
 cimport pysndlib.sndlib
 
 csndlib.mus_sound_initialize()
@@ -181,7 +185,18 @@ cpdef str mus_sound_comment(str file):
     """
     retrieve file comment if one exists
     """
-    return csndlib.mus_sound_comment(file) 
+    # mus_sound_comment returns NULL when the file has no comment; with
+    # c_string_type=unicode the implicit char*->str conversion would call
+    # strlen(NULL) and segfault, so handle NULL explicitly.  when a comment
+    # exists, sndlib calloc's the buffer: copy it into the Python string and
+    # free the original (nothing else owns it).
+    cdef char* comment_ptr = csndlib.mus_sound_comment(file)
+    if comment_ptr is NULL:
+        return None
+    try:
+        return comment_ptr
+    finally:
+        free(comment_ptr)
 
 cpdef cython.int mus_bytes_per_sample(Sample samp_type):
     """
@@ -203,21 +218,26 @@ cpdef cython.int mus_sound_override_header(str file, cython.int srate, cython.in
     """
     override the header information
     """
-    return csndlib.mus_sound_override_header(str, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, location, size)
+    return csndlib.mus_sound_override_header(file, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, location, size)
 
 cpdef np.ndarray mus_sound_loop_info(str filename):
     """
     8 loop vals (mode,start,end) then base-detune and base-note  (empty list if no loop info found)
     """
     cdef int* info_ptr = csndlib.mus_sound_loop_info(filename)
-    cdef view.array arr = None
-    
+    cdef int i
+
     if info_ptr is NULL:
         return None
     else:
-        arr = view.array(shape=(8,),itemsize=sizeof(int), format='i', allocate_buffer=False)
-        arr.data = <char*>info_ptr
-        return np.asarray(arr)    
+        # mus_sound_loop_info calloc's its buffer and hands ownership to the caller:
+        # copy the values and free the original so the returned array owns its
+        # data and nothing leaks.
+        res = np.zeros(8, dtype=np.intc)
+        for i in range(8):
+            res[i] = info_ptr[i]
+        free(info_ptr)
+        return res
  
 cpdef mus_sound_set_loop_info(str filename, np.ndarray info):
     """
@@ -241,7 +261,7 @@ cpdef cython.int mus_sound_open_output(str file, cython.int srate, cython.int ch
     """
     return csndlib.mus_sound_open_output(file, srate, chans, <csndlib.mus_sample_t>sample_type, <csndlib.mus_header_t>header_type, comments)
 
-cpdef cython.int mus_sound_reopen_output(str file, cython.int srate, cython.int chans, Sample sample_type, Header header_type,  cython.int  location):
+cpdef cython.int mus_sound_reopen_output(str file, cython.int chans, Sample sample_type, Header header_type,  cython.int  location):
     """
     reopen a file for further input
     """
@@ -262,22 +282,6 @@ cpdef cython.int mus_sound_close_output(cython.int fd, csndlib.mus_long_t bytes_
 #mus_sound_read
 #mus_sound_write
 
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 cpdef mus_set_clipping(new_value):
     return csndlib.mus_set_clipping(new_value)

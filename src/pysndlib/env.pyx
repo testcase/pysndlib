@@ -1,19 +1,20 @@
+# cython: language_level=3
+
 #==================================================================================
 # The code is an attempt at translation of Bill Schottstedaet's 'env.scm' 
 # file available at https://ccrma.stanford.edu/software/snd/sndlib/
 #==================================================================================
 
 
-from functools import singledispatch
 import operator
-import types
 import math
 import numpy as np
-import numpy.typing as npt
 cimport numpy as np
+np.import_array()
 import cython
 cimport cython
 import pysndlib.clm as clm
+
 
 
 @cython.ccall
@@ -41,6 +42,8 @@ def scale_and_offset(e, scl, offset: cython.double=0.0):
         return [x * scl + offset for x in e]
     elif isinstance(e, np.ndarray):
         return e * scl + offset
+    else:
+        raise TypeError(f"expects list or ndarray, got {type(e)}")
 
 # TODO: --------------- window_envelopes ---------------- #    
 
@@ -96,10 +99,10 @@ def integrate_envelope(e):
     """
     integrate_envelope(e) -> area under env
     """
-    sum = 0.0
+    total = 0.0
     for i in range(0,len(e)-2,2):
-        sum += (e[i+1] + e[i+3]) * .5 * (e[i+2] - e[i])
-    return sum
+        total += (e[i+1] + e[i+3]) * .5 * (e[i+2] - e[i])
+    return total
 
 # --------------- envelope_last_x  ---------------- #  
 @cython.ccall

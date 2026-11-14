@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 #==================================================================================
 # The code is part of an attempt at translation of Bill Schottstedaet's sndlib 
 # available at https://ccrma.stanford.edu/software/snd/sndlib/
@@ -9,10 +11,14 @@ import pysndlib.clm as clm
 cimport pysndlib.clm as clm
 import numpy as np
 cimport numpy as np
+np.import_array()
 
 import math
-## TODO: Look into using cimports for c math for c . as here - https://cython.readthedocs.io/en/latest/src/tutorial/pure.html?highlight=math#calling-c-functions
-from math import sin, fabs, cos, tan, pow, fabs, floor, cosh, exp, sinh, atan2, log, acos, sqrt, ceil, tanh
+## C math functions are cimported so that per-sample calls in the
+## generators compile to direct C calls with no Python call overhead.
+## (`math` is still used for math.pi at module level.)
+
+from libc.math cimport sin, fabs, cos, tan, pow, floor, cosh, exp, sinh, atan2, log, acos, sqrt, ceil, tanh
 
 cdef cython.double NEARLY_ZERO = 1.0e-10
 cdef cython.double TWO_PI = math.pi * 2
@@ -3006,7 +3012,7 @@ cdef class J0evencos(CLMGenerator):
         self.angle += self.frequency + fm
         if dc == 1.0:
             return 1.
-        return (clm.bes_j0(self.index * math.sin(x)) - dc) / (1.0 - dc)
+        return (clm.bes_j0(self.index * sin(x)) - dc) / (1.0 - dc)
        
 
     def __call__(self, fm: cython.double=0.) -> cython.double:
@@ -3446,7 +3452,19 @@ cdef class K3sin(CLMGenerator):
         if not 0.0 <= x <= TWO_PI:
             x = x % TWO_PI*2
         self.angle = x + fm + self.frequency
-        return clm.polynomial(self.coeffs, x)
+        # inline Horner evaluation mirroring mus_polynomial (coeffs[0] is the
+        # constant term); avoids the per-call ndarray -> memoryview conversion
+        # (and arg checks) of clm.polynomial in this per-sample path
+        cdef cython.double[::1] coeffs = self.coeffs
+        cdef int ncoeffs = coeffs.shape[0]
+        cdef cython.double res
+        cdef cython.int i
+        if ncoeffs <= 0:
+            return 0.0
+        res = coeffs[ncoeffs - 1]
+        for i in range(ncoeffs - 2, -1, -1):
+            res = res * x + coeffs[i]
+        return res
                 
     def __call__(self, fm: cython.double =0.) -> cython.double:
         return self.next(fm)
@@ -3497,7 +3515,7 @@ cdef class Izcos(CLMGenerator):
         self.angle = x + fm + self.frequency
         if abs(self.norm) < NEARLY_ZERO:
             return 1.
-        return (exp(self.r * math.cos(x)) - self.dc) * self.inorm
+        return (exp(self.r * cos(x)) - self.dc) * self.inorm
                 
     def __call__(self, fm: cython.double =0.) -> cython.double:
         return self.next(fm)
@@ -3895,7 +3913,7 @@ cdef class RoundInterp(CLMGenerator):
 
     @mus_phase.setter
     def mus_phase(self, val: cython.double):
-        self.gen.rnd = val
+        self.rnd.mus_phase = val
 
     @property
     def mus_frequency(self) -> cython.double:
@@ -3935,22 +3953,22 @@ cpdef cython.bint is_round_interp(gen):
 # --------------- env-any functions ---------------- # 
 
 # --------------- sine-env ---------------- # 
-cdef cython.double sin_env_fun(y):
+cdef cython.double sin_env_fun(y) noexcept:
     return (0.5 * (1.0 + (sin (PI * (y - 0.5)))))
     
 cpdef cython.double sine_env(e):
     """connects envelope points using sin function"""
     return clm.env_any(e, sin_env_fun)
     
-cdef cython.double square_env_fun(y):
+cdef cython.double square_env_fun(y) noexcept:
     return y*y
     
 cpdef cython.double square_env(e):
     """connects envelope points using square wave function"""
     return clm.env_any(e, square_env_fun)
 
-cdef cython.double blackman4_env_fun(y):
-    cx = math.cos(math.pi * y)
+cdef cython.double blackman4_env_fun(y) noexcept:
+    cx = cos(math.pi * y)
     return 0.084037 + (cx * ((cx * (0.375696 + (cx * ((cx * 0.041194) - 0.20762)))) - 0.29145))
     
 cpdef cython.double blackman4_env(e):
@@ -3973,21 +3991,22 @@ cdef class Nchoosekcos(CLMGenerator):
         self.frequency = frequency
         self.ratio = ratio
         self.n = n
+        self.angle = 0.0
     
     cpdef cython.double next(self, cython.double fm=0.0):
         cdef cython.double x = self.angle
         cdef cython.double y = x * self.ratio
         self.angle += self.frequency + fm
 
-        return np.real(math.cos(x) * math.pow(math.cos(y), self.n))
+        return np.real(cos(x) * pow(cos(y), self.n))
                
     def __call__(self, cython.double fm=0.) -> cython.double:
         return self.next(fm)
 
 
-cpdef Nchoosekcos make_nchoosekcos(frequency=0, n=1, amplitude=1.0):
+cpdef Nchoosekcos make_nchoosekcos(frequency=0, ratio=1.0, n=1):
     """creates an nchoosekcos generator that produces a sum of cosines scaled by the binomial coefficients"""
-    return Nchoosekcos(frequency, n, amplitude)
+    return Nchoosekcos(frequency, ratio, n)
     
 cpdef cython.double nchoosekcos(Nchoosekcos gen, cython.double fm=0.):
     """
@@ -4024,8 +4043,7 @@ cdef class SincTrain(CLMGenerator):
         self.original_frequency = self.frequency
         self.frequency = .5 * self.n * clm.hz2radians(self.frequency)
         self.angle = 0.0
-        self.n = n
-    
+
     cpdef cython.double next(self, cython.double fm=0.0):
         cdef cython.double x = self.angle
         cdef cython.double max_angle = PI * .5 * self.n
@@ -4106,18 +4124,21 @@ cdef class PinkNoise(CLMGenerator):
     cpdef cython.double next(self, fm: cython.double =0.0):
         cdef cython.double x = 0.5 
         cdef cython.double s = 0.0
-        cdef cython.double amp = self.data[0]
+        # typed memoryview over the octave table: avoids per-element
+        # Python indexing of the ndarray in the per-sample loop below
+        cdef cython.double[::1] data = self.data
+        cdef cython.double amp = data[0]
         cdef cython.int size = self.n*2
 
         cdef cython.long i = 0
 
         for i in range(2,size,2):
-            s += self.data[i]
-            self.data[i+1] -= x
+            s += data[i]
+            data[i+1] -= x
         
-            if self.data[i+1] < 0.0:
-                self.data[i] = clm.random(amp)
-                self.data[i+1] += 1.0
+            if data[i+1] < 0.0:
+                data[i] = clm.random(amp)
+                data[i+1] += 1.0
             x *= .5
         return s + clm.random(amp)
                 
@@ -4698,26 +4719,29 @@ cdef class MovingFFT(CLMGenerator):
         self.im = np.zeros(self.n)
         self.data = np.zeros(self.n)
         
-        if isinstance(self.last_moving_fft_window, np.ndarray) and len(self.last_moving_fft_window) == self.n:
-            self.window = self.last_moving_fft_window
-        else:
-            self.last_moving_fft_window = clm.make_fft_window(clm.Window.HAMMING, self.n)
-            self.window = self.last_moving_fft_window
+        self.last_moving_fft_window = clm.make_fft_window(clm.Window.HAMMING, self.n)
+        self.window = self.last_moving_fft_window
         self.window *= 2.0 / (.54 * self.n)
         self.outctr = self.n + 1
        
     cpdef cython.double next(self, cython.double x=0): 
         new_data = False
         cdef cython.long i = 0
+        # typed memoryview over the data window: avoids per-element Python
+        # indexing of the ndarray in the readin loops below.  it is captured
+        # per branch because np.roll() assigns a fresh array.
+        cdef cython.double[::1] data_view
         if self.outctr >= self.hop:
             if self.outctr > self.n:
+                data_view = self.data
                 for i in range(self.n):
-                    self.data[i] = clm.readin(self.reader)
+                    data_view[i] = clm.readin(self.reader)
             else:
               mid = self.n - self.hop
               self.data = np.roll(self.data, -self.hop)
+              data_view = self.data
               for i in range(mid,self.n):
-                self.data[i] = clm.readin(self.reader)
+                data_view[i] = clm.readin(self.reader)
             
             self.outctr = 0
             new_data = True
@@ -4730,7 +4754,7 @@ cdef class MovingFFT(CLMGenerator):
         self.outctr += 1
         return new_data
         
-    def __call__(self, cython.double insig=0.) -> cython.double:
+    def __call__(self, cython.double insig=0.):
         return self.next(insig)
     
     @property
@@ -4746,14 +4770,13 @@ cdef class MovingFFT(CLMGenerator):
         return self.im
     
     cpdef mus_run(self, arg1, arg2):
-        self.next()
+        return self.next()
 
 cpdef MovingFFT make_moving_fft(clm.mus_any reader, n=512, hop=128, outctr=0):
     return MovingFFT(reader, n, hop, outctr)
     
 cpdef cython.double moving_fft(MovingFFT gen):
-    return gen.next()
-    
+    return gen.next()    
 cpdef cython.bint is_moving_fft(gen):
     return isinstance(gen, MovingFFT)    
 
