@@ -175,3 +175,58 @@ def test_polynomial_constant_term_first():
     coeffs = np.array([1.0, 2.0, 3.0, 4.0])
     # coeffs[0] is the constant term (mus_polynomial convention)
     assert clm.polynomial(coeffs, 0.0) == pytest.approx(1.0)
+
+
+# ---- play path ----
+
+def test_play_raises_without_player(tmp_path):
+    path = str(tmp_path / "play.wav")
+    old_player = clm.default.player
+    try:
+        clm.default.player = None
+        with pytest.raises(RuntimeError, match="no player"):
+            with clm.Sound(path, channels=1, srate=44100, play=True):
+                clm.outa(0, 0.5)
+    finally:
+        clm.default.player = old_player
+
+
+def test_play_list_form_substitutes_placeholder(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(clm.subprocess, "run", lambda cmd, **kw: calls.append(cmd))
+    path = str(tmp_path / "play.wav")
+    clm.default.player = ['echo', 'playing {file}']  # restored by clean_clm_default
+    with clm.Sound(path, channels=1, srate=44100, play=True):
+        clm.outa(0, 0.5)
+    assert calls and calls[0] == ['echo', f'playing {path}']
+
+
+def test_play_list_form_appends_file_without_placeholder(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(clm.subprocess, "run", lambda cmd, **kw: calls.append(cmd))
+    path = str(tmp_path / "play2.wav")
+    clm.default.player = ['some-player', '-flag']
+    with clm.Sound(path, channels=1, srate=44100, play=True):
+        clm.outa(0, 0.5)
+    assert calls and calls[0] == ['some-player', '-flag', path]
+
+
+def test_play_string_form_unchanged(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(clm.subprocess, "run", lambda cmd, **kw: calls.append(cmd))
+    path = str(tmp_path / "play3.wav")
+    clm.default.player = 'my-player'
+    with clm.Sound(path, channels=1, srate=44100, play=True):
+        clm.outa(0, 0.5)
+    assert calls and calls[0] == ['my-player', path]
+
+
+def test_play_escapes_single_quotes_in_placeholder(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(clm.subprocess, "run", lambda cmd, **kw: calls.append(cmd))
+    path = str(tmp_path / "it's a file.wav")
+    clm.default.player = ['echo', 'path={file}']
+    with clm.Sound(path, channels=1, srate=44100, play=True):
+        clm.outa(0, 0.5)
+    escaped = path.replace("'", "''")   # PowerShell single-quote escaping
+    assert calls and calls[0] == ['echo', f'path={escaped}']

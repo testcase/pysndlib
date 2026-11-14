@@ -65,10 +65,19 @@ if sys.platform.startswith("linux"):
     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
 
 if sys.platform.startswith("win32"):
-    # no built-in equivalent of afplay/aplay; Sound(..., play=True)
-    # raises a clear error rather than crashing (a sndlib-based player
-    # could be wired in here later)
-    DEFAULT_FILE_PLAYER = None
+    # No CLI player ships with Windows; use the Windows Media Player COM
+    # engine via PowerShell -- present on every stock install, plays float
+    # WAVs (pysndlib's default RIFF/LFLOAT output), runs headless, and the
+    # playState loop waits for playback to finish like afplay/aplay do.
+    # List-form player: the '{file}' placeholder is substituted with the
+    # single-quote-escaped filename; a plain string player ('afplay', a
+    # custom binary) keeps receiving the file as a trailing argument.
+    DEFAULT_FILE_PLAYER = [
+        'powershell', '-NoProfile', '-Command',
+        "$p = New-Object -ComObject WMPlayer.OCX; $p.URL = '{file}'; "
+        "$p.controls.play(); "
+        'while ($p.playState -ne 1) { Start-Sleep -Milliseconds 200 }'
+    ]
     DEFAULT_FILE_NAME = 'test.wav'
     DEFAULT_OUTPUT_HEADER_TYPE = Header.RIFF
     DEFAULT_OUTPUT_SAMPLE_TYPE = Sample.LFLOAT
@@ -994,10 +1003,28 @@ class Sound(object):
                 self.output *= self.scaled_by
        
         if self.play and self.output_to_file:
-            if default.player:
-                subprocess.run([default.player, self.output])
-            else:
+            if default.player is None:
                 raise RuntimeError("no player specified")
+            player = default.player
+            if isinstance(player, str):
+                # simple executable player (afplay, aplay, a custom binary)
+                subprocess.run([player, self.output])
+            else:
+                # list-form player: a '{file}' segment is substituted with
+                # the single-quote-escaped filename; if no segment uses the
+                # placeholder the filename is appended as the trailing
+                # argument (argv-safe for both shapes)
+                escaped = str(self.output).replace("'", "''")
+                used_placeholder = False
+                cmd = []
+                for segment in player:
+                    if isinstance(segment, str) and '{file}' in segment:
+                        segment = segment.replace('{file}', escaped)
+                        used_placeholder = True
+                    cmd.append(segment)
+                if not used_placeholder:
+                    cmd.append(self.output)
+                subprocess.run(cmd)
         # need some safety if errors
         
         set_srate(self.old_srate)

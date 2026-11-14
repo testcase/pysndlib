@@ -242,6 +242,27 @@ per-module sndlib globals of the static-linking design (pre-existing on all plat
 changes cause no regressions; the Windows build itself must be exercised by the CI job (or a
 real Windows machine: `pip install -e ".[test]" && pytest`), since MSVC cannot run on macOS.
 
+## Phase 8 — Windows default player + robust settings loading
+
+**Commit 1: PowerShell WMPlayer default player for win32.** Stock Windows ships no CLI audio
+player (no `afplay`/`aplay` equivalent), and the only player present on every install — the
+Windows Media Player COM engine (`WMPlayer.OCX`) — must be hosted in a script via
+`powershell -Command`. The win32 `DEFAULT_FILE_PLAYER` is therefore now the list-form command
+`["powershell", "-NoProfile", "-Command", "<WMPlayer.OCX script with {file}>"]`: it plays float
+WAVs (pysndlib's default RIFF/LFLOAT output), runs headless, and waits for playback to finish
+(`playState` loop) like `afplay`/`aplay`.
+
+| Change | Detail |
+|---|---|
+| `clm.pyx` play path | Supports two player shapes: a plain string (executable — `afplay`, `aplay`, a custom binary; unchanged behavior) and a list form. In list form, a segment containing the `{file}` placeholder is substituted with the **single-quote-escaped** filename (PowerShell `'` → `''`); with no placeholder, the filename is appended as the trailing argument (argv-safe for both shapes). The placeholder exists because anything after `powershell -Command` is merged into the command text — a trailing path argument would be torn apart by spaces. `player = None` still raises `RuntimeError("no player specified")`. |
+| `clm.pyx` win32 branch | `DEFAULT_FILE_PLAYER` set to the PowerShell/WMPlayer list command (previously `None`, which required users to configure a player before `play=True` worked). |
+| `test/test_clm_core.py` | Five mocked tests: raise-without-player, `{file}` substitution, trailing-arg append, string form unchanged, single-quote escaping. |
+
+The WMPlayer COM object does not exist on macOS, so actual playback gets its first real
+exercise from a Windows wheel's CI run (or a manual `Sound(play=True)` on Windows); the command
+construction itself is fully covered by the platform-independent mocked tests.
+
+
 
 
 
