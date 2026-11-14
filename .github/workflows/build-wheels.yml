@@ -165,21 +165,3 @@ jobs:
           name: wheels-sdist
           path: dist/*.tar.gz
 
-  pypi-publish:
-    name: Upload release to PyPI
-    needs: [build_macos_wheels, build_linux_wheels, build_windows_wheels, make_sdist]
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/pysndlib
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          # download all wheel + sdist artifacts, flattened into dist/
-          pattern: wheels-*
-          merge-multiple: true
-          path: dist
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1

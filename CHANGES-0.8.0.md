@@ -262,6 +262,21 @@ The WMPlayer COM object does not exist on macOS, so actual playback gets its fir
 exercise from a Windows wheel's CI run (or a manual `Sound(play=True)` on Windows); the command
 construction itself is fully covered by the platform-independent mocked tests.
 
+**Commit 2: robust settings (rc) file loading.** The rc stays an **executable Python file**
+(CLM heritage, matching `~/.clm-init.lsp`; preserves back-compat with existing `~/.pysndlib`
+contents) — the fix targets discovery and failure handling, not the format.
+
+| Change | Detail |
+|---|---|
+| `clm.pyx` | The historical `if os.path.exists('~/.pysndlib'): exec(open(...).read())` is replaced by `_rc_paths()` + a public `clm.load_rc(path=None)` called at import. Resolution order (first existing file wins): `$PYSNDLIB_RC` → platform-typical location (`%APPDATA%\pysndlib\pysndlib.py` on Windows, `~/Library/Application Support/pysndlib/pysndlib.py` on macOS, `$XDG_CONFIG_HOME`/`~/.config` + `/pysndlib/pysndlib.py` on Linux) → legacy `~/.pysndlib` on every platform. |
+| Failure mode | `compile()` (inside the `try`, so even syntax errors are caught) gives the rc's real filename in tracebacks instead of `<string>`; any error becomes `warnings.warn(...)` instead of crashing every import; `$PYSNDLIB_RC_STRICT=1` restores fatal behavior. `exec(source, globals())` preserves the exact module-global semantics of the old module-level exec (bare assignments persist in the `clm` namespace). |
+| `test/test_config.py` | Seven tests: explicit-path load mutating `default`, bare-assignment persistence, missing file → `False`, broken file warns (incl. syntax errors), strict mode raises, `$PYSNDLIB_RC` override, platform-path order + legacy fallback. |
+| `docs/source/installation.rst` | New Settings section documenting the locations, `PYSNDLIB_RC`, `PYSNDLIB_RC_STRICT`, and `load_rc()`. |
+
+Design notes: deliberately stdlib-only (one resolved directory does not justify a
+`platformdirs` dependency); Windows uses `%APPDATA%` (Roaming) per user-preference convention.
+
+
 
 
 

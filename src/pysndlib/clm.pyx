@@ -19,6 +19,7 @@ import sys
 import tempfile
 import time
 import types
+import warnings
 from typing import Optional
 import cython
 from cython.cimports.cpython.mem import PyMem_Malloc, PyMem_Realloc, PyMem_Free
@@ -107,8 +108,71 @@ default  = types.SimpleNamespace(
 )
 
 
-if os.path.exists(os.path.expanduser('~/.pysndlib')):
-    exec(open(os.path.expanduser('~/.pysndlib')).read())
+# --------------- settings (rc) file loading ---------------- #
+
+def _rc_paths():
+    """
+    candidate settings files, in priority order. the first existing file wins.
+
+    1. $PYSNDLIB_RC (explicit override)
+    2. the platform-typical config location
+    3. ~/.pysndlib (legacy location, kept for back-compat)
+
+    :meta private:
+    """
+    env = os.environ.get('PYSNDLIB_RC')
+    if env:
+        return [env]
+    home = os.path.expanduser('~')
+    if sys.platform == 'win32':
+        base = os.environ.get('APPDATA', os.path.join(home, 'AppData', 'Roaming'))
+    elif sys.platform == 'darwin':
+        base = os.path.join(home, 'Library', 'Application Support')
+    else:
+        base = os.environ.get('XDG_CONFIG_HOME', os.path.join(home, '.config'))
+    return [os.path.join(base, 'pysndlib', 'pysndlib.py'),
+            os.path.join(home, '.pysndlib')]
+
+
+cpdef bint load_rc(path=None):
+    """
+    load pysndlib settings from an rc file.
+
+    an rc file is an ordinary python script (the analog of clm's ~/.clm-init.lsp)
+    -- typically a sequence of assignments to the ``default`` namespace, e.g.
+    ``default.srate = 48000``. it is executed in the clm module namespace.
+
+    by default the first existing file of :func:`_rc_paths` is loaded:
+    ``$PYSNDLIB_RC`` if set, else the platform-typical location
+    (``%APPDATA%/pysndlib/pysndlib.py`` on Windows,
+    ``~/Library/Application Support/pysndlib/pysndlib.py`` on macOS,
+    ``$XDG_CONFIG_HOME/pysndlib/pysndlib.py`` on Linux), else the legacy
+    ``~/.pysndlib``. errors in the file are reported as warnings rather than
+    raised (so a broken settings file cannot break importing pysndlib), unless
+    $PYSNDLIB_RC_STRICT is set.
+
+    :param path: path to load explicitly, or None for the default search
+    :return: True if a settings file was found and executed
+    """
+    for candidate in ([path] if path else _rc_paths()):
+        if os.path.isfile(candidate):
+            try:
+                # compile() gives the rc file's real name in tracebacks
+                # (exec(open(...).read()) shows '<string>'); inside the try so
+                # that even syntax errors degrade to a warning, not a crash
+                source = compile(open(candidate).read(), candidate, 'exec')
+                # module globals, same as the historical module-level exec:
+                # existing rc files use bare `default.x = ...` statements, and
+                # bare assignments must persist in the clm namespace
+                exec(source, globals())
+            except Exception as e:
+                if os.environ.get('PYSNDLIB_RC_STRICT'):
+                    raise
+                warnings.warn(f"error loading pysndlib settings from {candidate}: {e}")
+            return True
+    return False
+
+load_rc()
 
 # --------------- initializations ---------------- #
 
