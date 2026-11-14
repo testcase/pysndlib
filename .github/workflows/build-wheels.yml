@@ -1,4 +1,4 @@
-name: Python build Wheels and SDist
+name: Python build Wheels
 
 on:
   workflow_dispatch:
