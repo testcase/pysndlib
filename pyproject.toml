@@ -1,6 +1,8 @@
 [project]
 name = "pysndlib"
-version = "0.8.0"
+# version comes from git tags via setuptools-scm (see RELEASE.md);
+# builds after a tag self-identify as X.Y.Z.devN+g<hash>
+dynamic = ["version"]
 authors = [
   { name="Todd Ingalls", email="testcase@asu.edu" },
 ]
@@ -32,10 +34,12 @@ test = ["pytest"]
 testpaths = ["test"]
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "Cython>=3.0.5", "numpy"]
+requires = ["setuptools>=61.0", "wheel", "Cython>=3.0.5", "numpy", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-
+[tool.setuptools_scm]
+# the version is the git tag (vX.Y.Z); there is no version number in any
+# source file to keep in sync. see RELEASE.md for the release process.

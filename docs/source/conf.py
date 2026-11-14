@@ -13,7 +13,11 @@ sys.path.insert(0, os.path.abspath('../src'))
 project = 'pysndlib'
 copyright = '2023-2024, Todd Ingalls'
 author = 'Todd Ingalls'
-release = '0.7.0'
+# version is derived from the installed package (git tag via setuptools-scm);
+# there is no hardcoded release string to keep in sync
+import pysndlib
+release = pysndlib.__version__
+version = ".".join(release.split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

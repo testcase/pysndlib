@@ -1,4 +1,29 @@
-# pysndlib 0.8.0 change record
+# Changelog
+
+## 0.9.0
+
+### Versioning automation (setuptools-scm + single CHANGELOG)
+
+- **The version number now lives only in git tags** (via `setuptools-scm`): the static
+  `version` field was removed from `pyproject.toml` (`dynamic = ["version"]`), and wheels,
+  sdist, and dev builds derive their version from `git describe` — tagged builds are exact
+  (`0.8.0`), builds between tags self-identify as `0.9.0.devN+g<hash>`.
+- `pysndlib.__version__` added (via `importlib.metadata`), and `docs/source/conf.py` now
+  derives `version`/`release` from it — the hardcoded `0.7.0` in conf.py had already
+  drifted from the package version.
+- Publishing is now **tag-driven**: `build-wheels-publish.yml` triggers on `push: tags:
+  ['v*']` (manual dispatch kept as fallback). All build jobs check out with
+  `fetch-depth: 0` — setuptools-scm cannot see tags in a shallow clone.
+- Per-release change-record files are consolidated: `CHANGES-0.8.0.md` → `CHANGELOG.md`
+  with version sections; future releases append a `## X.Y.Z` section.
+- New `RELEASE.md` documents the process — command-line tagging and the GitHub web UI
+  (Releases → Choose a tag → Publish) — plus semver guidance and cautions (never move a
+  published tag; PyPI versions are immutable). README and `docs/source/building.rst`
+  point at it.
+- New `test/test_metadata.py` pins the scheme (derived version, CHANGELOG structure,
+  RELEASE.md content, no static version in pyproject).
+
+## 0.8.0
 
 Baseline: commit `64ea37f` ("Update conf.py").
 

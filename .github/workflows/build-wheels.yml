@@ -35,6 +35,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
 
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_macos_universal2.zip
@@ -71,6 +73,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
 
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_linux_x86_64.zip
@@ -107,6 +111,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # setuptools-scm needs the tags
 
       - name: Fetch asset
         run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_windows_x64.zip
