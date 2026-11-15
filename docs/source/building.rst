@@ -68,6 +68,6 @@ Releasing
 The version number is derived from git tags via setuptools-scm; there is nothing to
 bump in the sources. To release, create and push a version tag (e.g. ``v0.9.0``), which
 triggers the publish workflow. The full procedure, including how to tag from the GitHub
-web UI, is in ``RELEASE.md`` in the repository root.
+web UI, is in the ``RELEASE.md`` file (kept local, not tracked in the repository).
 
 

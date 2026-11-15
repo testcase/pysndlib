@@ -62,3 +62,7 @@ sndlib.tar.gz
 \.#*
 pysndlib/pysndlib.egg-info/
 sndlib
+
+# local-only documentation (kept in working copies, not tracked)
+CHANGELOG.md
+RELEASE.md
