@@ -6,6 +6,15 @@ import pysndlib.clm as clm
 from pysndlib.clm_ins import canter, drone, vox
 
 
+def test_instruments_package_imports():
+    """The compiled instruments package must import cleanly; this catches
+    Cython signature drift between instruments/*.py and the clm module
+    (found by the notebook probes after the LLP64 signature change)."""
+    import pysndlib.instruments  # noqa: F401
+    from pysndlib.instruments import fm_violin, gong, pluck  # noqa: F401
+    assert callable(fm_violin) and callable(gong) and callable(pluck)
+
+
 
 def _assert_nonsilent(path):
     arr, _ = clm.file2ndarray(path)
