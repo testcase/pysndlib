@@ -28,19 +28,19 @@ cpdef enum Error:
 
 
 
-cpdef cython.long mus_sound_samples(str file)
-cpdef cython.long mus_sound_framples(str file)
+cpdef cython.longlong mus_sound_samples(str file)
+cpdef cython.longlong mus_sound_framples(str file)
 cpdef cython.int mus_sound_datum_size(str file)
-cpdef cython.long mus_sound_data_location(str file)
+cpdef cython.longlong mus_sound_data_location(str file)
 cpdef cython.int mus_sound_chans(str file)
 cpdef cython.double mus_sound_srate(str file)
 cpdef Header mus_sound_header_type(str file)
 cpdef Sample mus_sound_sample_type(str file)
 cpdef Sample mus_sound_original_sample_type(str file)
-cpdef cython.long mus_sound_comment_start(str file)
+cpdef cython.longlong mus_sound_comment_start(str file)
 
-cpdef cython.long mus_sound_comment_end(str file)
-cpdef cython.long mus_sound_length(str file)
+cpdef cython.longlong mus_sound_comment_end(str file)
+cpdef cython.longlong mus_sound_length(str file)
 cpdef cython.long mus_sound_fact_samples(str file)
 cpdef cython.int mus_sound_type_specifier(str file)
 cpdef cython.int mus_sound_block_align(str file)

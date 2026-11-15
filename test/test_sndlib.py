@@ -88,3 +88,14 @@ def test_mus_file_round_trip(sine_wav):
     data, _ = clm.file2ndarray(path)
     assert np.all(np.isfinite(data))
 
+
+def test_mus_long_t_values_do_not_truncate(sine_wav):
+    """Regression (LLP64): the wrappers were declared C long (32-bit on
+    Windows); sample counts above 2^31 must round-trip intact through
+    sndlib's sound-file cache. Fails on Windows as the code stood."""
+    path, sr, nsamples, freq = sine_wav
+    big = 3 * 2**32  # needs more than 32 bits
+    assert sndlib.mus_sound_set_samples(path, big) == 0
+    assert sndlib.mus_sound_samples(path) == big
+    assert sndlib.mus_sound_set_samples(path, nsamples) == 0  # restore
+

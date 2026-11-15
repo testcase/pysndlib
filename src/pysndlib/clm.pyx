@@ -1165,7 +1165,7 @@ cpdef mus_reset(mus_any obj):
     
 # --------------- length ---------------- #
 
-cpdef cython.long get_length(obj):
+cpdef cython.longlong get_length(obj):
     """Returns length in samples of a sound file, list, ndarray, or generator"""
     #assume file
     if isinstance(obj, str):
@@ -1225,7 +1225,7 @@ cpdef cython.double get_srate(obj=None):
   
 # --------------- framples ---------------- #
 
-cpdef cython.long get_framples(obj):
+cpdef cython.longlong get_framples(obj):
     """Returns length in frames of a sound file, list, ndarray, or generator"""
     if isinstance(obj, str):
         return csndlib.mus_sound_framples(obj)

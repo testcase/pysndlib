@@ -20,13 +20,13 @@ csndlib.mus_sound_initialize()
 
 # -------- sound.c -------- 
 
-cpdef cython.long mus_sound_samples(str file):
+cpdef cython.longlong mus_sound_samples(str file):
     """
     samples of sound according to header 
     """
     return csndlib.mus_sound_samples(file)
     
-cpdef cython.long mus_sound_framples(str file):
+cpdef cython.longlong mus_sound_framples(str file):
     """
     samples per channel
     """
@@ -38,7 +38,7 @@ cpdef cython.int mus_sound_datum_size(str file):
     """
     return csndlib.mus_sound_datum_size(file) 
 
-cpdef cython.long mus_sound_data_location(str file):
+cpdef cython.longlong mus_sound_data_location(str file):
     """
     location of first sample (bytes)
     """
@@ -71,19 +71,19 @@ cpdef Sample mus_sound_sample_type(str file):
 cpdef Sample mus_sound_original_sample_type(str file):
     return <Sample>csndlib.mus_sound_original_sample_type(file)  
 
-cpdef cython.long mus_sound_comment_start(str file):
+cpdef cython.longlong mus_sound_comment_start(str file):
     """
     comment start (bytes) if any
     """
     return csndlib.mus_sound_comment_start(file)  
 
-cpdef cython.long mus_sound_comment_end(str file):
+cpdef cython.longlong mus_sound_comment_end(str file):
     """
     comment end (bytes)
     """
     return csndlib.mus_sound_comment_end(file)  
 
-cpdef cython.long mus_sound_length(str file):
+cpdef cython.longlong mus_sound_length(str file):
     """
     true file length in bytes 
     """
