@@ -1,10 +1,12 @@
 CLM Enums
 =========================
 
+
 .. module:: 
 	pysndlib.clm
 	:noindex:
 
+**in pysndlib.clm**
 
 .. autoenum:: Interp
 	:members:
@@ -17,9 +19,3 @@ CLM Enums
 	
 .. autoenum:: Polynomial
 	:members:
-	
-	
-	
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

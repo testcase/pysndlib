@@ -5,6 +5,11 @@ CLM Utility Functions
 	pysndlib.clm
 	:noindex:
 
+General		
+--------------
+.. autofunction:: get_length
+.. autofunction:: random
+.. autofunction:: get_channels
 
 Sampling rate		
 --------------
@@ -73,10 +78,4 @@ Chebyshev
 
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

@@ -1,7 +1,4 @@
-.. pysndlib documentation master file, created by
-   sphinx-quickstart on Thu Jun 22 05:00:14 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+
 
 Welcome to pysndlib's documentation!
 ====================================
@@ -14,20 +11,38 @@ Welcome to pysndlib's documentation!
 
 .. toctree::
     :maxdepth: 1
-    :caption: Contents:
-
+    
+    description
+    building
+    installation
+    settings
+    whats_new
+    basic_usage
     with_sound
+    instruments
     clm_generators
     clm_utility_functions
+    other_generators
     file_IO
     clm_init
     clm_enums
     mus_any
     sndlib_functions
+    sndlib_enums
 
 
-Indices and tables
-==================
+
+Tutorials
+=========================
+
+A hands-on tutorial series of `jupyter notebooks
+<https://github.com/testcase/pysndlib/tree/main/notebooks>`_ is
+included in the repository: basics, generators and envelopes,
+filters, writing instruments, speeding instruments up with cython,
+an FM trilogy following the `CLM FM documentation
+<https://ccrma.stanford.edu/software/snd/snd/fm.html>`_, and notebooks
+on granulate, the phase vocoder, spectral tools, sound files, and
+spatialization/reverb.
 
 * :ref:`genindex`
 * :ref:`modindex`
