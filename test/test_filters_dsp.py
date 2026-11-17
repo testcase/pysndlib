@@ -76,10 +76,35 @@ def test_one_pole_lowpass_converges_to_dc():
     assert out[-1] == pytest.approx(1.0, abs=1e-9)
 
 
+def test_00_two_pole_isolation_probe():
+    """Position-0 probe: does the two_pole ycoeffs path work BEFORE any other
+    test runs? (cross-test corruption discriminator for the Windows cp311 bug)"""
+    gen = clm.make_two_pole(a0=1.0, b1=0.5, b2=0.25)
+    ycoeffs = np.asarray(gen.mus_ycoeffs)
+    assert ycoeffs[1] == pytest.approx(0.5)
+    assert ycoeffs[2] == pytest.approx(0.25)
+
+
 def test_two_pole_uses_b1_not_b2_twice():
     """Regression (0.8.0): make_two_pole passed (a0, b2, b2)."""
     gen = clm.make_two_pole(a0=1.0, b1=0.5, b2=0.25)
-    ycoeffs = np.asarray(gen.mus_ycoeffs)
+    try:
+        ycoeffs = np.asarray(gen.mus_ycoeffs)
+    except TypeError:
+        # --- diagnostics for the Windows cp311 release-blocker failure ---
+        print("=== two_pole failure diagnostics ===")
+        print("is_two_pole   :", clm.is_two_pole(gen))
+        print("str(gen)      :", str(gen))
+        for label, fn in [("mus_xcoeffs", lambda: gen.mus_xcoeffs),
+                          ("mus_length  ", lambda: gen.mus_length),
+                          ("two_pole run", lambda: clm.two_pole(gen, 1.0)),
+                          ("ycoeffs retry", lambda: gen.mus_ycoeffs)]:
+            try:
+                print(label, ":", fn())
+            except Exception as e:
+                print(label, ": raised", repr(e))
+        print("=== end diagnostics ===")
+        raise
     assert ycoeffs[1] == pytest.approx(0.5)
     assert ycoeffs[2] == pytest.approx(0.25)
 

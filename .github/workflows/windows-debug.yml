@@ -1,0 +1,49 @@
+name: Windows debug
+
+# Single-job Windows debug loop for platform-specific failures: builds the
+# extensions in place with pip (no wheels), then runs the pytest suite.
+# Dispatch with the Python version to test via the `python` input.
+
+on:
+  workflow_dispatch:
+    inputs:
+      python:
+        description: 'Python version to test (e.g. "3.11")'
+        default: '3.11'
+        required: true
+        type: string
+
+jobs:
+  windows_debug:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ inputs.python }}
+
+      - name: Fetch asset
+        run: gh release download  --clobber  --repo testcase/sndlib v1.0.0 --pattern libsndlib_windows_x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPERSECRET }}
+
+      - name: unzip
+        run: tar -xf libsndlib_windows_x64.zip
+        shell: pwsh
+
+      - name: Copy sndlib header files
+        run: |
+          Copy-Item ./sndlib/sndlib.h ./src/pysndlib/
+          Copy-Item ./sndlib/clm.h ./src/pysndlib/
+        shell: pwsh
+
+      - name: Install package with test deps
+        run: pip install -e ".[test]"
+
+      - name: Run test suite
+        run: pytest test -q --tb=long
+        env:
+          PYSNDLIB_RC: C:\nonexistent\pysndlibrc
