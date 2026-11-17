@@ -59,7 +59,7 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: wheels-macos-universal2
+          name: wheels-macos-${{ matrix.cibw_python }}
           path: ./wheelhouse/*.whl
 
   build_linux_wheels:
@@ -97,7 +97,7 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: wheels-linux-${{ matrix.cibw_arch }}
+          name: wheels-linux-${{ matrix.cibw_python }}-${{ matrix.cibw_arch }}
           path: ./wheelhouse/*.whl
 
   build_windows_wheels:
@@ -138,7 +138,7 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: wheels-windows-x64
+          name: wheels-windows-${{ matrix.cibw_python }}
           path: ./wheelhouse/*.whl
 
   make_sdist:
