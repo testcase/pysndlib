@@ -1,0 +1,7 @@
+# Documentation build dependencies (see build_docs.sh).
+# The conf.py includes a small shim for enum_tools under sphinx 9;
+# remove it once enum-tools ships sphinx 9 support.
+sphinx>=9,<10
+sphinx-book-theme>=1.4
+enum-tools>=0.13
+sphinx-toolbox>=4.3

@@ -62,7 +62,8 @@ sndlib.tar.gz
 \.#*
 pysndlib/pysndlib.egg-info/
 sndlib
-
+notebooks/*.wav/*.rev
 # local-only documentation (kept in working copies, not tracked)
 CHANGELOG.md
 RELEASE.md
+

@@ -6,6 +6,16 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../src'))
 
+# --- sphinx 9 compatibility shim -------------------------------------------
+# enum_tools.autoenum imports `logger` from sphinx.ext.autodoc, which sphinx 9
+# removed. Inject the equivalent logger until enum-tools ships sphinx 9 support;
+# the hasattr guard makes this inert once it does.
+import sphinx.ext.autodoc
+import sphinx.util.logging
+if not hasattr(sphinx.ext.autodoc, 'logger'):
+    sphinx.ext.autodoc.logger = sphinx.util.logging.getLogger('sphinx.ext.autodoc')
+# --- end shim ---------------------------------------------------------------
+
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

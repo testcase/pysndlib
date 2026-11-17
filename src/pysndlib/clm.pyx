@@ -1114,6 +1114,15 @@ cpdef next_power_of_2(x):
     
 # TODO: could be simplified now
 cpdef np.ndarray to_partials(harms):
+    """
+    convert harmonic/amplitude PAIRS to a flat amplitude array.
+
+    :param harms: list of [harm, amp, harm, amp, ...]; harm is the
+        harmonic number (0 = DC) and amp its amplitude; non-integer
+        harmonic numbers are truncated to int
+    :return: np.ndarray of amplitudes, partials[k] = amplitude of harmonic k
+    :rtype: np.ndarray
+    """
     if isinstance(harms, list):
         p = harms[::2]
         maxpartial = max(p)
@@ -2536,7 +2545,9 @@ cpdef mus_any make_polywave(cython.double frequency,  partials = [0.,1.], Polyno
     the same \in effect as make_oscil.
     
     :param frequency: polywave frequency
-    :param partials: a list of harmonic numbers and their associated amplitudes
+    :param partials: harmonic/amplitude PAIRS, [harm, amp, harm, amp, ...],
+        e.g. [1, 1, 3, 0.5] = harmonic 1 at amplitude 1 plus harmonic 3 at
+        amplitude 0.5; harmonic 0 is the DC component
     :param kind: Chebyshev polynomial choice
     :param xcoeffs: tn for tu-sum case
     :param ycoeffs: un for tu-sum case
@@ -2626,12 +2637,19 @@ cpdef bint is_polywave(mus_any gen):
 cpdef mus_any make_polyshape(cython.double frequency, cython.double initial_phase=0.0, coeffs = None, partials = [1.,1.], Polynomial kind=Polynomial.FIRST_KIND):
                     
     """
-    return a new polynomial-based waveshaping generator.
+    return a new polynomial-based waveshaping generator: out = polynomial(index * sin(phase)).
+    
+    the 'index' is the waveshaping drive amplitude and is the first argument of
+    polyshape() (or the first argument of a bare gen() call); a generator called
+    with no arguments gets index 0.0 and outputs silence -- call gen(1.0) or
+    clm.polyshape(gen, 1.0) to drive it.
     
     :param frequency: frequency of gen \in hz
     :param initial_phase: initial phase of gen \in radians
-    :param coeff: coefficients can be passed to polyshape
-    :param partials: a list of harmonic numbers and their associated amplitudes
+    :param coeffs: chebyshev polynomial coefficients (overrides partials)
+    :param partials: harmonic/amplitude PAIRS, [harm, amp, harm, amp, ...],
+        e.g. [1, 1, 3, 0.5] = harmonic 1 at amplitude 1 plus harmonic 3 at
+        amplitude 0.5; harmonic 0 is the DC component
     :param kind: Chebyshev polynomial choice
     :return: polyshape gen
     :rtype: mus_any
@@ -2658,10 +2676,11 @@ cpdef mus_any make_polyshape(cython.double frequency, cython.double initial_phas
     
 cpdef cython.double polyshape(mus_any gen, cython.double index=1.0, cython.double fm=0.0) noexcept:
     """
-    next sample of polynomial-based waveshaper.
+    next sample of polynomial-based waveshaper: polynomial(index * sin(phase)).
     
     :param gen: polyshape gen
-    :param index: fm index
+    :param index: waveshaping drive amplitude -- the sine input to the polynomial
+        is index * sin(phase), so index 0.0 gives silence
     :param fm: fm input
     :rtype: float
     """
